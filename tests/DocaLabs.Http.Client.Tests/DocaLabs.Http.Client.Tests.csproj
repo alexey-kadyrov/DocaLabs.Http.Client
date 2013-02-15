@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{39AD9FB5-C1CE-4D32-9253-79F795DC6426}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DocaLabs.Http.Client.Tests</RootNamespace>
+    <AssemblyName>DocaLabs.Http.Client.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Machine.Specifications, Version=0.5.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Machine.Specifications.0.5.10\lib\net40\Machine.Specifications.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.5.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Machine.Specifications.0.5.10\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.TDNetRunner, Version=0.5.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Machine.Specifications.0.5.10\lib\net40\Machine.Specifications.TDNetRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ContentEncoding\ContentDecoderFactoryTests.cs" />
+    <Compile Include="ContentEncoding\ContentEncoderFactoryTests.cs" />
+    <Compile Include="ContentEncoding\GZipContentDecoderTests.cs" />
+    <Compile Include="ContentEncoding\GZipContentEncoderTests.cs" />
+    <Compile Include="ContentEncoding\DeflateContentDecoderTests.cs" />
+    <Compile Include="ContentEncoding\DeflateContentEncoderTests.cs" />
+    <Compile Include="HttpClientExceptionTests.cs" />
+    <Compile Include="HttpClientFactoryTests.cs" />
+    <Compile Include="HttpResponseTests.cs" />
+    <Compile Include="Mapping\Attributes\SeparatedCollectionConverterAttributeTests.cs" />
+    <Compile Include="Mapping\QueryBuilderTests.cs" />
+    <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverterTests.cs" />
+    <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
+    <Compile Include="Utils\DictionaryListTests.cs" />
+    <Compile Include="_Utils\IGenericService.cs" />
+    <Compile Include="_Utils\ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute.cs" />
+    <Compile Include="_Utils\IDecoratedService.cs" />
+    <Compile Include="_Utils\InterfaceOnlyAttribute.cs" />
+    <Compile Include="_Utils\IServiceWithMethodWithMoreThanOneArg.cs" />
+    <Compile Include="_Utils\IServiceWithoutAnyMethod.cs" />
+    <Compile Include="_Utils\IServiceWithoutQueryOrResult.cs" />
+    <Compile Include="_Utils\IServiceWithQueryAndResult.cs" />
+    <Compile Include="_Utils\IServiceWithQueryOnly.cs" />
+    <Compile Include="_Utils\IServiceWithResultOnly.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonDeserializerTests.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonSerializerTests.cs" />
+    <Compile Include="JsonSerialization\JsonSerializationProviderTests.cs" />
+    <Compile Include="_Utils\IServiceWithTwoMethods.cs" />
+    <Compile Include="_Utils\NonGenericTestHttpClientBaseType.cs" />
+    <Compile Include="_Utils\ServiceClassInsteadOfInterface.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseTypeForConcurrentRun.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseTypeWithConstructorWithWrongArguments.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseTypeWithExecuteMethodWithWrongArguments.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseTypeWithOneGenericArg.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseTypeWithOnlyDefaultConstructor.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseTypeWithoutExecuteMethod.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseTypeWithThreeGenericArgs.cs" />
+    <Compile Include="_Utils\TestResult.cs" />
+    <Compile Include="_Utils\TestsQuery.cs" />
+    <Compile Include="_Utils\TestHttpClientInterfaceBuilder.cs" />
+    <Compile Include="RequestSerialization\RequestBodySerializationFactoryTests.cs" />
+    <Compile Include="ResponseDeserialization\ImageResponseDeserializerTests.cs" />
+    <Compile Include="ResponseDeserialization\PlainTextResponseDeserializerTests.cs" />
+    <Compile Include="ResponseDeserialization\ResponseParserTests.cs" />
+    <Compile Include="ResponseDeserialization\XmlResponseDeserializerTests.cs" />
+    <Compile Include="ResponseDeserialization\DeserializeFromXmlAttributeTests.cs" />
+    <Compile Include="ResponseDeserialization\JsonResponseDeserializerTests.cs" />
+    <Compile Include="UnrecoverableHttpClientExceptionTests.cs" />
+    <Compile Include="_Utils\request_serialization_test_context.cs" />
+    <Compile Include="RequestSerialization\SerializeAsFormAttributeTests.cs" />
+    <Compile Include="RequestSerialization\SerializeAsJsonAttributeTests.cs" />
+    <Compile Include="RequestSerialization\SerializeAsXmlAttributeTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResponseDeserialization\DeserializeFromJsonAttributeTests.cs" />
+    <Compile Include="_Utils\response_deserialization_test_context.cs" />
+    <Compile Include="_Utils\TestHttpClientBaseType.cs" />
+    <Compile Include="_Utils\TestTarget.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
+      <Project>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</Project>
+      <Name>DocaLabs.Http.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Conversion\DocaLabs.Conversion.csproj">
+      <Project>{5EF7D2C9-BA29-4EF9-AC6F-CA4A15150A6D}</Project>
+      <Name>DocaLabs.Conversion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DocaLabs.Testing.Common\DocaLabs.Testing.Common.csproj">
+      <Project>{40A96AE2-C931-4AC1-A38E-5FBB3045216C}</Project>
+      <Name>DocaLabs.Testing.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="img.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="img.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="img.tif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,15 @@
+<Configuration>
+  <CoverageFilters>
+    <IncludeFilters>
+      <Filter ModuleMask="*" ClassMask="*" FunctionMask="*" />
+    </IncludeFilters>
+    <ExcludeFilters>
+      <Filter ModuleMask="*" ClassMask="*.Resources.Text" FunctionMask="get_Culture" />
+      <Filter ModuleMask="*" ClassMask="*.Resources.Text" FunctionMask="set_Culture" />
+      <Filter ModuleMask="*" ClassMask="*.Resources.Text" FunctionMask=".ctor" />
+    </ExcludeFilters>
+  </CoverageFilters>
+  <SnapshotDialog>
+    <InitialDirectory>C:\DocaLabs</InitialDirectory>
+  </SnapshotDialog>
+</Configuration>

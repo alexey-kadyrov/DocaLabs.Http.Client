@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DocaLabs.Http.Client</RootNamespace>
+    <AssemblyName>DocaLabs.Http.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\DocaLabs.Http.Client.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\DocaLabs.Http.Client.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
+    <Compile Include="HttpClientFactory.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonDeserializer.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonSerializer.cs" />
+    <Compile Include="JsonSerialization\IJsonDeserializer.cs" />
+    <Compile Include="JsonSerialization\IJsonSerializer.cs" />
+    <Compile Include="JsonSerialization\JsonSerializationProvider.cs" />
+    <Compile Include="Mapping\UrlBuilder.cs" />
+    <Compile Include="Utils\CollectionExtensions.cs" />
+    <Compile Include="Utils\CustomNameValueCollection.cs" />
+    <Compile Include="Utils\DictionaryList.cs" />
+    <Compile Include="Utils\IDictionaryList.cs" />
+    <Compile Include="Utils\LibraryExtensionsComposer.cs" />
+    <Compile Include="Utils\ReflectionExtensions.cs" />
+    <Compile Include="ResponseDeserialization\ImageResponseDeserializer.cs" />
+    <Compile Include="ResponseDeserialization\PlainTextResponseDeserializer.cs" />
+    <Compile Include="ResponseDeserialization\XmlResponseDeserializer.cs" />
+    <Compile Include="ResponseDeserialization\IResponseDeserializationProvider.cs" />
+    <Compile Include="ResponseDeserialization\JsonResponseDeserializer.cs" />
+    <Compile Include="VoidType.cs" />
+    <Compile Include="ContentEncoding\ContentDecoderFactory.cs" />
+    <Compile Include="ContentEncoding\ContentEncoderFactory.cs" />
+    <Compile Include="ContentEncoding\KnownContentEncodings.cs" />
+    <Compile Include="ContentEncoding\GZipContentDecoder.cs" />
+    <Compile Include="ContentEncoding\GZipContentEncoder.cs" />
+    <Compile Include="ContentEncoding\DeflateContentDecoder.cs" />
+    <Compile Include="ContentEncoding\DeflateContentEncoder.cs" />
+    <Compile Include="ContentEncoding\IDecodeContent.cs" />
+    <Compile Include="ContentEncoding\IEncodeContent.cs" />
+    <Compile Include="Configuration\HttpClientCertificateCollection.cs" />
+    <Compile Include="Configuration\HttpClientCertificateReferenceElement.cs" />
+    <Compile Include="Configuration\HttpClientEndpointCollection.cs" />
+    <Compile Include="Configuration\HttpClientEndpointElement.cs" />
+    <Compile Include="Configuration\HttpClientEndpointSection.cs" />
+    <Compile Include="Configuration\HttpClientProxyElement.cs" />
+    <Compile Include="RequestSerialization\IRequestSerialization.cs" />
+    <Compile Include="ResponseDeserialization\IResponseDeserialization.cs" />
+    <Compile Include="RequestSerialization\RequestBodySerializationFactory.cs" />
+    <Compile Include="ResponseDeserialization\ResponseParser.cs" />
+    <Compile Include="RequestSerialization\SerializeAsFormAttribute.cs" />
+    <Compile Include="Mapping\Attributes\QueryPropertyConverterAttribute.cs" />
+    <Compile Include="Mapping\ICustomQueryMapper.cs" />
+    <Compile Include="Mapping\PropertyConverters\ConvertObjectProperty.cs" />
+    <Compile Include="Mapping\PropertyConverterBase.cs" />
+    <Compile Include="Mapping\Attributes\QueryIgnoreAttribute.cs" />
+    <Compile Include="Mapping\Attributes\QueryParameterAttribute.cs" />
+    <Compile Include="RequestSerialization\RequestSerializationAttribute.cs" />
+    <Compile Include="ResponseDeserialization\ResponseDeserializationAttribute.cs" />
+    <Compile Include="RequestSerialization\SerializeAsJsonAttribute.cs" />
+    <Compile Include="ResponseDeserialization\DeserializeFromJsonAttribute.cs" />
+    <Compile Include="RequestSerialization\SerializeAsXmlAttribute.cs" />
+    <Compile Include="ResponseDeserialization\DeserializeFromXmlAttribute.cs" />
+    <Compile Include="Mapping\QueryBuilder.cs" />
+    <Compile Include="HttpClient.cs" />
+    <Compile Include="HttpClientException.cs" />
+    <Compile Include="HttpResponse.cs" />
+    <Compile Include="Mapping\PropertyConverters\ConvertCollectionProperty.cs" />
+    <Compile Include="Mapping\PropertyConverters\ConvertOrdinaryProperty.cs" />
+    <Compile Include="Mapping\PropertyConverters\IConvertProperty.cs" />
+    <Compile Include="Mapping\ParsedType.cs" />
+    <Compile Include="Mapping\QueryMapper.cs" />
+    <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverter.cs" />
+    <Compile Include="Mapping\Attributes\SeparatedCollectionConverterAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Text.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Text.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UnrecoverableHttpClientException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Text.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Text.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DocaLabs.Conversion\DocaLabs.Conversion.csproj">
+      <Project>{5EF7D2C9-BA29-4EF9-AC6F-CA4A15150A6D}</Project>
+      <Name>DocaLabs.Conversion</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

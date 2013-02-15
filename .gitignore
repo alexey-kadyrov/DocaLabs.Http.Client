@@ -1,0 +1,38 @@
+#use glob syntax
+syntax: glob
+
+# ignore OS files
+[Th]humbnail.db
+
+#ignore visual studio generated files
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*._i.c
+*._p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.scc
+*.dotCover
+[Bb]in
+[Db]ebug*/
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+[Bb]uild[Ll]og.*
+*.[Pp]ublish.xml
+glob:*/ServiceDefinition.build.csdef
+PartCover/
