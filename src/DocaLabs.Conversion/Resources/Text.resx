@@ -120,20 +120,8 @@
   <data name="cannot_convert_from_0_to_1" xml:space="preserve">
     <value>Cannot convert from type {0} to type {1}.</value>
   </data>
-  <data name="compile_errors" xml:space="preserve">
-    <value>Compile error. See provided 'compilerErrors' for details.</value>
-  </data>
-  <data name="configuration_file_0_not_found" xml:space="preserve">
-    <value>The configuration file {0} was not found.</value>
-  </data>
   <data name="input_argument_can_be_only_string_or_guid" xml:space="preserve">
     <value>Input argument can be only of string or Guid type.</value>
-  </data>
-  <data name="length_cannot_be_less_than_zero" xml:space="preserve">
-    <value>String length cannot be less than zero.</value>
-  </data>
-  <data name="no_compiled_type" xml:space="preserve">
-    <value>Compiled assembly dosen't contain any types. Sometimes the compiled assembly cannot be used after compilation if the generateInMemory is set to true (for example if it's running under PowerShell) but if recompiled with generateInMemory set to false it's usually fine.</value>
   </data>
   <data name="type_0_cannot_be_converted_to_byte_array" xml:space="preserve">
     <value>Type {0} cannot be converted to byte array.</value>

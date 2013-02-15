@@ -142,15 +142,6 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method {0} must have the return value..
-        /// </summary>
-        internal static string method_must_have_return_value {
-            get {
-                return ResourceManager.GetString("method_must_have_return_value", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The type {0} must be interface..
         /// </summary>
         internal static string must_be_interface {

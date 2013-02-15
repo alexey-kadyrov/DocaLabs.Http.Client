@@ -70,47 +70,11 @@ namespace DocaLabs.Conversion.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compile error. See provided &apos;compilerErrors&apos; for details..
-        /// </summary>
-        internal static string compile_errors {
-            get {
-                return ResourceManager.GetString("compile_errors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The configuration file {0} was not found..
-        /// </summary>
-        internal static string configuration_file_0_not_found {
-            get {
-                return ResourceManager.GetString("configuration_file_0_not_found", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Input argument can be only of string or Guid type..
         /// </summary>
         internal static string input_argument_can_be_only_string_or_guid {
             get {
                 return ResourceManager.GetString("input_argument_can_be_only_string_or_guid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to String length cannot be less than zero..
-        /// </summary>
-        internal static string length_cannot_be_less_than_zero {
-            get {
-                return ResourceManager.GetString("length_cannot_be_less_than_zero", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Compiled assembly dosen&apos;t contain any types. Sometimes the compiled assembly cannot be used after compilation if the generateInMemory is set to true (for example if it&apos;s running under PowerShell) but if recompiled with generateInMemory set to false it&apos;s usually fine..
-        /// </summary>
-        internal static string no_compiled_type {
-            get {
-                return ResourceManager.GetString("no_compiled_type", resourceCulture);
             }
         }
         

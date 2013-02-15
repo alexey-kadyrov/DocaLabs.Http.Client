@@ -36,3 +36,4 @@ _ReSharper*/
 *.[Pp]ublish.xml
 glob:*/ServiceDefinition.build.csdef
 PartCover/
+*sln.DotSettings
