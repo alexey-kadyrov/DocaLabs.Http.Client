@@ -79,9 +79,9 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if(resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            var deserializer = resultType.GetCustomAttribute(typeof(ResponseDeserializationAttribute), true);
+            var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
             if (deserializer != null)
-                return ((IResponseDeserialization)deserializer).Deserialize(response, resultType);
+                return deserializer.Deserialize(response, resultType);
 
             if (resultType == typeof (VoidType))
                 return VoidType.Value;

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
+using DocaLabs.Conversion;
 using DocaLabs.Http.Client.Mapping.Attributes;
 
-namespace DocaLabs.Http.Client.Mapping
+namespace DocaLabs.Http.Client.Mapping.PropertyConverters
 {
     /// <summary>
     /// Base class for property converters.
@@ -35,11 +36,11 @@ namespace DocaLabs.Http.Client.Mapping
 
             Info = info;
 
-            var attrs = info.GetCustomAttribute(typeof (QueryParameterAttribute), true);
-            if(attrs != null)
+            var attribute = info.GetCustomAttribute<QueryParameterAttribute>(true);
+            if(attribute != null)
             {
-                Name = ((QueryParameterAttribute) attrs).Name;
-                Format = ((QueryParameterAttribute)attrs).Format;
+                Name = attribute.Name;
+                Format = attribute.Format;
             }
 
             if(string.IsNullOrWhiteSpace(Name))
@@ -47,6 +48,16 @@ namespace DocaLabs.Http.Client.Mapping
                 Name = Info.Name;
             }
 
+        }
+
+        protected string ConvertValue(object value)
+        {
+            if (value == null)
+                return string.Empty;
+
+            return string.IsNullOrWhiteSpace(Format)
+                       ? CustomConverter.Current.ChangeType<string>(value)
+                       : string.Format("{0:" + Format + "}", value);
         }
     }
 }

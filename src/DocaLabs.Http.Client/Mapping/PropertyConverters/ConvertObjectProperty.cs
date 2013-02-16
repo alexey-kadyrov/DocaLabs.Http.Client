@@ -13,22 +13,27 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
 
         public static IConvertProperty TryParse(PropertyInfo info)
         {
-            return info.PropertyType.IsPrimitive
-                ? new ConvertObjectProperty(info)
-                : null;
+            return info.PropertyType.IsSimpleType()
+                ? null
+                : new ConvertObjectProperty(info);
         }
 
         public IEnumerable<KeyValuePair<string, IList<string>>> GetValue(object obj)
         {
             IEnumerable<KeyValuePair<string, IList<string>>> values = null;
 
-            var value = Info.GetValue(obj, null);
-
-            if (value != null)
+            if (obj != null)
             {
-                var customeMapper = obj as ICustomQueryMapper;
-                if (customeMapper != null)
-                    values = customeMapper.ToParameterDictionary();
+                var value = Info.GetValue(obj, null);
+
+                if (value != null)
+                {
+                    var customeMapper = obj as ICustomQueryMapper;
+
+                    values = customeMapper != null
+                                 ? customeMapper.ToParameterDictionary()
+                                 : new CustomNameValueCollection {{Name, obj.ToString()}};
+                }
             }
 
             return values ?? new CustomNameValueCollection();

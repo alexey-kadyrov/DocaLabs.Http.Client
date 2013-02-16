@@ -5,21 +5,25 @@ using System.Reflection;
 
 namespace DocaLabs.Http.Client.Utils
 {
+    /// <summary>
+    /// Reflection extension methods.
+    /// </summary>
     public static class ReflectionExtensions
     {
         /// <summary>
-        /// Returns true if the type is primitive or string/decimal/Guid/dateTime/TimeSpan/DateTimeOffset.
+        /// Returns true if the type is primitive, enum or string/decimal/Guid/dateTime/TimeSpan/DateTimeOffset/byte[].
         /// </summary>
         public static bool IsSimpleType(this Type type)
         {
-            return (type == typeof(string) ||
-                    type.IsPrimitive ||
+            return (type.IsPrimitive ||
+                    type.IsEnum ||
+                    type == typeof(string) ||
                     type == typeof(decimal) ||
                     type == typeof(Guid) ||
                     type == typeof(DateTime) ||
                     type == typeof(TimeSpan) ||
                     type == typeof(DateTimeOffset) ||
-                    type.IsEnum);
+                    type == typeof(byte[]));
         }
 
         /// <summary>
@@ -32,13 +36,19 @@ namespace DocaLabs.Http.Client.Utils
                 : null;
         }
 
-        public static bool IsValidOn(this CustomAttributeData data, AttributeTargets flags)
+        /// <summary>
+        /// Checks whenever the attribute can be used on the specified targets.
+        /// </summary>
+        public static bool IsValidOn(this CustomAttributeData attribute, AttributeTargets flags)
         {
-            var attributes = data.AttributeType.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
+            var attributes = attribute.AttributeType.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
 
             return attributes.Length == 0 || attributes.Any(x => ((AttributeUsageAttribute)x).ValidOn.HasFlag(flags));
         }
 
+        /// <summary>
+        /// Gets all properties defined on the type and all interfaces that it implements.
+        /// </summary>
         public static IList<PropertyInfo> GetAllProperties(this Type type, BindingFlags flags)
         {
             flags |= BindingFlags.FlattenHierarchy;
@@ -58,16 +68,13 @@ namespace DocaLabs.Http.Client.Utils
             return list;
         }
 
-        public static bool Exists(this IEnumerable<PropertyInfo> collection, PropertyInfo property)
+        static bool Exists(this IEnumerable<PropertyInfo> collection, PropertyInfo property)
         {
             var name = property.Name;
             var propertType = property.PropertyType;
             var parameters = property.GetIndexParameters();
 
-            return collection.Any(
-                    existingProperty => existingProperty.Name == name 
-                    && existingProperty.PropertyType == propertType 
-                    && existingProperty.GetIndexParameters().Compare(parameters));
+            return collection.Any(x => x.Name == name && x.PropertyType == propertType && x.GetIndexParameters().Compare(parameters));
         }
 
         static bool Compare(this ICollection<ParameterInfo> left, IList<ParameterInfo> right)

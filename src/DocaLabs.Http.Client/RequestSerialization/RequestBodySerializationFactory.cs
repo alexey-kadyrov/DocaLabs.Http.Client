@@ -36,11 +36,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
 
         static IRequestSerialization TryQueryClassLevel(object query)
         {
-            var serializer = query.GetType().GetCustomAttribute(typeof(RequestSerializationAttribute), true);
-
-            return serializer == null 
-                ? null 
-                : serializer as IRequestSerialization;
+            return query.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
         }
 
         static IRequestSerialization TryQueryPropertyLevel(object query)
@@ -48,11 +44,11 @@ namespace DocaLabs.Http.Client.RequestSerialization
             // ReSharper disable LoopCanBeConvertedToQuery
             foreach (var property in query.GetType().GetProperties())
             {
-                var serializer = property.GetCustomAttribute(typeof(RequestSerializationAttribute), true);
+                var serializer = property.GetCustomAttribute<RequestSerializationAttribute>(true);
                 if (serializer == null)
                     continue;
 
-                return serializer as IRequestSerialization;
+                return serializer;
             }
 
             return null;
@@ -61,11 +57,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
 
         static IRequestSerialization TryHttpClientClassLevel(object httpClient)
         {
-            var serializer = httpClient.GetType().GetCustomAttribute(typeof(RequestSerializationAttribute), true);
-
-            return serializer == null 
-                ? null 
-                : serializer as IRequestSerialization;
+            return httpClient.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
         }
     }
 }

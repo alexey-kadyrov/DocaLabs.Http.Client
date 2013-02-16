@@ -84,6 +84,114 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_on_null_instance
+    {
+        static PropertyInfo property_info;
+        static IConvertProperty converter;
+        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+
+            converter = new SeparatedCollectionConverter(property_info)
+            {
+                Separator = ','
+            };
+        };
+
+        Because of =
+            () => result = converter.GetValue(null);
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+
+        class TestClass
+        {
+            // ReSharper disable UnusedMember.Local
+            [SeparatedCollectionConverter(Separator = ';')]
+            public IEnumerable<int> Values { get; set; }
+            // ReSharper restore UnusedMember.Local
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_on_null_property
+    {
+        static PropertyInfo property_info;
+        static TestClass instance;
+        static IConvertProperty converter;
+        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+
+            instance = new TestClass();
+
+            converter = new SeparatedCollectionConverter(property_info)
+            {
+                Separator = ','
+            };
+        };
+
+        Because of =
+            () => result = converter.GetValue(instance);
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+
+        class TestClass
+        {
+            // ReSharper disable UnusedMember.Local
+            [SeparatedCollectionConverter(Separator = ';')]
+            public IEnumerable<int> Values { get; set; }
+            // ReSharper restore UnusedMember.Local
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_on_collection_property_where_some_values_are_null
+    {
+        static PropertyInfo property_info;
+        static TestClass instance;
+        static IConvertProperty converter;
+        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+
+            instance = new TestClass
+            {
+                Values = new [] { null, "Hello", null }
+            };
+
+            converter = new SeparatedCollectionConverter(property_info)
+            {
+                Separator = ','
+            };
+        };
+
+        Because of =
+            () => result = converter.GetValue(instance);
+
+        It should_be_able_to_get_the_key_as_property_name =
+            () => result.First().Key.ShouldEqual("Values");
+
+        It should_be_able_to_get_value_of_property =
+            () => result.First().Value[0].ShouldEqual("Hello,");
+
+        class TestClass
+        {
+            // ReSharper disable UnusedAutoPropertyAccessor.Local
+            [SeparatedCollectionConverter(Separator = ';')]
+            public IEnumerable<string> Values { get; set; }
+            // ReSharper restore UnusedAutoPropertyAccessor.Local
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_used_with_together_with_query_parameter_where_name_and_format_are_not_set
     {
         static PropertyInfo property_info;

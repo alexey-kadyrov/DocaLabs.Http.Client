@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using DocaLabs.Conversion;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Mapping.PropertyConverters
 {
     /// <summary>
-    /// Defines converter for enumerable properties that serializes into delimited string.
+    /// Converter for enumerable properties that serializes into delimited string.
     /// </summary>
     public class SeparatedCollectionConverter : PropertyConverterBase, IConvertProperty
     {
@@ -35,32 +34,28 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
         {
             var values = new CustomNameValueCollection();
 
-            var collection = Info.GetValue(obj, null) as IEnumerable;
-
-            if (collection != null)
+            if (obj != null)
             {
-                var stringBuilder = new StringBuilder();
+                var collection = Info.GetValue(obj, null) as IEnumerable;
 
-                foreach (var value in collection)
+                if (collection != null)
                 {
+                    var stringBuilder = new StringBuilder();
+
+                    foreach (var value in collection)
+                    {
+                        if (stringBuilder.Length > 0)
+                            stringBuilder.Append(Separator);
+
+                        stringBuilder.Append(ConvertValue(value));
+                    }
+
                     if (stringBuilder.Length > 0)
-                        stringBuilder.Append(Separator);
-
-                    stringBuilder.Append(ConvertItem(value));
+                        values.Add(Name, stringBuilder.ToString());
                 }
-
-                if(stringBuilder.Length > 0)
-                    values.Add(Name, stringBuilder.ToString());
             }
 
             return values;
-        }
-
-        string ConvertItem(object value)
-        {
-            return string.IsNullOrWhiteSpace(Format)
-                ? CustomConverter.Current.ChangeType<string>(value)
-                : string.Format("{0:" + Format + "}", value);
         }
     }
 }

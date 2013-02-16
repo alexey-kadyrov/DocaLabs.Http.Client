@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DocaLabs.Http.Client.Mapping;
 using DocaLabs.Http.Client.Mapping.Attributes;
 using DocaLabs.Http.Client.Mapping.PropertyConverters;
 using Machine.Specifications;

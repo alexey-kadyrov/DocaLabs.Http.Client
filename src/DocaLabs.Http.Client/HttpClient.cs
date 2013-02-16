@@ -181,9 +181,9 @@ namespace DocaLabs.Http.Client
 
             var type = typeof(TQuery);
 
-            return type.GetCustomAttribute(typeof(RequestSerializationAttribute), true) != null
-                || GetType().GetCustomAttribute(typeof(RequestSerializationAttribute), true) != null
-                || type.GetProperties().Any(property => property.GetCustomAttribute(typeof(RequestSerializationAttribute), true) != null)
+            return type.GetCustomAttribute<RequestSerializationAttribute>(true) != null
+                || GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
+                || type.GetProperties().Any(property => property.GetCustomAttribute<RequestSerializationAttribute>(true) != null)
                 ? WebRequestMethods.Http.Post
                 : WebRequestMethods.Http.Get;
         }

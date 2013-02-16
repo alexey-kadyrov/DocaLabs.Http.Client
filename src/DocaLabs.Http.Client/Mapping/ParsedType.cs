@@ -48,7 +48,7 @@ namespace DocaLabs.Http.Client.Mapping
 
             return TryGetCustomPropertyParser(info)
                 ?? ConvertCollectionProperty.TryParse(info)
-                ?? ConvertOrdinaryProperty.TryParse(info)
+                ?? ConvertSimpleProperty.TryParse(info)
                 ?? ConvertObjectProperty.TryParse(info);
         }
 
@@ -57,14 +57,15 @@ namespace DocaLabs.Http.Client.Mapping
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return  info.GetIndexParameters().Length > 0 ||
                     info.GetGetMethod() == null ||
-                    info.GetCustomAttributes(typeof(QueryIgnoreAttribute), true).Length > 0;
+                    info.GetCustomAttribute<QueryIgnoreAttribute>(true) != null;
         }
 
         static IConvertProperty TryGetCustomPropertyParser(PropertyInfo info)
         {
-            var attrs = info.GetCustomAttributes(typeof (QueryPropertyConverterAttribute), true);
-            return attrs.Length > 0
-                ? ((QueryPropertyConverterAttribute)attrs[0]).GetConverter(info)
+            var attribute = info.GetCustomAttribute<QueryPropertyConverterAttribute>(true);
+
+            return attribute != null
+                ? attribute.GetConverter(info)
                 : null;
         }
     }

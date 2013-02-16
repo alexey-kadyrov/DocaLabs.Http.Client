@@ -96,7 +96,7 @@
     <Compile Include="Mapping\Attributes\QueryPropertyConverterAttribute.cs" />
     <Compile Include="Mapping\ICustomQueryMapper.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertObjectProperty.cs" />
-    <Compile Include="Mapping\PropertyConverterBase.cs" />
+    <Compile Include="Mapping\PropertyConverters\PropertyConverterBase.cs" />
     <Compile Include="Mapping\Attributes\QueryIgnoreAttribute.cs" />
     <Compile Include="Mapping\Attributes\QueryParameterAttribute.cs" />
     <Compile Include="RequestSerialization\RequestSerializationAttribute.cs" />
@@ -110,7 +110,7 @@
     <Compile Include="HttpClientException.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertCollectionProperty.cs" />
-    <Compile Include="Mapping\PropertyConverters\ConvertOrdinaryProperty.cs" />
+    <Compile Include="Mapping\PropertyConverters\ConvertSimpleProperty.cs" />
     <Compile Include="Mapping\PropertyConverters\IConvertProperty.cs" />
     <Compile Include="Mapping\ParsedType.cs" />
     <Compile Include="Mapping\QueryMapper.cs" />

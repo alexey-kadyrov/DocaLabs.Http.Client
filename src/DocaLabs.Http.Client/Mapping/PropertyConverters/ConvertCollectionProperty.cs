@@ -32,7 +32,7 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
             {
                 foreach (var value in collection)
                 {
-                    values.Add(Name, CustomConverter.Current.ChangeType<string>(value));
+                    values.Add(Name, ConvertValue(value));
                 }
             }
 
