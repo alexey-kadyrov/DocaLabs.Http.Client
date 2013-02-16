@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -22,6 +23,9 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
         public SeparatedCollectionConverter(PropertyInfo info)
             : base(info)
         {
+            if (info.GetIndexParameters().Length > 0)
+                throw new ArgumentException(Resources.Text.property_cannot_be_indexer, "info");
+
             Separator = '|';
         }
 
@@ -42,12 +46,16 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
                 {
                     var stringBuilder = new StringBuilder();
 
+                    var first = true;
+
                     foreach (var value in collection)
                     {
-                        if (stringBuilder.Length > 0)
+                        if (!first)
                             stringBuilder.Append(Separator);
 
                         stringBuilder.Append(ConvertValue(value));
+
+                        first = false;
                     }
 
                     if (stringBuilder.Length > 0)

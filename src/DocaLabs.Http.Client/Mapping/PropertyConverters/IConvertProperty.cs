@@ -10,6 +10,8 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
         /// <summary>
         /// Gets a property value.
         /// </summary>
+        /// <param name="obj">Instance of the object which "owns" the property.</param>
+        /// <returns>One key-value pair with single string which contains all items.</returns>
         IEnumerable<KeyValuePair<string, IList<string>>> GetValue(object obj);
     }
 }

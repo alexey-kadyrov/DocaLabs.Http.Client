@@ -159,6 +159,9 @@
   <data name="null_response_stream" xml:space="preserve">
     <value>Response stream is null.</value>
   </data>
+  <data name="property_cannot_be_indexer" xml:space="preserve">
+    <value>Does not support indexers.</value>
+  </data>
   <data name="service_url_is_not_defined" xml:space="preserve">
     <value>The Service URL is not defined in the constaructor paramter or is not in the configuration file.</value>
   </data>

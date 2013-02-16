@@ -47,9 +47,9 @@ namespace DocaLabs.Http.Client.Mapping
                 return null;
 
             return TryGetCustomPropertyParser(info)
-                ?? ConvertCollectionProperty.TryParse(info)
-                ?? ConvertSimpleProperty.TryParse(info)
-                ?? ConvertObjectProperty.TryParse(info);
+                ?? ConvertCollectionProperty.TryCreate(info)
+                ?? ConvertSimpleProperty.TryCreate(info)
+                ?? ConvertObjectProperty.TryCreate(info);
         }
 
         static bool Ignore(PropertyInfo info)

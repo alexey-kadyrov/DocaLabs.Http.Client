@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DocaLabs.Conversion;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Mapping.PropertyConverters
 {
+    /// <summary>
+    /// Converts enumerable of simple type properties.
+    /// </summary>
     public class ConvertCollectionProperty : PropertyConverterBase, IConvertProperty
     {
         ConvertCollectionProperty(PropertyInfo info)
@@ -15,24 +17,40 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
         {
         }
 
-        public static IConvertProperty TryParse(PropertyInfo info)
+        /// <summary>
+        /// Tries to create the converter for the specified property.
+        /// </summary>
+        /// <param name="info">Property for which instance of the ConvertCollectionProperty should be created.</param>
+        /// <returns>Instance of the ConvertCollectionProperty class if the info describes the enumerable of simple types otherwise null.</returns>
+        public static IConvertProperty TryCreate(PropertyInfo info)
         {
-            return IsEnumerable(info) && GetEnumerableElementType(info).IsPrimitive
+            if(info == null)
+                throw new ArgumentNullException("info");
+
+            return IsEnumerable(info) && GetEnumerableElementType(info).IsSimpleType() && info.GetIndexParameters().Length == 0
                 ? new ConvertCollectionProperty(info)
                 : null;
         }
 
+        /// <summary>
+        /// Serializes the property value to the string.
+        /// </summary>
+        /// <param name="obj">Instance of the object which "owns" the property.</param>
+        /// <returns>One key-values pair.</returns>
         public IEnumerable<KeyValuePair<string, IList<string>>> GetValue(object obj)
         {
             var values = new CustomNameValueCollection();
 
-            var collection = Info.GetValue(obj, null) as IEnumerable;
-
-            if (collection != null)
+            if (obj != null)
             {
-                foreach (var value in collection)
+                var collection = Info.GetValue(obj, null) as IEnumerable;
+
+                if (collection != null)
                 {
-                    values.Add(Name, ConvertValue(value));
+                    foreach (var value in collection)
+                    {
+                        values.Add(Name, ConvertValue(value));
+                    }
                 }
             }
 
@@ -46,7 +64,7 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
             if (type == typeof(string) || type == typeof(byte[]))
                 return false;
 
-            return type.GetInterfaces().FirstOrDefault(x => x == typeof(IEnumerable)) != null;
+            return type == typeof(IEnumerable) || type.GetInterfaces().Any(x => x == typeof(IEnumerable));
         }
 
         static Type GetEnumerableElementType(PropertyInfo info)
@@ -55,7 +73,14 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
             if (type.IsArray)
                 return type.GetElementType();
 
-            var genericEnumerable = type.GetInterfaces().FirstOrDefault(x => x == typeof(IEnumerable<>));
+            if (type == typeof (IEnumerable))
+                return typeof (object);
+
+            if (type.IsInterface && type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IEnumerable<>))
+                return type.GetGenericArguments()[0];
+
+            var genericEnumerable = type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+
             return genericEnumerable != null
                 ? genericEnumerable.GetGenericArguments()[0]
                 : typeof(object);

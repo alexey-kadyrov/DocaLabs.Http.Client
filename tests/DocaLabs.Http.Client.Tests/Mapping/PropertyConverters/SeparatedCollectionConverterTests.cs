@@ -8,6 +8,11 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 {
+    // ReSharper disable UnusedMember.Local
+    // ReSharper disable ValueParameterNotUsed
+    // ReSharper disable UnusedParameter.Local
+    // ReSharper disable UnusedAutoPropertyAccessor.Local
+
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_newed
     {
@@ -21,10 +26,8 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            // ReSharper disable UnusedMember.Local
             [SeparatedCollectionConverter(Separator = ';')]
             public IEnumerable<string> Countries { get; set; }
-            // ReSharper restore UnusedMember.Local
         }
     }
 
@@ -41,6 +44,30 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         It should_report_info_argument =
             () => ((ArgumentNullException) exception).ParamName.ShouldEqual("info");
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_newed_for_indexer
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => new SeparatedCollectionConverter(typeof(TestClass).GetProperties()[0]));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentException>();
+
+        It should_report_info_argument =
+            () => ((ArgumentException)exception).ParamName.ShouldEqual("info");
+
+        class TestClass
+        {
+            public IEnumerable<string> this [int index] 
+            { 
+                get { return null; }
+                set { }
+            }
+        }
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
@@ -76,10 +103,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            // ReSharper disable UnusedAutoPropertyAccessor.Local
-            [SeparatedCollectionConverter(Separator = ';')]
             public IEnumerable<int> Values { get; set; }
-            // ReSharper restore UnusedAutoPropertyAccessor.Local
         }
     }
 
@@ -108,10 +132,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            // ReSharper disable UnusedMember.Local
-            [SeparatedCollectionConverter(Separator = ';')]
             public IEnumerable<int> Values { get; set; }
-            // ReSharper restore UnusedMember.Local
         }
     }
 
@@ -143,10 +164,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            // ReSharper disable UnusedMember.Local
-            [SeparatedCollectionConverter(Separator = ';')]
             public IEnumerable<int> Values { get; set; }
-            // ReSharper restore UnusedMember.Local
         }
     }
 
@@ -180,19 +198,16 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
             () => result.First().Key.ShouldEqual("Values");
 
         It should_be_able_to_get_value_of_property =
-            () => result.First().Value[0].ShouldEqual("Hello,");
+            () => result.First().Value[0].ShouldEqual(",Hello,");
 
         class TestClass
         {
-            // ReSharper disable UnusedAutoPropertyAccessor.Local
-            [SeparatedCollectionConverter(Separator = ';')]
             public IEnumerable<string> Values { get; set; }
-            // ReSharper restore UnusedAutoPropertyAccessor.Local
         }
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
-    class when_separated_collection_converter_is_used_with_together_with_query_parameter_where_name_and_format_are_not_set
+    class when_separated_collection_converter_is_used_together_with_query_parameter_where_name_and_format_are_not_set
     {
         static PropertyInfo property_info;
         static TestClass instance;
@@ -224,10 +239,8 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            // ReSharper disable UnusedAutoPropertyAccessor.Local
-            [SeparatedCollectionConverter(Separator = ';'), QueryParameter]
+            [QueryParameter]
             public IEnumerable<int> Values { get; set; }
-            // ReSharper restore UnusedAutoPropertyAccessor.Local
         }
     }
 
@@ -264,10 +277,8 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            // ReSharper disable UnusedAutoPropertyAccessor.Local
-            [SeparatedCollectionConverter(Separator = ';'), QueryParameter(Name = "Hello World")]
+            [QueryParameter(Name = "Hello World")]
             public IEnumerable<int> Values { get; set; }
-            // ReSharper restore UnusedAutoPropertyAccessor.Local
         }
     }
 
@@ -304,10 +315,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            // ReSharper disable UnusedAutoPropertyAccessor.Local
-            [SeparatedCollectionConverter(Separator = ';'), QueryParameter(Format = "X")]
+            [QueryParameter(Format = "X")]
             public IEnumerable<int> Values { get; set; }
-            // ReSharper restore UnusedAutoPropertyAccessor.Local
         }
     }
+
+    // ReSharper restore UnusedAutoPropertyAccessor.Local
+    // ReSharper restore UnusedParameter.Local
+    // ReSharper restore ValueParameterNotUsed
+    // ReSharper restore UnusedMember.Local
 }

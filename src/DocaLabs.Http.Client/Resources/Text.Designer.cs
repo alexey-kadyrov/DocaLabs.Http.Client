@@ -187,6 +187,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Does not support indexers..
+        /// </summary>
+        internal static string property_cannot_be_indexer {
+            get {
+                return ResourceManager.GetString("property_cannot_be_indexer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Service URL is not defined in the constaructor paramter or is not in the configuration file..
         /// </summary>
         internal static string service_url_is_not_defined {
