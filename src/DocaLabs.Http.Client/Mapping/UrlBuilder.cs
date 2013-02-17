@@ -3,9 +3,15 @@ using DocaLabs.Http.Client.Mapping.Attributes;
 
 namespace DocaLabs.Http.Client.Mapping
 {
+    /// <summary>
+    /// Adds query string build from query object to the specified URL.
+    /// </summary>
     public static class UrlBuilder
     {
-        public static Uri CreateUrl<TQuery>(Uri serviceUrl, TQuery query)
+        /// <summary>
+        /// Adds query string build from query object to the specified URL.
+        /// </summary>
+        public static Uri CreateUrl(Uri serviceUrl, object query)
         {
             try
             {

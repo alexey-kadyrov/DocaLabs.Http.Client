@@ -82,11 +82,14 @@
     <Compile Include="HttpClientFactoryTests.cs" />
     <Compile Include="HttpResponseTests.cs" />
     <Compile Include="Mapping\Attributes\SeparatedCollectionConverterAttributeTests.cs" />
+    <Compile Include="Mapping\QueryMapperTests.cs" />
+    <Compile Include="Mapping\TypeMapTests.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertCollectionPropertyTests.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertObjectPropertyTests.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertSimplePropertyTests.cs" />
     <Compile Include="Mapping\QueryBuilderTests.cs" />
     <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverterTests.cs" />
+    <Compile Include="Mapping\UrlBuilderTests.cs" />
     <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
     <Compile Include="Utils\DictionaryListTests.cs" />
     <Compile Include="_Utils\IGenericService.cs" />

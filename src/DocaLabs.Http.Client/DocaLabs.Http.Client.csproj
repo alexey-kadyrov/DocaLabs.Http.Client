@@ -112,7 +112,7 @@
     <Compile Include="Mapping\PropertyConverters\ConvertCollectionProperty.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertSimpleProperty.cs" />
     <Compile Include="Mapping\PropertyConverters\IConvertProperty.cs" />
-    <Compile Include="Mapping\ParsedType.cs" />
+    <Compile Include="Mapping\TypeMap.cs" />
     <Compile Include="Mapping\QueryMapper.cs" />
     <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverter.cs" />
     <Compile Include="Mapping\Attributes\SeparatedCollectionConverterAttribute.cs" />

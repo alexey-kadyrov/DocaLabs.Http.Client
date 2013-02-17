@@ -6,14 +6,15 @@ namespace DocaLabs.Http.Client.Mapping
 {
     /// <summary>
     /// Defines methods to create query string from properties of a class.
+    /// All members are thread safe.
     /// </summary>
     public static class QueryMapper
     {
-        static ConcurrentDictionary<Type, ParsedType> ParsedTypes { get; set; }
+        static ConcurrentDictionary<Type, TypeMap> ParsedTypeMaps { get; set; }
 
         static QueryMapper()
         {
-            ParsedTypes = new ConcurrentDictionary<Type, ParsedType>();
+            ParsedTypeMaps = new ConcurrentDictionary<Type, TypeMap>();
         }
 
         /// <summary>
@@ -35,20 +36,10 @@ namespace DocaLabs.Http.Client.Mapping
 
         static CustomNameValueCollection ToDictionary(object obj)
         {
-            return ToDictionary(obj, ParsedTypes.GetOrAdd(obj.GetType(), ParseType));
+            return ToDictionary(obj, ParsedTypeMaps.GetOrAdd(obj.GetType(), x => new TypeMap(x)));
         }
 
-        static string ToQueryString(CustomNameValueCollection values)
-        {
-            return new QueryBuilder().Add(values).ToString();
-        }
-
-        static ParsedType ParseType(Type type)
-        {
-            return ParsedType.ParseType(type);
-        }
-
-        static CustomNameValueCollection ToDictionary(object obj, ParsedType map)
+        static CustomNameValueCollection ToDictionary(object obj, TypeMap map)
         {
             var values = new CustomNameValueCollection();
 
@@ -56,6 +47,11 @@ namespace DocaLabs.Http.Client.Mapping
                 values.AddRange(property.GetValue(obj));
 
             return values;
+        }
+
+        static string ToQueryString(CustomNameValueCollection values)
+        {
+            return new QueryBuilder().Add(values).ToString();
         }
     }
 }

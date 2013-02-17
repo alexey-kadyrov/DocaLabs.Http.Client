@@ -11,29 +11,24 @@ namespace DocaLabs.Http.Client.Mapping
     /// <summary>
     /// Defines class that contains information about properties that can be mapped.
     /// </summary>
-    public class ParsedType
+    public class TypeMap
     {
         /// <summary>
         /// Gets parsed properties.
         /// </summary>
-        public IEnumerable<IConvertProperty> Properties { get; private set; }
+        public IList<IConvertProperty> Properties { get; private set; }
 
-        ParsedType(Type type)
+        /// <summary>
+        /// Initializes a new instance of the TypeMap class for the specified type.
+        /// </summary>
+        public TypeMap(Type type)
         {
             Properties = Parse(type);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the ParsedType class for the specified type.
-        /// </summary>
-        public static ParsedType ParseType(Type type)
+        static IList<IConvertProperty> Parse(Type type)
         {
-            return new ParsedType(type);
-        }
-
-        static IEnumerable<IConvertProperty> Parse(Type type)
-        {
-            return type.IsPrimitive
+            return type.IsSimpleType()
                 ? new List<IConvertProperty>()
                 : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Select(ParseProperty)
