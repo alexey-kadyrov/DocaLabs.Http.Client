@@ -89,10 +89,10 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// If headers are defined in the endpoint configuration then the methods adds them to the request.
         /// </summary>
-        public void AddHeaders(WebRequest request)
+        public void CopyHeadersTo(WebRequest request)
         {
             if (request == null)
-                return;
+                throw new ArgumentNullException("request");
 
             foreach (var name in Headers.AllKeys)
                 request.Headers.Add(name, Headers[name].Value);
@@ -101,10 +101,10 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// If client certificates are defined in the endpoint configuration then the methods adds them to the request.
         /// </summary>
-        public void AddClientCertificates(HttpWebRequest request)
+        public void CopyClientCertificatesTo(HttpWebRequest request)
         {
             if (request == null)
-                return;
+                throw new ArgumentNullException("request");
 
             foreach (HttpClientCertificateReferenceElement certRef in ClientCertificates)
                 request.ClientCertificates.AddRange(certRef.Find());
@@ -113,9 +113,12 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// If web proxy are defined in the endpoint configuration then the methods adds it to the request.
         /// </summary>
-        public void SetWebProxy(WebRequest request)
+        public void CopyWebProxyTo(WebRequest request)
         {
-            if (request != null && Proxy.Address != null)
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (Proxy != null && Proxy.Address != null)
                 request.Proxy = new WebProxy(Proxy.Address);
         }
     }

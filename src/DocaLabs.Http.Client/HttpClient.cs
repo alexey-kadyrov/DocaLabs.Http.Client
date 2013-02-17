@@ -189,11 +189,11 @@ namespace DocaLabs.Http.Client
             if (AutoSetAcceptEncoding && (!typeof(TResult).IsAssignableFrom(typeof(Image))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
-            Configuration.AddHeaders(request);
+            Configuration.CopyHeadersTo(request);
 
-            Configuration.AddClientCertificates(request as HttpWebRequest);
+            Configuration.CopyClientCertificatesTo(request as HttpWebRequest);
 
-            Configuration.SetWebProxy(request);
+            Configuration.CopyWebProxyTo(request);
         }
 
         /// <summary>

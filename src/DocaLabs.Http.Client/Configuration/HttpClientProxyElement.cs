@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the proxy address.
         /// </summary>
-        [ConfigurationProperty(AddressProperty, IsRequired = true), TypeConverter(typeof(UriTypeConverter))]
+        [ConfigurationProperty(AddressProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
         public Uri Address
         {
             get { return ((Uri)base[AddressProperty]); }
