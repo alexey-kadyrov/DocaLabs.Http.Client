@@ -59,6 +59,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -72,6 +73,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\HttpClientCertificateReferenceElementTests.cs" />
     <Compile Include="ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\GZipContentDecoderTests.cs" />

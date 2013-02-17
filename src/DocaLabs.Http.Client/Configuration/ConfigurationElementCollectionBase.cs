@@ -50,15 +50,6 @@ namespace DocaLabs.Http.Client.Configuration
         protected override bool ThrowOnDuplicate { get { return true; } }
 
         /// <summary>
-        /// Always returns false letting the element to be modified at runtime.
-        /// </summary>
-        /// <returns></returns>
-        public override bool IsReadOnly()
-        {
-            return false;
-        }
-
-        /// <summary>
         /// Gets or sets the EntityTableNameElement object by its key.
         /// </summary>
         public virtual TElement this[TKey key]

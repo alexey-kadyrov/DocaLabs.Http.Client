@@ -14,15 +14,6 @@ namespace DocaLabs.Http.Client.Configuration
         const string FindValueProperty = "findValue";
 
         /// <summary>
-        /// Always returns false letting the element to be modified at runtime.
-        /// </summary>
-        /// <returns></returns>
-        public override bool IsReadOnly()
-        {
-            return false;
-        }
-
-        /// <summary>
         /// Gets or sets the name of the X.509 certificate store to open.
         /// </summary>
         [ConfigurationProperty(StoreNameProperty, IsKey = true, DefaultValue = StoreName.My)]

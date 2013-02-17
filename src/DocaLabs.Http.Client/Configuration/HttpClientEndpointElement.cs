@@ -19,15 +19,6 @@ namespace DocaLabs.Http.Client.Configuration
         const string ProxyProperty = "proxy";
 
         /// <summary>
-        /// Always returns false letting the element to be modified at runtime.
-        /// </summary>
-        /// <returns></returns>
-        public override bool IsReadOnly()
-        {
-            return false;
-        }
-
-        /// <summary>
         /// Gets or sets the endpoint name.
         /// </summary>
         [ConfigurationProperty(NameProperty, IsKey = true, IsRequired = true)]
