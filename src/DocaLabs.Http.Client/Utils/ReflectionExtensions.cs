@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -66,6 +67,49 @@ namespace DocaLabs.Http.Client.Utils
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Checks whenever the type is enumerable, string or byte[] are not considered enumerable.
+        /// </summary>
+        public static bool IsEnumerable(this Type type)
+        {
+            if(type == null)
+                throw new ArgumentNullException("type");
+
+            if (type == typeof(string) || type == typeof(byte[]))
+                return false;
+
+            return type == typeof(IEnumerable) || type.GetInterfaces().Any(x => x == typeof(IEnumerable));
+        }
+
+        /// <summary>
+        /// Returns enumerable element type, string or byte[] are not considered enumerable..
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>Enumerable element type or null if the type is not enumerable.</returns>
+        public static Type GetEnumerableElementType(this Type type)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            if (!type.IsEnumerable())
+                return null;
+
+            if (type.IsArray)
+                return type.GetElementType();
+
+            if (type == typeof(IEnumerable))
+                return typeof(object);
+
+            if (type.IsInterface && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                return type.GetGenericArguments()[0];
+
+            var genericEnumerable = type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+
+            return genericEnumerable != null
+                ? genericEnumerable.GetGenericArguments()[0]
+                : typeof(object);
         }
 
         static bool Exists(this IEnumerable<PropertyInfo> collection, PropertyInfo property)

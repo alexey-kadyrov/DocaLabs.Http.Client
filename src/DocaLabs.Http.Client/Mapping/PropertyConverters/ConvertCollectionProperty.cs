@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
@@ -27,7 +25,9 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
             if(info == null)
                 throw new ArgumentNullException("info");
 
-            return IsEnumerable(info) && GetEnumerableElementType(info).IsSimpleType() && info.GetIndexParameters().Length == 0
+            var type = info.PropertyType;
+
+            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && info.GetIndexParameters().Length == 0
                 ? new ConvertCollectionProperty(info)
                 : null;
         }
@@ -55,35 +55,6 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
             }
 
             return values;
-        }
-
-        static bool IsEnumerable(PropertyInfo info)
-        {
-            var type = info.PropertyType;
-
-            if (type == typeof(string) || type == typeof(byte[]))
-                return false;
-
-            return type == typeof(IEnumerable) || type.GetInterfaces().Any(x => x == typeof(IEnumerable));
-        }
-
-        static Type GetEnumerableElementType(PropertyInfo info)
-        {
-            var type = info.PropertyType;
-            if (type.IsArray)
-                return type.GetElementType();
-
-            if (type == typeof (IEnumerable))
-                return typeof (object);
-
-            if (type.IsInterface && type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IEnumerable<>))
-                return type.GetGenericArguments()[0];
-
-            var genericEnumerable = type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-
-            return genericEnumerable != null
-                ? genericEnumerable.GetGenericArguments()[0]
-                : typeof(object);
         }
     }
 }

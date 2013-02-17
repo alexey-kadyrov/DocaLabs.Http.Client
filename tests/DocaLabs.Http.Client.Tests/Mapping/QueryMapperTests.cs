@@ -15,6 +15,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
     // ReSharper disable MemberCanBePrivate.Local
     // ReSharper disable UnusedParameter.Local
     // ReSharper disable UnusedAutoPropertyAccessor.Local
+    // ReSharper disable NotAccessedField.Local
 
     [Subject(typeof(QueryMapper))]
     class when_query_mapper_is_used
@@ -38,7 +39,8 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             EnumerableStringWithAttributeProperty = new [] { "ss1", "ss2" },
             ArrayIntProperty = new [] { 3, 4 },
             NoGetter = "hello",
-            Ignored = "World"
+            Ignored = "World",
+            PublicField = "field"
         };
 
         Because of =
@@ -79,14 +81,20 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
             public static string StaticProperty { get; set; }
 
+            public string PublicField;
+            string _privateField;
+            static string _staticField;
+
             static TestClass()
             {
                 StaticProperty = "static";
+                _staticField = "static field";
             }
 
             public TestClass()
             {
                 PrivateProperty = "private";
+                _privateField = "private field";
             }
         }
 
@@ -193,6 +201,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         }
     }
 
+    // ReSharper restore NotAccessedField.Local
     // ReSharper restore UnusedAutoPropertyAccessor.Local
     // ReSharper restore UnusedParameter.Local
     // ReSharper restore MemberCanBePrivate.Local
