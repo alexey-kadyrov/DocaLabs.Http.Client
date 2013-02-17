@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Web;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Mapping
 {
@@ -48,7 +48,7 @@ namespace DocaLabs.Http.Client.Mapping
         /// Adds a new pairs of key/value from collection to the query string. The value is encoded using HttpUtility.UrlEncode.
         /// </summary>
         /// <returns>Self reference, useful for method chaining.</returns>
-        public QueryBuilder Add(IEnumerable<KeyValuePair<string, IList<string>>> collection)
+        public QueryBuilder Add(CustomNameValueCollection collection)
         {
             if (collection == null)
                 return this;

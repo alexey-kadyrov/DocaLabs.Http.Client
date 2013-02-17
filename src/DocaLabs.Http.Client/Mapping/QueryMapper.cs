@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Mapping
@@ -34,12 +33,12 @@ namespace DocaLabs.Http.Client.Mapping
                 : ToQueryString(ToDictionary(obj));
         }
 
-        static IEnumerable<KeyValuePair<string, IList<string>>> ToDictionary(object obj)
+        static CustomNameValueCollection ToDictionary(object obj)
         {
             return ToDictionary(obj, ParsedTypes.GetOrAdd(obj.GetType(), ParseType));
         }
 
-        static string ToQueryString(IEnumerable<KeyValuePair<string, IList<string>>> values)
+        static string ToQueryString(CustomNameValueCollection values)
         {
             return new QueryBuilder().Add(values).ToString();
         }
@@ -49,7 +48,7 @@ namespace DocaLabs.Http.Client.Mapping
             return ParsedType.ParseType(type);
         }
 
-        static IEnumerable<KeyValuePair<string, IList<string>>> ToDictionary(object obj, ParsedType map)
+        static CustomNameValueCollection ToDictionary(object obj, ParsedType map)
         {
             var values = new CustomNameValueCollection();
 

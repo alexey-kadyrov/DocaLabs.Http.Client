@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Mapping
 {
@@ -12,6 +12,6 @@ namespace DocaLabs.Http.Client.Mapping
         /// Serializes the instance into the collection of pairs: parameter name and its values.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<KeyValuePair<string, IList<string>>> ToParameterDictionary();
+        CustomNameValueCollection ToParameterDictionary();
     }
 }

@@ -37,7 +37,7 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
         /// </summary>
         /// <param name="obj">Instance of the object which "owns" the property.</param>
         /// <returns>One key-values pair.</returns>
-        public IEnumerable<KeyValuePair<string, IList<string>>> GetValue(object obj)
+        public CustomNameValueCollection GetValue(object obj)
         {
             var values = new CustomNameValueCollection();
 

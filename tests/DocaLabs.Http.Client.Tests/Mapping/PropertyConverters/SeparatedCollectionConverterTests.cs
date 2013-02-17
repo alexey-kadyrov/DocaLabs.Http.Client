@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Mapping.Attributes;
 using DocaLabs.Http.Client.Mapping.PropertyConverters;
+using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
@@ -76,7 +77,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         static PropertyInfo property_info;
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -112,7 +113,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static PropertyInfo property_info;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -142,7 +143,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         static PropertyInfo property_info;
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -174,7 +175,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         static PropertyInfo property_info;
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -212,7 +213,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         static PropertyInfo property_info;
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -250,7 +251,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         static PropertyInfo property_info;
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -288,7 +289,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         static PropertyInfo property_info;
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {

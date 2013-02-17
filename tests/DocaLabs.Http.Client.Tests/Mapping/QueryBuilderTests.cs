@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using DocaLabs.Http.Client.Mapping;
+using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping
@@ -136,9 +136,9 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryBuilder();
 
-        Because of = () => builder.Add(new List<KeyValuePair<string, IList<string>>>
+        Because of = () => builder.Add(new CustomNameValueCollection
         {
-            new KeyValuePair<string, IList<string>>("oneKey", new [] {"oneValue"})
+            { "oneKey", new [] {"oneValue"} }
         });
 
         It should_form_valid_query_string =
@@ -153,9 +153,9 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryBuilder();
 
-        Because of = () => builder.Add(new List<KeyValuePair<string, IList<string>>>
+        Because of = () => builder.Add(new CustomNameValueCollection
         {
-            new KeyValuePair<string, IList<string>>("oneKey", new [] {"firstValue", "secondValue"})
+            { "oneKey", new [] {"firstValue", "secondValue"} }
         });
 
         It should_form_valid_query_string =
@@ -170,10 +170,10 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryBuilder();
 
-        Because of = () => builder.Add(new List<KeyValuePair<string, IList<string>>>
+        Because of = () => builder.Add(new CustomNameValueCollection
         {
-            new KeyValuePair<string, IList<string>>("firstKey", new [] {"firstValue"}),
-            new KeyValuePair<string, IList<string>>("secondKey", new [] {"secondValue", "thirdValue"})
+            { "firstKey", new [] {"firstValue"} },
+            { "secondKey", new [] {"secondValue", "thirdValue"} }
         });
 
         It should_form_valid_query_string =
@@ -188,11 +188,11 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryBuilder();
 
-        Because of = () => builder.Add(new List<KeyValuePair<string, IList<string>>>
+        Because of = () => builder.Add(new CustomNameValueCollection
         {
-            new KeyValuePair<string, IList<string>>("firstKey", new [] {"first Value"}),
-            new KeyValuePair<string, IList<string>>("secondKey", new [] {"second&Value"}),
-            new KeyValuePair<string, IList<string>>("thirdKey", new [] {"third+Value"})
+            { "firstKey", new [] {"first Value"} },
+            { "secondKey", new [] {"second&Value"} },
+            { "thirdKey", new [] {"third+Value"} }
         });
 
         It should_form_valid_query_string =

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DocaLabs.Http.Client.Mapping;
 using DocaLabs.Http.Client.Mapping.Attributes;
@@ -146,7 +145,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     class when_convert_object_property_is_used_on_null_instance
     {
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context =
             () => converter = ConvertObjectProperty.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -176,7 +175,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -212,7 +211,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -248,7 +247,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -285,7 +284,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -322,7 +321,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -359,7 +358,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -383,7 +382,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestPropertyClass : ICustomQueryMapper
         {
-            public IEnumerable<KeyValuePair<string, IList<string>>> ToParameterDictionary()
+            public CustomNameValueCollection ToParameterDictionary()
             {
                 return new CustomNameValueCollection { { "Hello!", new [] { "42" } } };
             }
@@ -395,7 +394,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -420,7 +419,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestPropertyClass : ICustomQueryMapper
         {
-            public IEnumerable<KeyValuePair<string, IList<string>>> ToParameterDictionary()
+            public CustomNameValueCollection ToParameterDictionary()
             {
                 return new CustomNameValueCollection { { "Hello!", new[] { "42" } } };
             }
@@ -432,7 +431,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -457,7 +456,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestPropertyClass : ICustomQueryMapper
         {
-            public IEnumerable<KeyValuePair<string, IList<string>>> ToParameterDictionary()
+            public CustomNameValueCollection ToParameterDictionary()
             {
                 return new CustomNameValueCollection { { "Hello!", new[] { "42" } } };
             }
@@ -469,7 +468,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static TestClass instance;
         static IConvertProperty converter;
-        static IEnumerable<KeyValuePair<string, IList<string>>> result;
+        static CustomNameValueCollection result;
 
         Establish context = () =>
         {
@@ -494,7 +493,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestPropertyClass : ICustomQueryMapper
         {
-            public IEnumerable<KeyValuePair<string, IList<string>>> ToParameterDictionary()
+            public CustomNameValueCollection ToParameterDictionary()
             {
                 return new CustomNameValueCollection { { "Hello!", new[] { "42" } } };
             }
