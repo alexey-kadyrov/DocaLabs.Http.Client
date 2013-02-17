@@ -3,11 +3,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
 using System.Reflection;
 using System.Threading;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.Mapping;
+using DocaLabs.Http.Client.Mapping.Attributes;
 using DocaLabs.Http.Client.RequestSerialization;
 using DocaLabs.Http.Client.ResponseDeserialization;
 
@@ -58,6 +60,16 @@ namespace DocaLabs.Http.Client
         /// The default value is true.
         /// </summary>
         public bool AutoSetAcceptEncoding { get; set; }
+
+        /// <summary>
+        /// Gets or sets values indicating the level of authentication and impersonation used for this request.
+        /// </summary>
+        public AuthenticationLevel? AuthenticationLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets authentication information for the request.
+        /// </summary>
+        public ICredentials Credentials { get; set; }
 
         /// <summary>
         /// Gets the service configuration. If it's not defined then the default values will be used.
@@ -132,6 +144,8 @@ namespace DocaLabs.Http.Client
 
             var request = CreateRequest(url);
 
+            InitializeRequest(request);
+
             TryWriteRequestData(query, request);
 
             return ParseResponse(query, request);
@@ -144,18 +158,33 @@ namespace DocaLabs.Http.Client
         /// <returns></returns>
         protected virtual string BuildUrl(TQuery query)
         {
-            return UrlBuilder.CreateUrl(BaseUrl, query).ToString();
+            return GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) == null
+
+                       ? UrlBuilder.CreateUrl(BaseUrl, query).ToString()
+                       : BaseUrl.ToString();
         }
 
         /// <summary>
-        /// Creates the request. If headers, client certificates, and a proxy are defined in the configuration they will be added to the request
+        /// Creates the request.
         /// </summary>
         protected virtual WebRequest CreateRequest(string url)
         {
-            var request = WebRequest.Create(url);
+            return WebRequest.Create(url);
+        }
 
+        /// <summary>
+        /// Initializes the request. If headers, client certificates, and a proxy are defined in the configuration they will be added to the request
+        /// </summary>
+        protected virtual void InitializeRequest(WebRequest request)
+        {
             request.Timeout = RequestTimeout;
             request.Method = GetRequestMethod();
+
+            if (AuthenticationLevel != null)
+            {
+                request.AuthenticationLevel = AuthenticationLevel.GetValueOrDefault();
+                request.Credentials = Credentials;
+            }
 
             if (AutoSetAcceptEncoding && (!typeof(TResult).IsAssignableFrom(typeof(Image))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
@@ -165,8 +194,6 @@ namespace DocaLabs.Http.Client
             Configuration.AddClientCertificates(request as HttpWebRequest);
 
             Configuration.SetWebProxy(request);
-
-            return request;
         }
 
         /// <summary>
