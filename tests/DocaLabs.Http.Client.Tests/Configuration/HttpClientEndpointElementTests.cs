@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Net;
+using System.Net.Security;
 using DocaLabs.Http.Client.Configuration;
 using Machine.Specifications;
 using Moq;
@@ -27,6 +28,12 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
         It should_have_auto_set_accept_encoding =
             () => element.AutoSetAcceptEncoding.ShouldBeTrue();
+
+        It should_have_authentication_level_set_to_null =
+            () => element.AuthenticationLevel.ShouldBeNull();
+
+        It should_have_credentials_set_to_none =
+            () => element.Credentials.CredentialsType.ShouldEqual(CredentialsType.None);
 
         It should_have_empty_collection_of_headers =
             () => element.Headers.ShouldBeEmpty();
@@ -146,6 +153,35 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
         It should_copy_proxy_to_the_web_request =
             () => ((WebProxy)web_request.Object.Proxy).Address.ToString().ShouldEqual("http://foo.bar/");
+
+        It should_not_set_credentials =
+            () => ((WebProxy) web_request.Object.Proxy).Credentials.ShouldBeNull();
+    }
+
+    [Subject(typeof(HttpClientEndpointElement))]
+    class when_copying_web_proxy_from_http_client_endpoint_whith_credentials_set
+    {
+        static Mock<WebRequest> web_request;
+        static HttpClientEndpointElement element;
+
+        Establish context = () =>
+        {
+            web_request = new Mock<WebRequest>();
+            web_request.SetupAllProperties();
+
+            element = new HttpClientEndpointElement();
+            element.Proxy.Address = new Uri("http://foo.bar/");
+            element.Proxy.Credentials.CredentialsType = CredentialsType.DefaultCredentials;
+        };
+
+        Because of =
+            () => element.CopyWebProxyTo(web_request.Object);
+
+        It should_copy_proxy_to_the_web_request =
+            () => ((WebProxy)web_request.Object.Proxy).Address.ToString().ShouldEqual("http://foo.bar/");
+
+        It should_set_credentials =
+            () => ((WebProxy)web_request.Object.Proxy).Credentials.ShouldBeTheSameAs(CredentialCache.DefaultCredentials);
     }
 
     [Subject(typeof(HttpClientEndpointElement))]
@@ -239,6 +275,113 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
         Because of =
             () => exception = Catch.Exception(() => element.CopyWebProxyTo(null));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_request_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("request");
+    }
+
+    [Subject(typeof(HttpClientEndpointElement))]
+    class when_copying_credentials_from_http_client_endpoint_which_are_set_to_none_without_authentication_level
+    {
+        static Mock<WebRequest> web_request;
+        static HttpClientEndpointElement element;
+
+        Establish context = () =>
+        {
+            web_request = new Mock<WebRequest>();
+            web_request.SetupAllProperties();
+            web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
+
+            element = new HttpClientEndpointElement();
+        };
+
+        Because of =
+            () => element.CopyCredentialsTo(web_request.Object);
+
+        It should_not_copy_credentials =
+            () => web_request.Object.Credentials.ShouldBeNull();
+
+        It should_leave_default_authentication_level =
+            () => web_request.Object.AuthenticationLevel.ShouldEqual(AuthenticationLevel.None);
+    }
+
+    [Subject(typeof(HttpClientEndpointElement))]
+    class when_copying_credentials_from_http_client_endpoint_which_are_set_to_default_credentials_without_authentication_level
+    {
+        static Mock<WebRequest> web_request;
+        static HttpClientEndpointElement element;
+
+        Establish context = () =>
+        {
+            web_request = new Mock<WebRequest>();
+            web_request.SetupAllProperties();
+            web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
+
+            element = new HttpClientEndpointElement
+            {
+                Credentials =
+                {
+                    CredentialsType = CredentialsType.DefaultCredentials
+                }
+            };
+        };
+
+        Because of =
+            () => element.CopyCredentialsTo(web_request.Object);
+         
+        It should_copy_credentials =
+            () => web_request.Object.Credentials.ShouldBeTheSameAs(CredentialCache.DefaultCredentials);
+
+        It should_leave_default_authentication_level =
+            () => web_request.Object.AuthenticationLevel.ShouldEqual(AuthenticationLevel.None);
+    }
+
+    [Subject(typeof(HttpClientEndpointElement))]
+    class when_copying_credentials_from_http_client_endpoint_which_are_set_to_default_credentials_with_authentication_level
+    {
+        static Mock<WebRequest> web_request;
+        static HttpClientEndpointElement element;
+
+        Establish context = () =>
+        {
+            web_request = new Mock<WebRequest>();
+            web_request.SetupAllProperties();
+            web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
+
+            element = new HttpClientEndpointElement
+            {
+                AuthenticationLevel = AuthenticationLevel.MutualAuthRequired,
+                Credentials =
+                {
+                    CredentialsType = CredentialsType.DefaultCredentials
+                }
+            };
+        };
+
+        Because of =
+            () => element.CopyCredentialsTo(web_request.Object);
+
+        It should_copy_credentials =
+            () => web_request.Object.Credentials.ShouldBeTheSameAs(CredentialCache.DefaultCredentials);
+
+        It should_copy_authentication_level =
+            () => web_request.Object.AuthenticationLevel.ShouldEqual(AuthenticationLevel.MutualAuthRequired);
+    }
+
+    [Subject(typeof(HttpClientEndpointElement))]
+    class when_copying_credentials_from_http_client_endpoint_to_null_request
+    {
+        static HttpClientEndpointElement element;
+        static Exception exception;
+
+        Establish context =
+            () => element = new HttpClientEndpointElement();
+
+        Because of =
+            () => exception = Catch.Exception(() => element.CopyCredentialsTo(null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();

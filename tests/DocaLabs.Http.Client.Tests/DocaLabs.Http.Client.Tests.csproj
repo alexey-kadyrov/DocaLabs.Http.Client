@@ -76,6 +76,7 @@
     <Compile Include="Configuration\HttpClientCertificateReferenceElementTests.cs" />
     <Compile Include="Configuration\HttpClientEndpointElementTests.cs" />
     <Compile Include="Configuration\HttpClientProxyElementTests.cs" />
+    <Compile Include="Configuration\NetworkCredentialsElementTests.cs" />
     <Compile Include="ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\GZipContentDecoderTests.cs" />

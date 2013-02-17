@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
-using System.Net.Security;
 using System.Reflection;
 using System.Threading;
 using DocaLabs.Http.Client.Configuration;
@@ -40,7 +39,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Gets a service Url
         /// </summary>
-        public Uri BaseUrl { get; private set; }
+        protected Uri BaseUrl { get; private set; }
 
         /// <summary>
         /// Gets a protocol method to be used in the request.
@@ -48,28 +47,18 @@ namespace DocaLabs.Http.Client
         /// if there is RequestSerializationAttribute defined either on the TQuery class or one of its properties or on the HttpClient's subclass then the method will be POST
         /// otherwise it'll use GET. The default value is null.
         /// </summary>
-        public virtual string RequestMethod { get { return null; } }
+        protected virtual string RequestMethod { get { return null; } }
 
         /// <summary>
         /// Gets or sets the request timeout, the default value is 90 seconds.
         /// </summary>
-        public int RequestTimeout { get; set; }
+        protected int RequestTimeout { get; set; }
 
         /// <summary>
         /// Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.
         /// The default value is true.
         /// </summary>
-        public bool AutoSetAcceptEncoding { get; set; }
-
-        /// <summary>
-        /// Gets or sets values indicating the level of authentication and impersonation used for this request.
-        /// </summary>
-        public AuthenticationLevel? AuthenticationLevel { get; set; }
-
-        /// <summary>
-        /// Gets or sets authentication information for the request.
-        /// </summary>
-        public ICredentials Credentials { get; set; }
+        protected bool AutoSetAcceptEncoding { get; set; }
 
         /// <summary>
         /// Gets the service configuration. If it's not defined then the default values will be used.
@@ -178,16 +167,13 @@ namespace DocaLabs.Http.Client
         protected virtual void InitializeRequest(WebRequest request)
         {
             request.Timeout = RequestTimeout;
-            request.Method = GetRequestMethod();
 
-            if (AuthenticationLevel != null)
-            {
-                request.AuthenticationLevel = AuthenticationLevel.GetValueOrDefault();
-                request.Credentials = Credentials;
-            }
+            request.Method = GetRequestMethod();
 
             if (AutoSetAcceptEncoding && (!typeof(TResult).IsAssignableFrom(typeof(Image))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
+
+            Configuration.CopyCredentialsTo(request);
 
             Configuration.CopyHeadersTo(request);
 
