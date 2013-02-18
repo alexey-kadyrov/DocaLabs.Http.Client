@@ -50,17 +50,6 @@ namespace DocaLabs.Http.Client
         protected virtual string RequestMethod { get { return null; } }
 
         /// <summary>
-        /// Gets or sets the request timeout, the default value is 90 seconds.
-        /// </summary>
-        protected int RequestTimeout { get; set; }
-
-        /// <summary>
-        /// Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.
-        /// The default value is true.
-        /// </summary>
-        protected bool AutoSetAcceptEncoding { get; set; }
-
-        /// <summary>
         /// Gets the service configuration. If it's not defined then the default values will be used.
         /// </summary>
         protected HttpClientEndpointElement Configuration { get; private set; }
@@ -133,7 +122,7 @@ namespace DocaLabs.Http.Client
 
             var request = CreateRequest(url);
 
-            InitializeRequest(request);
+            InitializeRequest(query, request);
 
             TryWriteRequestData(query, request);
 
@@ -164,13 +153,13 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Initializes the request. If headers, client certificates, and a proxy are defined in the configuration they will be added to the request
         /// </summary>
-        protected virtual void InitializeRequest(WebRequest request)
+        protected virtual void InitializeRequest(TQuery query, WebRequest request)
         {
-            request.Timeout = RequestTimeout;
+            request.Timeout = Configuration.Timeout;
 
             request.Method = GetRequestMethod();
 
-            if (AutoSetAcceptEncoding && (!typeof(TResult).IsAssignableFrom(typeof(Image))))
+            if (Configuration.AutoSetAcceptEncoding && (!typeof(TResult).IsAssignableFrom(typeof(Image))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
             Configuration.CopyCredentialsTo(request);
@@ -288,9 +277,6 @@ namespace DocaLabs.Http.Client
 
             if (Configuration.BaseUrl != null)
                 BaseUrl = Configuration.BaseUrl;
-
-            RequestTimeout = Configuration.Timeout;
-            AutoSetAcceptEncoding = Configuration.AutoSetAcceptEncoding;
         }
 
         HttpClientEndpointElement GetConfigurationElement(string configurationName)

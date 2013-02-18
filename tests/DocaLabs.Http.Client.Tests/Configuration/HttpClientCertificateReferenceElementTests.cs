@@ -50,7 +50,22 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         It should_change_find_type =
             () => element.X509FindType.ShouldEqual(X509FindType.FindByThumbprint);
 
-        It should_change_find =
+        It should_change_find_value =
             () => element.FindValue.ShouldEqual("some certificate");
+    }
+
+    [Subject(typeof(HttpClientCertificateReferenceElement))]
+    class when_setting_find_value_on_http_client_certitificate_reference_to_null
+    {
+        static HttpClientCertificateReferenceElement element;
+
+        Establish context =
+            () => element = new HttpClientCertificateReferenceElement();
+
+        Because of = 
+            () => element.FindValue = null;
+
+        It should_set_find_value_to_empty_string =
+            () => element.FindValue.ShouldBeEmpty();
     }
 }

@@ -29,7 +29,6 @@ namespace DocaLabs.Http.Client.Configuration
         public NetworkCredentialsElement Credentials
         {
             get { return ((NetworkCredentialsElement)base[CredentialsProperty]); }
-            set { base[CredentialsProperty] = value; }
         }
     }
 }

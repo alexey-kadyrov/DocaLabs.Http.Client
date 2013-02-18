@@ -73,8 +73,10 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="Configuration\HttpClientCertificateReferenceElementTests.cs" />
     <Compile Include="Configuration\HttpClientEndpointElementTests.cs" />
+    <Compile Include="Configuration\HttpClientEndpointSectionTests.cs" />
     <Compile Include="Configuration\HttpClientProxyElementTests.cs" />
     <Compile Include="Configuration\NetworkCredentialsElementTests.cs" />
     <Compile Include="ContentEncoding\ContentDecoderFactoryTests.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="Mapping\QueryBuilderTests.cs" />
     <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverterTests.cs" />
     <Compile Include="Mapping\UrlBuilderTests.cs" />
+    <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
     <Compile Include="Utils\DictionaryListTests.cs" />
     <Compile Include="_Utils\IGenericService.cs" />

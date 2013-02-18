@@ -25,7 +25,7 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the user name if the CredentialsType is Custom.
+        /// Gets or sets the user name if the CredentialsType is NetworkCredential.
         /// </summary>
         [ConfigurationProperty(UserProperty, IsRequired = false, DefaultValue = "")]
         public string User
@@ -35,7 +35,7 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the password if the CredentialsType is Custom.
+        /// Gets or sets the password if the CredentialsType is NetworkCredential.
         /// </summary>
         [ConfigurationProperty(PasswordProperty, IsRequired = false, DefaultValue = "")]
         public string Password
@@ -45,7 +45,7 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the domain if the CredentialsType is Custom.
+        /// Gets or sets the domain if the CredentialsType is NetworkCredential.
         /// </summary>
         [ConfigurationProperty(DomainProperty, IsRequired = false, DefaultValue = "")]
         public string Domain
@@ -68,7 +68,7 @@ namespace DocaLabs.Http.Client.Configuration
                 case CredentialsType.DefaultNetworkCredentials:
                     return CredentialCache.DefaultNetworkCredentials;
 
-                case CredentialsType.Custom:
+                case CredentialsType.NetworkCredential:
                     return new NetworkCredential(
                         string.IsNullOrWhiteSpace(User) ? string.Empty : User,
                         string.IsNullOrWhiteSpace(Password) ? string.Empty : Password,

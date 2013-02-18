@@ -23,6 +23,6 @@
         /// <summary>
         /// The credentials that are specified explicitly by user,password and domain
         /// </summary>
-        Custom = 3
+        NetworkCredential = 3
     }
 }

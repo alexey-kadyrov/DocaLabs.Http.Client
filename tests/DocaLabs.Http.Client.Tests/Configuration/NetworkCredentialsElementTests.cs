@@ -116,7 +116,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
         Establish context = () => element = new NetworkCredentialsElement
         {
-            CredentialsType = CredentialsType.Custom,
+            CredentialsType = CredentialsType.NetworkCredential,
             User = "user1",
             Password = "password1",
             Domain = "domain1"
