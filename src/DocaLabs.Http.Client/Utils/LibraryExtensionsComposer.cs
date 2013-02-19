@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client.Utils
         /// <summary>
         /// Initializes an instance of the LibraryExtensionsComposer class.
         /// </summary>
-        public LibraryExtensionsComposer()
+        public LibraryExtensionsComposer(string searchPattern = "DocaLabs.Extensions.Http.Client.*")
         {
             // An aggregate catalogue that combines multiple catalogues
             var catalog = new AggregateCatalog();
@@ -24,7 +24,7 @@ namespace DocaLabs.Http.Client.Utils
             catalog.Catalogs.Add(new DirectoryCatalog(
                     string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.RelativeSearchPath)
                         ? AppDomain.CurrentDomain.BaseDirectory
-                        : AppDomain.CurrentDomain.RelativeSearchPath, "DocaLabs.Extensions.Http.Client.*"));
+                        : AppDomain.CurrentDomain.RelativeSearchPath, searchPattern));
 
             // Create the CompositionContainer with the parts in the catalogue.
             _compositionContainer = new CompositionContainer(catalog);

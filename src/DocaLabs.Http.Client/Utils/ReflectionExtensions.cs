@@ -16,6 +16,9 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public static bool IsSimpleType(this Type type)
         {
+            if(type == null)
+                throw new ArgumentNullException("type");
+
             return (type.IsPrimitive ||
                     type.IsEnum ||
                     type == typeof(string) ||
@@ -32,6 +35,9 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public static object GetDefaultValue(this Type type)
         {
+            if(type == null)
+                throw new ArgumentNullException("type");
+
             return type.IsValueType
                 ? Activator.CreateInstance(type)
                 : null;
@@ -42,6 +48,9 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public static bool IsValidOn(this CustomAttributeData attribute, AttributeTargets flags)
         {
+            if(attribute == null)
+                throw new ArgumentNullException("attribute");
+
             var attributes = attribute.AttributeType.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
 
             return attributes.Length == 0 || attributes.Any(x => ((AttributeUsageAttribute)x).ValidOn.HasFlag(flags));
@@ -52,6 +61,9 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public static IList<PropertyInfo> GetAllProperties(this Type type, BindingFlags flags)
         {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
             flags |= BindingFlags.FlattenHierarchy;
 
             var list = type.GetProperties(flags).ToList();
@@ -61,7 +73,7 @@ namespace DocaLabs.Http.Client.Utils
 
             foreach (var @interface in type.GetInterfaces())
             {
-                var properties = @interface.GetProperties(flags).Where(x => (!x.IsSpecialName) && (!list.Exists(x)));
+                var properties = @interface.GetProperties(flags);
 
                 list.AddRange(properties);
             }
@@ -93,7 +105,7 @@ namespace DocaLabs.Http.Client.Utils
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            if (!type.IsEnumerable())
+            if (type.IsGenericTypeDefinition || (!type.IsEnumerable()))
                 return null;
 
             if (type.IsArray)
@@ -110,23 +122,6 @@ namespace DocaLabs.Http.Client.Utils
             return genericEnumerable != null
                 ? genericEnumerable.GetGenericArguments()[0]
                 : typeof(object);
-        }
-
-        static bool Exists(this IEnumerable<PropertyInfo> collection, PropertyInfo property)
-        {
-            var name = property.Name;
-            var propertType = property.PropertyType;
-            var parameters = property.GetIndexParameters();
-
-            return collection.Any(x => x.Name == name && x.PropertyType == propertType && x.GetIndexParameters().Compare(parameters));
-        }
-
-        static bool Compare(this ICollection<ParameterInfo> left, IList<ParameterInfo> right)
-        {
-            if (left.Count != right.Count)
-                return false;
-
-            return !left.Where((t, i) => t.ParameterType != right[i].ParameterType).Any();
         }
     }
 }

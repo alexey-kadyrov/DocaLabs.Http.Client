@@ -100,6 +100,7 @@
     <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
     <Compile Include="Utils\DictionaryListTests.cs" />
+    <Compile Include="Utils\ReflectionExtensionsTests.cs" />
     <Compile Include="_Utils\IGenericService.cs" />
     <Compile Include="_Utils\ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute.cs" />
     <Compile Include="_Utils\IDecoratedService.cs" />
