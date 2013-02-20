@@ -8,12 +8,14 @@ namespace DocaLabs.Http.Client.Integration.Tests._Setup
     static class TestServerSetup
     {
         static ManualResetEvent ServerReady { get; set; }
-        static ManualResetEvent KeepingServerAlive { get; set; }
+        static ManualResetEvent StopServer { get; set; }
+        static ManualResetEvent ServerStopped { get; set; }
 
-        public static void Setup()
+        public static void Start()
         {
             ServerReady = new ManualResetEvent(false);
-            KeepingServerAlive = new ManualResetEvent(false);
+            StopServer = new ManualResetEvent(false);
+            ServerStopped = new ManualResetEvent(true);
 
             AppDomain.CurrentDomain.DomainUnload += HandleDomainUnload;
 
@@ -26,9 +28,15 @@ namespace DocaLabs.Http.Client.Integration.Tests._Setup
             Console.WriteLine(@"{0} started.", typeof(TestService));
         }
 
+        public static void Stop()
+        {
+            StopServer.Set();
+            ServerStopped.WaitOne(TimeSpan.FromSeconds(1));
+        }
+
         static void HandleDomainUnload(object sender, EventArgs e)
         {
-            KeepingServerAlive.Set();
+            Stop();
 
             AppDomain.CurrentDomain.DomainUnload -= HandleDomainUnload;
         }
@@ -37,21 +45,13 @@ namespace DocaLabs.Http.Client.Integration.Tests._Setup
         {
             try
             {
+                ServerStopped.Reset();
+
                 using (var host = new ServiceHost(typeof(TestService)/*, new Uri("http://localhost:5701/TestService")*/))
                 {
-                    ////Add a service endpoint
-                    //host.AddServiceEndpoint(typeof(ITestService), new WSHttpBinding(), "");
-
-                    ////Enable metadata exchange
-                    //host.Description.Behaviors.Add(new ServiceMetadataBehavior
-                    //{
-                    //    HttpGetEnabled = true
-                    //});
-
                     host.Open();
-
                     ServerReady.Set();
-                    KeepingServerAlive.WaitOne();
+                    StopServer.WaitOne();
                 }
             }
             catch(Exception e)
@@ -59,6 +59,8 @@ namespace DocaLabs.Http.Client.Integration.Tests._Setup
                 Console.WriteLine(e);
                 ServerReady.Set();
             }
+
+            ServerStopped.Set();
         }
     }
 }

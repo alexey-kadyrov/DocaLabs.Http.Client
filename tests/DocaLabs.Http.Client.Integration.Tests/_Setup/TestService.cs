@@ -7,6 +7,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._Setup
     {
         public OutData GetAsJson(int value1, string value2)
         {
+            //OperationContext.Current.IncomingMessageHeaders.Count
             return new OutData
             {
                 Value1 = value1,

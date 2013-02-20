@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Configuration\HttpClientCertificateReferenceElementTests.cs" />
     <Compile Include="Configuration\HttpClientEndpointElementTests.cs" />
+    <Compile Include="HttpClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Setup\ITestService.cs" />
     <Compile Include="_Setup\TestServerSetup.cs" />
