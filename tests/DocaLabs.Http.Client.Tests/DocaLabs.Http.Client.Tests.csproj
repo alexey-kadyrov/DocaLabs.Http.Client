@@ -166,16 +166,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="img.gif">
+    <None Include="_Utils\img.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="img.jpg">
+    <None Include="_Utils\img.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="img.png">
+    <None Include="_Utils\img.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="img.tif">
+    <None Include="_Utils\img.tif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

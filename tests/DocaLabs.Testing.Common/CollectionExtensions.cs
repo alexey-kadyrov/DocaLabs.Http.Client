@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using Machine.Specifications;
 
-namespace DocaLabs.Testing.Common.MSpec
+namespace DocaLabs.Testing.Common
 {
     public static class CollectionExtensions
     {

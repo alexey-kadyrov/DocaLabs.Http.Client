@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Machine.Specifications;
 
-namespace DocaLabs.Testing.Common.MSpec
+namespace DocaLabs.Testing.Common
 {
     /// <remarks>
     /// It's impossible to redefine the equality behaviour for objects as it will mess the entity tracking

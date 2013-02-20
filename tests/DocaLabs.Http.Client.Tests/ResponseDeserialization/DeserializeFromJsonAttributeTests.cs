@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using DocaLabs.Http.Client.ResponseDeserialization;
 using DocaLabs.Http.Client.Tests._Utils;
-using DocaLabs.Testing.Common.MSpec;
+using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.ResponseDeserialization

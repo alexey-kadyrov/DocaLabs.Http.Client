@@ -5,7 +5,7 @@ using System.Web;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.RequestSerialization;
 using DocaLabs.Http.Client.Tests._Utils;
-using DocaLabs.Testing.Common.MSpec;
+using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.RequestSerialization

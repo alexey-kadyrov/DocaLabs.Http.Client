@@ -3,9 +3,8 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Machine.Specifications;
-using It = Machine.Specifications.It;
 
-namespace DocaLabs.Testing.Common.MSpec
+namespace DocaLabs.Testing.Common
 {
     // ReSharper disable StaticFieldInGenericType
 

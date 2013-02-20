@@ -1,4 +1,4 @@
-﻿using DocaLabs.Testing.Common.MSpec;
+﻿using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests
