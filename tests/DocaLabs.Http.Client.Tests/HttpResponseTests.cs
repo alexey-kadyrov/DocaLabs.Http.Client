@@ -114,7 +114,7 @@ namespace DocaLabs.Http.Client.Tests
             mock_response.Setup(x => x.GetResponseStream()).Returns(new MemoryStream());
             mock_response.Setup(x => x.IsMutuallyAuthenticated).Returns(true);
             mock_response.Object.ContentLength = 42;
-            mock_response.Object.ContentType = "plain/text; charset=utf-8";
+            mock_response.Object.ContentType = "text/plain; charset=utf-8";
             mock_response.Setup(x => x.ResponseUri).Returns(new Uri("http://contoso.foo/"));
             mock_response.Setup(x => x.Headers).Returns(new WebHeaderCollection());
             mock_response.Setup(x => x.SupportsHeaders).Returns(true);
@@ -133,10 +133,13 @@ namespace DocaLabs.Http.Client.Tests
             () => http_response.ContentLength.ShouldEqual(42);
 
         It should_return_media_type_from_wrapped_web_response =
-            () => http_response.ContentType.MediaType.ShouldEqual("plain/text");
+            () => http_response.ContentType.MediaType.ShouldEqual("text/plain");
 
         It should_return_charset_from_wrapped_web_response =
             () => http_response.ContentType.CharSet.ShouldEqual("utf-8");
+
+        It should_return_http_encoding =
+            () => http_response.TryGetEncoding().ToString().ShouldEqual(Encoding.UTF8.ToString());
 
         It should_return_response_uri_from_wrapped_web_response =
             () => http_response.ResponseUri.ShouldBeTheSameAs(mock_response.Object.ResponseUri);
