@@ -23,7 +23,7 @@ namespace DocaLabs.Http.Client.Tests
         Establish context = () =>
         {
             response_stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
-            Setup("text/plain", response_stream);
+            Setup("text/plain; charset=utf-8", response_stream);
         };
 
         Because of =
@@ -63,7 +63,7 @@ namespace DocaLabs.Http.Client.Tests
             mock_response = new Mock<WebResponse>();
             mock_response.SetupAllProperties();
             mock_response.Setup(x => x.GetResponseStream()).Returns((Stream)null);
-            mock_response.Object.ContentType = "plain/text";
+            mock_response.Object.ContentType = "plain/text; charset=utf-8";
             mock_response.Object.ContentLength = 0;
 
             mock_request = new Mock<WebRequest>();
@@ -93,8 +93,8 @@ namespace DocaLabs.Http.Client.Tests
     [Subject(typeof(HttpResponse))]
     class when_http_response_is_used_with_plain_text_data : response_deserialization_test_context
     {
-        Establish context = 
-            () => Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+        Establish context =
+            () => Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
 
         It should_deserialize_string_data =
             () => http_response.AsString().ShouldEqual("Hello World!");
@@ -114,7 +114,7 @@ namespace DocaLabs.Http.Client.Tests
             mock_response.Setup(x => x.GetResponseStream()).Returns(new MemoryStream());
             mock_response.Setup(x => x.IsMutuallyAuthenticated).Returns(true);
             mock_response.Object.ContentLength = 42;
-            mock_response.Object.ContentType = "plain/text";
+            mock_response.Object.ContentType = "plain/text; charset=utf-8";
             mock_response.Setup(x => x.ResponseUri).Returns(new Uri("http://contoso.foo/"));
             mock_response.Setup(x => x.Headers).Returns(new WebHeaderCollection());
             mock_response.Setup(x => x.SupportsHeaders).Returns(true);
@@ -132,8 +132,11 @@ namespace DocaLabs.Http.Client.Tests
         It should_return_content_length_from_wrapped_web_response =
             () => http_response.ContentLength.ShouldEqual(42);
 
-        It should_return_content_type_from_wrapped_web_response =
-            () => http_response.ContentType.ShouldEqual("plain/text");
+        It should_return_media_type_from_wrapped_web_response =
+            () => http_response.ContentType.MediaType.ShouldEqual("plain/text");
+
+        It should_return_charset_from_wrapped_web_response =
+            () => http_response.ContentType.CharSet.ShouldEqual("utf-8");
 
         It should_return_response_uri_from_wrapped_web_response =
             () => http_response.ResponseUri.ShouldBeTheSameAs(mock_response.Object.ResponseUri);

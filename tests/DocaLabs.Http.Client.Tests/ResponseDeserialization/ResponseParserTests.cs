@@ -34,7 +34,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
 
         Establish context = () =>
         {
-            Setup("application/json", new MemoryStream());
+            Setup("application/json; charset=utf-8", new MemoryStream());
 
             original_providers = ResponseParser.Providers;
 
@@ -148,7 +148,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         {
             order = 1;
 
-            Setup("application/json", new MemoryStream());
+            Setup("application/json; charset=utf-8", new MemoryStream());
 
             original_providers = ResponseParser.Providers;
 

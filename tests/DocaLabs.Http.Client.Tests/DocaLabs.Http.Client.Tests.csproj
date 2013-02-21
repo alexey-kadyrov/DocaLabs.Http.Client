@@ -98,6 +98,7 @@
     <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverterTests.cs" />
     <Compile Include="Mapping\UrlBuilderTests.cs" />
     <Compile Include="Utils\CollectionExtensionsTests.cs" />
+    <Compile Include="Utils\ContentTypeExtensionsTests.cs" />
     <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
     <Compile Include="Utils\DictionaryListTests.cs" />
     <Compile Include="Utils\ReflectionExtensionsTests.cs" />

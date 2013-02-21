@@ -76,7 +76,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
             if(obj == null)
                 throw new ArgumentNullException("obj");
 
-            request.ContentType = "text/xml";
+            request.ContentType = string.Format("text/xml; charset={0}", Encoding);
 
             if (string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(obj, request);

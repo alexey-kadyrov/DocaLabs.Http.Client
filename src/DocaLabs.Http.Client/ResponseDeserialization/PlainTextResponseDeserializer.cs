@@ -46,17 +46,10 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            return
-                (!string.IsNullOrWhiteSpace(response.ContentType)) &&
-                    (
-                        (
-                            string.Compare(response.ContentType, "text/plain", StringComparison.OrdinalIgnoreCase) == 0 &&
-                            resultType.IsSimpleType()
-                        ) ||
-                        (
-                            string.Compare(response.ContentType, "text/html", StringComparison.OrdinalIgnoreCase) == 0 &&
-                            resultType == typeof(string)
-                        )
+            return (
+                        (response.ContentType.Is("text/plain") && resultType.IsSimpleType()) 
+                        ||
+                        (response.ContentType.Is("text/html") && resultType == typeof(string))
                     );
         }
     }

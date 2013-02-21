@@ -64,6 +64,7 @@
     <Compile Include="JsonSerialization\JsonSerializationProvider.cs" />
     <Compile Include="Mapping\UrlBuilder.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
+    <Compile Include="Utils\ContentTypeExtensions.cs" />
     <Compile Include="Utils\CustomNameValueCollection.cs" />
     <Compile Include="Utils\DictionaryList.cs" />
     <Compile Include="Utils\IDictionaryList.cs" />

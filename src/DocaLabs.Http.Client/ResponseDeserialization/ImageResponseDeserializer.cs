@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.ResponseDeserialization
 {
@@ -51,17 +52,12 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            return
-                (!string.IsNullOrWhiteSpace(response.ContentType)) &&
-                    (
-                        string.Compare(response.ContentType, "image/gif", StringComparison.OrdinalIgnoreCase) == 0 ||
-                        string.Compare(response.ContentType, "image/jpeg", StringComparison.OrdinalIgnoreCase) == 0 ||
-                        string.Compare(response.ContentType, "image/tiff", StringComparison.OrdinalIgnoreCase) == 0 ||
-                        string.Compare(response.ContentType, "image/png", StringComparison.OrdinalIgnoreCase) == 0
+            return  (
+                        response.ContentType.Is("image/gif") || response.ContentType.Is("image/jpeg") ||
+                        response.ContentType.Is("image/tiff") || response.ContentType.Is("image/png")
                     ) &&
                     (
-                        resultType == typeof(Image) ||
-                        resultType == typeof(Bitmap)
+                        resultType == typeof(Image) || resultType == typeof(Bitmap)
                     );
         }
     }

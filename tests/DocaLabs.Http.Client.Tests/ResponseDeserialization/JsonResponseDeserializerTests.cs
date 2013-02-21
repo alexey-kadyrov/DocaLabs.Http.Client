@@ -18,6 +18,29 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new JsonResponseDeserializer();
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (TestTarget)deserializer.Deserialize(http_response, typeof(TestTarget));
+
+        It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(JsonResponseDeserializer), "deserialization")]
+    class when_json_deserializer_is_used_and_there_is_charset_on_content_type : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static JsonResponseDeserializer deserializer;
+        static TestTarget target;
+
+        Establish context = () =>
+        {
+            deserializer = new JsonResponseDeserializer();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
@@ -41,7 +64,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new JsonResponseDeserializer();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -61,7 +84,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new JsonResponseDeserializer();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -103,7 +126,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new JsonResponseDeserializer();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -126,7 +149,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new JsonResponseDeserializer();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -160,6 +183,27 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
 
     [Subject(typeof(JsonResponseDeserializer), "checking that can deserialize")]
     class when_json_deserializer_is_checking_response_with_json_content_type : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static JsonResponseDeserializer deserializer;
+        static bool can_deserialize;
+
+        Establish context = () =>
+        {
+            deserializer = new JsonResponseDeserializer();
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+
+        It should_be_able_to_deserialize =
+            () => can_deserialize.ShouldBeTrue();
+    }
+
+
+    [Subject(typeof(JsonResponseDeserializer), "checking that can deserialize")]
+    class when_json_deserializer_is_checking_response_with_json_content_type_but_without_charset : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
         static JsonResponseDeserializer deserializer;
@@ -208,7 +252,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new JsonResponseDeserializer();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -228,7 +272,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new JsonResponseDeserializer();
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =

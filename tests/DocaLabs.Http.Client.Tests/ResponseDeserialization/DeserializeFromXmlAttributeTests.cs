@@ -19,6 +19,29 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute();
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+
+        It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(DeserializeFromXmlAttribute))]
+    class when_deserialize_from_xml_attribute_is_used_and_charset_is_not_set_in_content_type : response_deserialization_test_context
+    {
+        const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
+        static DeserializeFromXmlAttribute attribute;
+        static TestTarget target;
+
+        Establish context = () =>
+        {
+            attribute = new DeserializeFromXmlAttribute();
             Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
@@ -46,7 +69,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute();
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -73,7 +96,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute { DtdProcessing = DtdProcessing.Prohibit };
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -97,7 +120,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute { DtdProcessing = DtdProcessing.Parse };
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -121,7 +144,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute();
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -144,7 +167,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute();
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -164,7 +187,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute();
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -206,7 +229,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromXmlAttribute();
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =

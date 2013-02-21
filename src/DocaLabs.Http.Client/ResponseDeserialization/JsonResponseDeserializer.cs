@@ -47,10 +47,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            return 
-                (!string.IsNullOrWhiteSpace(response.ContentType)) &&
-                string.Compare(response.ContentType, "application/json", StringComparison.OrdinalIgnoreCase) == 0 && 
-                (!resultType.IsSimpleType());
+            return response.ContentType.Is("application/json") && (!resultType.IsSimpleType());
         }
     }
 }

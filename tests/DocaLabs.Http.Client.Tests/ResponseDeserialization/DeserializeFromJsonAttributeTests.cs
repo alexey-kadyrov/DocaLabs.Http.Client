@@ -18,6 +18,29 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromJsonAttribute();
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+
+        It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(DeserializeFromJsonAttribute))]
+    class when_deserialize_from_json_attribute_is_used_and_content_type_does_not_have_charset : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static DeserializeFromJsonAttribute attribute;
+        static TestTarget target;
+
+        Establish context = () =>
+        {
+            attribute = new DeserializeFromJsonAttribute();
             Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
@@ -41,7 +64,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromJsonAttribute();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -61,7 +84,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromJsonAttribute();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -103,7 +126,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             attribute = new DeserializeFromJsonAttribute();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =

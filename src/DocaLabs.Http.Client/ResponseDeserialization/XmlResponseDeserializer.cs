@@ -53,10 +53,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            return 
-                (!string.IsNullOrWhiteSpace(response.ContentType)) &&
-                string.Compare(response.ContentType, "text/xml", StringComparison.OrdinalIgnoreCase) == 0 &&
-                (!resultType.IsSimpleType());
+            return response.ContentType.Is("text/xml") && (!resultType.IsSimpleType());
         }
 
         static XmlReaderSettings GetXmlReaderSettings()

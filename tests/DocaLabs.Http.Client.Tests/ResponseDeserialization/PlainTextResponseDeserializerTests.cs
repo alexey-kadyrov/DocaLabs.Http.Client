@@ -17,7 +17,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -37,7 +37,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -57,7 +57,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -77,7 +77,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -97,7 +97,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -139,7 +139,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/plain", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -162,7 +162,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("application/json", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -224,7 +224,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -236,6 +236,62 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
 
     [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
     class when_plain_text_deserializer_is_checking_response_with_plain_text_content_type : response_deserialization_test_context
+    {
+        const string data = "";
+        static PlainTextResponseDeserializer deserializer;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        It should_be_able_to_deserialize_for_string =
+            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_int =
+            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_long =
+            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_double =
+            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_decimal =
+            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_guid =
+            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_datetime =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_datetimeoffset =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_timespan =
+            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_enum =
+            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_bool =
+            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeTrue();
+
+        It should_be_able_to_deserialize_for_char =
+            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeTrue();
+
+        It should_not_be_able_to_deserialize_for_refrence_type =
+            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+
+        enum TestEnum
+        {
+        }
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
+    class when_plain_text_deserializer_is_checking_response_with_plain_text_content_type_but_without_charset : response_deserialization_test_context
     {
         const string data = "";
         static PlainTextResponseDeserializer deserializer;
@@ -299,7 +355,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/html", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("text/html; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         It should_be_able_to_deserialize_for_string =
@@ -342,6 +398,62 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
             () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum 
+        {
+        }
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
+    class when_html_text_deserializer_is_checking_response_with_plain_text_content_type_but_without_charset : response_deserialization_test_context
+    {
+        const string data = "";
+        static PlainTextResponseDeserializer deserializer;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("text/html", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        It should_be_able_to_deserialize_for_string =
+            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+
+        It should_not_be_able_to_deserialize_for_int =
+            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_long =
+            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_double =
+            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_decimal =
+            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_guid =
+            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetime =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetimeoffset =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_timespan =
+            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_enum =
+            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_bool =
+            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_char =
+            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_refrence_type =
+            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+
+        enum TestEnum
         {
         }
     }
