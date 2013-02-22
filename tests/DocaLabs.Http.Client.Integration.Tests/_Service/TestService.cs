@@ -11,7 +11,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
             return new OutData
             {
                 Value1 = value1,
-                Value2 = value2
+                Value2 = "GET JSON: " + value2
             };
         }
 
@@ -20,7 +20,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
             return new OutData
             {
                 Value1 = data.Value1,
-                Value2 = data.Value2
+                Value2 = "POST JSON: " + data.Value2
             };
         }
 
@@ -29,7 +29,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
             return new OutData
             {
                 Value1 = value1,
-                Value2 = value2
+                Value2 = "GET XML: " + value2
             };
         }
 
@@ -38,7 +38,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
             return new OutData
             {
                 Value1 = data.Value1,
-                Value2 = data.Value2
+                Value2 = "POST XML: " + data.Value2
             };
         }
     }
