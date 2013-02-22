@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Utils;
@@ -7,20 +9,71 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
 {
     /// <summary>
     /// Deserializes the response stream content using XML format.
+    /// Static methods are thread safe.
     /// </summary>
     public class XmlResponseDeserializer : IResponseDeserializationProvider
     {
+        static readonly object Locker;
+        static HashSet<string> _supportedTypes;
+        static DtdProcessing _dtdProcessing;
+
         /// <summary>
         /// Gets or sets a value that determines the processing of DTDs.  The value is static because the class is meant to be used
         /// unobtrusively and is not accessible directly in the http request pipeline per instance base.
         /// The property is not thread safe so it should be set before the first usage.
         /// The default value is DtdProcessing.Ignore.
         /// </summary>
-        public static DtdProcessing DtdProcessing { get; set; }
+        public static DtdProcessing DtdProcessing
+        {
+            get
+            {
+                lock (Locker)
+                {
+                    return _dtdProcessing;
+                }
+            }
+            set
+            {
+                lock (Locker)
+                {
+                    _dtdProcessing = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets content MIME/media type which are supported by the deserializer.
+        /// By default it's 'text/xml' and 'application/xml'
+        /// </summary>
+        public static string[] SupportedTypes
+        {
+            get
+            {
+                lock (Locker)
+                {
+                    return _supportedTypes.ToArray();
+                }
+            }
+            set
+            {
+                lock (Locker)
+                {
+                    _supportedTypes = new HashSet<string>(value, StringComparer.OrdinalIgnoreCase);
+                }
+            }
+        }
 
         static XmlResponseDeserializer()
         {
-            DtdProcessing = DtdProcessing.Ignore;
+            Locker = new object();
+
+            _dtdProcessing = DtdProcessing.Ignore;
+
+            _supportedTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "text/xml",
+                "application/xml"
+            };
         }
 
         /// <summary>
@@ -53,7 +106,13 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            return response.ContentType.Is("text/xml") && (!resultType.IsSimpleType());
+            if (resultType.IsSimpleType())
+                return false;
+
+            lock (Locker)
+            {
+                return _supportedTypes.Contains(response.ContentType.MediaType);
+            }
         }
 
         static XmlReaderSettings GetXmlReaderSettings()
@@ -61,7 +120,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             return new XmlReaderSettings
             {
                 DtdProcessing = DtdProcessing,
-                ValidationType = DtdProcessing == DtdProcessing.Parse ? ValidationType.DTD : ValidationType.None
+                ValidationType = DtdProcessing == DtdProcessing.Parse ? ValidationType.DTD : ValidationType.None,
             };
         }
     }

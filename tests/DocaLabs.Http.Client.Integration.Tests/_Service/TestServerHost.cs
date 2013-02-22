@@ -3,51 +3,42 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Setup
+namespace DocaLabs.Http.Client.Integration.Tests._Service
 {
-    static class TestServerSetup
+    class TestServerHost<TService> : IDisposable
     {
-        static ManualResetEvent ServerReady { get; set; }
-        static ManualResetEvent StopServer { get; set; }
-        static ManualResetEvent ServerStopped { get; set; }
+        ManualResetEvent ServerReady { get; set; }
+        ManualResetEvent StopServer { get; set; }
+        ManualResetEvent ServerStopped { get; set; }
 
-        public static void Start()
+        public TestServerHost()
         {
             ServerReady = new ManualResetEvent(false);
             StopServer = new ManualResetEvent(false);
             ServerStopped = new ManualResetEvent(true);
 
-            AppDomain.CurrentDomain.DomainUnload += HandleDomainUnload;
-
-            Console.WriteLine(@"Starting {0}.", typeof(TestService));
+            Console.WriteLine(@"Starting {0}.", typeof(TService));
 
             Task.Factory.StartNew(Listener);
 
             ServerReady.WaitOne();
 
-            Console.WriteLine(@"{0} started.", typeof(TestService));
+            Console.WriteLine(@"{0} started.", typeof(TService));
         }
 
-        public static void Stop()
+        public void Dispose()
         {
             StopServer.Set();
             ServerStopped.WaitOne(TimeSpan.FromSeconds(1));
         }
 
-        static void HandleDomainUnload(object sender, EventArgs e)
-        {
-            Stop();
-
-            AppDomain.CurrentDomain.DomainUnload -= HandleDomainUnload;
-        }
-
-        static void Listener()
+        void Listener()
         {
             try
             {
                 ServerStopped.Reset();
 
-                using (var host = new ServiceHost(typeof(TestService)/*, new Uri("http://localhost:5701/TestService")*/))
+                using (var host = new ServiceHost(typeof(TService)))
                 {
                     host.Open();
                     ServerReady.Set();

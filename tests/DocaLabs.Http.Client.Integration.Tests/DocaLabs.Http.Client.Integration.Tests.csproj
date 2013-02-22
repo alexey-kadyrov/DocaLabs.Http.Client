@@ -71,9 +71,9 @@
     <Compile Include="Configuration\HttpClientEndpointElementTests.cs" />
     <Compile Include="HttpClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_Setup\ITestService.cs" />
-    <Compile Include="_Setup\TestServerSetup.cs" />
-    <Compile Include="_Setup\TestService.cs" />
+    <Compile Include="_Service\ITestService.cs" />
+    <Compile Include="_Service\TestServerHost.cs" />
+    <Compile Include="_Service\TestService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
@@ -86,7 +86,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="test-certificate.cer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

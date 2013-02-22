@@ -19,6 +19,29 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (TestTarget)deserializer.Deserialize(http_response, typeof(TestTarget));
+
+        It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(XmlResponseDeserializer), "deserialization")]
+    class when_xml_deserializer_is_used_for_text_xml_media_type : response_deserialization_test_context
+    {
+        const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
+        static XmlResponseDeserializer deserializer;
+        static TestTarget target;
+
+        Establish context = () =>
+        {
+            deserializer = new XmlResponseDeserializer();
             Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
@@ -70,7 +93,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
 
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -103,7 +126,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
             original = XmlResponseDeserializer.DtdProcessing;
             XmlResponseDeserializer.DtdProcessing = DtdProcessing.Prohibit;
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -133,7 +156,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
             original = XmlResponseDeserializer.DtdProcessing;
             XmlResponseDeserializer.DtdProcessing = DtdProcessing.Parse;
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -157,7 +180,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -180,7 +203,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -200,7 +223,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -242,7 +265,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -262,7 +285,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -304,7 +327,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -315,7 +338,27 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(XmlResponseDeserializer), "checking that can deserialize")]
-    class when_xml_deserializer_is_checking_response_with_xml_content_type_but_without_charset : response_deserialization_test_context
+    class when_xml_deserializer_is_checking_response_with_application_xml_content_type_but_without_charset : response_deserialization_test_context
+    {
+        const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
+        static XmlResponseDeserializer deserializer;
+        static bool can_deserialize;
+
+        Establish context = () =>
+        {
+            deserializer = new XmlResponseDeserializer();
+            Setup("application/xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+
+        It should_be_able_to_deserialize =
+            () => can_deserialize.ShouldBeTrue();
+    }
+
+    [Subject(typeof(XmlResponseDeserializer), "checking that can deserialize")]
+    class when_xml_deserializer_is_checking_response_with_text_xml_content_type_but_without_charset : response_deserialization_test_context
     {
         const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
         static XmlResponseDeserializer deserializer;
@@ -335,7 +378,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(XmlResponseDeserializer), "checking that can deserialize")]
-    class when_xml_deserializer_is_checking_response_with_xml_content_type_all_in_capital : response_deserialization_test_context
+    class when_xml_deserializer_is_checking_response_with_text_xml_content_type_all_in_capital : response_deserialization_test_context
     {
         const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
         static XmlResponseDeserializer deserializer;
@@ -355,6 +398,26 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(XmlResponseDeserializer), "checking that can deserialize")]
+    class when_xml_deserializer_is_checking_response_with_application_xml_content_type_all_in_capital : response_deserialization_test_context
+    {
+        const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
+        static XmlResponseDeserializer deserializer;
+        static bool can_deserialize;
+
+        Establish context = () =>
+        {
+            deserializer = new XmlResponseDeserializer();
+            Setup("APPLICATION/Xml", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+
+        It should_be_able_to_deserialize =
+            () => can_deserialize.ShouldBeTrue();
+    }
+
+    [Subject(typeof(XmlResponseDeserializer), "checking that can deserialize")]
     class when_xml_deserializer_is_checking_response_with_xml_content_type_but_for_simple_type : response_deserialization_test_context
     {
         const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
@@ -364,7 +427,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new XmlResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -405,6 +468,32 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         {
             deserializer = new XmlResponseDeserializer();
             Setup("", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+
+        It should_not_be_able_to_deserialize =
+            () => can_deserialize.ShouldBeFalse();
+    }
+
+    [Subject(typeof(XmlResponseDeserializer), "checking that can deserialize")]
+    class when_changing_supported_media_types_to_some_garbage : response_deserialization_test_context
+    {
+        const string data = "<TestTarget><Value1>2012</Value1><Value2>Hello World!</Value2></TestTarget>";
+        static string[] original_supported_types;
+        static XmlResponseDeserializer deserializer;
+        static bool can_deserialize;
+
+        Cleanup after_each =
+            () => XmlResponseDeserializer.SupportedTypes = original_supported_types;
+
+        Establish context = () =>
+        {
+            original_supported_types = XmlResponseDeserializer.SupportedTypes;
+            XmlResponseDeserializer.SupportedTypes = new[] { "weird/type" };
+            deserializer = new XmlResponseDeserializer();
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =

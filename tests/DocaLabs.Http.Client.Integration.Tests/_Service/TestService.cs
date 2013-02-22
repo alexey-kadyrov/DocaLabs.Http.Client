@@ -1,6 +1,6 @@
 using System.ServiceModel;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Setup
+namespace DocaLabs.Http.Client.Integration.Tests._Service
 {
     [ServiceBehavior(AddressFilterMode = AddressFilterMode.Any)]
     public class TestService : ITestService

@@ -56,6 +56,11 @@ namespace DocaLabs.Http.Client.RequestSerialization
         public string Subset { get; set; }
 
         /// <summary>
+        /// Gets or sets media type which will be used in content type. The default value is 'application/xml'
+        /// </summary>
+        public string MediaType { get; set; }
+
+        /// <summary>
         /// Instantiates an instance of the SerializeAsXmlAttribute class.
         /// </summary>
         public SerializeAsXmlAttribute()
@@ -63,6 +68,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
             Encoding = System.Text.Encoding.UTF8.WebName;
             Indent = true;
             IndentChars = "\t";
+            MediaType = "application/xml";
         }
 
         /// <summary>
@@ -76,7 +82,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
             if(obj == null)
                 throw new ArgumentNullException("obj");
 
-            request.ContentType = string.Format("text/xml; charset={0}", Encoding);
+            request.ContentType = string.Format("{0}; charset={1}", MediaType, Encoding);
 
             if (string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(obj, request);

@@ -29,6 +29,42 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=utf-8");
+
+        It should_serialize_object =
+            () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
+
+        It should_not_serialize_doctype_definition =
+            () => GetRequestDataAsXDocument().DocumentType.ShouldBeNull();
+
+        It should_use_tab_identation =
+            () => GetRequestData().ShouldContain("\t");
+
+        It should_use_utf8_encoding =
+            () => GetRequestDataAsXDocument().Declaration.Encoding.ShouldBeEqualIgnoringCase("utf-8");
+    }
+
+    [Subject(typeof(SerializeAsXmlAttribute))]
+    public class when_serialize_as_xml_attribute_is_used_with_text_xml_media_type : request_serialization_test_context
+    {
+        static TestTarget original_object;
+        static SerializeAsXmlAttribute attribute;
+
+        Establish context = () =>
+        {
+            original_object = new TestTarget
+            {
+                Value1 = 2012,
+                Value2 = "Hello World!"
+            };
+
+            attribute = new SerializeAsXmlAttribute { MediaType = "text/xml" };
+        };
+
+        Because of =
+            () => attribute.Serialize(original_object, mock_web_request.Object);
+
+        It should_set_request_content_type_as_xml =
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=utf-8");
 
         It should_serialize_object =
@@ -65,7 +101,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=utf-8");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=utf-8");
 
         It should_add_content_encoding_request_header =
             () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
@@ -113,7 +149,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=utf-8");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=utf-8");
 
         It should_serialize_object =
             () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
@@ -162,7 +198,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=utf-16");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=utf-16");
 
         It should_serialize_object =
             () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
@@ -201,7 +237,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=utf-32");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=utf-32");
 
         It should_serialize_object =
             () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
@@ -240,7 +276,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=us-ascii");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=us-ascii");
 
         It should_serialize_object =
             () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
@@ -279,7 +315,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=utf-8");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=utf-8");
 
         It should_serialize_object =
             () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);
@@ -318,7 +354,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_xml =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("text/xml; charset=utf-8");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/xml; charset=utf-8");
 
         It should_serialize_object =
             () => ParseRequestDataAsXml<TestTarget>().ShouldBeSimilar(original_object);

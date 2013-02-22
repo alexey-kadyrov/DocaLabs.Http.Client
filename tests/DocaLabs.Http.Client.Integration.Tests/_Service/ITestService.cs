@@ -1,10 +1,12 @@
 ﻿using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Xml.Serialization;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Setup
+namespace DocaLabs.Http.Client.Integration.Tests._Service
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/DocaLabs.Http.Client.Integration.Tests._Service")]
+    [XmlRoot(Namespace = "http://schemas.datacontract.org/2004/07/DocaLabs.Http.Client.Integration.Tests._Service")]
     public class OutData
     {
         [DataMember]
@@ -14,7 +16,8 @@ namespace DocaLabs.Http.Client.Integration.Tests._Setup
         public string Value2 { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/DocaLabs.Http.Client.Integration.Tests._Service")]
+    [XmlRoot(Namespace = "http://schemas.datacontract.org/2004/07/DocaLabs.Http.Client.Integration.Tests._Service")]
     public class InData
     {
         [DataMember]
