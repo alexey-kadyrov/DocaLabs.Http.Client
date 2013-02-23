@@ -50,6 +50,11 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
 
         }
 
+        /// <summary>
+        /// Converts a single to its string representation, if the Format is specified then string.Format is used.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         protected string ConvertValue(object value)
         {
             if (value == null)

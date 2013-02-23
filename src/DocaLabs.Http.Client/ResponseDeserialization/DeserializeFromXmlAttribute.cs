@@ -37,13 +37,13 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             // cannot wrap into UnrecoverableHttpClientException as the XmlSerializer reads from the stream  so it may throw network exception
 
             // stream is disposed by the reader
-            using (var reader = XmlReader.Create(response.GetDataStream(), GetXmlReaderSettings(response, resultType)))
+            using (var reader = XmlReader.Create(response.GetDataStream(), GetXmlReaderSettings()))
             {
                 return new XmlSerializer(resultType).Deserialize(reader);
             }
         }
 
-        protected virtual XmlReaderSettings GetXmlReaderSettings(HttpResponse response, Type resultType)
+        XmlReaderSettings GetXmlReaderSettings()
         {
             return new XmlReaderSettings
             {
