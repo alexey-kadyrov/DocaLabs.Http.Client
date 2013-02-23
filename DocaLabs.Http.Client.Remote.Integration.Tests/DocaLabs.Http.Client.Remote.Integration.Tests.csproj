@@ -51,9 +51,22 @@
   <ItemGroup>
     <Compile Include="HttpClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_Contract\AuthenticatedUser.cs" />
-    <Compile Include="_Contract\IAuthenticatedUser.cs" />
+    <Compile Include="_Contract\_Authentication\AuthenticatedUser.cs" />
+    <Compile Include="_Contract\_Get\GetDataRequest.cs" />
+    <Compile Include="_Contract\_Get\GetDataResponse.cs" />
+    <Compile Include="_Contract\_Authentication\IAuthenticatedUser.cs" />
+    <Compile Include="_Contract\_Get\IGetData.cs" />
     <Compile Include="_Contract\IGoogleSearch.cs" />
+    <Compile Include="_Contract\_MixedPost\IMixedPostData.cs" />
+    <Compile Include="_Contract\_MixedPost\InnerPostDataRequest.cs" />
+    <Compile Include="_Contract\_MixedPost\MixedPostDataRequest.cs" />
+    <Compile Include="_Contract\_MixedPost\MixedPostDataResponse.cs" />
+    <Compile Include="_Contract\_Post\IPostData.cs" />
+    <Compile Include="_Contract\_Post\PostDataRequest.cs" />
+    <Compile Include="_Contract\_Post\PostDataResponse.cs" />
+    <Compile Include="_Contract\_Put\IPutData.cs" />
+    <Compile Include="_Contract\_Put\PutDataRequest.cs" />
+    <Compile Include="_Contract\_Put\PutDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

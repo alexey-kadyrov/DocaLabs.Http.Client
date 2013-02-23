@@ -1,8 +1,8 @@
 ﻿using DocaLabs.Http.Client.Integration.Tests._Contract;
 using DocaLabs.Http.Client.Integration.Tests._Service;
 using Machine.Specifications;
-using InData = DocaLabs.Http.Client.Integration.Tests._Contract.InData;
-using OutData = DocaLabs.Http.Client.Integration.Tests._Contract.OutData;
+using DataRequest = DocaLabs.Http.Client.Integration.Tests._Contract.DataRequest;
+using DataResponse = DocaLabs.Http.Client.Integration.Tests._Contract.DataResponse;
 
 namespace DocaLabs.Http.Client.Integration.Tests
 {
@@ -11,7 +11,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     {
         static TestServerHost<TestService> host;
         static ITestGetService1 client;
-        static OutData result;
+        static DataResponse result;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -23,7 +23,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => result = client.GetData(new InData { Value1 = 42, Value2 = "Hello World!" });
+            () => result = client.GetData(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
 
         It should_call_the_service_and_return_data =
             () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "GET JSON: Hello World!");
@@ -34,7 +34,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     {
         static TestServerHost<TestService> host;
         static ITestPostJsonService1 client;
-        static OutData result;
+        static DataResponse result;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => result = client.PostData(new InData { Value1 = 42, Value2 = "Hello World!" });
+            () => result = client.PostData(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
 
         It should_call_the_service_and_return_data =
             () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "POST JSON: Hello World!");
@@ -57,7 +57,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     {
         static TestServerHost<TestService> host;
         static ITestGetService1 client;
-        static OutData result;
+        static DataResponse result;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -69,7 +69,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => result = client.GetData(new InData { Value1 = 42, Value2 = "Hello World!" });
+            () => result = client.GetData(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
 
         It should_call_the_service_and_return_data =
             () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "GET XML: Hello World!");
@@ -80,7 +80,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     {
         static TestServerHost<TestService> host;
         static ITestPostXmlService1 client;
-        static OutData result;
+        static DataResponse result;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -92,7 +92,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => result = client.PostData(new InData { Value1 = 42, Value2 = "Hello World!" });
+            () => result = client.PostData(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
 
         It should_call_the_service_and_return_data =
             () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "POST XML: Hello World!");
@@ -103,7 +103,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     {
         static TestServerHost<TestService> host;
         static ITestGetService1 client;
-        static OutData result;
+        static DataResponse result;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -115,7 +115,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => result = client.GetData(new InData { Value1 = 42, Value2 = "Hello World!" });
+            () => result = client.GetData(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
 
         It should_call_the_service_and_return_data =
             () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "GET JSON: Hello World!");

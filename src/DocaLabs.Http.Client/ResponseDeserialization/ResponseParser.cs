@@ -83,12 +83,18 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             if (deserializer != null)
                 return deserializer.Deserialize(response, resultType);
 
-            if (resultType == typeof (VoidType))
-                return VoidType.Value;
-
             var provider = FindProvider(response, resultType);
             if (provider != null)
                 return provider.Deserialize(response, resultType);
+
+            if (resultType == typeof(string))
+                return response.AsString();
+
+            if (resultType == typeof(byte[]))
+                return response.AsByteArray();
+
+            if (resultType == typeof(VoidType))
+                return VoidType.Value;
 
             throw new UnrecoverableHttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }

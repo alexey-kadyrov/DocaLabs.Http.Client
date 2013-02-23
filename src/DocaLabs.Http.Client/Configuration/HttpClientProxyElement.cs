@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Configuration
     public class HttpClientProxyElement : ConfigurationElement
     {
         const string AddressProperty = "address";
-        const string CredentialsProperty = "credentials";
+        const string CredentialProperty = "credential";
 
         /// <summary>
         /// Gets or sets the proxy address.
@@ -25,10 +25,10 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the proxy's credentials.
         /// </summary>
-        [ConfigurationProperty(CredentialsProperty, IsRequired = false)]
-        public NetworkCredentialsElement Credentials
+        [ConfigurationProperty(CredentialProperty, IsRequired = false)]
+        public NetworkCredentialElement Credential
         {
-            get { return ((NetworkCredentialsElement)base[CredentialsProperty]); }
+            get { return ((NetworkCredentialElement)base[CredentialProperty]); }
         }
     }
 }

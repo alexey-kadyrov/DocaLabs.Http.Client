@@ -54,8 +54,8 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
-    <Compile Include="Configuration\CredentialsType.cs" />
-    <Compile Include="Configuration\NetworkCredentialsElement.cs" />
+    <Compile Include="Configuration\CredentialType.cs" />
+    <Compile Include="Configuration\NetworkCredentialElement.cs" />
     <Compile Include="HttpClientFactory.cs" />
     <Compile Include="JsonSerialization\DefaultJsonDeserializer.cs" />
     <Compile Include="JsonSerialization\DefaultJsonSerializer.cs" />

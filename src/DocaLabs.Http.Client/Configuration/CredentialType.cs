@@ -1,12 +1,12 @@
 ﻿namespace DocaLabs.Http.Client.Configuration
 {
     /// <summary>
-    /// Defines a type of credentials for NetworkCredentialsElement
+    /// Defines a type of credentials for NetworkCredentialElement
     /// </summary>
-    public enum CredentialsType
+    public enum CredentialType
     {
         /// <summary>
-        /// Credentials are not defined.
+        /// Credential are not defined.
         /// </summary>
         None = 0,
 

@@ -36,7 +36,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.AuthenticationLevel.ShouldBeNull();
 
         It should_have_credentials_set_to_none =
-            () => element.Credentials.CredentialsType.ShouldEqual(CredentialsType.None);
+            () => element.Credential.CredentialType.ShouldEqual(CredentialType.None);
 
         It should_have_empty_collection_of_headers =
             () => element.Headers.ShouldBeEmpty();
@@ -178,7 +178,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
             element = new HttpClientEndpointElement();
             element.Proxy.Address = new Uri("http://foo.bar/");
-            element.Proxy.Credentials.CredentialsType = CredentialsType.DefaultCredentials;
+            element.Proxy.Credential.CredentialType = CredentialType.DefaultCredentials;
         };
 
         Because of =
@@ -329,9 +329,9 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
             element = new HttpClientEndpointElement
             {
-                Credentials =
+                Credential =
                 {
-                    CredentialsType = CredentialsType.DefaultCredentials
+                    CredentialType = CredentialType.DefaultCredentials
                 }
             };
         };
@@ -361,9 +361,9 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             element = new HttpClientEndpointElement
             {
                 AuthenticationLevel = AuthenticationLevel.MutualAuthRequired,
-                Credentials =
+                Credential =
                 {
-                    CredentialsType = CredentialsType.DefaultCredentials
+                    CredentialType = CredentialType.DefaultCredentials
                 }
             };
         };

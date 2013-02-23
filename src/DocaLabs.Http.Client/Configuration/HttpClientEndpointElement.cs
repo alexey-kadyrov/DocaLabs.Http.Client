@@ -17,7 +17,7 @@ namespace DocaLabs.Http.Client.Configuration
         const string TimeoutProperty = "timeout";
         const string AutoSetAcceptEncodingProperty = "autoSetAcceptEncoding";
         const string AuthenticationLevelProperty = "authenticationLevel";
-        const string CredentialsProperty = "credentials";
+        const string CredentialProperty = "credential";
         const string HeadersProperty = "headers";
         const string ClientCertificatesProperty = "clientCertificates";
         const string ProxyProperty = "proxy";
@@ -86,10 +86,10 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets authentication information for the request.
         /// </summary>
-        [ConfigurationProperty(CredentialsProperty, IsRequired = false)]
-        public NetworkCredentialsElement Credentials
+        [ConfigurationProperty(CredentialProperty, IsRequired = false)]
+        public NetworkCredentialElement Credential
         {
-            get { return ((NetworkCredentialsElement)base[CredentialsProperty]); }
+            get { return ((NetworkCredentialElement)base[CredentialProperty]); }
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// If the AuthenticationLevel and Credentials are defined then the method copies them into the request.
+        /// If the AuthenticationLevel and Credential are defined then the method copies them into the request.
         /// </summary>
         /// <param name="request"></param>
         public void CopyCredentialsTo(WebRequest request)
@@ -155,7 +155,7 @@ namespace DocaLabs.Http.Client.Configuration
             if (AuthenticationLevel != null)
                 request.AuthenticationLevel = AuthenticationLevel.GetValueOrDefault();
 
-            request.Credentials = Credentials.GetCredentials();
+            request.Credentials = Credential.GetCredential();
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace DocaLabs.Http.Client.Configuration
                 throw new ArgumentNullException("request");
 
             if (Proxy != null && Proxy.Address != null)
-                request.Proxy = new WebProxy(Proxy.Address) { Credentials = Proxy.Credentials.GetCredentials() };
+                request.Proxy = new WebProxy(Proxy.Address) { Credentials = Proxy.Credential.GetCredential() };
         }
     }
 }

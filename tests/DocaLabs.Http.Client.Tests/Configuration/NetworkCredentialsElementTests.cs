@@ -4,16 +4,16 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Configuration
 {
-    [Subject(typeof(NetworkCredentialsElement))]
+    [Subject(typeof(NetworkCredentialElement))]
     class when_netwrok_credentials_are_newed
     {
-        static NetworkCredentialsElement element;
+        static NetworkCredentialElement element;
 
         Because of =
-            () => element = new NetworkCredentialsElement();
+            () => element = new NetworkCredentialElement();
 
         It should_have_credentials_type_set_to_none =
-            () => element.CredentialsType.ShouldEqual(CredentialsType.None);
+            () => element.CredentialType.ShouldEqual(CredentialType.None);
 
         It should_have_user_set_to_empty_string =
             () => element.User.ShouldBeEmpty();
@@ -25,24 +25,24 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.Domain.ShouldBeEmpty();
     }
 
-    [Subject(typeof(NetworkCredentialsElement))]
+    [Subject(typeof(NetworkCredentialElement))]
     class when_changing_value_on_netwrok_credentials_which_is_directly_newed
     {
-        static NetworkCredentialsElement element;
+        static NetworkCredentialElement element;
 
         Establish context =
-            () => element = new NetworkCredentialsElement();
+            () => element = new NetworkCredentialElement();
 
         Because of = () =>
         {
-            element.CredentialsType = CredentialsType.DefaultNetworkCredentials;
+            element.CredentialType = CredentialType.DefaultNetworkCredentials;
             element.User = "user1";
             element.Password = "password1";
             element.Domain = "domain1";
         };
 
         It should_change_credentials_type =
-            () => element.CredentialsType.ShouldEqual(CredentialsType.DefaultNetworkCredentials);
+            () => element.CredentialType.ShouldEqual(CredentialType.DefaultNetworkCredentials);
 
         It should_change_user =
             () => element.User.ShouldBeTheSameAs("user1");
@@ -54,76 +54,76 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.Domain.ShouldEqual("domain1");
     }
 
-    [Subject(typeof(NetworkCredentialsElement))]
+    [Subject(typeof(NetworkCredentialElement))]
     class when_getting_credentials_for_none
     {
-        static NetworkCredentialsElement element;
+        static NetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialsElement
+        Establish context = () => element = new NetworkCredentialElement
         {
-            CredentialsType = CredentialsType.None
+            CredentialType = CredentialType.None
         };
 
         Because of =
-            () => credentials = element.GetCredentials();
+            () => credentials = element.GetCredential();
 
         It should_return_null =
             () => credentials.ShouldBeNull();
     }
 
-    [Subject(typeof (NetworkCredentialsElement))]
+    [Subject(typeof (NetworkCredentialElement))]
     class when_getting_credentials_for_default_credentials
     {
-        static NetworkCredentialsElement element;
+        static NetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialsElement
+        Establish context = () => element = new NetworkCredentialElement
         {
-            CredentialsType = CredentialsType.DefaultCredentials
+            CredentialType = CredentialType.DefaultCredentials
         };
 
         Because of =
-            () => credentials = element.GetCredentials();
+            () => credentials = element.GetCredential();
 
         It should_return_default_credentials =
             () => credentials.ShouldBeTheSameAs(CredentialCache.DefaultCredentials);
     }
 
-    [Subject(typeof(NetworkCredentialsElement))]
+    [Subject(typeof(NetworkCredentialElement))]
     class when_getting_credentials_for_default_network_credentials
     {
-        static NetworkCredentialsElement element;
+        static NetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialsElement
+        Establish context = () => element = new NetworkCredentialElement
         {
-            CredentialsType = CredentialsType.DefaultNetworkCredentials
+            CredentialType = CredentialType.DefaultNetworkCredentials
         };
 
         Because of =
-            () => credentials = element.GetCredentials();
+            () => credentials = element.GetCredential();
 
         It should_return_default_network_credentials =
             () => credentials.ShouldBeTheSameAs(CredentialCache.DefaultNetworkCredentials);
     }
 
-    [Subject(typeof(NetworkCredentialsElement))]
+    [Subject(typeof(NetworkCredentialElement))]
     class when_getting_credentials_for_custom_credentials
     {
-        static NetworkCredentialsElement element;
+        static NetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialsElement
+        Establish context = () => element = new NetworkCredentialElement
         {
-            CredentialsType = CredentialsType.NetworkCredential,
+            CredentialType = CredentialType.NetworkCredential,
             User = "user1",
             Password = "password1",
             Domain = "domain1"
         };
 
         Because of =
-            () => credentials = element.GetCredentials();
+            () => credentials = element.GetCredential();
 
         It should_return_network_credential_object =
             () => credentials.ShouldBeOfType<NetworkCredential>();

@@ -7,15 +7,15 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
     public interface ITestService
     {
         [OperationContract, WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetAsJson?value1={value1}&value2={value2}")]
-        OutData GetAsJson(int value1, string value2);
+        DataResponse GetAsJson(int value1, string value2);
 
-        [OperationContract, WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Xml, UriTemplate = "PostAsJson")]
-        OutData PostAsJson(InData data);
+        [OperationContract, WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, UriTemplate = "PostAsJson")]
+        DataResponse PostAsJson(DataRequest data);
 
         [OperationContract, WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "GetAsXml?value1={value1}&value2={value2}")]
-        OutData GetAsXml(int value1, string value2);
+        DataResponse GetAsXml(int value1, string value2);
 
-        [OperationContract, WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, RequestFormat = WebMessageFormat.Json, UriTemplate = "PostAsXml")]
-        OutData PostAsXml(InData data);
+        [OperationContract, WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "PostAsXml")]
+        DataResponse PostAsXml(DataRequest data);
     }
 }

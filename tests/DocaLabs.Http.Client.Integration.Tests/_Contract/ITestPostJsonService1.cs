@@ -5,6 +5,6 @@ namespace DocaLabs.Http.Client.Integration.Tests._Contract
     [SerializeAsJson]
     public interface ITestPostJsonService1
     {
-        OutData PostData(InData query);
+        DataResponse PostData(DataRequest query);
     }
 }

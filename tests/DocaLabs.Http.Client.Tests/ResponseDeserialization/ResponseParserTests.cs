@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.ResponseDeserialization;
@@ -12,7 +13,7 @@ using It = Machine.Specifications.It;
 namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
 {
     [Subject(typeof(ResponseParser))]
-    class when_response_parser_is_used_in_deafult_configuration
+    class when_response_parser_is_used_in_default_configuration
     {
         It should_have_four_providers =
             () => ResponseParser.Providers.Count.ShouldEqual(4);
@@ -225,6 +226,30 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
                 return resultType == typeof(Result);
             }
         }
+    }
+
+    [Subject(typeof(ResponseParser))]
+    class when_response_parser_is_used_to_deserialize_into_string : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+
+        Establish context = 
+            () => Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+
+        It should_be_able_to_deserialize =
+            () => ResponseParser.Parse(mock_request.Object, typeof (string)).ShouldEqual(data);
+    }
+
+    [Subject(typeof(ResponseParser))]
+    class when_response_parser_is_used_to_deserialize_into_byte_array : response_deserialization_test_context
+    {
+        static byte[] data = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
+
+        Establish context =
+            () => Setup("application/json; charset=utf-8", new MemoryStream(data));
+
+        It should_be_able_to_deserialize =
+            () => ResponseParser.Parse(mock_request.Object, typeof(byte[])).ShouldEqual(data);
     }
 
     [Subject(typeof(ResponseParser))]

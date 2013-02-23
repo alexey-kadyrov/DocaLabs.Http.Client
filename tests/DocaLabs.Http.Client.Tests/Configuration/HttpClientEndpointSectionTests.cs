@@ -23,7 +23,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
                                         x.AutoSetAcceptEncoding == false && x.AuthenticationLevel.GetValueOrDefault() == AuthenticationLevel.MutualAuthRequired);
         
         It should_load_credentials =
-            () => endpoint.Credentials.ShouldMatch(x => x.CredentialsType == CredentialsType.NetworkCredential && x.User == "user1" &&
+            () => endpoint.Credential.ShouldMatch(x => x.CredentialType == CredentialType.NetworkCredential && x.User == "user1" &&
                                         x.Password == "password1" && x.Domain == "domain1");
 
         It should_load_headers =
@@ -37,7 +37,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => endpoint.Proxy.Address.ToString().ShouldEqual("http://contoso.com/");
 
         It should_load_proxy_credentials =
-            () => endpoint.Proxy.Credentials.ShouldMatch(x => x.CredentialsType == CredentialsType.NetworkCredential && x.User == "user2" &&
+            () => endpoint.Proxy.Credential.ShouldMatch(x => x.CredentialType == CredentialType.NetworkCredential && x.User == "user2" &&
                                         x.Password == "password2" && x.Domain == "domain2");
     }
 
@@ -69,7 +69,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => endpoint.AuthenticationLevel.ShouldBeNull();
 
         It should_load_empty_credentials =
-            () => endpoint.Credentials.CredentialsType.ShouldEqual(CredentialsType.None);
+            () => endpoint.Credential.CredentialType.ShouldEqual(CredentialType.None);
 
         It should_load_empty_headers =
             () => endpoint.Headers.ShouldBeEmpty();
@@ -81,7 +81,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => endpoint.Proxy.Address.ShouldBeNull();
 
         It should_load_empty_proxy_credentials =
-            () => endpoint.Proxy.Credentials.CredentialsType.ShouldEqual(CredentialsType.None);
+            () => endpoint.Proxy.Credential.CredentialType.ShouldEqual(CredentialType.None);
     }
 
     [Subject(typeof(HttpClientEndpointSection))]

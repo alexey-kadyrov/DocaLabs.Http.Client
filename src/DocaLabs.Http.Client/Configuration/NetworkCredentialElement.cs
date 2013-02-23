@@ -7,26 +7,26 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Represents a configuration element that defines the network credentials. 
     /// </summary>
-    public class NetworkCredentialsElement : ConfigurationElement
+    public class NetworkCredentialElement : ConfigurationElement
     {
-        const string CredentialsTypeProperty = "credentialsType";
+        const string CredentialTypeProperty = "credentialType";
         const string UserProperty = "user";
         const string PasswordProperty = "password";
         const string DomainProperty = "domain";
 
         /// <summary>
         /// Gets or sets the type of credentials. If it's DefaultCredentials or DefaultNetworkCredentials other properties will be ignored.
-        /// The default value is CredentialsType.None.
+        /// The default value is CredentialType.None.
         /// </summary>
-        [ConfigurationProperty(CredentialsTypeProperty, IsRequired = false, DefaultValue = CredentialsType.None)]
-        public CredentialsType CredentialsType
+        [ConfigurationProperty(CredentialTypeProperty, IsRequired = false, DefaultValue = CredentialType.None)]
+        public CredentialType CredentialType
         {
-            get { return ((CredentialsType)base[CredentialsTypeProperty]); }
-            set { base[CredentialsTypeProperty] = value; }
+            get { return ((CredentialType)base[CredentialTypeProperty]); }
+            set { base[CredentialTypeProperty] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the user name if the CredentialsType is NetworkCredential.
+        /// Gets or sets the user name if the CredentialType is NetworkCredential.
         /// </summary>
         [ConfigurationProperty(UserProperty, IsRequired = false, DefaultValue = "")]
         public string User
@@ -36,7 +36,7 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the password if the CredentialsType is NetworkCredential.
+        /// Gets or sets the password if the CredentialType is NetworkCredential.
         /// </summary>
         [ConfigurationProperty(PasswordProperty, IsRequired = false, DefaultValue = "")]
         public string Password
@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the domain if the CredentialsType is NetworkCredential.
+        /// Gets or sets the domain if the CredentialType is NetworkCredential.
         /// </summary>
         [ConfigurationProperty(DomainProperty, IsRequired = false, DefaultValue = "")]
         public string Domain
@@ -59,17 +59,17 @@ namespace DocaLabs.Http.Client.Configuration
         /// Gets credentials from the description.
         /// </summary>
         /// <returns></returns>
-        public ICredentials GetCredentials()
+        public ICredentials GetCredential()
         {
-            switch (CredentialsType)
+            switch (CredentialType)
             {
-                case CredentialsType.DefaultCredentials:
+                case CredentialType.DefaultCredentials:
                     return CredentialCache.DefaultCredentials;
 
-                case CredentialsType.DefaultNetworkCredentials:
+                case CredentialType.DefaultNetworkCredentials:
                     return CredentialCache.DefaultNetworkCredentials;
 
-                case CredentialsType.NetworkCredential:
+                case CredentialType.NetworkCredential:
                     return GetNetworkCredential();
 
                 default:
@@ -77,7 +77,7 @@ namespace DocaLabs.Http.Client.Configuration
             }
         }
 
-        NetworkCredential GetNetworkCredential()
+        ICredentials GetNetworkCredential()
         {
             return new NetworkCredential(
                 string.IsNullOrWhiteSpace(User) ? string.Empty : User,
