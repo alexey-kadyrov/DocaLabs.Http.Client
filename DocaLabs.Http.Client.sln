@@ -25,7 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Remote.Integration.Tests", "DocaLabs.Http.Client.Remote.Integration.Tests\DocaLabs.Http.Client.Remote.Integration.Tests.csproj", "{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Remote.Integration.Tests", "tests\DocaLabs.Http.Client.Remote.Integration.Tests\DocaLabs.Http.Client.Remote.Integration.Tests.csproj", "{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Google.Examples", "tests\DocsaLabs.Http.Client.Google.Examples\DocsaLabs.Http.Client.Google.Examples.csproj", "{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,12 @@ Global
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|x86.ActiveCfg = Release|Any CPU
+		{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,5 +107,6 @@ Global
 		{FF684018-D38B-4BF2-936E-930B454D3B97} = {6684DB84-8528-4089-837C-C75247A7FB4B}
 		{A10951A1-8B5D-4518-93D5-C43476A52B41} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
+		{39FF9D74-01B8-42FE-8B20-FB3A4ED51F00} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 	EndGlobalSection
 EndGlobal
