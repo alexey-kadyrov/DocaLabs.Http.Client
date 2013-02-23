@@ -13,6 +13,7 @@ namespace DocaLabs.Http.Client.Configuration
     {
         const string NameProperty = "name";
         const string BaseUrlProperty = "baseUrl";
+        const string MethodProperty = "method";
         const string TimeoutProperty = "timeout";
         const string AutoSetAcceptEncodingProperty = "autoSetAcceptEncoding";
         const string AuthenticationLevelProperty = "authenticationLevel";
@@ -39,6 +40,16 @@ namespace DocaLabs.Http.Client.Configuration
         {
             get { return ((Uri)base[BaseUrlProperty]); }
             set { base[BaseUrlProperty] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the request's method, e.g. GET,POST,PUT,DELETE. Default value is empty which means that HttpClient will try to figure out the method.
+        /// </summary>
+        [ConfigurationProperty(MethodProperty, IsRequired = false, DefaultValue = "")]
+        public string Method
+        {
+            get { return ((string)base[MethodProperty]); }
+            set { base[MethodProperty] = value; }
         }
 
         /// <summary>

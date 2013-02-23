@@ -47,7 +47,7 @@ namespace DocaLabs.Http.Client
         /// if there is RequestSerializationAttribute defined either on the TQuery class or one of its properties or on the HttpClient's subclass then the method will be POST
         /// otherwise it'll use GET. The default value is null.
         /// </summary>
-        protected virtual string RequestMethod { get { return null; } }
+        protected string Method { get; set; }
 
         /// <summary>
         /// Gets the service configuration. If it's not defined then the default values will be used.
@@ -172,14 +172,14 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Gets the request method (GET,PUT, etc.). If RequestMethod is null or blank then tries to figure out what method to use
+        /// Gets the request method (GET,PUT, etc.). If Method is null or blank then tries to figure out what method to use
         /// by checking the query type.
         /// </summary>
         /// <returns></returns>
         protected virtual string GetRequestMethod()
         {
-            if (!string.IsNullOrWhiteSpace(RequestMethod))
-                return RequestMethod;
+            if (!string.IsNullOrWhiteSpace(Method))
+                return Method;
 
             var type = typeof(TQuery);
 
@@ -277,9 +277,17 @@ namespace DocaLabs.Http.Client
 
             if (Configuration.BaseUrl != null)
                 BaseUrl = Configuration.BaseUrl;
+
+            if (string.IsNullOrWhiteSpace(Method))
+                Method = Configuration.Method;
         }
 
-        HttpClientEndpointElement GetConfigurationElement(string configurationName)
+        /// <summary>
+        /// Returns endpoint configuration. If configuration is not found in the app.config (or web.config) then the default will be used.
+        /// </summary>
+        /// <param name="configurationName">The parameter that was passed to the constructor. It it's empty string then that full class name will be used.</param>
+        /// <returns></returns>
+        protected virtual HttpClientEndpointElement GetConfigurationElement(string configurationName)
         {
             if (string.IsNullOrWhiteSpace(configurationName))
                 configurationName = GetType().FullName;

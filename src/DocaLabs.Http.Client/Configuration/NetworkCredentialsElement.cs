@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Net;
 
 namespace DocaLabs.Http.Client.Configuration
@@ -69,14 +70,19 @@ namespace DocaLabs.Http.Client.Configuration
                     return CredentialCache.DefaultNetworkCredentials;
 
                 case CredentialsType.NetworkCredential:
-                    return new NetworkCredential(
-                        string.IsNullOrWhiteSpace(User) ? string.Empty : User,
-                        string.IsNullOrWhiteSpace(Password) ? string.Empty : Password,
-                        string.IsNullOrWhiteSpace(Domain) ? string.Empty : Domain);
+                    return GetNetworkCredential();
 
                 default:
                     return null;
             }
+        }
+
+        NetworkCredential GetNetworkCredential()
+        {
+            return new NetworkCredential(
+                string.IsNullOrWhiteSpace(User) ? string.Empty : User,
+                string.IsNullOrWhiteSpace(Password) ? string.Empty : Password,
+                string.IsNullOrWhiteSpace(Domain) ? string.Empty : Domain);
         }
     }
 }

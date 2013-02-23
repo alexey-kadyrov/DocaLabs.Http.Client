@@ -23,6 +23,9 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         It should_have_base_url_set_to_null =
             () => element.BaseUrl.ShouldBeNull();
 
+        It should_have_method_set_to_blank_string =
+            () => element.Method.ShouldBeEmpty();
+
         It should_have_timeout_set_to_90_seconds =
             () => element.Timeout.ShouldEqual(90000);
 
@@ -61,12 +64,16 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         {
             element.Name = "name1";
             element.BaseUrl = base_url;
+            element.Method = "PUT";
             element.Timeout = 1;
             element.AutoSetAcceptEncoding = false;
         };
 
         It should_change_name =
             () => element.Name.ShouldEqual("name1");
+
+        It should_change_method =
+            () => element.Method.ShouldEqual("PUT");
 
         It should_change_base_url =
             () => element.BaseUrl.ShouldBeTheSameAs(base_url);

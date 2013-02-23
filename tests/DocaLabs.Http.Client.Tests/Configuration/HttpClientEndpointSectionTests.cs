@@ -56,6 +56,9 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         It should_have_base_url_set_to_null =
             () => endpoint.BaseUrl.ShouldBeNull();
 
+        It should_have_method_set_to_blank_string =
+            () => endpoint.Method.ShouldBeEmpty();
+
         It should_have_timeout_set_to_configured_value =
             () => endpoint.Timeout.ShouldEqual(2000);
 
