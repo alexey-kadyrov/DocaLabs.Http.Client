@@ -52,8 +52,19 @@ For example for Google's street view you would need to define someting like:
 More details
 ------------
 By default all public properties of a query model are mapped to URL's query part using a property name as a parameter name. Properties can be ignore by marling them with QueryIgnoreAttribute and the parameter name can be changed by using QueryParameterAttribute.
+
 The behaviour can be altered by using attributes. If you want your entire query model to be serialised into request body you can apply any descendants of RequestSerializationAttribute to the model type or the service interface. However if you are not using HttpClientFactory to instantiate but isntead prefer to use HttpClient<,> directly you will need to create subclass an apply the attribute on that subclass (it's only in case if you do not want to drop[ the attribut in your query model type).
+
 You can also mix by mapping some properties to a URL's query part and one of the properties to a request's body, you wiil need mark the property with QueryIgnoreAttribute and any descendants of RequestSerializationAttribute which you want to serialisr to request body.
+
 The request can be compressed using deflate or gzip, for details see descendants of RequestSerializationAttribute.
 
+By defult the request method is determied based on a query model (if it doesn't have anything to serialize into a request body then it's GET otherwies it's POST) but you can define it explicitly in an application configuration file.
+
+
 The response is processed smartly - it checks whenever the conttent MIME type is 'applicatiion/json', 'application/xml', 'text/xml' and tryes to use appropriate deserialization. However you can still supply your own deserialization using subclasses of ResponseDeserializationAttribute defined either on the result model type or the service interface.
+
+
+The service intarface must have only one method with one parametr (and without any properties).
+
+The service behaviour can be confogured using an application configuration file where you can specify baseURL (instead of on CreateInstance) timeout, headers, authentication, client certificates, proxy.
