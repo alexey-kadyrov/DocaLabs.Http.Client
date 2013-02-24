@@ -71,3 +71,5 @@ The response is processed smartly - it checks whenever the conttent MIME type is
 The service intarface must have only one method with one parametr (and without any properties).
 
 The service behaviour can be confogured using an application configuration file where you can specify baseURL (instead of on CreateInstance) timeout, headers, authentication, client certificates, proxy.
+
+<a href='http://www.pledgie.com/campaigns/19326'><img alt='Click here to lend your support to: DocaLabs.Http.Client and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/19326.png?skin_name=chrome' border='0' /></a>
