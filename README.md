@@ -4,6 +4,9 @@ DocaLabs.Http.Client
 Strong typed HTTP client library. The main goal of the library is to minimize plumbing code to bare minimum.
 ------------------------------------------------------------------------------------------------------------
 
+The nuget package can be found at: https://nuget.org/packages/DocaLabs.Http.Client/
+
+
 In order to use the library in most cases you would need to define:
 * An interface for the remote service.
 * A class for request data (query model), properties of that class can be mapped into the HTTP query or to the request body.
