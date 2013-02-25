@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using DocaLabs.Conversion;
-using DocaLabs.Http.Client.Mapping.Attributes;
+using DocaLabs.Http.Client.Binding.Mapping.Attributes;
 
-namespace DocaLabs.Http.Client.Mapping.PropertyConverters
+namespace DocaLabs.Http.Client.Binding.Mapping.PropertyConverters
 {
     /// <summary>
     /// Base class for property converters.

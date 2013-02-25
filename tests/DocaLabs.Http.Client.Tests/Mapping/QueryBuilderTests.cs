@@ -1,5 +1,5 @@
 ﻿using System;
-using DocaLabs.Http.Client.Mapping;
+using DocaLabs.Http.Client.Binding.Mapping;
 using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 

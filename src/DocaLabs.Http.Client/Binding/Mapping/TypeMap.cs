@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DocaLabs.Http.Client.Mapping.Attributes;
-using DocaLabs.Http.Client.Mapping.PropertyConverters;
+using DocaLabs.Http.Client.Binding.Mapping.Attributes;
+using DocaLabs.Http.Client.Binding.Mapping.PropertyConverters;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Mapping
+namespace DocaLabs.Http.Client.Binding.Mapping
 {
     /// <summary>
     /// Defines class that contains information about properties that can be mapped.

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using DocaLabs.Http.Client.Binding.Mapping;
+using DocaLabs.Http.Client.Binding.Mapping.Attributes;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
-using DocaLabs.Http.Client.Mapping;
-using DocaLabs.Http.Client.Mapping.Attributes;
 using DocaLabs.Http.Client.RequestSerialization;
 using DocaLabs.Http.Client.ResponseDeserialization;
 

@@ -1,8 +1,8 @@
 using System;
 using System.Reflection;
-using DocaLabs.Http.Client.Mapping.PropertyConverters;
+using DocaLabs.Http.Client.Binding.Mapping.PropertyConverters;
 
-namespace DocaLabs.Http.Client.Mapping.Attributes
+namespace DocaLabs.Http.Client.Binding.Mapping.Attributes
 {
     /// <summary>
     /// Defines methods for a custom converter that should be used to convert a property for serializing into URI's query.

@@ -2,8 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using DocaLabs.Http.Client.Binding.Mapping;
 using DocaLabs.Http.Client.ContentEncoding;
-using DocaLabs.Http.Client.Mapping;
 
 namespace DocaLabs.Http.Client.RequestSerialization
 {

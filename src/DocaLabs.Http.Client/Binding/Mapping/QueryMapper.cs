@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Mapping
+namespace DocaLabs.Http.Client.Binding.Mapping
 {
     /// <summary>
     /// Defines methods to create query string from properties of a class.

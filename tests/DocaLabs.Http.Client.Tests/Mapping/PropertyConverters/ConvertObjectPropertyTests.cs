@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using DocaLabs.Http.Client.Mapping;
-using DocaLabs.Http.Client.Mapping.Attributes;
-using DocaLabs.Http.Client.Mapping.PropertyConverters;
+using DocaLabs.Http.Client.Binding.Mapping;
+using DocaLabs.Http.Client.Binding.Mapping.Attributes;
+using DocaLabs.Http.Client.Binding.Mapping.PropertyConverters;
 using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 

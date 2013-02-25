@@ -1,7 +1,7 @@
 ﻿using System;
-using DocaLabs.Http.Client.Mapping.Attributes;
+using DocaLabs.Http.Client.Binding.Mapping.Attributes;
 
-namespace DocaLabs.Http.Client.Mapping
+namespace DocaLabs.Http.Client.Binding.Mapping
 {
     /// <summary>
     /// Adds query string build from query object to the specified URL.

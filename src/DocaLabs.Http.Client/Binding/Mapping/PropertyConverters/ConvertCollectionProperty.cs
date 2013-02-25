@@ -3,7 +3,7 @@ using System.Collections;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Mapping.PropertyConverters
+namespace DocaLabs.Http.Client.Binding.Mapping.PropertyConverters
 {
     /// <summary>
     /// Converts enumerable of simple type properties.

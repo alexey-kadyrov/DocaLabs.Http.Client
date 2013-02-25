@@ -70,6 +70,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The binder {0} must implement at least one oth the next interfaces: IMutator, IUrlMapper, IHeaderMapper, or IRequestStreamWriter..
+        /// </summary>
+        internal static string binder_must_implement {
+            get {
+                return ResourceManager.GetString("binder_must_implement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot figure out how to deserialize web response..
         /// </summary>
         internal static string cannot_figure_out_how_to_deserialize {
