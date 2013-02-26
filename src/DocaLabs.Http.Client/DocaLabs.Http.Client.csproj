@@ -53,13 +53,14 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Binding\BindingExtensions.cs" />
     <Compile Include="Binding\ClientModelBinders.cs" />
-    <Compile Include="Binding\DefaultHeaderMapper.cs" />
+    <Compile Include="Binding\DefaultRequestMapper.cs" />
     <Compile Include="Binding\DefaultMutator.cs" />
     <Compile Include="Binding\DefaultRequestStreamWriter.cs" />
     <Compile Include="Binding\DefaultUrlMapper.cs" />
     <Compile Include="Binding\IMutator.cs" />
-    <Compile Include="Binding\IHeaderMapper.cs" />
+    <Compile Include="Binding\IRequestMapper.cs" />
     <Compile Include="Binding\IRequestStreamWriter.cs" />
     <Compile Include="Binding\IUrlMapper.cs" />
     <Compile Include="Binding\RequestContext.cs" />

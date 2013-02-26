@@ -121,7 +121,7 @@
     <value>Base type argument {0} does not match the original argument {1}.</value>
   </data>
   <data name="binder_must_implement" xml:space="preserve">
-    <value>The binder {0} must implement at least one oth the next interfaces: IMutator, IUrlMapper, IHeaderMapper, or IRequestStreamWriter.</value>
+    <value>The binder {0} must implement at least one oth the next interfaces: IMutator, IUrlMapper, IRequestMapper, or IRequestStreamWriter.</value>
   </data>
   <data name="cannot_figure_out_how_to_deserialize" xml:space="preserve">
     <value>Cannot figure out how to deserialize web response.</value>

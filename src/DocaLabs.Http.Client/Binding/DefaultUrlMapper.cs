@@ -11,11 +11,11 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultUrlMapper : IUrlMapper
     {
-        ConcurrentDictionary<Type, TypeMap> ParsedTypeMaps { get; set; }
+        ConcurrentDictionary<Type, ConverterMap> ParsedMaps { get; set; }
 
         public DefaultUrlMapper()
         {
-            ParsedTypeMaps = new ConcurrentDictionary<Type, TypeMap>();
+            ParsedMaps = new ConcurrentDictionary<Type, ConverterMap>();
         }
 
         public CustomNameValueCollection Map(RequestContext context)
@@ -25,10 +25,10 @@ namespace DocaLabs.Http.Client.Binding
 
             return context.QueryModel == null 
                 ? new CustomNameValueCollection() 
-                : ToDictionary(context.QueryModel, ParsedTypeMaps.GetOrAdd(context.QueryModel.GetType(), x => new TypeMap(x)));
+                : ToDictionary(context.QueryModel, ParsedMaps.GetOrAdd(context.QueryModel.GetType(), x => new ConverterMap(x)));
         }
 
-        static CustomNameValueCollection ToDictionary(object obj, TypeMap map)
+        static CustomNameValueCollection ToDictionary(object obj, ConverterMap map)
         {
             var values = new CustomNameValueCollection();
 
@@ -38,11 +38,11 @@ namespace DocaLabs.Http.Client.Binding
             return values;
         }
 
-        class TypeMap
+        class ConverterMap
         {
             public IList<IConvertProperty> Converters { get; private set; }
 
-            public TypeMap(Type type)
+            public ConverterMap(Type type)
             {
                 Converters = Parse(type);
             }
@@ -59,21 +59,13 @@ namespace DocaLabs.Http.Client.Binding
 
             static IConvertProperty ParseProperty(PropertyInfo info)
             {
-                if (Ignore(info))
+                if (!info.CanGoToUrl())
                     return null;
 
                 return TryGetCustomPropertyParser(info)
                     ?? ConvertCollectionProperty.TryCreate(info)
                     ?? ConvertSimpleProperty.TryCreate(info)
                     ?? ConvertObjectProperty.TryCreate(info);
-            }
-
-            static bool Ignore(PropertyInfo info)
-            {
-                // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
-                return info.GetIndexParameters().Length > 0 ||
-                        info.GetGetMethod() == null ||
-                        info.GetCustomAttribute<QueryIgnoreAttribute>(true) != null;
             }
 
             static IConvertProperty TryGetCustomPropertyParser(PropertyInfo info)
