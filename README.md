@@ -1,8 +1,11 @@
 DocaLabs.Http.Client
 ====================
 
-Strong typed HTTP client library. The main goal of the library is to minimize plumbing code to bare minimum.
-------------------------------------------------------------------------------------------------------------
+_Strong typed HTTP client library. The main goal of the library is to minimize plumbing code to bare minimum._
+
+
+The nuget package can be found at: https://nuget.org/packages/DocaLabs.Http.Client/
+
 
 The nuget package can be found at: https://nuget.org/packages/DocaLabs.Http.Client/
 
@@ -73,3 +76,8 @@ The service intarface must have only one method with one parametr (and without a
 The service behaviour can be confogured using an application configuration file where you can specify baseURL (instead of on CreateInstance) timeout, headers, authentication, client certificates, proxy.
 
 <a href='http://www.pledgie.com/campaigns/19326'><img alt='Click here to lend your support to: DocaLabs.Http.Client and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/19326.png?skin_name=chrome' border='0' /></a>
+
+
+v1.0.1.0 Release Notes
+----------------------
+Fixed #10 When service call method in interface has void return type the factory generates invalid IL code
