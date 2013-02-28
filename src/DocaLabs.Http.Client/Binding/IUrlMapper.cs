@@ -4,6 +4,6 @@ namespace DocaLabs.Http.Client.Binding
 {
     public interface IUrlMapper
     {
-        CustomNameValueCollection Map(RequestContext context);
+        CustomNameValueCollection Map(object model, object client);
     }
 }

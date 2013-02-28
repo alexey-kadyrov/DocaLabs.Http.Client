@@ -2,9 +2,9 @@
 {
     public class DefaultMutator : IMutator
     {
-        public object Mutate(object queryModel, object httpClient)
+        public object Mutate(object model, object client)
         {
-            return queryModel;
+            return model;
         }
     }
 }

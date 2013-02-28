@@ -12,8 +12,8 @@ namespace DocaLabs.Http.Client.Binding
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
                     info.GetGetMethod() != null &&
-                    (!typeof(ICredentials).IsAssignableFrom(info.PropertyType)) &&
-                    (!typeof(WebHeaderCollection).IsAssignableFrom(info.PropertyType)) &&
+                    (!info.IsHeaderCollection()) &&
+                    (!info.IsCredentials()) &&
                     info.GetCustomAttribute<QueryIgnoreAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
@@ -23,10 +23,10 @@ namespace DocaLabs.Http.Client.Binding
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
                    info.GetGetMethod() != null &&
-                   typeof (WebHeaderCollection).IsAssignableFrom(info.PropertyType);
+                   (typeof (WebHeaderCollection).IsAssignableFrom(info.PropertyType) || info.GetCustomAttribute<QueryHeaderAttribute>() != null);
         }
 
-        public static bool IsCredential(this PropertyInfo info)
+        public static bool IsCredentials(this PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&

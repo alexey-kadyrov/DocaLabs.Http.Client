@@ -18,14 +18,11 @@ namespace DocaLabs.Http.Client.Binding
             ParsedMaps = new ConcurrentDictionary<Type, ConverterMap>();
         }
 
-        public CustomNameValueCollection Map(RequestContext context)
+        public CustomNameValueCollection Map(object model, object client)
         {
-            if(context == null)
-                throw new ArgumentNullException("context");
-
-            return context.QueryModel == null 
-                ? new CustomNameValueCollection() 
-                : ToDictionary(context.QueryModel, ParsedMaps.GetOrAdd(context.QueryModel.GetType(), x => new ConverterMap(x)));
+            return model == null 
+                ? new CustomNameValueCollection()
+                : ToDictionary(model, ParsedMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
         }
 
         static CustomNameValueCollection ToDictionary(object obj, ConverterMap map)
