@@ -261,6 +261,10 @@ namespace DocaLabs.Http.Client
                 : OpCodes.Ldnull);
 
             executeGenerator.Emit(OpCodes.Call, baseExecute);
+
+            if(interfaceInfo.OriginalResultType == typeof(void))
+                executeGenerator.Emit(OpCodes.Pop);
+
             executeGenerator.Emit(OpCodes.Ret);
 
             typeBuilder.DefineMethodOverride(newExecute, interfaceInfo.ServiceExecuteMethod);
@@ -287,6 +291,7 @@ namespace DocaLabs.Http.Client
             public Type QueryType { get; private set; }
             public Type ResultType { get; private set; }
             public Type RetryStragtegyType { get; private set; }
+            public Type OriginalResultType { get; private set; }
             public IEnumerable<AttributeInfo> Attributes { get; private set; }
 
             public ClientInterfaceInfo(Type interfaceType)
@@ -302,7 +307,7 @@ namespace DocaLabs.Http.Client
                     throw new ArgumentException(string.Format(Resources.Text.must_have_only_one_method, interfaceType.FullName), "interfaceType");
 
                 ServiceExecuteMethod = methods[0];
-                ResultType = ServiceExecuteMethod.ReturnType;
+                ResultType = OriginalResultType = ServiceExecuteMethod.ReturnType;
 
                 if (ResultType == typeof (void))
                     ResultType = typeof (VoidType);
