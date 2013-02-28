@@ -9,11 +9,11 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
-    public class DefaultUrlMapper : IUrlMapper
+    public class DefaultUrlQueryMapper : IUrlQueryMapper
     {
         ConcurrentDictionary<Type, ConverterMap> ParsedMaps { get; set; }
 
-        public DefaultUrlMapper()
+        public DefaultUrlQueryMapper()
         {
             ParsedMaps = new ConcurrentDictionary<Type, ConverterMap>();
         }
@@ -56,7 +56,7 @@ namespace DocaLabs.Http.Client.Binding
 
             static IConvertProperty ParseProperty(PropertyInfo info)
             {
-                if (!info.CanGoToUrl())
+                if (!info.IsUrlQuery())
                     return null;
 
                 return TryGetCustomPropertyParser(info)

@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding.Mapping.Attributes
         /// <summary>
         /// Returns converter for a property.
         /// </summary>
-        /// <param name="info">PropertyInfo for which the attribute was set.</param>
+        /// <param name="info">IConvertProperty for which the attribute was set.</param>
         /// <returns>Class implementing IConvertProperty that can be used to convert the property value.</returns>
         public abstract IConvertProperty GetConverter(PropertyInfo info);
     }

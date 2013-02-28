@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using DocaLabs.Http.Client.Binding.Mapping.PropertyConverters;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
@@ -28,27 +29,54 @@ namespace DocaLabs.Http.Client.Binding
         {
             var collection = new WebHeaderCollection();
 
-            foreach (var headers in map.Headers.Select(x => x.GetValue(model)).OfType<WebHeaderCollection>())
-                collection.Add(headers);
+            foreach (var items in map.Headers)
+            {
+                var property = items as PropertyInfo;
+                if (property != null)
+                {
+                    var headers = property.GetValue(model) as WebHeaderCollection;
+                    if (headers != null)
+                        collection.Add(headers);
+                }
+                else
+                {
+                    var converter = items as IConvertProperty;
+                    if (converter != null)
+                    {
+                        var values = converter.GetValue(model);
+                        if (values != null)
+                        {
+                            foreach (var key in values.Keys)
+                            {
+                                foreach (var value in values[key])
+                                {
+                                    collection.Add(key, value);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             return collection;
         }
 
         class PropertyMap
         {
-            public IList<PropertyInfo> Headers { get; private set; }
+            public IList<object> Headers { get; private set; }
 
             public PropertyMap(Type type)
             {
                 Headers = Parse(type);
             }
 
-            static IList<PropertyInfo> Parse(Type type)
+            static IList<object> Parse(Type type)
             {
                 return type.IsSimpleType()
-                           ? new List<PropertyInfo>()
+                           ? new List<object>()
                            : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
                                  .Where(x => x.IsHeaderCollection())
+                                 .Cast<object>()
                                  .ToList();
             }
         }
