@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Specialized;
 using System.Net;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Mapping.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverters;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
@@ -29,55 +29,90 @@ namespace DocaLabs.Http.Client.Binding
         {
             var collection = new WebHeaderCollection();
 
-            foreach (var items in map.Headers)
-            {
-                var property = items as PropertyInfo;
-                if (property != null)
-                {
-                    var headers = property.GetValue(model) as WebHeaderCollection;
-                    if (headers != null)
-                        collection.Add(headers);
-                }
-                else
-                {
-                    var converter = items as IConvertProperty;
-                    if (converter != null)
-                    {
-                        var values = converter.GetValue(model);
-                        if (values != null)
-                        {
-                            foreach (var key in values.Keys)
-                            {
-                                foreach (var value in values[key])
-                                {
-                                    collection.Add(key, value);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            foreach (var property in map.Properties)
+                ProcessProperty(model, property, collection);
 
             return collection;
         }
 
+        static void ProcessProperty(object model, object property, NameValueCollection collection)
+        {
+            if(TryAsHeaderCollection(model, property, collection))
+                return;
+
+            TryConverter(model, property, collection);
+        }
+
+        static bool TryAsHeaderCollection(object model, object property, NameValueCollection collection)
+        {
+            var headerProperty = property as PropertyInfo;
+            if (headerProperty == null)
+                return false;
+
+            var headers = headerProperty.GetValue(model) as WebHeaderCollection;
+            if (headers == null)
+                return false;
+
+            collection.Add(headers);
+
+            return true;
+        }
+
+        static void TryConverter(object model, object property, NameValueCollection collection)
+        {
+            var converter = property as IConvertProperty;
+            if (converter == null)
+                return;
+
+            var values = converter.GetValue(model);
+            if (values == null)
+                return;
+
+            foreach (var key in values.Keys)
+            {
+                foreach (var value in values[key])
+                {
+                    collection.Add(key, value);
+                }
+            }
+        }
+
         class PropertyMap
         {
-            public IList<object> Headers { get; private set; }
+            public IList<object> Properties { get; private set; }
 
             public PropertyMap(Type type)
             {
-                Headers = Parse(type);
+                Properties = Parse(type);
             }
 
             static IList<object> Parse(Type type)
             {
-                return type.IsSimpleType()
-                           ? new List<object>()
-                           : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
-                                 .Where(x => x.IsHeaderCollection())
-                                 .Cast<object>()
-                                 .ToList();
+                if(type.IsSimpleType())
+                    return new List<object>();
+
+                var collection = new List<object>();
+
+                foreach (var property in type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance))
+                    ParseProperty(property, collection);
+
+                return collection;
+            }
+
+            static void ParseProperty(PropertyInfo property, List<object> collection)
+            {
+                if (!property.IsHeader())
+                    return;
+
+                if (typeof (WebHeaderCollection).IsAssignableFrom(property.PropertyType))
+                {
+                    collection.Add(property);
+                    return;
+                }
+
+                var converter = ConvertSimpleProperty.TryCreate(property);
+                if (converter != null)
+                    collection.Add(converter);
             }
         }
     }

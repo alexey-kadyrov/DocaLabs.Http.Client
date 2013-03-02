@@ -17,9 +17,9 @@ namespace DocaLabs.Http.Client.Configuration
         /// Gets a list of endpoints that a http client can connect to.
         /// </summary>
         [ConfigurationProperty("", Options = ConfigurationPropertyOptions.IsDefaultCollection)]
-        public HttpClientEndpointCollection Endpoints
+        public ClientEndpointCollection Endpoints
         {
-            get { return (HttpClientEndpointCollection)this[""]; }
+            get { return (ClientEndpointCollection)this[""]; }
         }
 
         /// <summary>

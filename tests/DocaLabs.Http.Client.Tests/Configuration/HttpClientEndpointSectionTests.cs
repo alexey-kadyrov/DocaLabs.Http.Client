@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
     class when_loading_from_file_service_where_all_data_is_defined
     {
         static HttpClientEndpointSection section;
-        static HttpClientEndpointElement endpoint;
+        static IClientEndpoint endpoint;
 
         Establish context =
             () => section = HttpClientEndpointSection.GetDefaultSection();
@@ -27,10 +27,10 @@ namespace DocaLabs.Http.Client.Tests.Configuration
                                         x.Password == "password1" && x.Domain == "domain1");
 
         It should_load_headers =
-            () => endpoint.Headers.ShouldMatch(x => x.Count == 1 && x["x1"].Value == "v1");
+            () => endpoint.Headers.ShouldMatch(x => x.AllKeys.Length == 1 && x["x1"].Value == "v1");
 
         It should_load_client_certificates =
-            () => endpoint.ClientCertificates.ShouldMatch(x => x.Count == 1 && x[0].StoreName == StoreName.My && x[0].StoreLocation == StoreLocation.LocalMachine
+            () => endpoint.ClientCertificates.ShouldMatch(x => x.AllKeys.Length == 1 && x[0].StoreName == StoreName.My && x[0].StoreLocation == StoreLocation.LocalMachine
                 && x[0].X509FindType == X509FindType.FindBySubjectName && x[0].FindValue == "some");
 
         It should_load_proxy_properties =
@@ -45,7 +45,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
     class when_loading_from_file_service_where_only_some_data_is_defined
     {
         static HttpClientEndpointSection section;
-        static HttpClientEndpointElement endpoint;
+        static IClientEndpoint endpoint;
 
         Establish context =
             () => section = HttpClientEndpointSection.GetDefaultSection();

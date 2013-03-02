@@ -254,6 +254,14 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         {
             return ((TestElement) element).Name;
         }
+
+        /// <summary>
+        /// Creates a new instance of the element.
+        /// </summary>
+        protected override ConfigurationElement CreateNewElement()
+        {
+            return Activator.CreateInstance<TestElement>();
+        }
     }
 
     class TestElement : ConfigurationElement

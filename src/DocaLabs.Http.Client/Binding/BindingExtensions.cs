@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Mapping.Attributes;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.RequestSerialization;
 
 namespace DocaLabs.Http.Client.Binding
@@ -12,7 +12,7 @@ namespace DocaLabs.Http.Client.Binding
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
                     info.GetGetMethod() != null &&
-                    (!info.IsHeaderCollection()) &&
+                    (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
                     info.GetCustomAttribute<QueryPathAttribute>(true) != null &&
                     info.GetCustomAttribute<QueryIgnoreAttribute>(true) == null &&
@@ -24,14 +24,14 @@ namespace DocaLabs.Http.Client.Binding
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
                     info.GetGetMethod() != null &&
-                    (!info.IsHeaderCollection()) &&
+                    (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
                     info.GetCustomAttribute<QueryPathAttribute>(true) == null &&
                     info.GetCustomAttribute<QueryIgnoreAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
 
-        public static bool IsHeaderCollection(this PropertyInfo info)
+        public static bool IsHeader(this PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&

@@ -7,10 +7,10 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
     /// <summary>
     /// The test installs and then remove the test certificate to Trusted People, verify that the certificate was actually removed after the test
     /// </summary>
-    [Subject(typeof(HttpClientCertificateReferenceElement))]
+    [Subject(typeof(ClientCertificateReferenceElement))]
     class when_finding_certitificate
     {
-        static HttpClientCertificateReferenceElement element;
+        static ClientCertificateReferenceElement element;
         static X509Certificate2 test_certificate;
 
         Cleanup after_each =
@@ -19,7 +19,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
         Establish context = () =>
         {
             Create();
-            element = new HttpClientCertificateReferenceElement();
+            element = new ClientCertificateReferenceElement();
         };
 
         Because of = () =>

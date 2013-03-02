@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Web;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Binding.Mapping;
-using DocaLabs.Http.Client.Binding.Mapping.Attributes;
 using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using DocaLabs.Http.Client.Binding.Mapping.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverters;
 
-namespace DocaLabs.Http.Client.Binding.Mapping.Attributes
+namespace DocaLabs.Http.Client.Binding.Attributes
 {
     /// <summary>
     /// Defines converter for enumerable properties that serializes into delimited string.

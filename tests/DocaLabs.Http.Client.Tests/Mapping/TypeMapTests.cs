@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Binding.Mapping;
-using DocaLabs.Http.Client.Binding.Mapping.Attributes;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping

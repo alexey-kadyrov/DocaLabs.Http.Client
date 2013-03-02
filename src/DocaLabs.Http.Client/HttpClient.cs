@@ -5,8 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Binding.Mapping;
-using DocaLabs.Http.Client.Binding.Mapping.Attributes;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.RequestSerialization;
@@ -52,7 +52,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Gets the service configuration. If it's not defined then the default values will be used.
         /// </summary>
-        protected HttpClientEndpointElement Configuration { get; private set; }
+        protected IClientEndpoint Configuration { get; private set; }
 
         /// <summary>
         /// Retry strategy for calling the remote endpoint.
@@ -287,7 +287,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         /// <param name="configurationName">The parameter that was passed to the constructor. It it's empty string then that full class name will be used.</param>
         /// <returns></returns>
-        protected virtual HttpClientEndpointElement GetConfigurationElement(string configurationName)
+        protected virtual IClientEndpoint GetConfigurationElement(string configurationName)
         {
             if (string.IsNullOrWhiteSpace(configurationName))
                 configurationName = GetType().FullName;
@@ -295,8 +295,8 @@ namespace DocaLabs.Http.Client
             var section = HttpClientEndpointSection.GetDefaultSection();
 
             return section != null
-                ? section.Endpoints[configurationName] ?? new HttpClientEndpointElement()
-                : new HttpClientEndpointElement();
+                ? section.Endpoints[configurationName] ?? new ClientEndpointElement()
+                : new ClientEndpointElement();
         }
     }
 }

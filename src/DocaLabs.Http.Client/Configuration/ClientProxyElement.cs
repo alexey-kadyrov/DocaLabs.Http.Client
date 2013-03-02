@@ -7,7 +7,7 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Represents a configuration element that defines the proxy for http client endpoint. 
     /// </summary>
-    public class HttpClientProxyElement : ConfigurationElement
+    public class ClientProxyElement : ConfigurationElement, IClientProxy
     {
         const string AddressProperty = "address";
         const string CredentialProperty = "credential";
@@ -15,20 +15,31 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the proxy address.
         /// </summary>
-        [ConfigurationProperty(AddressProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
         public Uri Address
         {
-            get { return ((Uri)base[AddressProperty]); }
-            set { base[AddressProperty] = value; }
+            get { return AddressElement; }
+            set { AddressElement = value; }
         }
 
         /// <summary>
         /// Gets or sets the proxy's credentials.
         /// </summary>
-        [ConfigurationProperty(CredentialProperty, IsRequired = false)]
-        public NetworkCredentialElement Credential
+        public IClientNetworkCredential Credential
         {
-            get { return ((NetworkCredentialElement)base[CredentialProperty]); }
+            get { return CredentialElement; }
+        }
+
+        [ConfigurationProperty(AddressProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
+        Uri AddressElement
+        {
+            get { return ((Uri)base[AddressProperty]); }
+            set { base[AddressProperty] = value; }
+        }
+
+        [ConfigurationProperty(CredentialProperty, IsRequired = false)]
+        ClientNetworkCredentialElement CredentialElement
+        {
+            get { return ((ClientNetworkCredentialElement)base[CredentialProperty]); }
         }
     }
 }

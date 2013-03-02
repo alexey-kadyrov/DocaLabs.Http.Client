@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.Binding.Mapping.Attributes
+namespace DocaLabs.Http.Client.Binding.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public class QueryPathAttribute : Attribute

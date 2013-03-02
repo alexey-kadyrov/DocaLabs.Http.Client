@@ -1,15 +1,16 @@
-using System;
 using System.Collections;
 using System.Configuration;
 
 namespace DocaLabs.Http.Client.Configuration
 {
+    // ReSharper disable AssignNullToNotNullAttribute
+
     /// <summary>
     /// Contains a base collection type to implement configuration collections.
     /// </summary>
     public abstract class ConfigurationElementCollectionBase<TKey, TElement> : ConfigurationElementCollection
         where TKey : class
-        where TElement : ConfigurationElement, new()
+        where TElement : class 
     {
         readonly ConfigurationElementCollectionType _collectionType;
         readonly string _elementName;
@@ -50,11 +51,11 @@ namespace DocaLabs.Http.Client.Configuration
         protected override bool ThrowOnDuplicate { get { return true; } }
 
         /// <summary>
-        /// Gets or sets the EntityTableNameElement object by its key.
+        /// Gets or sets the element object by its key.
         /// </summary>
         public virtual TElement this[TKey key]
         {
-            get { return (TElement)BaseGet(key); }
+            get { return BaseGet(key) as TElement; }
 
             set
             {
@@ -66,18 +67,18 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the EntityTableNameElement object by its position.
+        /// Gets or sets the element object by its position.
         /// </summary>
         public TElement this[int index]
         {
-            get { return (TElement)BaseGet(index); }
+            get { return BaseGet(index) as TElement; }
 
             set
             {
                 if (BaseGet(index) != null)
                     BaseRemoveAt(index);
 
-                BaseAdd(index, value);
+                BaseAdd(index, value as ConfigurationElement);
             }
         }
 
@@ -124,15 +125,15 @@ namespace DocaLabs.Http.Client.Configuration
         /// </summary>
         public int IndexOf(TElement element)
         {
-            return BaseIndexOf(element);
+            return BaseIndexOf(element as ConfigurationElement);
         }
 
         /// <summary>
-        /// Adds a new EntityTableNameElement object to the collection.
+        /// Adds a new element object to the collection.
         /// </summary>
         public virtual void Add(TElement element)
         {
-            BaseAdd(element);
+            BaseAdd(element as ConfigurationElement);
         }
 
         /// <summary>
@@ -156,7 +157,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// </summary>
         public void Remove(TElement element)
         {
-            BaseRemove(GetElementKey(element));
+            BaseRemove(GetElementKey(element as ConfigurationElement));
         }
 
         /// <summary>
@@ -166,13 +167,7 @@ namespace DocaLabs.Http.Client.Configuration
         {
             BaseRemoveAt(index);
         }
-
-        /// <summary>
-        /// Creates a new instance of the element.
-        /// </summary>
-        protected override ConfigurationElement CreateNewElement()
-        {
-            return Activator.CreateInstance<TElement>();
-        }
     }
+
+    // ReSharper restore AssignNullToNotNullAttribute
 }

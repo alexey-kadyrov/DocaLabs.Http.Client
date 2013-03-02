@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.Binding.Mapping.Attributes
+namespace DocaLabs.Http.Client.Binding.Attributes
 {
     /// <summary>
     /// Specifies additional information about a property for serializing into a URI's query.

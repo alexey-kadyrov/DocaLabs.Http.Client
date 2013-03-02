@@ -1,6 +1,6 @@
 ﻿using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.Mapping.PropertyConverters
+namespace DocaLabs.Http.Client.Binding.PropertyConverters
 {
     /// <summary>
     /// Defines methods to convert a property value for the query mapping.

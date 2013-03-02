@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
+using DocaLabs.Http.Client.Binding.Mapping;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.Mapping.PropertyConverters
+namespace DocaLabs.Http.Client.Binding.PropertyConverters
 {
     /// <summary>
     /// Converts reference type properties, like object, etc.

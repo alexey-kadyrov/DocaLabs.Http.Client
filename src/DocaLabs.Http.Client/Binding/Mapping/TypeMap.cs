@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Mapping.Attributes;
-using DocaLabs.Http.Client.Binding.Mapping.PropertyConverters;
+using DocaLabs.Http.Client.Binding.Attributes;
+using DocaLabs.Http.Client.Binding.PropertyConverters;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.Mapping

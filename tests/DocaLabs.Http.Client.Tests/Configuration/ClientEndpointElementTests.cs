@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Net;
 using System.Net.Security;
 using DocaLabs.Http.Client.Configuration;
@@ -9,13 +8,13 @@ using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Configuration
 {
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_http_client_endpoint_is_newed
     {
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Because of =
-            () => element = new HttpClientEndpointElement();
+            () => element = new ClientEndpointElement();
 
         It should_have_name_set_to_empty_string =
             () => element.Name.ShouldBeEmpty();
@@ -48,15 +47,15 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.Proxy.Address.ShouldBeNull();
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_changing_value_on_http_client_endpoint_which_is_directly_newed
     {
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
         static Uri base_url;
 
         Establish context = () =>
         {
-            element = new HttpClientEndpointElement();
+            element = new ClientEndpointElement();
             base_url = new Uri("http://foo.bar/");
         };
 
@@ -85,12 +84,12 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.AutoSetAcceptEncoding.ShouldBeFalse();
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_headers_from_http_client_endpoint
     {
         static WebHeaderCollection headers;
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
@@ -100,9 +99,9 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             web_request.SetupAllProperties();
             web_request.Setup(x => x.Headers).Returns(headers);
 
-            element = new HttpClientEndpointElement();
-            element.Headers.Add(new NameValueConfigurationElement("x-header1", "value11,value12"));
-            element.Headers.Add(new NameValueConfigurationElement("x-header2", "value2"));
+            element = new ClientEndpointElement();
+            element.Headers.Add(new ClientHeaderElement { Name = "x-header1", Value = "value11,value12" });
+            element.Headers.Add(new ClientHeaderElement { Name = "x-header2", Value = "value2" });
         };
 
         Because of =
@@ -115,12 +114,12 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => headers["x-header2"].ShouldEqual("value2");
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_empty_headers_from_http_client_endpoint
     {
         static WebHeaderCollection headers;
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
@@ -130,7 +129,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             web_request.SetupAllProperties();
             web_request.Setup(x => x.Headers).Returns(headers);
 
-            element = new HttpClientEndpointElement();
+            element = new ClientEndpointElement();
         };
 
         Because of =
@@ -140,18 +139,18 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => headers.ShouldBeEmpty();
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_web_proxy_from_http_client_endpoint
     {
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
             web_request = new Mock<WebRequest>();
             web_request.SetupAllProperties();
 
-            element = new HttpClientEndpointElement();
+            element = new ClientEndpointElement();
             element.Proxy.Address = new Uri("http://foo.bar/");
         };
 
@@ -165,18 +164,18 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => ((WebProxy) web_request.Object.Proxy).Credentials.ShouldBeNull();
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_web_proxy_from_http_client_endpoint_whith_credentials_set
     {
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
             web_request = new Mock<WebRequest>();
             web_request.SetupAllProperties();
 
-            element = new HttpClientEndpointElement();
+            element = new ClientEndpointElement();
             element.Proxy.Address = new Uri("http://foo.bar/");
             element.Proxy.Credential.CredentialType = CredentialType.DefaultCredentials;
         };
@@ -191,18 +190,18 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => ((WebProxy)web_request.Object.Proxy).Credentials.ShouldBeTheSameAs(CredentialCache.DefaultCredentials);
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_web_proxy_with_null_address_from_http_client_endpoint
     {
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
             web_request = new Mock<WebRequest>();
             web_request.SetupAllProperties();
 
-            element = new HttpClientEndpointElement();
+            element = new ClientEndpointElement();
         };
 
         Because of =
@@ -212,18 +211,18 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => web_request.Object.Proxy.ShouldBeNull();
     }
     
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_empty_client_certificates_from_http_client_endpoint
     {
         static Mock<HttpWebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
 
         Establish context = () =>
         {
             web_request = new Mock<HttpWebRequest> { CallBase = true };
 
-            element = new HttpClientEndpointElement();
+            element = new ClientEndpointElement();
         };
 
         Because of =
@@ -233,14 +232,14 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => web_request.Object.ClientCertificates.ShouldBeEmpty();
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_headers_from_http_client_endpoint_to_null_request
     {
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
         static Exception exception;
 
         Establish context = 
-            () => element = new HttpClientEndpointElement();
+            () => element = new ClientEndpointElement();
 
         Because of =
             () => exception = Catch.Exception(() => element.CopyHeadersTo(null));
@@ -252,14 +251,14 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => ((ArgumentNullException) exception).ParamName.ShouldEqual("request");
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_client_certificates_from_http_client_endpoint_to_null_request
     {
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
         static Exception exception;
 
         Establish context =
-            () => element = new HttpClientEndpointElement();
+            () => element = new ClientEndpointElement();
 
         Because of =
             () => exception = Catch.Exception(() => element.CopyClientCertificatesTo(null));
@@ -271,14 +270,14 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("request");
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_proxy_from_http_client_endpoint_to_null_request
     {
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
         static Exception exception;
 
         Establish context =
-            () => element = new HttpClientEndpointElement();
+            () => element = new ClientEndpointElement();
 
         Because of =
             () => exception = Catch.Exception(() => element.CopyWebProxyTo(null));
@@ -290,11 +289,11 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("request");
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_credentials_from_http_client_endpoint_which_are_set_to_none_without_authentication_level
     {
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
@@ -302,7 +301,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             web_request.SetupAllProperties();
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
-            element = new HttpClientEndpointElement();
+            element = new ClientEndpointElement();
         };
 
         Because of =
@@ -315,11 +314,11 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => web_request.Object.AuthenticationLevel.ShouldEqual(AuthenticationLevel.None);
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_credentials_from_http_client_endpoint_which_are_set_to_default_credentials_without_authentication_level
     {
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
@@ -327,7 +326,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             web_request.SetupAllProperties();
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
-            element = new HttpClientEndpointElement
+            element = new ClientEndpointElement
             {
                 Credential =
                 {
@@ -346,11 +345,11 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => web_request.Object.AuthenticationLevel.ShouldEqual(AuthenticationLevel.None);
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_credentials_from_http_client_endpoint_which_are_set_to_default_credentials_with_authentication_level
     {
         static Mock<WebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
 
         Establish context = () =>
         {
@@ -358,7 +357,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             web_request.SetupAllProperties();
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
-            element = new HttpClientEndpointElement
+            element = new ClientEndpointElement
             {
                 AuthenticationLevel = AuthenticationLevel.MutualAuthRequired,
                 Credential =
@@ -378,14 +377,14 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => web_request.Object.AuthenticationLevel.ShouldEqual(AuthenticationLevel.MutualAuthRequired);
     }
 
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_credentials_from_http_client_endpoint_to_null_request
     {
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
         static Exception exception;
 
         Establish context =
-            () => element = new HttpClientEndpointElement();
+            () => element = new ClientEndpointElement();
 
         Because of =
             () => exception = Catch.Exception(() => element.CopyCredentialsTo(null));

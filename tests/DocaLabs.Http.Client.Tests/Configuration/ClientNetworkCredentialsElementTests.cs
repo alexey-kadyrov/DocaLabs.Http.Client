@@ -4,13 +4,13 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Configuration
 {
-    [Subject(typeof(NetworkCredentialElement))]
+    [Subject(typeof(ClientNetworkCredentialElement))]
     class when_netwrok_credentials_are_newed
     {
-        static NetworkCredentialElement element;
+        static ClientNetworkCredentialElement element;
 
         Because of =
-            () => element = new NetworkCredentialElement();
+            () => element = new ClientNetworkCredentialElement();
 
         It should_have_credentials_type_set_to_none =
             () => element.CredentialType.ShouldEqual(CredentialType.None);
@@ -25,13 +25,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.Domain.ShouldBeEmpty();
     }
 
-    [Subject(typeof(NetworkCredentialElement))]
+    [Subject(typeof(ClientNetworkCredentialElement))]
     class when_changing_value_on_netwrok_credentials_which_is_directly_newed
     {
-        static NetworkCredentialElement element;
+        static ClientNetworkCredentialElement element;
 
         Establish context =
-            () => element = new NetworkCredentialElement();
+            () => element = new ClientNetworkCredentialElement();
 
         Because of = () =>
         {
@@ -54,13 +54,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.Domain.ShouldEqual("domain1");
     }
 
-    [Subject(typeof(NetworkCredentialElement))]
+    [Subject(typeof(ClientNetworkCredentialElement))]
     class when_getting_credentials_for_none
     {
-        static NetworkCredentialElement element;
+        static ClientNetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialElement
+        Establish context = () => element = new ClientNetworkCredentialElement
         {
             CredentialType = CredentialType.None
         };
@@ -72,13 +72,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => credentials.ShouldBeNull();
     }
 
-    [Subject(typeof (NetworkCredentialElement))]
+    [Subject(typeof (ClientNetworkCredentialElement))]
     class when_getting_credentials_for_default_credentials
     {
-        static NetworkCredentialElement element;
+        static ClientNetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialElement
+        Establish context = () => element = new ClientNetworkCredentialElement
         {
             CredentialType = CredentialType.DefaultCredentials
         };
@@ -90,13 +90,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => credentials.ShouldBeTheSameAs(CredentialCache.DefaultCredentials);
     }
 
-    [Subject(typeof(NetworkCredentialElement))]
+    [Subject(typeof(ClientNetworkCredentialElement))]
     class when_getting_credentials_for_default_network_credentials
     {
-        static NetworkCredentialElement element;
+        static ClientNetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialElement
+        Establish context = () => element = new ClientNetworkCredentialElement
         {
             CredentialType = CredentialType.DefaultNetworkCredentials
         };
@@ -108,13 +108,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => credentials.ShouldBeTheSameAs(CredentialCache.DefaultNetworkCredentials);
     }
 
-    [Subject(typeof(NetworkCredentialElement))]
+    [Subject(typeof(ClientNetworkCredentialElement))]
     class when_getting_credentials_for_custom_credentials
     {
-        static NetworkCredentialElement element;
+        static ClientNetworkCredentialElement element;
         static ICredentials credentials;
 
-        Establish context = () => element = new NetworkCredentialElement
+        Establish context = () => element = new ClientNetworkCredentialElement
         {
             CredentialType = CredentialType.NetworkCredential,
             User = "user1",

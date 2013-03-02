@@ -4,13 +4,13 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Configuration
 {
-    [Subject(typeof(HttpClientCertificateReferenceElement))]
+    [Subject(typeof(ClientCertificateReferenceElement))]
     class when_http_client_certitificate_reference_is_newed
     {
-        static HttpClientCertificateReferenceElement element;
+        static ClientCertificateReferenceElement element;
 
         Because of =
-            () => element = new HttpClientCertificateReferenceElement();
+            () => element = new ClientCertificateReferenceElement();
 
         It should_have_store_name_set_to_my =
             () => element.StoreName.ShouldEqual(StoreName.My);
@@ -25,13 +25,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.FindValue.ShouldBeEmpty();
     }
 
-    [Subject(typeof(HttpClientCertificateReferenceElement))]
+    [Subject(typeof(ClientCertificateReferenceElement))]
     class when_changing_value_on_http_client_certitificate_reference_which_is_directly_newed
     {
-        static HttpClientCertificateReferenceElement element;
+        static ClientCertificateReferenceElement element;
 
         Establish context =
-            () => element = new HttpClientCertificateReferenceElement();
+            () => element = new ClientCertificateReferenceElement();
 
         Because of = () =>
         {
@@ -54,13 +54,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.FindValue.ShouldEqual("some certificate");
     }
 
-    [Subject(typeof(HttpClientCertificateReferenceElement))]
+    [Subject(typeof(ClientCertificateReferenceElement))]
     class when_setting_find_value_on_http_client_certitificate_reference_to_null
     {
-        static HttpClientCertificateReferenceElement element;
+        static ClientCertificateReferenceElement element;
 
         Establish context =
-            () => element = new HttpClientCertificateReferenceElement();
+            () => element = new ClientCertificateReferenceElement();
 
         Because of = 
             () => element.FindValue = null;

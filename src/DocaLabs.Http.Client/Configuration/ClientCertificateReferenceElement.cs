@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Represents a configuration element that defines how to find a certificate. 
     /// </summary>
-    public class HttpClientCertificateReferenceElement : ConfigurationElement
+    public class ClientCertificateReferenceElement : ConfigurationElement, IClientCertificateReference
     {
         const string StoreNameProperty = "storeName";
         const string StoreLocationProperty = "storeLocation";
@@ -19,8 +19,8 @@ namespace DocaLabs.Http.Client.Configuration
         [ConfigurationProperty(StoreNameProperty, IsKey = true, DefaultValue = StoreName.My)]
         public StoreName StoreName
         {
-            get { return (StoreName)this[StoreNameProperty]; }
-            set { this[StoreNameProperty] = value; }
+            get { return StoreNameElement; }
+            set { StoreNameElement = value; }
         }
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace DocaLabs.Http.Client.Configuration
         [ConfigurationProperty(StoreLocationProperty, IsKey = true, DefaultValue = StoreLocation.LocalMachine)]
         public StoreLocation StoreLocation
         {
-            get { return (StoreLocation)this[StoreLocationProperty]; }
-            set { this[StoreLocationProperty] = value; }
+            get { return StoreLocationElement; }
+            set { StoreLocationElement = value; }
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace DocaLabs.Http.Client.Configuration
         [ConfigurationProperty(X509FindTypeProperty, IsKey = true, DefaultValue = X509FindType.FindBySubjectDistinguishedName)]
         public X509FindType X509FindType
         {
-            get { return (X509FindType)this[X509FindTypeProperty]; }
-            set { this[X509FindTypeProperty] = value; }
+            get { return X509FindTypeElement; }
+            set { X509FindTypeElement = value; }
         }
 
         /// <summary>
@@ -49,6 +49,34 @@ namespace DocaLabs.Http.Client.Configuration
         [ConfigurationProperty(FindValueProperty, IsKey = true, DefaultValue = "")]
         public string FindValue
         {
+            get { return FindValueElement; }
+            set { FindValueElement = value; }
+        }
+
+        [ConfigurationProperty(StoreNameProperty, IsKey = true, DefaultValue = StoreName.My)]
+        StoreName StoreNameElement
+        {
+            get { return (StoreName)this[StoreNameProperty]; }
+            set { this[StoreNameProperty] = value; }
+        }
+
+        [ConfigurationProperty(StoreLocationProperty, IsKey = true, DefaultValue = StoreLocation.LocalMachine)]
+        StoreLocation StoreLocationElement
+        {
+            get { return (StoreLocation)this[StoreLocationProperty]; }
+            set { this[StoreLocationProperty] = value; }
+        }
+
+        [ConfigurationProperty(X509FindTypeProperty, IsKey = true, DefaultValue = X509FindType.FindBySubjectDistinguishedName)]
+        X509FindType X509FindTypeElement
+        {
+            get { return (X509FindType)this[X509FindTypeProperty]; }
+            set { this[X509FindTypeProperty] = value; }
+        }
+
+        [ConfigurationProperty(FindValueProperty, IsKey = true, DefaultValue = "")]
+        string FindValueElement
+        {
             get { return (string)this[FindValueProperty]; }
             set 
             {
@@ -56,26 +84,6 @@ namespace DocaLabs.Http.Client.Configuration
                     value = string.Empty;
 
                 this[FindValueProperty] = value;
-            }
-        }
-
-        /// <summary>
-        /// Finds a certificate referenced by an instance of the class.
-        /// </summary>
-        /// <returns>Found certificate or null if the certificate is not found, or throws MoreThanOneMatchFoundException if there are more than one match.</returns>
-        public X509CertificateCollection Find()
-        {
-            var certStore = new X509Store(StoreName, StoreLocation);
-
-            try
-            {
-                certStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-
-                return certStore.Certificates.Find(X509FindType, FindValue, true);
-            }
-            finally 
-            {
-                certStore.Close();
             }
         }
     }

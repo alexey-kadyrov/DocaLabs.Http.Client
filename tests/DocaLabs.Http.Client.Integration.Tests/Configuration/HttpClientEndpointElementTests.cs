@@ -10,11 +10,11 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
     /// <summary>
     /// The test installs and then remove the test certificate to Trusted People, verify that the certificate was actually removed after the test
     /// </summary>
-    [Subject(typeof(HttpClientEndpointElement))]
+    [Subject(typeof(ClientEndpointElement))]
     class when_copying_client_certificates_from_http_client_endpoint
     {
         static Mock<HttpWebRequest> web_request;
-        static HttpClientEndpointElement element;
+        static ClientEndpointElement element;
         static X509Certificate2 test_certificate;
 
         Cleanup after_each =
@@ -26,8 +26,8 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
 
             web_request = new Mock<HttpWebRequest> { CallBase = true };
 
-            element = new HttpClientEndpointElement();
-            element.ClientCertificates.Add(new HttpClientCertificateReferenceElement
+            element = new ClientEndpointElement();
+            element.ClientCertificates.Add(new ClientCertificateReferenceElement
             {
                 StoreName = StoreName.TrustedPeople,
                 StoreLocation = StoreLocation.CurrentUser,
