@@ -25,7 +25,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.Attributes
         static PropertyInfo property_info;
         static SeparatedCollectionConverterAttribute attribute;
         static TestClass instance;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
 
         Establish context = () =>
         {

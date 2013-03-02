@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converter for enumerable properties that serializes into delimited string.
     /// </summary>
-    public class SeparatedCollectionConverter : PropertyConverterBase, IConvertProperty
+    public class SeparatedCollectionConverter : PropertyConverterBase, IPropertyConverter
     {
         /// <summary>
         /// String's delimiter. The default value is pipe |.

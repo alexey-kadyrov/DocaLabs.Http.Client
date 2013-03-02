@@ -18,7 +18,7 @@ namespace DocaLabs.Http.Client.Binding
             ParsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
         }
 
-        public WebHeaderCollection Map(object model)
+        public WebHeaderCollection Map(object model, object client)
         {
             return model == null ? 
                 new WebHeaderCollection() 
@@ -60,7 +60,7 @@ namespace DocaLabs.Http.Client.Binding
 
         static void TryConverter(object model, object property, NameValueCollection collection)
         {
-            var converter = property as IConvertProperty;
+            var converter = property as IPropertyConverter;
             if (converter == null)
                 return;
 
@@ -110,7 +110,7 @@ namespace DocaLabs.Http.Client.Binding
                     return;
                 }
 
-                var converter = ConvertSimpleProperty.TryCreate(property);
+                var converter = SimplePropertyConverter.TryCreate(property);
                 if (converter != null)
                     collection.Add(converter);
             }

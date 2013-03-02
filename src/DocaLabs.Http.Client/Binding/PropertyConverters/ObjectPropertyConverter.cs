@@ -8,9 +8,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converts reference type properties, like object, etc.
     /// </summary>
-    public class ConvertObjectProperty : PropertyConverterBase, IConvertProperty
+    public class ObjectPropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        ConvertObjectProperty(PropertyInfo info)
+        ObjectPropertyConverter(PropertyInfo info)
             : base(info)
         {
         }
@@ -18,16 +18,16 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         /// <summary>
         /// Tries to create the converter for the specified property.
         /// </summary>
-        /// <param name="info">Property for which instance of the ConvertObjectProperty should be created.</param>
-        /// <returns>Instance of the ConvertObjectProperty class if the info describes the reference type property otherwise null.</returns>
-        public static IConvertProperty TryCreate(PropertyInfo info)
+        /// <param name="info">Property for which instance of the ObjectPropertyConverter should be created.</param>
+        /// <returns>Instance of the ObjectPropertyConverter class if the info describes the reference type property otherwise null.</returns>
+        public static IPropertyConverter TryCreate(PropertyInfo info)
         {
             if(info == null)
                 throw new ArgumentNullException("info");
 
             return info.PropertyType.IsSimpleType() || info.GetIndexParameters().Length > 0
                 ? null
-                : new ConvertObjectProperty(info);
+                : new ObjectPropertyConverter(info);
         }
 
         /// <summary>

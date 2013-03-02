@@ -5,7 +5,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Defines methods to convert a property value for the query mapping.
     /// </summary>
-    public interface IConvertProperty
+    public interface IPropertyConverter
     {
         /// <summary>
         /// Gets a property value.

@@ -16,7 +16,7 @@ namespace DocaLabs.Http.Client.Binding.Mapping
         /// <summary>
         /// Gets parsed properties.
         /// </summary>
-        public IList<IConvertProperty> Properties { get; private set; }
+        public IList<IPropertyConverter> Properties { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the TypeMap class for the specified type.
@@ -26,25 +26,25 @@ namespace DocaLabs.Http.Client.Binding.Mapping
             Properties = Parse(type);
         }
 
-        static IList<IConvertProperty> Parse(Type type)
+        static IList<IPropertyConverter> Parse(Type type)
         {
             return type.IsSimpleType()
-                ? new List<IConvertProperty>()
+                ? new List<IPropertyConverter>()
                 : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Select(ParseProperty)
                     .Where(x => x != null)
                     .ToList();
         }
 
-        static IConvertProperty ParseProperty(PropertyInfo info)
+        static IPropertyConverter ParseProperty(PropertyInfo info)
         {
             if (Ignore(info))
                 return null;
 
             return TryGetCustomPropertyParser(info)
-                ?? ConvertCollectionProperty.TryCreate(info)
-                ?? ConvertSimpleProperty.TryCreate(info)
-                ?? ConvertObjectProperty.TryCreate(info);
+                ?? CollectionPropertyConverter.TryCreate(info)
+                ?? SimplePropertyConverter.TryCreate(info)
+                ?? ObjectPropertyConverter.TryCreate(info);
         }
 
         static bool Ignore(PropertyInfo info)
@@ -55,7 +55,7 @@ namespace DocaLabs.Http.Client.Binding.Mapping
                     info.GetCustomAttribute<QueryIgnoreAttribute>(true) != null;
         }
 
-        static IConvertProperty TryGetCustomPropertyParser(PropertyInfo info)
+        static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo info)
         {
             var attribute = info.GetCustomAttribute<QueryPropertyConverterAttribute>(true);
 

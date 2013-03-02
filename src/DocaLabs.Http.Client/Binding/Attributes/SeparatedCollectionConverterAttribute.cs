@@ -24,7 +24,7 @@ namespace DocaLabs.Http.Client.Binding.Attributes
         /// <summary>
         /// Returns a new instance of the SeparatedCollectionConverter class.
         /// </summary>
-        public override IConvertProperty GetConverter(PropertyInfo info)
+        public override IPropertyConverter GetConverter(PropertyInfo info)
         {
             return new SeparatedCollectionConverter(info)
             {

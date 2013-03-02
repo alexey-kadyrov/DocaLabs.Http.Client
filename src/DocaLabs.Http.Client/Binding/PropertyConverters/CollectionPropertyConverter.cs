@@ -8,9 +8,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converts enumerable of simple type properties.
     /// </summary>
-    public class ConvertCollectionProperty : PropertyConverterBase, IConvertProperty
+    public class CollectionPropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        ConvertCollectionProperty(PropertyInfo info)
+        CollectionPropertyConverter(PropertyInfo info)
             : base(info)
         {
         }
@@ -18,9 +18,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         /// <summary>
         /// Tries to create the converter for the specified property.
         /// </summary>
-        /// <param name="info">Property for which instance of the ConvertCollectionProperty should be created.</param>
-        /// <returns>Instance of the ConvertCollectionProperty class if the info describes the enumerable of simple types otherwise null.</returns>
-        public static IConvertProperty TryCreate(PropertyInfo info)
+        /// <param name="info">Property for which instance of the CollectionPropertyConverter should be created.</param>
+        /// <returns>Instance of the CollectionPropertyConverter class if the info describes the enumerable of simple types otherwise null.</returns>
+        public static IPropertyConverter TryCreate(PropertyInfo info)
         {
             if(info == null)
                 throw new ArgumentNullException("info");
@@ -28,7 +28,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
             var type = info.PropertyType;
 
             return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && info.GetIndexParameters().Length == 0
-                ? new ConvertCollectionProperty(info)
+                ? new CollectionPropertyConverter(info)
                 : null;
         }
 

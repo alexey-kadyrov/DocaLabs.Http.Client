@@ -37,35 +37,35 @@ namespace DocaLabs.Http.Client.Binding
 
         class ConverterMap
         {
-            public IList<IConvertProperty> Converters { get; private set; }
+            public IList<IPropertyConverter> Converters { get; private set; }
 
             public ConverterMap(Type type)
             {
                 Converters = Parse(type);
             }
 
-            static IList<IConvertProperty> Parse(Type type)
+            static IList<IPropertyConverter> Parse(Type type)
             {
                 return type.IsSimpleType()
-                    ? new List<IConvertProperty>()
+                    ? new List<IPropertyConverter>()
                     : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
                         .Select(ParseProperty)
                         .Where(x => x != null)
                         .ToList();
             }
 
-            static IConvertProperty ParseProperty(PropertyInfo info)
+            static IPropertyConverter ParseProperty(PropertyInfo info)
             {
                 if (!info.IsUrlQuery())
                     return null;
 
                 return TryGetCustomPropertyParser(info)
-                    ?? ConvertCollectionProperty.TryCreate(info)
-                    ?? ConvertSimpleProperty.TryCreate(info)
-                    ?? ConvertObjectProperty.TryCreate(info);
+                    ?? CollectionPropertyConverter.TryCreate(info)
+                    ?? SimplePropertyConverter.TryCreate(info)
+                    ?? ObjectPropertyConverter.TryCreate(info);
             }
 
-            static IConvertProperty TryGetCustomPropertyParser(PropertyInfo info)
+            static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo info)
             {
                 var attribute = info.GetCustomAttribute<QueryPropertyConverterAttribute>(true);
 

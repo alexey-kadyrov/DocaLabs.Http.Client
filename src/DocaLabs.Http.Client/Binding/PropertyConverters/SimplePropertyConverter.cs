@@ -7,9 +7,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converts simple properties, like int, string, Guid, etc.
     /// </summary>
-    public class ConvertSimpleProperty : PropertyConverterBase, IConvertProperty
+    public class SimplePropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        ConvertSimpleProperty(PropertyInfo info)
+        SimplePropertyConverter(PropertyInfo info)
             : base(info)
         {
         }
@@ -17,15 +17,15 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         /// <summary>
         /// Tries to create the converter for the specified property.
         /// </summary>
-        /// <param name="info">Property for which instance of the ConvertSimpleProperty should be created.</param>
-        /// <returns>Instance of the ConvertSimpleProperty class if the info describes the simple property otherwise null.</returns>
-        public static IConvertProperty TryCreate(PropertyInfo info)
+        /// <param name="info">Property for which instance of the SimplePropertyConverter should be created.</param>
+        /// <returns>Instance of the SimplePropertyConverter class if the info describes the simple property otherwise null.</returns>
+        public static IPropertyConverter TryCreate(PropertyInfo info)
         {
             if(info == null)
                 throw new ArgumentNullException("info");
 
             return info.PropertyType.IsSimpleType() && info.GetIndexParameters().Length == 0
-                ? new ConvertSimpleProperty(info) 
+                ? new SimplePropertyConverter(info) 
                 : null;
         }
 

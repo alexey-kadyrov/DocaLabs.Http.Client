@@ -4,7 +4,7 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultRequestStreamWriter : IRequestStreamWriter
     {
-        public void Write(RequestContext context, WebRequest request)
+        public void Write(object model, object client, WebRequest request)
         {
             throw new System.NotImplementedException();
         }

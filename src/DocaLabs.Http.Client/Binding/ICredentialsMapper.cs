@@ -5,6 +5,6 @@ namespace DocaLabs.Http.Client.Binding
 {
     public interface ICredentialsMapper
     {
-        ICredentials Map(object model, Uri url);
+        ICredentials Map(object model, object client, Uri url);
     }
 }

@@ -76,7 +76,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = () =>
@@ -112,7 +112,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     class when_separated_collection_converter_is_used_on_null_instance
     {
         static PropertyInfo property_info;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = () =>
@@ -142,7 +142,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = () =>
@@ -174,7 +174,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = () =>
@@ -212,7 +212,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = () =>
@@ -250,7 +250,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = () =>
@@ -288,7 +288,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConvertProperty converter;
+        static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = () =>
