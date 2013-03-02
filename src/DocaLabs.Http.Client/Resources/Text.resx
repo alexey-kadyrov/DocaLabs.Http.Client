@@ -129,6 +129,9 @@
   <data name="compression_format_is_not_suppoerted" xml:space="preserve">
     <value>Compression format {0} is not supported.</value>
   </data>
+  <data name="configuration_file_0_not_found" xml:space="preserve">
+    <value>Confoguration file {0} is not found.</value>
+  </data>
   <data name="expected_retsult_to_be_image_or_bitmap_classes" xml:space="preserve">
     <value>Expected that {0} will be Image or Bitmap classes.</value>
   </data>

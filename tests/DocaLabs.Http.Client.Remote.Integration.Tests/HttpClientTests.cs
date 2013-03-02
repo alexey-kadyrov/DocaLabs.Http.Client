@@ -47,52 +47,52 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
             () => result.Headers.Keys.ShouldContain(x => string.Compare(x, "accept-encoding", StringComparison.OrdinalIgnoreCase) == 0);
     }
 
-    [Subject(typeof(HttpClient<,>))]
-    class when_posting_data_mixing_query_string_and_request_body
-    {
-        static IMixedPostData client;
-        static MixedPostDataResponse result;
+    //[Subject(typeof(HttpClient<,>))]
+    //class when_posting_data_mixing_query_string_and_request_body
+    //{
+    //    static IMixedPostData client;
+    //    static MixedPostDataResponse result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IMixedPostData>(new Uri("http://httpbin.org/post"));
+    //    Establish context =
+    //        () => client = HttpClientFactory.CreateInstance<IMixedPostData>(new Uri("http://httpbin.org/post"));
 
-        Because of = () => result = client.Post(new MixedPostDataRequest
-        {
-            Id = 42,
-            Data = new InnerPostDataRequest
-            {
-                Value = "Hello World!"
-            }
-        });
+    //    Because of = () => result = client.Post(new MixedPostDataRequest
+    //    {
+    //        Id = 42,
+    //        Data = new InnerPostDataRequest
+    //        {
+    //            Value = "Hello World!"
+    //        }
+    //    });
 
-        It should_call_the_service_and_return_data =
-            () => result.Json.Value.ShouldEqual("Hello World!");
+    //    It should_call_the_service_and_return_data =
+    //        () => result.Json.Value.ShouldEqual("Hello World!");
 
-        It should_pass_data_in_query_string =
-            () => result.Url.ShouldEqual("http://httpbin.org/post?Id=42");
+    //    It should_pass_data_in_query_string =
+    //        () => result.Url.ShouldEqual("http://httpbin.org/post?Id=42");
 
-        It should_pass_accept_encoding_header =
-            () => result.Headers.Keys.ShouldContain(x => string.Compare(x, "accept-encoding", StringComparison.OrdinalIgnoreCase) == 0);
-    }
+    //    It should_pass_accept_encoding_header =
+    //        () => result.Headers.Keys.ShouldContain(x => string.Compare(x, "accept-encoding", StringComparison.OrdinalIgnoreCase) == 0);
+    //}
 
-    [Subject(typeof(HttpClient<,>))]
-    class when_puting_data
-    {
-        static IPutData client;
-        static PutDataResponse result;
+    //[Subject(typeof(HttpClient<,>))]
+    //class when_puting_data
+    //{
+    //    static IPutData client;
+    //    static PutDataResponse result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IPutData>(null, "put");
+    //    Establish context =
+    //        () => client = HttpClientFactory.CreateInstance<IPutData>(null, "put");
 
-        Because of =
-            () => result = client.Post(new PutDataRequest { Id = 42 });
+    //    Because of =
+    //        () => result = client.Post(new PutDataRequest { Id = 42 });
 
-        It should_call_the_service_and_return_data =
-            () => result.Json.Id.ShouldEqual(42);
+    //    It should_call_the_service_and_return_data =
+    //        () => result.Json.Id.ShouldEqual(42);
 
-        It should_pass_accept_encoding_header =
-            () => result.Headers.Keys.ShouldContain(x => string.Compare(x, "accept-encoding", StringComparison.OrdinalIgnoreCase) == 0);
-    }
+    //    It should_pass_accept_encoding_header =
+    //        () => result.Headers.Keys.ShouldContain(x => string.Compare(x, "accept-encoding", StringComparison.OrdinalIgnoreCase) == 0);
+    //}
 
     [Subject(typeof(HttpClient<,>))]
     class when_getting_using_basic_http_authentication

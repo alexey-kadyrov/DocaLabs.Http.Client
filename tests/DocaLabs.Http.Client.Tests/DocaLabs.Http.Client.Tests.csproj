@@ -76,9 +76,10 @@
     <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
     <Compile Include="Configuration\ClientEndpointElementTests.cs" />
-    <Compile Include="Configuration\HttpClientEndpointSectionTests.cs" />
+    <Compile Include="Configuration\DefaultEndpointConfigurationProviderTests.cs" />
     <Compile Include="Configuration\ClientProxyElementTests.cs" />
     <Compile Include="Configuration\ClientNetworkCredentialsElementTests.cs" />
+    <Compile Include="Configuration\EndpointConfigurationTests.cs" />
     <Compile Include="ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="ContentEncoding\GZipContentDecoderTests.cs" />
@@ -163,6 +164,10 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="ExternalEndpointConfiguration.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

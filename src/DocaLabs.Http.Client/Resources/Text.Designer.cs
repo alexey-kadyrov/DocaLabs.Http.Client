@@ -97,6 +97,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confoguration file {0} is not found..
+        /// </summary>
+        internal static string configuration_file_0_not_found {
+            get {
+                return ResourceManager.GetString("configuration_file_0_not_found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expected that {0} will be Image or Bitmap classes..
         /// </summary>
         internal static string expected_retsult_to_be_image_or_bitmap_classes {

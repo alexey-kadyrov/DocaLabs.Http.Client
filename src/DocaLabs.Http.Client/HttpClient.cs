@@ -257,9 +257,9 @@ namespace DocaLabs.Http.Client
         protected virtual void OnLogRetry(int attempt, Exception e)
         {
             if(e == null)
-                Debug.Write(string.Format(Resources.Text.will_try_again, attempt));
+                Trace.WriteLine(string.Format(Resources.Text.will_try_again, attempt));
             else
-                Debug.WriteLine("{0} : {1}", string.Format(Resources.Text.will_try_again, attempt), e);
+                Trace.WriteLine(string.Format(Resources.Text.will_try_again, attempt) + ": " + e);
         }
 
         /// <summary>
@@ -292,11 +292,7 @@ namespace DocaLabs.Http.Client
             if (string.IsNullOrWhiteSpace(configurationName))
                 configurationName = GetType().FullName;
 
-            var section = HttpClientEndpointSection.GetDefaultSection();
-
-            return section != null
-                ? section.Endpoints[configurationName] ?? new ClientEndpointElement()
-                : new ClientEndpointElement();
+            return EndpointConfiguration.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
         }
     }
 }
