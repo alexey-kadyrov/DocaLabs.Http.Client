@@ -12,18 +12,13 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultUrlPathMapper : IUrlPathMapper
     {
-        ConcurrentDictionary<Type, PropertyMap> ParsedMaps { get; set; }
-
-        public DefaultUrlPathMapper()
-        {
-            ParsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
-        }
+        readonly ConcurrentDictionary<Type, PropertyMap> _parsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
         public object[] Map(object model, object client)
         {
             return model == null 
                 ? new object[0]
-                : ToOrderedCollection(model, ParsedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+                : ToOrderedCollection(model, _parsedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
         }
 
         static object[] ToOrderedCollection(object obj, PropertyMap map)

@@ -11,18 +11,13 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultHeaderMapper : IHeaderMapper
     {
-        ConcurrentDictionary<Type, PropertyMap> ParsedMaps { get; set; }
-
-        public DefaultHeaderMapper()
-        {
-            ParsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
-        }
+        readonly ConcurrentDictionary<Type, PropertyMap> _parsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
         public WebHeaderCollection Map(object model, object client)
         {
             return model == null ? 
                 new WebHeaderCollection() 
-                : GetHeaders(model, ParsedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+                : GetHeaders(model, _parsedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
         }
 
         static WebHeaderCollection GetHeaders(object model, PropertyMap map)

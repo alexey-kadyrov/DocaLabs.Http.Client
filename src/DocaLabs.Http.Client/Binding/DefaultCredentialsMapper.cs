@@ -10,14 +10,13 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultCredentialsMapper : ICredentialsMapper
     {
-        ConcurrentDictionary<Type, PropertyMap> PropertyMaps { get; set; }
+        readonly ConcurrentDictionary<Type, PropertyMap> _propertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
         public ICredentials Map(object model, object client, Uri url)
         {
-            if (model == null)
-                return null;
-
-            return GetCredentials(model, url, PropertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+            return model == null 
+                ? null 
+                : GetCredentials(model, url, _propertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
         }
 
         static ICredentials GetCredentials(object model, Uri url, PropertyMap map)
@@ -64,7 +63,7 @@ namespace DocaLabs.Http.Client.Binding
                 Credentials = Parse(type);
             }
 
-            IList<PropertyInfo> Parse(Type type)
+            static IList<PropertyInfo> Parse(Type type)
             {
                 return type.IsSimpleType() 
                     ? new List<PropertyInfo>()

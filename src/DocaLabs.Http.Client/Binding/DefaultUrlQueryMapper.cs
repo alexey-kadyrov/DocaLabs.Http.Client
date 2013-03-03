@@ -11,18 +11,13 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultUrlQueryMapper : IUrlQueryMapper
     {
-        ConcurrentDictionary<Type, ConverterMap> ParsedMaps { get; set; }
-
-        public DefaultUrlQueryMapper()
-        {
-            ParsedMaps = new ConcurrentDictionary<Type, ConverterMap>();
-        }
+        readonly ConcurrentDictionary<Type, ConverterMap> _parsedMaps = new ConcurrentDictionary<Type, ConverterMap>();
 
         public CustomNameValueCollection Map(object model, object client)
         {
             return model == null 
                 ? new CustomNameValueCollection()
-                : ToDictionary(model, ParsedMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
+                : ToDictionary(model, _parsedMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
         }
 
         static CustomNameValueCollection ToDictionary(object obj, ConverterMap map)
