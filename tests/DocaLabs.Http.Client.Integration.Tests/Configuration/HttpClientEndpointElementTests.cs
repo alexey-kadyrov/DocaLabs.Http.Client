@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.IO;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using DocaLabs.Http.Client.Configuration;
 using Machine.Specifications;
@@ -50,7 +52,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
             {
                 certStore.Open(OpenFlags.ReadWrite | OpenFlags.OpenExistingOnly);
 
-                test_certificate = new X509Certificate2("test-certificate.cer");
+                test_certificate = new X509Certificate2(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test-certificate.cer"));
 
                 certStore.Add(test_certificate);
             }

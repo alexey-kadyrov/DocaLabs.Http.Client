@@ -97,7 +97,7 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confoguration file {0} is not found..
+        ///   Looks up a localized string similar to Configuration file {0} is not found..
         /// </summary>
         internal static string configuration_file_0_not_found {
             get {

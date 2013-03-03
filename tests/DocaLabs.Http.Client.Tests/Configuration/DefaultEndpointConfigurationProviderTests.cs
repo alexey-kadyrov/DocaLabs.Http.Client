@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Establish context = () =>
         {
             provider = new DefaultEndpointConfigurationProvider();
-            provider.SetSource("ExternalEndpointConfiguration.config");
+            provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
         };
 
         Because of =
@@ -64,7 +64,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Establish context = () =>
         {
             provider = new DefaultEndpointConfigurationProvider();
-            provider.SetSource("ExternalEndpointConfiguration.config");
+            provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
         };
 
         Because of =
@@ -82,7 +82,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Establish context = () =>
         {
             provider = new DefaultEndpointConfigurationProvider();
-            provider.SetSource("ExternalEndpointConfiguration.config");
+            provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
             provider.SetSource(null);
         };
 
@@ -101,7 +101,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Establish context = () =>
         {
             provider = new DefaultEndpointConfigurationProvider();
-            provider.SetSource("ExternalEndpointConfiguration.config");
+            provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
             provider.SetSource(null);
         };
 

@@ -20,7 +20,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/gif", new MemoryStream(File.ReadAllBytes("_Utils/img.gif")));
+            Setup("image/gif", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.gif"))));
         };
 
         Because of =
@@ -42,7 +42,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/gif", new MemoryStream(File.ReadAllBytes("_Utils/img.gif")));
+            Setup("image/gif", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.gif"))));
         };
 
         Because of =
@@ -64,7 +64,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes("_Utils/img.jpg")));
+            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.jpg"))));
         };
 
         Because of =
@@ -86,7 +86,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes("_Utils/img.jpg")));
+            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.jpg"))));
         };
 
         Because of =
@@ -108,7 +108,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/tiff", new MemoryStream(File.ReadAllBytes("_Utils/img.tif")));
+            Setup("image/tiff", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.tif"))));
         };
 
         Because of =
@@ -130,7 +130,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/tiff", new MemoryStream(File.ReadAllBytes("_Utils/img.tif")));
+            Setup("image/tiff", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.tif"))));
         };
 
         Because of =
@@ -152,7 +152,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         Because of =
@@ -174,7 +174,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         Because of =
@@ -212,7 +212,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         Because of =
@@ -273,7 +273,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         Because of =
@@ -292,7 +292,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         Because of =
@@ -333,7 +333,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         Because of =
@@ -351,7 +351,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/gif", new MemoryStream(File.ReadAllBytes("_Utils/img.gif")));
+            Setup("image/gif", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.gif"))));
         };
 
         It should_be_able_to_deserialize =
@@ -366,7 +366,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes("_Utils/img.jpg")));
+            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.jpg"))));
         };
 
         It should_be_able_to_deserialize =
@@ -381,7 +381,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/tiff", new MemoryStream(File.ReadAllBytes("_Utils/img.tif")));
+            Setup("image/tiff", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.tif"))));
         };
 
         It should_be_able_to_deserialize =
@@ -396,7 +396,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         It should_be_able_to_deserialize =
@@ -411,7 +411,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/gif", new MemoryStream(File.ReadAllBytes("_Utils/img.gif")));
+            Setup("image/gif", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.gif"))));
         };
 
         It should_be_able_to_deserialize =
@@ -426,7 +426,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes("_Utils/img.jpg")));
+            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.jpg"))));
         };
 
         It should_be_able_to_deserialize =
@@ -441,7 +441,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/tiff", new MemoryStream(File.ReadAllBytes("_Utils/img.tif")));
+            Setup("image/tiff", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.tif"))));
         };
 
         It should_be_able_to_deserialize =
@@ -456,7 +456,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         It should_be_able_to_deserialize =
@@ -471,7 +471,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/gif", new MemoryStream(File.ReadAllBytes("_Utils/img.gif")));
+            Setup("image/gif", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.gif"))));
         };
 
         It should_be_not_able_to_deserialize =
@@ -486,7 +486,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes("_Utils/img.jpg")));
+            Setup("image/jpeg", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.jpg"))));
         };
 
         It should_be_not_able_to_deserialize =
@@ -501,7 +501,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/tiff", new MemoryStream(File.ReadAllBytes("_Utils/img.tif")));
+            Setup("image/tiff", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.tif"))));
         };
 
         It should_be_not_able_to_deserialize =
@@ -516,7 +516,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("image/png", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("image/png", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         It should_be_not_able_to_deserialize =
@@ -531,7 +531,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("text/plain", new MemoryStream(File.ReadAllBytes("_Utils/img.tif")));
+            Setup("text/plain", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.tif"))));
         };
 
         It should_be_not_able_to_deserialize =
@@ -546,7 +546,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new ImageResponseDeserializer();
-            Setup("text/plain", new MemoryStream(File.ReadAllBytes("_Utils/img.png")));
+            Setup("text/plain", new MemoryStream(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_Utils/img.png"))));
         };
 
         It should_be_not_able_to_deserialize =
