@@ -12,6 +12,9 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
         /// </summary>
         public static Uri CreateUrl(object model, object client, Uri baseUrl)
         {
+            if (baseUrl == null)
+                throw new ArgumentNullException("baseUrl");
+
             try
             {
                 var builder =  new UriBuilder(baseUrl.GetLeftPart(UriPartial.Authority))
