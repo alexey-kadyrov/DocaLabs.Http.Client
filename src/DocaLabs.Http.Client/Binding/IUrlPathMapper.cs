@@ -2,6 +2,6 @@
 {
     public interface IUrlPathMapper
     {
-        object[] Map(object model, object client);
+        string[] Map(object model, object client);
     }
 }

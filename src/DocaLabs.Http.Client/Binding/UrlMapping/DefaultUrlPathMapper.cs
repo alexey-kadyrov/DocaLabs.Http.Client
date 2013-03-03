@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,29 +7,22 @@ using DocaLabs.Conversion;
 using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding
+namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
     public class DefaultUrlPathMapper : IUrlPathMapper
     {
         readonly ConcurrentDictionary<Type, PropertyMap> _parsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
-        public object[] Map(object model, object client)
+        public string[] Map(object model, object client)
         {
             return model == null 
-                ? new object[0]
+                ? new string[0]
                 : ToOrderedCollection(model, _parsedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
         }
 
-        static object[] ToOrderedCollection(object obj, PropertyMap map)
+        static string[] ToOrderedCollection(object obj, PropertyMap map)
         {
-            var values = new ArrayList();
-
-            foreach (var converter in map.Converters)
-            {
-                values.Add(converter.ConvertValue(obj));
-            }
-
-            return values.ToArray();
+            return map.Converters.Select(x => x.ConvertValue(obj)).ToArray();
         }
 
         class PropertyMap
@@ -91,9 +83,13 @@ namespace DocaLabs.Http.Client.Binding
                 Info = info;
             }
 
-            public string ConvertValue(object value)
+            public string ConvertValue(object model)
             {
-                if (value == null)
+                if (model == null)
+                    return string.Empty;
+
+                var value = Info.GetValue(model);
+                if(value == null)
                     return string.Empty;
 
                 return string.IsNullOrWhiteSpace(Format)

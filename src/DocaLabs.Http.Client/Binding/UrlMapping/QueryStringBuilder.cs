@@ -3,19 +3,19 @@ using System.Text;
 using System.Web;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.Mapping
+namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
     /// <summary>
     /// Represents helper class to build a query string.
     /// </summary>
-    public class QueryBuilder
+    public class QueryStringBuilder
     {
         readonly StringBuilder _builder;
 
         /// <summary>
-        /// Initializes a new instance of the QueryBuilder class.
+        /// Initializes a new instance of the QueryStringBuilder class.
         /// </summary>
-        public QueryBuilder()
+        public QueryStringBuilder()
         {
             _builder = new StringBuilder();
         }
@@ -26,7 +26,7 @@ namespace DocaLabs.Http.Client.Binding.Mapping
         /// <param name="key">Query parameter name.</param>
         /// <param name="value">Parameter's value.</param>
         /// <returns>Self reference, useful for method chaining.</returns>
-        public QueryBuilder Add(string key, string value)
+        public QueryStringBuilder Add(string key, string value)
         {
             if(key == null)
                 throw new ArgumentNullException("key");
@@ -48,7 +48,7 @@ namespace DocaLabs.Http.Client.Binding.Mapping
         /// Adds a new pairs of key/value from collection to the query string. The value is encoded using HttpUtility.UrlEncode.
         /// </summary>
         /// <returns>Self reference, useful for method chaining.</returns>
-        public QueryBuilder Add(CustomNameValueCollection collection)
+        public QueryStringBuilder Add(CustomNameValueCollection collection)
         {
             if (collection == null)
                 return this;

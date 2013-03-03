@@ -2,7 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using DocaLabs.Http.Client.Binding.Mapping;
+using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Binding.UrlMapping;
 using DocaLabs.Http.Client.ContentEncoding;
 
 namespace DocaLabs.Http.Client.RequestSerialization
@@ -42,7 +43,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            var data = Encoding.GetEncoding(CharSet).GetBytes(obj == null ? "" : QueryMapper.ToQueryString(obj));
+            var data = Encoding.GetEncoding(CharSet).GetBytes(obj == null ? "" : new QueryMapper(obj).TryMakeQuery());
 
             request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
             

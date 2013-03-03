@@ -7,7 +7,7 @@ using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Binding.PropertyConverters;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding
+namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
     public class DefaultUrlQueryMapper : IUrlQueryMapper
     {
@@ -15,11 +15,18 @@ namespace DocaLabs.Http.Client.Binding
 
         public CustomNameValueCollection Map(object model, object client)
         {
-            return model == null 
+            return Ignore(model, client)
                 ? new CustomNameValueCollection()
                 : ToDictionary(model, _parsedMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
         }
 
+        static bool Ignore(object model, object client)
+        {
+            return model == null ||
+                   client == null ||
+                   model.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null ||
+                   client.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null;
+        }
         static CustomNameValueCollection ToDictionary(object obj, ConverterMap map)
         {
             var values = new CustomNameValueCollection();

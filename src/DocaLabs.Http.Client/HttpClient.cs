@@ -5,8 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using DocaLabs.Http.Client.Binding.Attributes;
-using DocaLabs.Http.Client.Binding.Mapping;
+using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Binding.UrlMapping;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.RequestSerialization;
@@ -136,10 +136,7 @@ namespace DocaLabs.Http.Client
         /// <returns></returns>
         protected virtual string BuildUrl(TQuery query)
         {
-            return GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) == null
-
-                       ? UrlBuilder.CreateUrl(BaseUrl, query).ToString()
-                       : BaseUrl.ToString();
+            return UrlBuilder.CreateUrl(query, this, BaseUrl).ToString();
         }
 
         /// <summary>

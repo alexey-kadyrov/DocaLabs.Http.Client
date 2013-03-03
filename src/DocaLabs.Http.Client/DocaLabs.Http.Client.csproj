@@ -59,8 +59,8 @@
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultMutator.cs" />
     <Compile Include="Binding\DefaultRequestStreamWriter.cs" />
-    <Compile Include="Binding\DefaultUrlPathMapper.cs" />
-    <Compile Include="Binding\DefaultUrlQueryMapper.cs" />
+    <Compile Include="Binding\UrlMapping\DefaultUrlPathMapper.cs" />
+    <Compile Include="Binding\UrlMapping\DefaultUrlQueryMapper.cs" />
     <Compile Include="Binding\ICredentialsMapper.cs" />
     <Compile Include="Binding\IMutator.cs" />
     <Compile Include="Binding\IHeaderMapper.cs" />
@@ -69,6 +69,8 @@
     <Compile Include="Binding\IUrlQueryMapper.cs" />
     <Compile Include="Binding\Attributes\QueryHeaderAttribute.cs" />
     <Compile Include="Binding\Attributes\QueryPathAttribute.cs" />
+    <Compile Include="Binding\UrlMapping\PathMapper.cs" />
+    <Compile Include="Binding\UrlMapping\QueryMapper.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
     <Compile Include="Configuration\CredentialType.cs" />
@@ -91,7 +93,7 @@
     <Compile Include="JsonSerialization\IJsonDeserializer.cs" />
     <Compile Include="JsonSerialization\IJsonSerializer.cs" />
     <Compile Include="JsonSerialization\JsonSerializationProvider.cs" />
-    <Compile Include="Binding\Mapping\UrlBuilder.cs" />
+    <Compile Include="Binding\UrlMapping\UrlBuilder.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\ContentTypeExtensions.cs" />
     <Compile Include="Utils\CustomNameValueCollection.cs" />
@@ -126,7 +128,6 @@
     <Compile Include="ResponseDeserialization\ResponseParser.cs" />
     <Compile Include="RequestSerialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Binding\Attributes\QueryPropertyConverterAttribute.cs" />
-    <Compile Include="Binding\Mapping\ICustomQueryMapper.cs" />
     <Compile Include="Binding\PropertyConverters\ObjectPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverters\PropertyConverterBase.cs" />
     <Compile Include="Binding\Attributes\QueryIgnoreAttribute.cs" />
@@ -137,15 +138,13 @@
     <Compile Include="ResponseDeserialization\DeserializeFromJsonAttribute.cs" />
     <Compile Include="RequestSerialization\SerializeAsXmlAttribute.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromXmlAttribute.cs" />
-    <Compile Include="Binding\Mapping\QueryBuilder.cs" />
+    <Compile Include="Binding\UrlMapping\QueryStringBuilder.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="HttpClientException.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="Binding\PropertyConverters\CollectionPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverters\SimplePropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverters\IPropertyConverter.cs" />
-    <Compile Include="Binding\Mapping\TypeMap.cs" />
-    <Compile Include="Binding\Mapping\QueryMapper.cs" />
     <Compile Include="Binding\PropertyConverters\SeparatedCollectionConverter.cs" />
     <Compile Include="Binding\Attributes\SeparatedCollectionConverterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Mapping;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverters
@@ -47,10 +46,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
 
                 if (value != null)
                 {
-                    var customeMapper = value as ICustomQueryMapper;
+                    var customeMapper = ClientModelBinders.GetUrlQueryMapper(obj.GetType());
 
                     values = customeMapper != null
-                        ? customeMapper.ToParameterDictionary()
+                        ? customeMapper.Map(obj, null)
                         : new CustomNameValueCollection { { Name, value.ToString() } };
                 }
             }

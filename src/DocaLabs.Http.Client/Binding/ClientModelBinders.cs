@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using DocaLabs.Http.Client.Binding.UrlMapping;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -89,6 +90,7 @@ namespace DocaLabs.Http.Client.Binding
             RequestStreamWriters = new ConcurrentDictionary<Type, IRequestStreamWriter>();
 
             _defaultMutator = new DefaultMutator();
+            _defaultUrlPathMapper = new DefaultUrlPathMapper();
             _defaultUrlQueryMapper = new DefaultUrlQueryMapper();
             _defaultHeaderMapper = new DefaultHeaderMapper();
             _defaultRequestStreamWriter = new DefaultRequestStreamWriter();

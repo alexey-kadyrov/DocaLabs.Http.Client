@@ -1,17 +1,18 @@
 ﻿using System;
-using DocaLabs.Http.Client.Binding.Mapping;
+using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Binding.UrlMapping;
 using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping
 {
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_single_key_value_pair_once
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of =
             () => builder.Add("oneKey", "oneValue");
@@ -20,13 +21,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("oneKey=oneValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_same_key_with_different_values
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of = () =>
         {
@@ -38,13 +39,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("oneKey=firstValue&oneKey=secondValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_several_key_and_value_pairs
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of = () =>
         {
@@ -56,13 +57,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("firstKey=firstValue&secondKey=secondValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_values_that_contain_simbols_required_encodings
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of = () =>
         {
@@ -75,14 +76,14 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("firstKey=first+Value&secondKey=second%26Value&thirdKey=third%2bValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_null_key
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
         static Exception exception;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of =
             () => exception = Catch.Exception(() => builder.Add(null, "oneValue"));
@@ -94,14 +95,14 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => ((ArgumentNullException) exception).ParamName.ShouldEqual("key");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_null_key_and_value
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
         static Exception exception;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of =
             () => exception = Catch.Exception(() => builder.Add(null, null));
@@ -113,13 +114,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("key");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_null_value
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of =
             () => builder.Add("oneKey", null);
@@ -128,13 +129,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldBeEmpty();
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_single_key_value_pair_once_using_enumerable_overload
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of = () => builder.Add(new CustomNameValueCollection
         {
@@ -145,13 +146,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("oneKey=oneValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_same_key_with_different_values_using_enumerable_overload
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of = () => builder.Add(new CustomNameValueCollection
         {
@@ -162,13 +163,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("oneKey=firstValue&oneKey=secondValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_several_key_and_value_pairs_using_enumerable_overload
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of = () => builder.Add(new CustomNameValueCollection
         {
@@ -180,13 +181,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("firstKey=firstValue&secondKey=secondValue&secondKey=thirdValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_values_that_contain_simbols_required_encodings_using_enumerable_overload
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of = () => builder.Add(new CustomNameValueCollection
         {
@@ -199,13 +200,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
             () => builder.ToString().ShouldEqual("firstKey=first+Value&secondKey=second%26Value&thirdKey=third%2bValue");
     }
 
-    [Subject(typeof(QueryBuilder))]
+    [Subject(typeof(QueryStringBuilder))]
     class when_adding_null_collection
     {
-        static QueryBuilder builder;
+        static QueryStringBuilder builder;
 
         Establish context =
-            () => builder = new QueryBuilder();
+            () => builder = new QueryStringBuilder();
 
         Because of =
             () => builder.Add(null);

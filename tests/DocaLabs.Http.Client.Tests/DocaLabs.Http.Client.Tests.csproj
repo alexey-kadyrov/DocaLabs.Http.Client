@@ -94,7 +94,7 @@
     <Compile Include="Mapping\PropertyConverters\ConvertSimplePropertyTests.cs" />
     <Compile Include="Mapping\QueryBuilderTests.cs" />
     <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverterTests.cs" />
-    <Compile Include="Mapping\UrlBuilderTests.cs" />
+    <Compile Include="Binding\UrlMapping\UrlBuilderTests.cs" />
     <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\ContentTypeExtensionsTests.cs" />
     <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
