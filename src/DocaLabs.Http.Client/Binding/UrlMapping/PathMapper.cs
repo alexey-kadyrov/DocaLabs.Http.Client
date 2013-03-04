@@ -39,10 +39,12 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
                 
             var values = mapper.Map(_model, _client);
 
-            return HttpUtility.UrlPathEncode(string.Join("/", ValidatePathValues(values)));
+            ValidatePathValues(values);
+
+            return HttpUtility.UrlPathEncode(string.Join("/", GetNonEmptyValues(values)));
         }
 
-        static IEnumerable<string> ValidatePathValues(string[] values)
+        static void ValidatePathValues(string[] values)
         {
             var isPreviousValueEmpty = false;
 
@@ -58,7 +60,10 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
                         throw new UnrecoverableHttpClientException(string.Format(Resources.Text.path_mapping_is_strictly_positioonal, string.Join(",", values)));
                 }
             }
+        }
 
+        static IEnumerable<string> GetNonEmptyValues(IEnumerable<string> values)
+        {
             return values.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
 
