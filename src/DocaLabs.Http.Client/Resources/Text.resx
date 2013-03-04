@@ -165,6 +165,9 @@
   <data name="null_response_stream" xml:space="preserve">
     <value>Response stream is null.</value>
   </data>
+  <data name="path_mapping_is_strictly_positioonal" xml:space="preserve">
+    <value>The path mapping is strictly positional, if there is an empty value all other values after that must be empty as well. This values {0} violate this rule.</value>
+  </data>
   <data name="property_cannot_be_indexer" xml:space="preserve">
     <value>Does not support indexers.</value>
   </data>

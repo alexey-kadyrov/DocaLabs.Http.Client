@@ -205,6 +205,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The path mapping is strictly positional, if there is an empty value all other values after that must be empty as well. This values {0} violate this rule..
+        /// </summary>
+        internal static string path_mapping_is_strictly_positioonal {
+            get {
+                return ResourceManager.GetString("path_mapping_is_strictly_positioonal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Does not support indexers..
         /// </summary>
         internal static string property_cannot_be_indexer {

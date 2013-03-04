@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
@@ -17,17 +20,17 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         public string TryMakePath()
         {
+            if (_model == null)
+                return _existingPath;
+
             var modelPath = ConvertModelToPath();
 
             if (string.IsNullOrWhiteSpace(_existingPath))
                 return modelPath;
 
-            if(string.IsNullOrWhiteSpace(modelPath))
-                return _existingPath;
-
-            return _existingPath.EndsWith("/")
-                ? _existingPath + modelPath
-                : _existingPath + "/" + modelPath;
+            return string.IsNullOrWhiteSpace(modelPath) 
+                ? _existingPath 
+                : ConcatenatePathParts(_existingPath, modelPath);
         }
 
         string ConvertModelToPath()
@@ -36,7 +39,34 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
                 
             var values = mapper.Map(_model, _client);
 
-            return string.Join("/", values);
+            return HttpUtility.UrlPathEncode(string.Join("/", ValidatePathValues(values)));
+        }
+
+        static IEnumerable<string> ValidatePathValues(string[] values)
+        {
+            var isPreviousValueEmpty = false;
+
+            foreach (var value in values)
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    isPreviousValueEmpty = true;
+                }
+                else
+                {
+                    if(isPreviousValueEmpty)
+                        throw new UnrecoverableHttpClientException(string.Format(Resources.Text.path_mapping_is_strictly_positioonal, string.Join(",", values)));
+                }
+            }
+
+            return values.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+        }
+
+        static string ConcatenatePathParts(string leftPart, string rightPart)
+        {
+            return leftPart.EndsWith("/")
+                       ? leftPart + rightPart
+                       : leftPart + "/" + rightPart;
         }
     }
 }

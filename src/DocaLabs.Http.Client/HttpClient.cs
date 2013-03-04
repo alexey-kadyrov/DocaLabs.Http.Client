@@ -136,7 +136,7 @@ namespace DocaLabs.Http.Client
         /// <returns></returns>
         protected virtual string BuildUrl(TQuery query)
         {
-            return UrlBuilder.CreateUrl(query, this, BaseUrl).ToString();
+            return UrlBuilder.CreateUrl(query, this, BaseUrl).AbsoluteUri;
         }
 
         /// <summary>

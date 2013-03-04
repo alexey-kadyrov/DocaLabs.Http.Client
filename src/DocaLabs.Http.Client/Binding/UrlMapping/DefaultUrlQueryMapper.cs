@@ -15,18 +15,17 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         public CustomNameValueCollection Map(object model, object client)
         {
-            return Ignore(model, client)
+            return model == null || Ignore(model, client)
                 ? new CustomNameValueCollection()
                 : ToDictionary(model, _parsedMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
         }
 
         static bool Ignore(object model, object client)
         {
-            return model == null ||
-                   client == null ||
-                   model.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null ||
-                   client.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null;
+            return model.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null ||
+                   (client != null && client.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null);
         }
+
         static CustomNameValueCollection ToDictionary(object obj, ConverterMap map)
         {
             var values = new CustomNameValueCollection();

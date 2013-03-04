@@ -15,9 +15,15 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         public string[] Map(object model, object client)
         {
-            return model == null 
+            return model == null || Ignore(model, client)
                 ? new string[0]
                 : ToOrderedCollection(model, _parsedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+        }
+
+        static bool Ignore(object model, object client)
+        {
+            return model.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null ||
+                   (client != null && client.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null);
         }
 
         static string[] ToOrderedCollection(object obj, PropertyMap map)
