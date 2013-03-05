@@ -72,6 +72,11 @@
     <Compile Include="Binding\IUrlQueryMapper.cs" />
     <Compile Include="Binding\Attributes\RequestHeaderAttribute.cs" />
     <Compile Include="Binding\Attributes\OrderedRequestPathAttribute.cs" />
+    <Compile Include="Utils\InheritanceComparer.cs" />
+    <Compile Include="Binding\UrlMapping\NamedPropertyConverter.cs" />
+    <Compile Include="Binding\UrlMapping\NamedPropertyMap.cs" />
+    <Compile Include="Binding\UrlMapping\OrderedPropertyConverter.cs" />
+    <Compile Include="Binding\UrlMapping\OrderedPropertyMap.cs" />
     <Compile Include="Binding\UrlMapping\QueryMapper.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
