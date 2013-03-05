@@ -43,7 +43,7 @@ namespace DocaLabs.Http.Client.RequestSerialization
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            var data = Encoding.GetEncoding(CharSet).GetBytes(obj == null ? "" : new QueryMapper(obj).TryMakeQuery());
+            var data = Encoding.GetEncoding(CharSet).GetBytes(obj == null ? "" : new QueryMapper(obj, null).TryMakeQuery());
 
             request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
             

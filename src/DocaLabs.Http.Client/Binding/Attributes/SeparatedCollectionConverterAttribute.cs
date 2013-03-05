@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.Binding.Attributes
     /// <summary>
     /// Defines converter for enumerable properties that serializes into delimited string.
     /// </summary>
-    public class SeparatedCollectionConverterAttribute : QueryPropertyConverterAttribute
+    public class SeparatedCollectionConverterAttribute : CustomPropertyConverterAttribute
     {
         /// <summary>
         /// String's delimiter. The default value is pipe |.

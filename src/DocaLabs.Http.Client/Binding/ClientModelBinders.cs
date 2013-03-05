@@ -10,13 +10,13 @@ namespace DocaLabs.Http.Client.Binding
     static public class ClientModelBinders
     {
         static readonly ConcurrentDictionary<Type, IMutator> Mutators;
-        static readonly ConcurrentDictionary<Type, IUrlPathMapper> UrlPathMappers;
+        static readonly ConcurrentDictionary<Type, IUrlPathComposer> UrlPathMappers;
         static readonly ConcurrentDictionary<Type, IUrlQueryMapper> UrlQueryMappers;
         static readonly ConcurrentDictionary<Type, IHeaderMapper> HeaderMappers;
         static readonly ConcurrentDictionary<Type, IRequestStreamWriter> RequestStreamWriters;
 
         static volatile IMutator _defaultMutator;
-        static volatile IUrlPathMapper _defaultUrlPathMapper;
+        static volatile IUrlPathComposer _defaultUrlPathComposer;
         static volatile IUrlQueryMapper _defaultUrlQueryMapper;
         static volatile IHeaderMapper _defaultHeaderMapper;
         static volatile IRequestStreamWriter _defaultRequestStreamWriter;
@@ -33,15 +33,15 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        public static IUrlPathMapper DefaultUrlPathMapper
+        public static IUrlPathComposer DefaultUrlPathComposer
         {
-            get { return _defaultUrlPathMapper; }
+            get { return _defaultUrlPathComposer; }
             set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
 
-                _defaultUrlPathMapper = value;
+                _defaultUrlPathComposer = value;
             }
         }
 
@@ -84,13 +84,13 @@ namespace DocaLabs.Http.Client.Binding
         static ClientModelBinders()
         {
             Mutators = new ConcurrentDictionary<Type, IMutator>();
-            UrlPathMappers = new ConcurrentDictionary<Type, IUrlPathMapper>();
+            UrlPathMappers = new ConcurrentDictionary<Type, IUrlPathComposer>();
             UrlQueryMappers = new ConcurrentDictionary<Type, IUrlQueryMapper>();
             HeaderMappers = new ConcurrentDictionary<Type, IHeaderMapper>();
             RequestStreamWriters = new ConcurrentDictionary<Type, IRequestStreamWriter>();
 
             _defaultMutator = new DefaultMutator();
-            _defaultUrlPathMapper = new DefaultUrlPathMapper();
+            _defaultUrlPathComposer = new DefaultUrlPathComposer();
             _defaultUrlQueryMapper = new DefaultUrlQueryMapper();
             _defaultHeaderMapper = new DefaultHeaderMapper();
             _defaultRequestStreamWriter = new DefaultRequestStreamWriter();
@@ -117,9 +117,9 @@ namespace DocaLabs.Http.Client.Binding
                 processed = true;
             }
 
-            if (binder is IUrlPathMapper)
+            if (binder is IUrlPathComposer)
             {
-                UrlPathMappers[type] = binder as IUrlPathMapper;
+                UrlPathMappers[type] = binder as IUrlPathComposer;
                 processed = true;
             }
 
@@ -151,10 +151,10 @@ namespace DocaLabs.Http.Client.Binding
             return Mutators.TryGetValue(type, out mutator) ? mutator : _defaultMutator;
         }
 
-        public static IUrlPathMapper GetUrlPathMapper(Type type)
+        public static IUrlPathComposer GetUrlPathComposer(Type type)
         {
-            IUrlPathMapper queryMapper;
-            return UrlPathMappers.TryGetValue(type, out queryMapper) ? queryMapper : _defaultUrlPathMapper;
+            IUrlPathComposer pathComposer;
+            return UrlPathMappers.TryGetValue(type, out pathComposer) ? pathComposer : _defaultUrlPathComposer;
         }
 
         public static IUrlQueryMapper GetUrlQueryMapper(Type type)

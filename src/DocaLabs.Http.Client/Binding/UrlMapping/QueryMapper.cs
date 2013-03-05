@@ -5,18 +5,11 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
     public class QueryMapper
     {
         readonly object _model;
-        readonly object _client;
         readonly string _existingQuery;
 
-        public QueryMapper(object model)
-            : this(model, null, null)
-        {
-        }
-
-        public QueryMapper(object model, object client, Uri baseUrl)
+        public QueryMapper(object model, Uri baseUrl)
         {
             _model = model;
-            _client = client;
             _existingQuery = GetExistingQuery(baseUrl);
         }
 
@@ -53,7 +46,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
         {
             var mapper = ClientModelBinders.GetUrlQueryMapper(_model.GetType());
                 
-            var values = mapper.Map(_model, _client);
+            var values = mapper.Map(_model);
 
             return new QueryStringBuilder().Add(values).ToString();
         }

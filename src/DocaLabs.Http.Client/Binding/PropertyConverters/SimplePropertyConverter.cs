@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverters
@@ -7,7 +8,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converts simple properties, like int, string, Guid, etc.
     /// </summary>
-    public class SimplePropertyConverter : PropertyConverterBase, IPropertyConverter
+    public class SimplePropertyConverter : PropertyConverterBase<RequestQueryAttribute>, IPropertyConverter
     {
         SimplePropertyConverter(PropertyInfo info)
             : base(info)

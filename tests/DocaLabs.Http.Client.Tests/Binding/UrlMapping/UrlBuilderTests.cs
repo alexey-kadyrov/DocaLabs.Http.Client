@@ -112,10 +112,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string ProductCategory { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int ProductId { get; set; }
 
             public string Value { get; set; }
@@ -197,13 +197,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string Value1 { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public string Value2 { get; set; }
 
-            [QueryPath(3)]
+            [OrderedRequestPath(3)]
             public string Value3 { get; set; }
         }
 
@@ -244,13 +244,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         It should_not_modify_url =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/?keepMe=Yes");
 
-        [QueryIgnore]
+        [IgnoreInRequest]
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string ProductCategory { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int ProductId { get; set; }
 
             public string Value { get; set; }
@@ -295,16 +295,16 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string ProductCategory { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int ProductId { get; set; }
 
             public string Value { get; set; }
         }
 
-        [QueryIgnore]
+        [IgnoreInRequest]
         class TestClient : HttpClient<TestModel, string>
         {
             public TestClient(Uri baseUrl)
@@ -336,16 +336,16 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string ProductCategory { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int ProductId { get; set; }
 
             public string Value { get; set; }
         }
 
-        [QueryIgnore]
+        [IgnoreInRequest]
         class TestClient : HttpClient<TestModel, string>
         {
             public TestClient(Uri baseUrl)
@@ -382,10 +382,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string ProductCategory { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int ProductId { get; set; }
 
             public string Value { get; set; }
@@ -422,13 +422,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string SubFolder1 { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int SubFolder2 { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public string File { get; set; }
         }
 
@@ -471,13 +471,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string SubFolder1 { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int SubFolder2 { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public string File { get; set; }
         }
 
@@ -520,10 +520,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string ProductCategory { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public int ProductId { get; set; }
 
             public string Value { get; set; }
@@ -611,13 +611,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
         class TestModel
         {
-            [QueryPath(1)]
+            [OrderedRequestPath(1)]
             public string Value1 { get; set; }
 
-            [QueryPath(2)]
+            [OrderedRequestPath(2)]
             public string Value2 { get; set; }
 
-            [QueryPath(3)]
+            [OrderedRequestPath(3)]
             public string Value3 { get; set; }
         }
 

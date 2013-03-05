@@ -13,17 +13,16 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
     {
         readonly ConcurrentDictionary<Type, ConverterMap> _parsedMaps = new ConcurrentDictionary<Type, ConverterMap>();
 
-        public CustomNameValueCollection Map(object model, object client)
+        public CustomNameValueCollection Map(object model)
         {
-            return model == null || Ignore(model, client)
+            return model == null || Ignore(model)
                 ? new CustomNameValueCollection()
                 : ToDictionary(model, _parsedMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
         }
 
-        static bool Ignore(object model, object client)
+        static bool Ignore(object model)
         {
-            return model.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null ||
-                   (client != null && client.GetType().GetCustomAttribute<QueryIgnoreAttribute>(true) != null);
+            return model == null || model.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
         }
 
         static CustomNameValueCollection ToDictionary(object obj, ConverterMap map)
@@ -68,7 +67,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
             static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo info)
             {
-                var attribute = info.GetCustomAttribute<QueryPropertyConverterAttribute>(true);
+                var attribute = info.GetCustomAttribute<CustomPropertyConverterAttribute>(true);
 
                 return attribute != null
                     ? attribute.GetConverter(info)

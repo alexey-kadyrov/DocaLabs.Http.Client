@@ -8,7 +8,7 @@ namespace DocaLabs.Http.Client.Binding.Attributes
     /// Defines methods for a custom converter that should be used to convert a property for serializing into URI's query.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public abstract class QueryPropertyConverterAttribute : Attribute
+    public abstract class CustomPropertyConverterAttribute : Attribute
     {
         /// <summary>
         /// Returns converter for a property.

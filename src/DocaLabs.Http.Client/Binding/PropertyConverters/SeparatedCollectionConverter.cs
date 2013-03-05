@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Reflection;
 using System.Text;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverters
@@ -9,7 +10,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converter for enumerable properties that serializes into delimited string.
     /// </summary>
-    public class SeparatedCollectionConverter : PropertyConverterBase, IPropertyConverter
+    public class SeparatedCollectionConverter : PropertyConverterBase<RequestQueryAttribute>, IPropertyConverter
     {
         /// <summary>
         /// String's delimiter. The default value is pipe |.

@@ -53,23 +53,25 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Binding\Attributes\NamedRequestPathAttribute.cs" />
+    <Compile Include="Binding\Attributes\RequestPathAttribute.cs" />
     <Compile Include="Binding\BindingExtensions.cs" />
     <Compile Include="Binding\ClientModelBinders.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultMutator.cs" />
     <Compile Include="Binding\DefaultRequestStreamWriter.cs" />
-    <Compile Include="Binding\UrlMapping\DefaultUrlPathMapper.cs" />
+    <Compile Include="Binding\PropertyConverters\INamedPropertyConverterInfo.cs" />
+    <Compile Include="Binding\UrlMapping\DefaultUrlPathComposer.cs" />
     <Compile Include="Binding\UrlMapping\DefaultUrlQueryMapper.cs" />
     <Compile Include="Binding\ICredentialsMapper.cs" />
     <Compile Include="Binding\IMutator.cs" />
     <Compile Include="Binding\IHeaderMapper.cs" />
     <Compile Include="Binding\IRequestStreamWriter.cs" />
-    <Compile Include="Binding\IUrlPathMapper.cs" />
+    <Compile Include="Binding\IUrlPathComposer.cs" />
     <Compile Include="Binding\IUrlQueryMapper.cs" />
-    <Compile Include="Binding\Attributes\QueryHeaderAttribute.cs" />
-    <Compile Include="Binding\Attributes\QueryPathAttribute.cs" />
-    <Compile Include="Binding\UrlMapping\PathMapper.cs" />
+    <Compile Include="Binding\Attributes\RequestHeaderAttribute.cs" />
+    <Compile Include="Binding\Attributes\OrderedRequestPathAttribute.cs" />
     <Compile Include="Binding\UrlMapping\QueryMapper.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
@@ -127,11 +129,11 @@
     <Compile Include="RequestSerialization\RequestBodySerializationFactory.cs" />
     <Compile Include="ResponseDeserialization\ResponseParser.cs" />
     <Compile Include="RequestSerialization\SerializeAsFormAttribute.cs" />
-    <Compile Include="Binding\Attributes\QueryPropertyConverterAttribute.cs" />
+    <Compile Include="Binding\Attributes\CustomPropertyConverterAttribute.cs" />
     <Compile Include="Binding\PropertyConverters\ObjectPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverters\PropertyConverterBase.cs" />
-    <Compile Include="Binding\Attributes\QueryIgnoreAttribute.cs" />
-    <Compile Include="Binding\Attributes\QueryParameterAttribute.cs" />
+    <Compile Include="Binding\Attributes\IgnoreInRequestAttribute.cs" />
+    <Compile Include="Binding\Attributes\RequestQueryAttribute.cs" />
     <Compile Include="RequestSerialization\RequestSerializationAttribute.cs" />
     <Compile Include="ResponseDeserialization\ResponseDeserializationAttribute.cs" />
     <Compile Include="RequestSerialization\SerializeAsJsonAttribute.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverters
@@ -7,7 +8,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converts reference type properties, like object, etc.
     /// </summary>
-    public class ObjectPropertyConverter : PropertyConverterBase, IPropertyConverter
+    public class ObjectPropertyConverter : PropertyConverterBase<RequestQueryAttribute>, IPropertyConverter
     {
         ObjectPropertyConverter(PropertyInfo info)
             : base(info)
@@ -49,7 +50,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
                     var customeMapper = ClientModelBinders.GetUrlQueryMapper(obj.GetType());
 
                     values = customeMapper != null
-                        ? customeMapper.Map(obj, null)
+                        ? customeMapper.Map(obj)
                         : new CustomNameValueCollection { { Name, value.ToString() } };
                 }
             }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using DocaLabs.Http.Client.Binding.Attributes;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
@@ -17,7 +19,9 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
             try
             {
-                return CreateUrlFrom(model, client, baseUrl);
+                return Ignore(client)
+                    ? baseUrl
+                    : CreateUrlFrom(model, baseUrl);
             }
             catch (UnrecoverableHttpClientException)
             {
@@ -29,12 +33,17 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
             }
         }
 
-        static Uri CreateUrlFrom(object model, object client, Uri baseUrl)
+        static bool Ignore(object client)
+        {
+            return client != null && client.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
+        }
+
+        static Uri CreateUrlFrom(object model, Uri baseUrl)
         {
             var builder = new UriBuilder(GetBaseUrl(baseUrl))
             {
-                Path = new PathMapper(model, client, baseUrl).TryMakePath(),
-                Query = new QueryMapper(model, client, baseUrl).TryMakeQuery(),
+                Path = ClientModelBinders.GetUrlPathComposer(model.GetType()).Compose(model, baseUrl),
+                Query = new QueryMapper(model, baseUrl).TryMakeQuery(),
                 Fragment = GetFragmentWithoutSharpMark(baseUrl)
             };
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverters
@@ -8,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converts enumerable of simple type properties.
     /// </summary>
-    public class CollectionPropertyConverter : PropertyConverterBase, IPropertyConverter
+    public class CollectionPropertyConverter : PropertyConverterBase<RequestQueryAttribute>, IPropertyConverter
     {
         CollectionPropertyConverter(PropertyInfo info)
             : base(info)

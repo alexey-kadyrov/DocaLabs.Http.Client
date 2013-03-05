@@ -3,16 +3,11 @@
 namespace DocaLabs.Http.Client.Binding.Attributes
 {
     /// <summary>
-    /// Specifies additional information about a property for serializing into a URI's query.
+    /// Base class to mark a property for mapping to an URL's path part.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public class QueryParameterAttribute : Attribute
+    public abstract class RequestPathAttribute : Attribute
     {
-        /// <summary>
-        /// Gets or sets a name that should be used for the property in a URI's query.
-        /// </summary>
-        public string Name { get; set; }
-
         /// <summary>
         /// Gets or sets a format string that should be used when converting the property value.
         /// </summary>

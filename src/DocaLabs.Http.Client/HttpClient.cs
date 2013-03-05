@@ -81,7 +81,7 @@ namespace DocaLabs.Http.Client
         /// The query class may define some properties to be serialized into the http query part and to serialize some property
         /// into the request body.
         /// The input data serialization behaviour can be altered by:
-        ///   * Using QueryIgnoreAttribute (on class or property level),
+        ///   * Using IgnoreInRequestAttribute (on class or property level),
         ///   * Using one of the RequestSerializationAttribute derived classes (on the class or property level) 
         ///   * Implementing ICustomQueryMapper interface for custom mapping to query string
         ///   * Overriding TryMakeQueryString and/or TryWriteRequestData

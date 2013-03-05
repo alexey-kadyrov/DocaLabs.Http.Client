@@ -4,6 +4,6 @@ namespace DocaLabs.Http.Client.Binding
 {
     public interface IUrlQueryMapper
     {
-        CustomNameValueCollection Map(object model, object client);
+        CustomNameValueCollection Map(object model);
     }
 }

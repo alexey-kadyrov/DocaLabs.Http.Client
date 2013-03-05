@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Reflection;
 using DocaLabs.Conversion;
-using DocaLabs.Http.Client.Binding.Attributes;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverters
 {
     /// <summary>
     /// Base class for property converters.
     /// </summary>
-    public abstract class PropertyConverterBase
+    public abstract class PropertyConverterBase<T>
+        where T : Attribute, INamedPropertyConverterInfo
     {
         /// <summary>
         /// Gets the linked property info.
@@ -16,15 +16,15 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         protected PropertyInfo Info { get; private set; }
 
         /// <summary>
-        /// Gets the name which should be used. If QueryParameterAttribute is not defined or the Name in the attribute
+        /// Gets the name which should be used. If RequestQueryAttribute is not defined or the Name in the attribute
         /// is null or blank then this property will set to the linked property name.
         /// </summary>
-        protected string Name { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
-        /// gets the custom format string that is set by QueryParameterAttribute.
+        /// gets the custom format string that is set by RequestQueryAttribute.
         /// </summary>
-        protected string Format { get; private set; }
+        public string Format { get; private set; }
 
         /// <summary>
         /// Initializes Info, Name and Format properties.
@@ -36,7 +36,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
 
             Info = info;
 
-            var attribute = info.GetCustomAttribute<QueryParameterAttribute>(true);
+            var attribute = info.GetCustomAttribute<T>(true);
             if(attribute != null)
             {
                 Name = attribute.Name;
@@ -55,7 +55,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        protected string ConvertValue(object value)
+        public string ConvertValue(object value)
         {
             if (value == null)
                 return string.Empty;

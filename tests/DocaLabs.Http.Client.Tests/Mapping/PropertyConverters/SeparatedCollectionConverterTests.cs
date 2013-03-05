@@ -240,7 +240,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            [QueryParameter]
+            [RequestQuery]
             public IEnumerable<int> Values { get; set; }
         }
     }
@@ -278,7 +278,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            [QueryParameter(Name = "Hello World")]
+            [RequestQuery(Name = "Hello World")]
             public IEnumerable<int> Values { get; set; }
         }
     }
@@ -316,7 +316,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
 
         class TestClass
         {
-            [QueryParameter(Format = "X")]
+            [RequestQuery(Format = "X")]
             public IEnumerable<int> Values { get; set; }
         }
     }
