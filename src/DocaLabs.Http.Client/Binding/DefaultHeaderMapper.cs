@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding
     {
         readonly ConcurrentDictionary<Type, PropertyMap> _parsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
-        public WebHeaderCollection Map(object model, object client)
+        public WebHeaderCollection Map(object model)
         {
             return model == null ? 
                 new WebHeaderCollection() 

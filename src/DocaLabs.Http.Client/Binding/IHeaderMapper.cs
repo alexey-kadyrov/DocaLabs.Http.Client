@@ -4,6 +4,6 @@ namespace DocaLabs.Http.Client.Binding
 {
     public interface IHeaderMapper
     {
-        WebHeaderCollection Map(object model, object client);
+        WebHeaderCollection Map(object model);
     }
 }

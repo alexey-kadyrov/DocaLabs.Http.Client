@@ -27,7 +27,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_not_modify_authority_and_path_and_should_add_query_part =
             () => url.ToString().ShouldEqual("http://foo.bar/product/red/?Value=Hello+World!");
@@ -63,7 +63,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_not_modify_authority_and_path_and_should_keep_existing_query_part_at_left_and_add_new_query_part =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/product/red?keepMe=Yes&Value=Hello+World!");
@@ -105,7 +105,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_not_modify_authority_and_path_and_should_keep_existing_query_part_at_left_and_add_new_query_part =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/red%20category/42?keepMe=Yes&Value=Hello+World!");
@@ -148,7 +148,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_not_modify_user_password_authority_path_existing_qyery_part_and_fragment_and_should_add_new_query_part =
             () => url.AbsoluteUri.ShouldEqual("http://user1:password1@foo.bar/product/red?keepMe=Yes&Value=Hello+World!#keepMeAsWell/andMe?andMeToo");
@@ -190,7 +190,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_not_modify_user_password_authority_path_existing_qyery_part_and_fragment_and_should_add_new_query_part =
             () => url.AbsoluteUri.ShouldEqual("http://user1:password1@foo.bar/product/Hello%20World?keepMe=Yes#keepMeAsWell/andMe?andMeToo");
@@ -239,7 +239,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_not_modify_url =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/?keepMe=Yes");
@@ -288,7 +288,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_not_modify_url =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/?keepMe=Yes");
@@ -329,7 +329,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(null, client, base_url);
+            () => url = UrlBuilder.Compose(null, client, base_url);
 
         It should_not_modify_url =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/?keepMe=Yes");
@@ -375,7 +375,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, null, base_url);
+            () => url = UrlBuilder.Compose(model, null, base_url);
 
         It should_still_modify_url =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/red/42?keepMe=Yes&Value=Hello+World!");
@@ -415,7 +415,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_create_full_url =
             () => url.AbsoluteUri.ShouldEqual("file:///c:/root/red/42/readme.txt");
@@ -464,7 +464,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => url = UrlBuilder.CreateUrl(model, client, base_url);
+            () => url = UrlBuilder.Compose(model, client, base_url);
 
         It should_create_full_url =
             () => url.AbsoluteUri.ShouldEqual("file://file-server/root/red/42/read%20me.txt");
@@ -510,7 +510,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => exception = Catch.Exception(() => UrlBuilder.CreateUrl(model, client, null));
+            () => exception = Catch.Exception(() => UrlBuilder.Compose(model, client, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -556,7 +556,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => exception = Catch.Exception(() => UrlBuilder.CreateUrl(model, client, base_url));
+            () => exception = Catch.Exception(() => UrlBuilder.Compose(model, client, base_url));
 
         It should_throw_unrecoverable_http_client_exception =
             () => exception.ShouldBeOfType<UnrecoverableHttpClientException>();
@@ -601,7 +601,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         };
 
         Because of =
-            () => exception = Catch.Exception(() => UrlBuilder.CreateUrl(model, client, base_url));
+            () => exception = Catch.Exception(() => UrlBuilder.Compose(model, client, base_url));
 
         It should_throw_unrecoverable_http_client_exception =
             () => exception.ShouldBeOfType<UnrecoverableHttpClientException>();

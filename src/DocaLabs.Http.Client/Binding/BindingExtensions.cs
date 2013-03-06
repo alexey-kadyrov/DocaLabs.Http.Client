@@ -38,7 +38,6 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetGetMethod() != null &&
                     (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
-                    info.GetCustomAttribute<OrderedRequestPathAttribute>(true) == null &&
                     info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }

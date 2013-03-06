@@ -11,12 +11,12 @@ namespace DocaLabs.Http.Client.Tests._Utils
         {
         }
 
-        protected override TResult ExecutePipeline(TQuery query)
+        protected override TResult ExecutePipeline(TQuery model)
         {
             var result = Activator.CreateInstance<TResult>();
 
             if(typeof(TQuery) != typeof(VoidType) && typeof(TResult) != typeof(VoidType))
-                typeof(TResult).GetProperty("Value").SetValue(result, typeof(TQuery).GetProperty("Value").GetValue(query, null));
+                typeof(TResult).GetProperty("Value").SetValue(result, typeof(TQuery).GetProperty("Value").GetValue(model, null));
 
             ExecutionMarker = "Pipeline was executed.";
 

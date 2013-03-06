@@ -12,7 +12,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
         /// <summary>
         /// Adds query string build from query object to the specified URL.
         /// </summary>
-        public static Uri CreateUrl(object model, object client, Uri baseUrl)
+        public static Uri Compose(object model, object client, Uri baseUrl)
         {
             if (baseUrl == null)
                 throw new ArgumentNullException("baseUrl");
