@@ -8,7 +8,7 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
-    public class OrderedPropertyMap
+    class OrderedPropertyMap
     {
         IList<OrderedPropertyConverter> Converters { get; set; }
 

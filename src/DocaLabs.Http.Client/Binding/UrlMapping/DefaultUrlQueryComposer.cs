@@ -9,15 +9,24 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
-    public class DefaultUrlQueryMapper : IUrlQueryMapper
+    public class DefaultUrlQueryComposer : IUrlQueryComposer
     {
-        readonly ConcurrentDictionary<Type, ConverterMap> _parsedMaps = new ConcurrentDictionary<Type, ConverterMap>();
+        readonly ConcurrentDictionary<Type, ConverterMap> _converterMaps = new ConcurrentDictionary<Type, ConverterMap>();
 
-        public CustomNameValueCollection Map(object model)
+        public string Compose(object model, Uri baseUrl)
         {
-            return model == null || Ignore(model)
-                ? new CustomNameValueCollection()
-                : ToDictionary(model, _parsedMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
+            var existingQuery = GetExistingQuery(baseUrl);
+            if (Ignore(model))
+                return existingQuery;
+
+            var modelQuery = ConvertModelToQuery(model, _converterMaps.GetOrAdd(model.GetType(), x => new ConverterMap(x)));
+
+            if (string.IsNullOrWhiteSpace(existingQuery))
+                return modelQuery;
+
+            return string.IsNullOrWhiteSpace(modelQuery)
+                ? existingQuery
+                : ConcatenateQueryParts(existingQuery, modelQuery);
         }
 
         static bool Ignore(object model)
@@ -25,14 +34,35 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
             return model == null || model.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
         }
 
-        static CustomNameValueCollection ToDictionary(object obj, ConverterMap map)
+        static string GetExistingQuery(Uri baseUrl)
+        {
+            var query = baseUrl == null ? "" : baseUrl.Query;
+
+            return GetQueryWithoutQuestionMark(query);
+        }
+
+        static string GetQueryWithoutQuestionMark(string query)
+        {
+            return query.StartsWith("?")
+                       ? query.Substring(1)
+                       : query;
+        }
+
+        static string ConvertModelToQuery(object obj, ConverterMap map)
         {
             var values = new CustomNameValueCollection();
 
             foreach (var converter in map.Converters)
                 values.AddRange(converter.GetValue(obj));
 
-            return values;
+            return new QueryStringBuilder().Add(values).ToString();
+        }
+
+        static string ConcatenateQueryParts(string leftPart, string rightPart)
+        {
+            return leftPart.EndsWith("&")
+                    ? leftPart + rightPart
+                    : leftPart + "&" + rightPart;
         }
 
         class ConverterMap

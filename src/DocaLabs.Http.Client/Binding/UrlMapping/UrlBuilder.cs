@@ -40,10 +40,12 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         static Uri CreateUrlFrom(object model, Uri baseUrl)
         {
+            var modelType = model.GetType();
+
             var builder = new UriBuilder(GetBaseUrl(baseUrl))
             {
-                Path = ClientModelBinders.GetUrlPathComposer(model.GetType()).Compose(model, baseUrl),
-                Query = new QueryMapper(model, baseUrl).TryMakeQuery(),
+                Path = ClientModelBinders.GetUrlPathComposer(modelType).Compose(model, baseUrl),
+                Query = ClientModelBinders.GetUrlQueryComposer(modelType).Compose(model, baseUrl),
                 Fragment = GetFragmentWithoutSharpMark(baseUrl)
             };
 

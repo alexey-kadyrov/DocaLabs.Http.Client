@@ -47,11 +47,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
 
                 if (value != null)
                 {
-                    var customeMapper = ClientModelBinders.GetUrlQueryMapper(obj.GetType());
+                    var customeMapper = /*ClientModelBinders.GetUrlQueryComposer(obj.GetType());
 
-                    values = customeMapper != null
-                        ? customeMapper.Map(obj)
-                        : new CustomNameValueCollection { { Name, value.ToString() } };
+                    values = */ new CustomNameValueCollection { { Name, value.ToString() } };
                 }
             }
 

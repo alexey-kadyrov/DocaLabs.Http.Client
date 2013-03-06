@@ -3,7 +3,7 @@ using DocaLabs.Conversion;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
-    public class OrderedPropertyConverter
+    class OrderedPropertyConverter
     {
         PropertyInfo Info { get; set; }
 

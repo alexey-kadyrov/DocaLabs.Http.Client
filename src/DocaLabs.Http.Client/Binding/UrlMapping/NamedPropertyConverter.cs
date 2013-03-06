@@ -4,7 +4,7 @@ using DocaLabs.Http.Client.Binding.PropertyConverters;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
-    public class NamedPropertyConverter : PropertyConverterBase<NamedRequestPathAttribute>
+    class NamedPropertyConverter : PropertyConverterBase<NamedRequestPathAttribute>
     {
         public NamedPropertyConverter(PropertyInfo info)
             : base(info)

@@ -63,13 +63,13 @@
     <Compile Include="Binding\DefaultRequestStreamWriter.cs" />
     <Compile Include="Binding\PropertyConverters\INamedPropertyConverterInfo.cs" />
     <Compile Include="Binding\UrlMapping\DefaultUrlPathComposer.cs" />
-    <Compile Include="Binding\UrlMapping\DefaultUrlQueryMapper.cs" />
+    <Compile Include="Binding\UrlMapping\DefaultUrlQueryComposer.cs" />
     <Compile Include="Binding\ICredentialsMapper.cs" />
     <Compile Include="Binding\IMutator.cs" />
     <Compile Include="Binding\IHeaderMapper.cs" />
     <Compile Include="Binding\IRequestStreamWriter.cs" />
     <Compile Include="Binding\IUrlPathComposer.cs" />
-    <Compile Include="Binding\IUrlQueryMapper.cs" />
+    <Compile Include="Binding\IUrlQueryComposer.cs" />
     <Compile Include="Binding\Attributes\RequestHeaderAttribute.cs" />
     <Compile Include="Binding\Attributes\OrderedRequestPathAttribute.cs" />
     <Compile Include="Utils\InheritanceComparer.cs" />
@@ -77,7 +77,6 @@
     <Compile Include="Binding\UrlMapping\NamedPropertyMap.cs" />
     <Compile Include="Binding\UrlMapping\OrderedPropertyConverter.cs" />
     <Compile Include="Binding\UrlMapping\OrderedPropertyMap.cs" />
-    <Compile Include="Binding\UrlMapping\QueryMapper.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
     <Compile Include="Configuration\CredentialType.cs" />

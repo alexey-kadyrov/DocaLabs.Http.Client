@@ -7,7 +7,7 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {
-    public class NamedPropertyMap
+    class NamedPropertyMap
     {
         public IList<NamedPropertyConverter> Converters { get; private set; }
 
