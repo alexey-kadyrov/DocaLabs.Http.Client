@@ -1,8 +1,9 @@
-﻿using System;
+using System;
+using DocaLabs.Http.Client.Utils;
 using Moq;
 using NUnit.Framework;
 
-namespace DocaLabs.Conversion.Tests
+namespace DocaLabs.Http.Client.Tests.Utils
 {
     [TestFixture]
     public class CustomConverterTests

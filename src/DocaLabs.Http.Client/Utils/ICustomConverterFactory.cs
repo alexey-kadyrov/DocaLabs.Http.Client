@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace DocaLabs.Conversion
+namespace DocaLabs.Http.Client.Utils
 {
     /// <summary>
     /// Defines methods to manage collection of converters.

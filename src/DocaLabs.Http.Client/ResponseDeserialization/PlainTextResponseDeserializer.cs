@@ -1,5 +1,4 @@
 ﻿using System;
-using DocaLabs.Conversion;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.ResponseDeserialization

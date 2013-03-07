@@ -67,7 +67,7 @@ namespace DocaLabs.Http.Client.Binding
             {
                 return type.IsSimpleType() 
                     ? new List<PropertyInfo>()
-                    : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
+                    : type.GetAllInstancePublicProperties()
                         .Where(x => x.IsCredentials())
                         .ToList();
             }

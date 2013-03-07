@@ -82,6 +82,14 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
+        /// Gets all properties defined on the type and all interfaces that it implements.
+        /// </summary>
+        public static IList<PropertyInfo> GetAllInstancePublicProperties(this Type type)
+        {
+            return type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance);
+        }
+
+        /// <summary>
         /// Checks whenever the type is enumerable, string or byte[] are not considered enumerable.
         /// </summary>
         public static bool IsEnumerable(this Type type)

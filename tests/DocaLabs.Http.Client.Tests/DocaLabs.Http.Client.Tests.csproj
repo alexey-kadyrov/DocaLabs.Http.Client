@@ -97,6 +97,8 @@
     <Compile Include="Binding\UrlMapping\UrlBuilderTests.cs" />
     <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\ContentTypeExtensionsTests.cs" />
+    <Compile Include="Utils\CustomConverterFactoryTests.cs" />
+    <Compile Include="Utils\CustomConverterTests.cs" />
     <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
     <Compile Include="Utils\DictionaryListTests.cs" />
     <Compile Include="Utils\ReflectionExtensionsTests.cs" />
@@ -148,10 +150,6 @@
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</Project>
       <Name>DocaLabs.Http.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\DocaLabs.Conversion\DocaLabs.Conversion.csproj">
-      <Project>{5EF7D2C9-BA29-4EF9-AC6F-CA4A15150A6D}</Project>
-      <Name>DocaLabs.Conversion</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Testing.Common\DocaLabs.Testing.Common.csproj">
       <Project>{40A96AE2-C931-4AC1-A38E-5FBB3045216C}</Project>

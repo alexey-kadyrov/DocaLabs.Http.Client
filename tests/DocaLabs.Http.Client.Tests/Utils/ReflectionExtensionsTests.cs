@@ -350,6 +350,58 @@ namespace DocaLabs.Http.Client.Tests.Utils
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
     }
 
+    [Subject(typeof(ReflectionExtensions), "GetAllInstancePublicProperties")]
+    class when_getting_all_instance_public_properties_on_a_type
+    {
+        It should_return_all_requested_properties_for_a_base_interface =
+            () => typeof(IInterface1).GetAllInstancePublicProperties().Count.ShouldEqual(2);
+
+        It should_return_all_requested_properties_for_a_subclassed_interface =
+            () => typeof(IInterface2).GetAllInstancePublicProperties().Count.ShouldEqual(5);
+
+        It should_return_all_requested_properties_for_a_class =
+            () => typeof(TestClass).GetAllInstancePublicProperties().Count.ShouldEqual(5);
+
+
+        interface IInterface1
+        {
+            string Property1 { get; set; }
+            int this[int i] { get; set; }
+        }
+
+        interface IInterface2 : IInterface1
+        {
+            string Property2 { get; set; }
+            int this[int i, int k] { get; set; }
+            int this[string i] { get; set; }
+        }
+
+        class BaseClass
+        {
+            public string BaseProperty1 { get; set; }
+            protected string BaseProperty2 { get; set; }
+            public string Property { get; set; }
+        }
+
+        class TestClass : BaseClass, IInterface1
+        {
+            public new string Property { get; set; }
+
+            public string Property1 { get; set; }
+
+            public int this[int i]
+            {
+                get { return 0; }
+                set { }
+            }
+
+            public string Property22 { get; set; }
+            public static string Property33 { get; set; }
+            string Property44 { get; set; }
+            static string Property55 { get; set; }
+        }
+    }
+
     [Subject(typeof(ReflectionExtensions), "IsEnumerable")]
     class when_checking_for_an_enumerable_type
     {

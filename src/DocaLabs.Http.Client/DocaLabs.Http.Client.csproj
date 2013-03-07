@@ -72,6 +72,9 @@
     <Compile Include="Binding\IUrlQueryComposer.cs" />
     <Compile Include="Binding\Attributes\RequestHeaderAttribute.cs" />
     <Compile Include="Binding\Attributes\OrderedRequestPathAttribute.cs" />
+    <Compile Include="Utils\CustomConverter.cs" />
+    <Compile Include="Utils\CustomConverterFactory.cs" />
+    <Compile Include="Utils\ICustomConverterFactory.cs" />
     <Compile Include="Utils\InheritanceComparer.cs" />
     <Compile Include="Binding\UrlMapping\NamedPropertyConverter.cs" />
     <Compile Include="Binding\UrlMapping\NamedPropertyMap.cs" />
@@ -167,12 +170,6 @@
       <LastGenOutput>Text.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DocaLabs.Conversion\DocaLabs.Conversion.csproj">
-      <Project>{5EF7D2C9-BA29-4EF9-AC6F-CA4A15150A6D}</Project>
-      <Name>DocaLabs.Conversion</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

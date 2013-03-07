@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using DocaLabs.Conversion;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
 {

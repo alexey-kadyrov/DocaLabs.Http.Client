@@ -78,7 +78,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
             {
                 return type.IsSimpleType()
                     ? new List<IPropertyConverter>()
-                    : type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
+                    : type.GetAllInstancePublicProperties()
                         .Select(ParseProperty)
                         .Where(x => x != null)
                         .ToList();

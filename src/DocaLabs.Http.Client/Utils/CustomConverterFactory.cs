@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.Xml;
 
-namespace DocaLabs.Conversion
+namespace DocaLabs.Http.Client.Utils
 {
     /// <summary>
     /// The converter factory. The behaviour can be customised by updating the factory.

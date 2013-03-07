@@ -36,8 +36,8 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
             // thanks http://code.google.com/p/lokad-cloud/ for the idea
 
-            var orderedCollection = type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance)
-                                        .Where(f => CustomAttributeExtensions.GetCustomAttribute<OrderedRequestPathAttribute>((MemberInfo) f, true) != null)
+            var orderedCollection = type.GetAllInstancePublicProperties()
+                                        .Where(f => f.GetCustomAttribute<OrderedRequestPathAttribute>(true) != null)
                 // ordering always respect inheritance
                                         .GroupBy(f => f.DeclaringType)
                                         .OrderBy(g => g.Key, new InheritanceComparer())

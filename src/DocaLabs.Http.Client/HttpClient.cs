@@ -187,7 +187,7 @@ namespace DocaLabs.Http.Client
 
             return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
                    || GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || modelType.GetAllProperties(BindingFlags.Public | BindingFlags.Instance).Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null);
+                   || modelType.GetAllInstancePublicProperties().Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null);
         }
 
         /// <summary>

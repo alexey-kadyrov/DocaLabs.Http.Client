@@ -79,6 +79,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot convert from type {0} to type {1}..
+        /// </summary>
+        internal static string cannot_convert_from_0_to_1 {
+            get {
+                return ResourceManager.GetString("cannot_convert_from_0_to_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot figure out how to deserialize web response..
         /// </summary>
         internal static string cannot_figure_out_how_to_deserialize {
@@ -138,6 +147,15 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string if_base_class_generic_it_must_have_two_parameters {
             get {
                 return ResourceManager.GetString("if_base_class_generic_it_must_have_two_parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input argument can be only of string or Guid type..
+        /// </summary>
+        internal static string input_argument_can_be_only_string_or_guid {
+            get {
+                return ResourceManager.GetString("input_argument_can_be_only_string_or_guid", resourceCulture);
             }
         }
         
@@ -228,6 +246,33 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string service_url_is_not_defined {
             get {
                 return ResourceManager.GetString("service_url_is_not_defined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type {0} cannot be converted to byte array..
+        /// </summary>
+        internal static string type_0_cannot_be_converted_to_byte_array {
+            get {
+                return ResourceManager.GetString("type_0_cannot_be_converted_to_byte_array", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown underlying enum type {0}..
+        /// </summary>
+        internal static string unknown_underlying_enum_type_0 {
+            get {
+                return ResourceManager.GetString("unknown_underlying_enum_type_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value {0} is not defined for enum {1}..
+        /// </summary>
+        internal static string value_0_is_not_defined_for_enum_1 {
+            get {
+                return ResourceManager.GetString("value_0_is_not_defined_for_enum_1", resourceCulture);
             }
         }
         

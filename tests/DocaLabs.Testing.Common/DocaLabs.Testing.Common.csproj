@@ -77,12 +77,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Conversion\DocaLabs.Conversion.csproj">
-      <Project>{5EF7D2C9-BA29-4EF9-AC6F-CA4A15150A6D}</Project>
-      <Name>DocaLabs.Conversion</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

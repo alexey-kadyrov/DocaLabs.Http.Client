@@ -88,7 +88,7 @@ namespace DocaLabs.Http.Client.Binding
 
                 var collection = new List<object>();
 
-                foreach (var property in type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance))
+                foreach (var property in type.GetAllInstancePublicProperties())
                     ParseProperty(property, collection);
 
                 return collection;

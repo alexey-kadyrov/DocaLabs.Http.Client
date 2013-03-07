@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using DocaLabs.Http.Client.Utils;
 using NUnit.Framework;
 
-namespace DocaLabs.Conversion.Tests
+namespace DocaLabs.Http.Client.Tests.Utils
 {
     [TestFixture]
     public class CustomConverterFactoryTests
