@@ -115,6 +115,7 @@
     <Compile Include="ResponseDeserialization\XmlResponseDeserializer.cs" />
     <Compile Include="ResponseDeserialization\IResponseDeserializationProvider.cs" />
     <Compile Include="ResponseDeserialization\JsonResponseDeserializer.cs" />
+    <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="VoidType.cs" />
     <Compile Include="ContentEncoding\ContentDecoderFactory.cs" />
     <Compile Include="ContentEncoding\ContentEncoderFactory.cs" />

@@ -11,13 +11,18 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         public string Compose(object model, Uri baseUrl)
         {
-            var existingPath = baseUrl == null 
-                ? "" 
-                : baseUrl.AbsolutePath;
+            var existingPath = GetExistingPath(baseUrl);
 
             return Ignore(model)
                 ? existingPath
                 : _orderedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)).ComposePath(model, existingPath);
+        }
+
+        static string GetExistingPath(Uri baseUrl)
+        {
+            return baseUrl == null 
+                       ? ""
+                       : baseUrl.GetComponents(UriComponents.Path, baseUrl.UserEscaped ? UriFormat.UriEscaped : UriFormat.Unescaped);
         }
 
         static bool Ignore(object model)

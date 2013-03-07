@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
     // ReSharper disable UnusedMember.Local
 
     [Subject(typeof(UrlBuilder))]
-    class when_url_builder_is_used_for_url_without_query_and_type_without_serialization_hints
+    class when_url_builder_is_used_for_url_without_input_model_and_type_without_serialization_hints
     {
         static Uri base_url;
         static TestClient client;
@@ -29,7 +29,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         Because of =
             () => url = UrlBuilder.Compose(model, client, base_url);
 
-        It should_not_modify_authority_and_path_and_should_add_query_part =
+        It should_not_modify_authority_and_path_and_should_add_input_model_part =
             () => url.ToString().ShouldEqual("http://foo.bar/product/red/?Value=Hello+World!");
 
         class TestModel
@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
     }
 
     [Subject(typeof(UrlBuilder))]
-    class when_url_builder_is_used_for_url_with_some_query_part_and_type_without_serialization_hints
+    class when_url_builder_is_used_for_url_with_some_input_model_part_and_type_without_serialization_hints
     {
         static Uri base_url;
         static TestClient client;
@@ -65,7 +65,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         Because of =
             () => url = UrlBuilder.Compose(model, client, base_url);
 
-        It should_not_modify_authority_and_path_and_should_keep_existing_query_part_at_left_and_add_new_query_part =
+        It should_not_modify_authority_and_path_and_should_keep_existing_input_model_part_at_left_and_add_new_input_model_part =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/product/red?keepMe=Yes&Value=Hello+World!");
 
         class TestModel
@@ -83,7 +83,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
     }
 
     [Subject(typeof(UrlBuilder))]
-    class when_url_builder_is_used_for_url_with_for_type_with_serialization_hints_for_path_and_query
+    class when_url_builder_is_used_for_url_with_for_type_with_serialization_hints_for_ordered_path_and_query
     {
         static Uri base_url;
         static TestClient client;
@@ -107,7 +107,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         Because of =
             () => url = UrlBuilder.Compose(model, client, base_url);
 
-        It should_not_modify_authority_and_path_and_should_keep_existing_query_part_at_left_and_add_new_query_part =
+        It should_not_modify_authority_and_path_and_should_keep_existing_input_model_part_at_left_and_add_new_input_model_part =
             () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/red%20category/42?keepMe=Yes&Value=Hello+World!");
 
         class TestModel
@@ -131,7 +131,107 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
     }
 
     [Subject(typeof(UrlBuilder))]
-    class when_url_builder_is_used_for_url_with_user_password_existing_query_part_and_fragment
+    class when_url_builder_is_used_for_url_with_for_type_with_serialization_hints_for_named_path_and_query
+    {
+        static Uri base_url;
+        static TestClient client;
+        static TestModel model;
+        static Uri url;
+
+        Establish context = () =>
+        {
+            base_url = new Uri("http://foo.bar/catalog/{productCategory}/{productId}?keepMe=Yes");
+
+            client = new TestClient(base_url);
+
+            model = new TestModel
+            {
+                ProductCategory = "red category",
+                ProductId = 42,
+                Value = "Hello World!"
+            };
+        };
+
+        Because of =
+            () => url = UrlBuilder.Compose(model, client, base_url);
+
+        It should_not_modify_authority_and_path_and_should_keep_existing_input_model_part_at_left_and_add_new_input_model_part =
+            () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/red%20category/42?keepMe=Yes&Value=Hello+World!");
+
+        class TestModel
+        {
+            [NamedRequestPath]
+            public string ProductCategory { get; set; }
+
+            [NamedRequestPath]
+            public int ProductId { get; set; }
+
+            public string Value { get; set; }
+        }
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient(Uri baseUrl)
+                : base(baseUrl)
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(UrlBuilder))]
+    class when_url_builder_is_used_for_url_with_for_type_with_serialization_hints_for_named_and_ordered_path_and_query
+    {
+        static Uri base_url;
+        static TestClient client;
+        static TestModel model;
+        static Uri url;
+
+        Establish context = () =>
+        {
+            base_url = new Uri("http://foo.bar/catalog/{productCategory}/{productId}?keepMe=Yes");
+
+            client = new TestClient(base_url);
+
+            model = new TestModel
+            {
+                ProductCategory = "red category",
+                ViewType = "small",
+                ProductId = 42,
+                Value = "Hello World!"
+            };
+        };
+
+        Because of =
+            () => url = UrlBuilder.Compose(model, client, base_url);
+
+        It should_not_modify_authority_and_path_and_should_keep_existing_input_model_part_at_left_and_add_new_input_model_part =
+            () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/red%20category/42/small?keepMe=Yes&Value=Hello+World!");
+
+        class TestModel
+        {
+            [NamedRequestPath]
+            public string ProductCategory { get; set; }
+
+            [OrderedRequestPath(1)]
+            public string ViewType { get; set; }
+
+            [NamedRequestPath]
+            public int ProductId { get; set; }
+
+            public string Value { get; set; }
+        }
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient(Uri baseUrl)
+                : base(baseUrl)
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(UrlBuilder))]
+    class when_url_builder_is_used_for_url_with_user_password_existing_input_model_part_and_fragment
     {
         static Uri base_url;
         static TestClient client;
@@ -150,7 +250,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         Because of =
             () => url = UrlBuilder.Compose(model, client, base_url);
 
-        It should_not_modify_user_password_authority_path_existing_qyery_part_and_fragment_and_should_add_new_query_part =
+        It should_not_modify_user_password_authority_path_existing_qyery_part_and_fragment_and_should_add_new_input_model_part =
             () => url.AbsoluteUri.ShouldEqual("http://user1:password1@foo.bar/product/red?keepMe=Yes&Value=Hello+World!#keepMeAsWell/andMe?andMeToo");
 
         class TestModel
@@ -168,7 +268,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
     }
 
     [Subject(typeof(UrlBuilder))]
-    class when_url_builder_is_used_to_create_path_where_empty_value_follow_non_emtpy
+    class when_url_builder_is_used_to_create_ordered_path_where_empty_value_follow_non_emtpy
     {
         static Uri base_url;
         static TestClient client;
@@ -192,7 +292,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
         Because of =
             () => url = UrlBuilder.Compose(model, client, base_url);
 
-        It should_not_modify_user_password_authority_path_existing_qyery_part_and_fragment_and_should_add_new_query_part =
+        It should_not_modify_user_password_authority_path_existing_qyery_part_and_fragment_and_should_add_new_input_model_part =
             () => url.AbsoluteUri.ShouldEqual("http://user1:password1@foo.bar/product/Hello%20World?keepMe=Yes#keepMeAsWell/andMe?andMeToo");
 
         class TestModel
@@ -205,6 +305,53 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
 
             [OrderedRequestPath(3)]
             public string Value3 { get; set; }
+        }
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient(Uri baseUrl)
+                : base(baseUrl)
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(UrlBuilder))]
+    class when_url_builder_is_used_to_create_named_path_where_empty_value_follow_non_emtpy
+    {
+        static Uri base_url;
+        static TestClient client;
+        static TestModel model;
+        static Uri url;
+
+        Establish context = () =>
+        {
+            base_url = new Uri("http://foo.bar/catalog/{productCategory}/{productId}?keepMe=Yes");
+
+            client = new TestClient(base_url);
+
+            model = new TestModel
+            {
+                ProductCategory = "red category",
+                Value = "Hello World!"
+            };
+        };
+
+        Because of =
+            () => url = UrlBuilder.Compose(model, client, base_url);
+
+        It should_not_modify_authority_and_path_and_should_keep_existing_input_model_part_at_left_and_add_new_input_model_part =
+            () => url.AbsoluteUri.ShouldEqual("http://foo.bar/catalog/red%20category/?keepMe=Yes&Value=Hello+World!");
+
+        class TestModel
+        {
+            [NamedRequestPath]
+            public string ProductCategory { get; set; }
+
+            [NamedRequestPath]
+            public string ProductId { get; set; }
+
+            public string Value { get; set; }
         }
 
         class TestClient : HttpClient<TestModel, string>
@@ -579,7 +726,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.UrlMapping
     }
 
     [Subject(typeof(UrlBuilder))]
-    class when_url_builder_is_used_to_create_path_where_non_empty_value_follow_empty
+    class when_url_builder_is_used_to_create_ordered_path_where_non_empty_value_follow_empty
     {
         static Uri base_url;
         static TestClient client;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.UrlMapping;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
@@ -156,12 +157,12 @@ namespace DocaLabs.Http.Client
 
             request.Method = GetRequestMethod(model);
 
-            if (Configuration.AutoSetAcceptEncoding && (!typeof(TOutputModel).IsAssignableFrom(typeof(Image))))
+            if (Configuration.AutoSetAcceptEncoding && (!typeof(Image).IsAssignableFrom(typeof(TOutputModel))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
             Configuration.CopyCredentialsTo(request);
 
-            Configuration.CopyHeadersTo(request);
+            CopyHeaders(model, request);
 
             Configuration.CopyClientCertificatesTo(request as HttpWebRequest);
 
@@ -188,6 +189,26 @@ namespace DocaLabs.Http.Client
             return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
                    || GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
                    || modelType.GetAllInstancePublicProperties().Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null);
+        }
+
+        /// <summary>
+        /// Copy defined headers from configuration and model to the request.
+        /// </summary>
+        protected virtual void CopyHeaders(object model, WebRequest request)
+        {
+            Configuration.CopyHeadersTo(request);
+
+            MapHeadersFromModel(model, request);
+        }
+
+        static void MapHeadersFromModel(object model, WebRequest request)
+        {
+            if (model == null)
+                return;
+
+            var headers = ClientModelBinders.GetHeaderMapper(model.GetType()).Map(model);
+            if (headers != null)
+                request.Headers.Add(headers);
         }
 
         /// <summary>

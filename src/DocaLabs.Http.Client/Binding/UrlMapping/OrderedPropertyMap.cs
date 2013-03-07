@@ -60,7 +60,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         string Compose(object model)
         {
-            var values = Converters.Select(x => x.ConvertValue(model)).ToList();
+            var values = Converters.Select(x => x.GetValue(model)).ToList();
 
             ValidatePathValues(values);
 

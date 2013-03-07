@@ -47,7 +47,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
             {
                 Name = Info.Name;
             }
-
         }
 
         /// <summary>

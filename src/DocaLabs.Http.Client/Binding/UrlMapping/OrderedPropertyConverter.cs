@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.UrlMapping
@@ -11,10 +13,17 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         public OrderedPropertyConverter(PropertyInfo info)
         {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
             Info = info;
+
+            var attribute = info.GetCustomAttribute<RequestPathAttribute>(true);
+            if (attribute != null)
+                Format = attribute.Format;
         }
 
-        public string ConvertValue(object model)
+        public string GetValue(object model)
         {
             if (model == null)
                 return string.Empty;

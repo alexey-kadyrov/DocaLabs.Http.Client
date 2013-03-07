@@ -36,16 +36,9 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         static string GetExistingQuery(Uri baseUrl)
         {
-            var query = baseUrl == null ? "" : baseUrl.Query;
-
-            return GetQueryWithoutQuestionMark(query);
-        }
-
-        static string GetQueryWithoutQuestionMark(string query)
-        {
-            return query.StartsWith("?")
-                       ? query.Substring(1)
-                       : query;
+            return baseUrl == null 
+                ? "" 
+                : baseUrl.GetComponents(UriComponents.Query, baseUrl.UserEscaped ? UriFormat.UriEscaped : UriFormat.Unescaped);
         }
 
         static string ConvertModelToQuery(object obj, ConverterMap map)

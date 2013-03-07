@@ -23,10 +23,10 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
             foreach (var converter in Converters)
             {
-                var value = converter.ConvertValue(model);
+                var value = converter.GetValue(model);
 
                 existingPath = existingPath.Replace(
-                    "{" + converter.Name + "}", string.IsNullOrWhiteSpace(value) ? "" : HttpUtility.UrlPathEncode(value));
+                    "{" + converter.Name + "}", string.IsNullOrWhiteSpace(value) ? "" : HttpUtility.UrlPathEncode(value), StringComparison.OrdinalIgnoreCase);
             }
 
             return existingPath;
@@ -45,7 +45,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         static NamedPropertyConverter ParseProperty(PropertyInfo info)
         {
-            if (info.IsUrlOrderedPath() && info.PropertyType.IsSimpleType())
+            if (info.IsUrlNamedPath() && info.PropertyType.IsSimpleType())
                 return new NamedPropertyConverter(info);
 
             return null;
