@@ -11,7 +11,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
         {
         }
 
-        protected override TResult ExecutePipeline(TQuery model)
+        protected override TResult ExecutePipeline(object model)
         {
             var result = Activator.CreateInstance<TResult>();
 

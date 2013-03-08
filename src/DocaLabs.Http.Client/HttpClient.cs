@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.UrlMapping;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
@@ -117,7 +116,7 @@ namespace DocaLabs.Http.Client
         ///     3. Writes to the request's body if there is something to write
         ///     4. Gets response from the remote server and parses it
         /// </summary>
-        protected virtual TOutputModel ExecutePipeline(TInputModel model)
+        protected virtual TOutputModel ExecutePipeline(object model)
         {
             var url = ComposeUrl(model);
 
@@ -135,7 +134,7 @@ namespace DocaLabs.Http.Client
         /// which may be required in case of URL signing like for some Google services.
         /// </summary>
         /// <returns></returns>
-        protected virtual string ComposeUrl(TInputModel model)
+        protected virtual string ComposeUrl(object model)
         {
             return UrlBuilder.Compose(model, this, BaseUrl).AbsoluteUri;
         }
@@ -151,7 +150,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Initializes the request. If headers, client certificates, and a proxy are defined in the configuration they will be added to the request
         /// </summary>
-        protected virtual void InitializeRequest(TInputModel model, WebRequest request)
+        protected virtual void InitializeRequest(object model, WebRequest request)
         {
             request.Timeout = Configuration.Timeout;
 
@@ -160,13 +159,13 @@ namespace DocaLabs.Http.Client
             if (Configuration.AutoSetAcceptEncoding && (!typeof(Image).IsAssignableFrom(typeof(TOutputModel))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
-            Configuration.CopyCredentialsTo(request);
+            Configuration.CopyCredentials(model, request);
 
-            CopyHeaders(model, request);
+            Configuration.CopyHeaders(model, request);
 
             Configuration.CopyClientCertificatesTo(request as HttpWebRequest);
 
-            Configuration.CopyWebProxyTo(request);
+            Configuration.CopyWebProxy(request);
         }
 
         /// <summary>
@@ -192,29 +191,9 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Copy defined headers from configuration and model to the request.
-        /// </summary>
-        protected virtual void CopyHeaders(object model, WebRequest request)
-        {
-            Configuration.CopyHeadersTo(request);
-
-            MapHeadersFromModel(model, request);
-        }
-
-        static void MapHeadersFromModel(object model, WebRequest request)
-        {
-            if (model == null)
-                return;
-
-            var headers = ClientModelBinders.GetHeaderMapper(model.GetType()).Map(model);
-            if (headers != null)
-                request.Headers.Add(headers);
-        }
-
-        /// <summary>
         /// Tries to write data to the request's body by examining the model type.
         /// </summary>
-        protected virtual void TryWriteRequestData(TInputModel model, WebRequest request)
+        protected virtual void TryWriteRequestData(object model, WebRequest request)
         {
             var serializer = RequestBodySerializationFactory.GetSerializer(this, model);
             if(serializer != null)
@@ -224,7 +203,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Gets the response and parses it. 
         /// </summary>
-        protected virtual TOutputModel ParseResponse(TInputModel query, WebRequest request)
+        protected virtual TOutputModel ParseResponse(object query, WebRequest request)
         {
             return (TOutputModel)ResponseParser.Parse(request, typeof(TOutputModel));
         }

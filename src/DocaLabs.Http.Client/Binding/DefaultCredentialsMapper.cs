@@ -12,7 +12,7 @@ namespace DocaLabs.Http.Client.Binding
     {
         readonly ConcurrentDictionary<Type, PropertyMap> _propertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
-        public ICredentials Map(object model, object client, Uri url)
+        public ICredentials Map(object model, Uri url)
         {
             return model == null 
                 ? null 

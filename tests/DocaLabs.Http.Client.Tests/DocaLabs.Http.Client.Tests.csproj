@@ -74,6 +74,7 @@
     <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
     <Compile Include="Configuration\ClientEndpointElementTests.cs" />
+    <Compile Include="Configuration\ConfigurationExtenstionsTests.cs" />
     <Compile Include="Configuration\DefaultEndpointConfigurationProviderTests.cs" />
     <Compile Include="Configuration\ClientProxyElementTests.cs" />
     <Compile Include="Configuration\ClientNetworkCredentialsElementTests.cs" />
