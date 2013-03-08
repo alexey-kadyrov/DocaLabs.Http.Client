@@ -1,20 +1,9 @@
+using System;
+using System.Collections.Specialized;
 using Machine.Specifications;
 
 namespace DocaLabs.Testing.Common
 {
-    /// <remarks>
-    /// It's impossible to redefine the equality behaviour for objects as it will mess the entity tracking
-    /// in the DataServiceContext which uses Dictionary and expects the default behaviour for
-    /// reference types - comparing references.
-    /// The dictionary uses hash code first to assign bucket and if there are more than one object 
-    /// with the same hash it will compare those objects.
-    /// If the equality is redefined the way that it compares properties of the object the DataServiceContext
-    /// won't be able to detect that it's already tracking the entity as the dictionary will look for the
-    /// changed object in different bucket.
-    /// By convention if the Equals is redefined the GetHaskCode must be redefined as well in the way
-    /// that it must always return the same value for equal objects.
-    /// The good article is: http://blogs.msdn.com/b/ericlippert/archive/2011/02/28/guidelines-and-rules-for-gethashcode.aspx
-    /// </remarks>
     public static class SimilarExtensions
     {
         public static void ShouldBeSimilar<TActual, TExpected>(this TActual actual, TExpected expected)
@@ -41,6 +30,24 @@ namespace DocaLabs.Testing.Common
 
                 if(!Equals(actualValue, expectedValue))
                     throw new SpecificationException(string.Format("Expected {0} should be equal to {1} but was {2}.", actualProperty.Name, expectedValue, actualValue));
+            }
+        }
+   
+        public static void ShouldContainOnly(this NameValueCollection actual, NameValueCollection expected)
+        {
+            if (actual == null)
+                throw new ArgumentNullException("actual");
+
+            if (expected == null)
+                throw new ArgumentNullException("expected");
+
+            if(actual.Count != expected.Count)
+                throw new SpecificationException(string.Format("Expected that collection will have the same number of items but the actual contains {0} and the expected {1}", actual.Count, expected.Count));
+
+            foreach (string key in expected)
+            {
+                actual.ShouldContain(key);
+                actual[key].ShouldEqual(expected[key]);
             }
         }
     }

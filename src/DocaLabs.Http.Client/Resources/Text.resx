@@ -177,6 +177,9 @@
   <data name="property_cannot_be_indexer" xml:space="preserve">
     <value>Does not support indexers.</value>
   </data>
+  <data name="property_must_be_simple" xml:space="preserve">
+    <value>Type of property {0} in {1} must be simple.</value>
+  </data>
   <data name="service_url_is_not_defined" xml:space="preserve">
     <value>The Service URL is not defined in the constaructor paramter or is not in the configuration file.</value>
   </data>

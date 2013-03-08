@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Reflection;
+using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Binding.PropertyConverters;
 using DocaLabs.Http.Client.Utils;
 
@@ -105,9 +106,11 @@ namespace DocaLabs.Http.Client.Binding
                     return;
                 }
 
-                var converter = SimplePropertyConverter.TryCreate(property);
-                if (converter != null)
-                    collection.Add(converter);
+                var converter = SimplePropertyConverter<RequestHeaderAttribute>.TryCreate(property);
+                if (converter == null)
+                    throw new UnrecoverableHttpClientException(string.Format(Resources.Text.property_must_be_simple, property.Name, property.DeclaringType));
+
+                collection.Add(converter);
             }
         }
     }

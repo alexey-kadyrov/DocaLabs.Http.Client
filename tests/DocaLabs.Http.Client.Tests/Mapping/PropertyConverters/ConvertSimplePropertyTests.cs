@@ -12,77 +12,77 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
     // ReSharper disable ValueParameterNotUsed
     // ReSharper disable UnusedParameter.Local
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_trying_to_create_convert_simple_property
     {
         private It should_create_it_for_bool =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_char =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_byte =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_short =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_ushort =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_uint =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_long =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_ulong =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_float =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_double =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_decimal =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_enum =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_guid =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_datetime =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_datetimeoffset =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_timespan =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_string =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_byte_array =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
 
         private It should_not_create_it_for_object =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
 
         private It should_not_create_it_for_class =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
 
         private It should_not_create_it_for_struct =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
 
         private It should_not_create_it_for_indexer =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
+            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
 
         class TestClass
         {
@@ -124,13 +124,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         }
     }
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_trying_to_create_convert_simple_property_for_null_property_info
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => SimplePropertyConverter.TryCreate(null));
+            () => exception = Catch.Exception(() => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -139,14 +139,14 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("info");
     }
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_convert_simple_property_is_used_on_null_instance
     {
         static IPropertyConverter converter;
         static CustomNameValueCollection result;
 
         Establish context = 
-            () => converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            () => converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
 
         Because of =
             () => result = converter.GetValue(null);
@@ -160,7 +160,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         }
     }
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_convert_simple_property_is_used_on_null_property
     {
         static TestClass instance;
@@ -171,7 +171,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         {
             instance = new TestClass();
 
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
@@ -186,7 +186,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         }
     }
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_convert_simple_property_is_used
     {
         static TestClass instance;
@@ -196,7 +196,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
@@ -214,7 +214,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         }
     }
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_convert_simple_property_is_used_together_with_query_parameter_where_name_and_format_are_not_set
     {
         static TestClass instance;
@@ -224,7 +224,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
@@ -243,7 +243,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         }
     }
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_convert_simple_property_is_used_on_property_which_name_is_redefined_using_query_parameter_attribute
     {
         static TestClass instance;
@@ -253,7 +253,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
@@ -272,7 +272,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         }
     }
 
-    [Subject(typeof(SimplePropertyConverter))]
+    [Subject(typeof(SimplePropertyConverter<>))]
     class when_convert_simple_property_is_used_on_property_with_custom_format_applied
     {
         static TestClass instance;
@@ -282,7 +282,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping.PropertyConverters
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =

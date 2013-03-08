@@ -241,6 +241,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type of property {0} in {1} must be simple..
+        /// </summary>
+        internal static string property_must_be_simple {
+            get {
+                return ResourceManager.GetString("property_must_be_simple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Service URL is not defined in the constaructor paramter or is not in the configuration file..
         /// </summary>
         internal static string service_url_is_not_defined {

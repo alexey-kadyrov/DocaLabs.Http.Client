@@ -84,7 +84,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
                 return TryGetCustomPropertyParser(info)
                     ?? CollectionPropertyConverter.TryCreate(info)
-                    ?? SimplePropertyConverter.TryCreate(info)
+                    ?? SimplePropertyConverter<RequestQueryAttribute>.TryCreate(info)
                     ?? ObjectPropertyConverter.TryCreate(info);
             }
 
