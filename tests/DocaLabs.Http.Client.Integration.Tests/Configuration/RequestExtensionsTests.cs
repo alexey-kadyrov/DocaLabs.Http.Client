@@ -39,7 +39,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
         };
 
         Because of =
-            () => element.CopyClientCertificatesTo(web_request.Object);
+            () => web_request.Object.CopyClientCertificatesFrom(element);
 
         It should_copy_the_certificate =
             () => web_request.Object.ClientCertificates.Count.ShouldEqual(1);

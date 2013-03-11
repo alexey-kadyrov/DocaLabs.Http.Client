@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Net.Security;
 using DocaLabs.Http.Client.Configuration;
 using Machine.Specifications;
-using Moq;
 using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Configuration

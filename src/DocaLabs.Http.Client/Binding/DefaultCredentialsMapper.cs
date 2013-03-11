@@ -39,20 +39,14 @@ namespace DocaLabs.Http.Client.Binding
             if (url == null)
                 return null;
 
-            var credentials = new CredentialCache();
-            var prefix = new Uri(url.GetLeftPart(UriPartial.Authority));
+            var builder = new CredentialCacheBuilder(url);
 
             foreach (var property in map.Credentials)
-            {
-                var value = property.GetValue(model) as NetworkCredential;
-                if (value == null)
-                    continue;
+                builder.Add(model, property);
 
-                credentials.Add(prefix, property.Name, value);
-            }
-
-            return credentials;
+            return builder.CredentialCache;
         }
+
 
         class PropertyMap
         {
@@ -70,6 +64,27 @@ namespace DocaLabs.Http.Client.Binding
                     : type.GetAllInstancePublicProperties()
                         .Where(x => x.IsCredentials())
                         .ToList();
+            }
+        }
+    
+        class CredentialCacheBuilder
+        {
+            readonly Uri _prefix;
+            public CredentialCache CredentialCache { get; private set; }
+
+            public CredentialCacheBuilder(Uri url)
+            {
+                CredentialCache = new CredentialCache();
+                _prefix = new Uri(url.GetLeftPart(UriPartial.Authority));
+            }
+
+            public void Add(object model, PropertyInfo property)
+            {
+                var value = property.GetValue(model) as NetworkCredential;
+                if (value == null)
+                    return;
+
+                CredentialCache.Add(_prefix, property.Name, value);
             }
         }
     }

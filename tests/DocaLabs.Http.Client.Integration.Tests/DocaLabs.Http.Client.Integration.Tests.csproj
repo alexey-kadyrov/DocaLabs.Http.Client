@@ -64,8 +64,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\HttpClientCertificateReferenceElementTests.cs" />
-    <Compile Include="Configuration\HttpClientEndpointElementTests.cs" />
+    <Compile Include="Configuration\ConfigurationExtensionsTests.cs" />
+    <Compile Include="Configuration\RequestExtensionsTests.cs" />
     <Compile Include="HttpClientTests.cs" />
     <Compile Include="_Contract\DataRequest.cs" />
     <Compile Include="_Contract\ITestGetService1.cs" />

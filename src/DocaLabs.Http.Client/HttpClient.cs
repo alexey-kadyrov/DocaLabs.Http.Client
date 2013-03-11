@@ -159,13 +159,13 @@ namespace DocaLabs.Http.Client
             if (Configuration.AutoSetAcceptEncoding && (!typeof(Image).IsAssignableFrom(typeof(TOutputModel))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
-            Configuration.CopyCredentials(model, request);
+            request.CopyCredentialsFrom(Configuration, model);
 
-            Configuration.CopyHeaders(model, request);
+            request.CopyHeadersFrom(Configuration, model);
 
-            Configuration.CopyClientCertificatesTo(request as HttpWebRequest);
+            request.CopyClientCertificatesFrom(Configuration);
 
-            Configuration.CopyWebProxy(request);
+            request.CopyWebProxyFrom(Configuration);
         }
 
         /// <summary>

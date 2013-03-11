@@ -72,6 +72,7 @@
     <Compile Include="Binding\IUrlQueryComposer.cs" />
     <Compile Include="Binding\Attributes\RequestHeaderAttribute.cs" />
     <Compile Include="Binding\Attributes\OrderedRequestPathAttribute.cs" />
+    <Compile Include="Configuration\RequestExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
     <Compile Include="Utils\CustomConverterFactory.cs" />
     <Compile Include="Utils\ICustomConverterFactory.cs" />
