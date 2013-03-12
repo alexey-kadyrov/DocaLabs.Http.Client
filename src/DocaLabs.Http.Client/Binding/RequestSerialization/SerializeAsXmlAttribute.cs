@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.ContentEncoding;
 
-namespace DocaLabs.Http.Client.RequestSerialization
+namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
     /// <summary>
     /// Serializes a given object into the web request in xml format.

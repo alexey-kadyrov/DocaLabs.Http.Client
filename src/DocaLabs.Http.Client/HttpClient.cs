@@ -5,10 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Binding.RequestSerialization;
 using DocaLabs.Http.Client.Binding.UrlMapping;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
-using DocaLabs.Http.Client.RequestSerialization;
 using DocaLabs.Http.Client.ResponseDeserialization;
 using DocaLabs.Http.Client.Utils;
 
@@ -195,9 +196,8 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual void TryWriteRequestData(object model, WebRequest request)
         {
-            var serializer = RequestBodySerializationFactory.GetSerializer(this, model);
-            if(serializer != null)
-                serializer.Serialize(model, request);
+            if(model != null)
+                ClientModelBinders.GetRequestWriter(model.GetType()).Write(model, this, request);
         }
 
         /// <summary>

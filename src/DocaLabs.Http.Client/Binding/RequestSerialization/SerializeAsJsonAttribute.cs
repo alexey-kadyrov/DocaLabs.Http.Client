@@ -2,16 +2,15 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.ContentEncoding;
+using DocaLabs.Http.Client.JsonSerialization;
 
-namespace DocaLabs.Http.Client.RequestSerialization
+namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
     /// <summary>
-    /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
-    /// The class uses QueryMapper.ToQueryString for serialization.
+    /// Serializes a given object into the web request in json format.
     /// </summary>
-    public class SerializeAsFormAttribute : RequestSerializationAttribute
+    public class SerializeAsJsonAttribute : RequestSerializationAttribute
     {
         /// <summary>
         /// Gets or sets the content encoding, if ContentEncoding blank or null no encoding is done.
@@ -25,15 +24,15 @@ namespace DocaLabs.Http.Client.RequestSerialization
         public string CharSet { get; set; }
 
         /// <summary>
-        /// Initializes an instance of the SerializeAsFormAttribute class.
+        /// Initializes an instance of the SerializeAsJsonAttribute class.
         /// </summary>
-        public SerializeAsFormAttribute()
+        public SerializeAsJsonAttribute()
         {
             CharSet = Encoding.UTF8.WebName;
         }
 
         /// <summary>
-        /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
+        /// Serializes a given object into the web request in json format
         /// </summary>
         /// <param name="obj">Object to be serialized.</param>
         /// <param name="request">Web request where to serialize to.</param>
@@ -42,15 +41,11 @@ namespace DocaLabs.Http.Client.RequestSerialization
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            var form = obj == null 
-                ? "" 
-                : ClientModelBinders.GetUrlQueryComposer(obj.GetType()).Compose(obj, null);
+            var data = Encoding.GetEncoding(CharSet).GetBytes(obj == null ? "" : JsonSerializationProvider.Serializer.Serialize(obj));
 
-            var data = Encoding.GetEncoding(CharSet).GetBytes(form);
-
-            request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
+            request.ContentType = string.Format("application/json; charset={0}", CharSet);
             
-            if (string.IsNullOrWhiteSpace(RequestContentEncoding))
+            if(string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(data, request);
             else
                 EncodeAndWrite(data, request);

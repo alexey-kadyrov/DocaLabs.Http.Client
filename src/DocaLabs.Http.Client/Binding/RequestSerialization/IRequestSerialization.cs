@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DocaLabs.Http.Client.RequestSerialization
+namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
     /// <summary>
     /// Defines methods to serialize an object into web request.

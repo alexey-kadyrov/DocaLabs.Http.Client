@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Attributes;
-using DocaLabs.Http.Client.RequestSerialization;
+using DocaLabs.Http.Client.Binding.RequestSerialization;
 
 namespace DocaLabs.Http.Client.Binding
 {

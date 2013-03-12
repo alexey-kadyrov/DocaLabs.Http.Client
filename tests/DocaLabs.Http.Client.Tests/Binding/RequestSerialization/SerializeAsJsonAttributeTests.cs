@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text;
+using DocaLabs.Http.Client.Binding.RequestSerialization;
 using DocaLabs.Http.Client.ContentEncoding;
-using DocaLabs.Http.Client.RequestSerialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.RequestSerialization
+namespace DocaLabs.Http.Client.Tests.Binding.RequestSerialization
 {
     [Subject(typeof(SerializeAsJsonAttribute))]
     class when_serialize_as_json_attribute_is_used : request_serialization_test_context

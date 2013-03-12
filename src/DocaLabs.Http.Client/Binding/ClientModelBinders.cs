@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using DocaLabs.Http.Client.Binding.RequestSerialization;
 using DocaLabs.Http.Client.Binding.UrlMapping;
 
 namespace DocaLabs.Http.Client.Binding
@@ -14,14 +15,14 @@ namespace DocaLabs.Http.Client.Binding
         static readonly ConcurrentDictionary<Type, IUrlQueryComposer> UrlQueryComposers;
         static readonly ConcurrentDictionary<Type, IHeaderMapper> HeaderMappers;
         static readonly ConcurrentDictionary<Type, ICredentialsMapper> CredentialsMappers;
-        static readonly ConcurrentDictionary<Type, IRequestStreamWriter> RequestStreamWriters;
+        static readonly ConcurrentDictionary<Type, IRequestWriter> RequestWriters;
 
         static volatile IMutator _defaultMutator;
         static volatile IUrlPathComposer _defaultUrlPathComposer;
         static volatile IUrlQueryComposer _defaultUrlQueryComposer;
         static volatile IHeaderMapper _defaultHeaderMapper;
         static volatile ICredentialsMapper _defaultCredentialsMapper;
-        static volatile IRequestStreamWriter _defaultRequestStreamWriter;
+        static volatile IRequestWriter _defaultRequestWriter;
 
         public static IMutator DefaultMutator
         {
@@ -83,15 +84,15 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        public static IRequestStreamWriter DefaultRequestStreamWriter
+        public static IRequestWriter DefaultRequestWriter
         {
-            get { return _defaultRequestStreamWriter; }
+            get { return _defaultRequestWriter; }
             set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
 
-                _defaultRequestStreamWriter = value;
+                _defaultRequestWriter = value;
             }
         }
 
@@ -102,21 +103,21 @@ namespace DocaLabs.Http.Client.Binding
             UrlQueryComposers = new ConcurrentDictionary<Type, IUrlQueryComposer>();
             HeaderMappers = new ConcurrentDictionary<Type, IHeaderMapper>();
             CredentialsMappers = new ConcurrentDictionary<Type, ICredentialsMapper>();
-            RequestStreamWriters = new ConcurrentDictionary<Type, IRequestStreamWriter>();
+            RequestWriters = new ConcurrentDictionary<Type, IRequestWriter>();
 
             _defaultMutator = new DefaultMutator();
             _defaultUrlPathComposer = new DefaultUrlPathComposer();
             _defaultUrlQueryComposer = new DefaultUrlQueryComposer();
             _defaultHeaderMapper = new DefaultHeaderMapper();
             _defaultCredentialsMapper = new DefaultCredentialsMapper();
-            _defaultRequestStreamWriter = new DefaultRequestStreamWriter();
+            _defaultRequestWriter = new DefaultRequestWriter();
         }
 
         /// <summary>
         /// Adds the specified item to the model binder dictionary.
         /// </summary>
         /// <param name="type">The type which binder should be used for.</param>
-        /// <param name="binder">The binder must implement at least one of IMutator, IUrlQueryComposer, IHeaderMapper, or IRequestStreamWriter.</param>
+        /// <param name="binder">The binder must implement at least one of IMutator, IUrlQueryComposer, IHeaderMapper, or IRequestWriter.</param>
         public static void Add(Type type, object binder)
         {
             if(type == null)
@@ -157,9 +158,9 @@ namespace DocaLabs.Http.Client.Binding
                 processed = true;
             }
 
-            if (binder is IRequestStreamWriter)
+            if (binder is IRequestWriter)
             {
-                RequestStreamWriters[type] = binder as IRequestStreamWriter;
+                RequestWriters[type] = binder as IRequestWriter;
                 processed = true;
             }
 
@@ -197,10 +198,10 @@ namespace DocaLabs.Http.Client.Binding
             return CredentialsMappers.TryGetValue(type, out mapper) ? mapper : _defaultCredentialsMapper;
         }
 
-        public static IRequestStreamWriter GetRequestStreamWriter(Type type)
+        public static IRequestWriter GetRequestWriter(Type type)
         {
-            IRequestStreamWriter writer;
-            return RequestStreamWriters.TryGetValue(type, out writer) ? writer : _defaultRequestStreamWriter;
+            IRequestWriter writer;
+            return RequestWriters.TryGetValue(type, out writer) ? writer : _defaultRequestWriter;
         }
     }
 }

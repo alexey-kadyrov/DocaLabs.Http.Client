@@ -121,7 +121,7 @@
     <value>Base type argument {0} does not match the original argument {1}.</value>
   </data>
   <data name="binder_must_implement" xml:space="preserve">
-    <value>The binder {0} must implement at least one oth the next interfaces: IMutator, IUrlQueryComposer, IHeaderMapper, or IRequestStreamWriter.</value>
+    <value>The binder {0} must implement at least one oth the next interfaces: IMutator, IUrlQueryComposer, IHeaderMapper, or IRequestWriter.</value>
   </data>
   <data name="cannot_convert_from_0_to_1" xml:space="preserve">
     <value>Cannot convert from type {0} to type {1}.</value>

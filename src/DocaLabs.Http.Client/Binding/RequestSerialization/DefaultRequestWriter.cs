@@ -1,37 +1,42 @@
 ﻿using System;
+using System.Net;
 using System.Reflection;
 
-namespace DocaLabs.Http.Client.RequestSerialization
+namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
-    /// <summary>
-    /// Defines methods to get IRequestSerialization for an http client and query. All public methods are thread safe.
-    /// </summary>
-    public static class RequestBodySerializationFactory
+    public class DefaultRequestWriter : IRequestWriter
     {
         /// <summary>
-        /// Gets IRequestSerialization for an http client and query.
+        /// Looks for IRequestSerialization on model or client level.
         /// Looks for RequestSerializationAttribute descendants defined on:
-        ///     1. Query class level
+        ///     1. input model class level
         ///     2. One of it's properties
         ///     3. HttpClient level
         /// </summary>
-        public static IRequestSerialization GetSerializer(object httpClient, object query)
+        public void Write(object model, object client, WebRequest request)
         {
-            if(httpClient == null)
-                throw new ArgumentNullException("httpClient");
+            var serializer = GetSerializer(model, client);
+            if (serializer != null)
+                serializer.Serialize(model, request);
+        }
 
-            if (query != null)
+        static IRequestSerialization GetSerializer(object model, object client)
+        {
+            if (client == null)
+                throw new ArgumentNullException("client");
+
+            if (model != null)
             {
-                var serializer = TryQueryClassLevel(query);
+                var serializer = TryQueryClassLevel(model);
                 if (serializer != null)
                     return serializer;
 
-                serializer = TryQueryPropertyLevel(query);
+                serializer = TryQueryPropertyLevel(model);
                 if (serializer != null)
                     return serializer;
             }
 
-            return TryHttpClientClassLevel(httpClient);
+            return TryHttpClientClassLevel(client);
         }
 
         static IRequestSerialization TryQueryClassLevel(object query)

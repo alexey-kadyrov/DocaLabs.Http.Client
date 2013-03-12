@@ -19,7 +19,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
             try
             {
-                return Ignore(client)
+                return Ignore(model, client)
                     ? baseUrl
                     : CreateUrlFrom(model, baseUrl);
             }
@@ -33,9 +33,9 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
             }
         }
 
-        static bool Ignore(object client)
+        static bool Ignore(object model, object client)
         {
-            return client != null && client.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
+            return model == null || (client != null && client.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null);
         }
 
         static Uri CreateUrlFrom(object model, Uri baseUrl)
