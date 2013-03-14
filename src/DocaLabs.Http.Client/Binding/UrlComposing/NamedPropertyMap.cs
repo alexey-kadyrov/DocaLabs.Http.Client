@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Web;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.UrlMapping
+namespace DocaLabs.Http.Client.Binding.UrlComposing
 {
     class NamedPropertyMap
     {
@@ -45,7 +45,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         static NamedPropertyConverter ParseProperty(PropertyInfo info)
         {
-            if (info.IsUrlNamedPath() && info.PropertyType.IsSimpleType())
+            if (info.IsExplicitUrlNamedPath() && info.PropertyType.IsSimpleType())
                 return new NamedPropertyConverter(info);
 
             return null;

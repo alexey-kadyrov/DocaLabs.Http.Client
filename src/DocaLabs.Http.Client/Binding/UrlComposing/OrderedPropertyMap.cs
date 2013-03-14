@@ -6,7 +6,7 @@ using System.Web;
 using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.UrlMapping
+namespace DocaLabs.Http.Client.Binding.UrlComposing
 {
     class OrderedPropertyMap
     {
@@ -52,7 +52,7 @@ namespace DocaLabs.Http.Client.Binding.UrlMapping
 
         static OrderedPropertyConverter ParseProperty(PropertyInfo info)
         {
-            if (info.IsUrlOrderedPath() && info.PropertyType.IsSimpleType())
+            if (info.IsExplicitUrlOrderedPath() && info.PropertyType.IsSimpleType())
                 return new OrderedPropertyConverter(info);
 
             return null;

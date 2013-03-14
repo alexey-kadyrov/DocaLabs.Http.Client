@@ -3,26 +3,17 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Attributes;
 
-namespace DocaLabs.Http.Client.Binding.UrlMapping
+namespace DocaLabs.Http.Client.Binding.UrlComposing
 {
-    public class DefaultUrlPathComposer : IUrlPathComposer
+    static class ExplicitUrlPathComposer
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _orderedMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly static ConcurrentDictionary<Type, PropertyMap> PropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
-        public string Compose(object model, Uri baseUrl)
+        public static string Compose(object model, string existingPath)
         {
-            var existingPath = GetExistingPath(baseUrl);
-
             return Ignore(model)
                 ? existingPath
-                : _orderedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)).ComposePath(model, existingPath);
-        }
-
-        static string GetExistingPath(Uri baseUrl)
-        {
-            return baseUrl == null 
-                       ? ""
-                       : baseUrl.GetComponents(UriComponents.Path, baseUrl.UserEscaped ? UriFormat.UriEscaped : UriFormat.Unescaped);
+                : PropertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)).ComposePath(model, existingPath);
         }
 
         static bool Ignore(object model)

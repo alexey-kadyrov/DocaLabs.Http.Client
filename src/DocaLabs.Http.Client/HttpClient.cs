@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Threading;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.RequestSerialization;
-using DocaLabs.Http.Client.Binding.UrlMapping;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.ResponseDeserialization;
@@ -137,7 +136,9 @@ namespace DocaLabs.Http.Client
         /// <returns></returns>
         protected virtual string ComposeUrl(object model)
         {
-            return UrlBuilder.Compose(model, this, BaseUrl).AbsoluteUri;
+            return model == null 
+                ? BaseUrl.AbsoluteUri 
+                : ClientModelBinders.GetUrlComposer(model.GetType()).Compose(model, this, BaseUrl);
         }
 
         /// <summary>
@@ -184,7 +185,10 @@ namespace DocaLabs.Http.Client
 
         bool ShouldSerializeToStream(object model)
         {
-            var modelType = model == null ? typeof (TInputModel) : model.GetType();
+            if (model == null)
+                return false;
+
+            var modelType = model.GetType();
 
             return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
                    || GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null

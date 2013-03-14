@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.UrlMapping
+namespace DocaLabs.Http.Client.Binding.UrlComposing
 {
     /// <summary>
     /// Represents helper class to build a query string.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using DocaLabs.Http.Client.Binding.RequestSerialization;
-using DocaLabs.Http.Client.Binding.UrlMapping;
+using DocaLabs.Http.Client.Binding.UrlComposing;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -11,15 +11,13 @@ namespace DocaLabs.Http.Client.Binding
     static public class ClientModelBinders
     {
         static readonly ConcurrentDictionary<Type, IMutator> Mutators;
-        static readonly ConcurrentDictionary<Type, IUrlPathComposer> UrlPathComposers;
-        static readonly ConcurrentDictionary<Type, IUrlQueryComposer> UrlQueryComposers;
+        static readonly ConcurrentDictionary<Type, IUrlComposer> UrlComposers;
         static readonly ConcurrentDictionary<Type, IHeaderMapper> HeaderMappers;
         static readonly ConcurrentDictionary<Type, ICredentialsMapper> CredentialsMappers;
         static readonly ConcurrentDictionary<Type, IRequestWriter> RequestWriters;
 
         static volatile IMutator _defaultMutator;
-        static volatile IUrlPathComposer _defaultUrlPathComposer;
-        static volatile IUrlQueryComposer _defaultUrlQueryComposer;
+        static volatile IUrlComposer _defaultUrlComposer;
         static volatile IHeaderMapper _defaultHeaderMapper;
         static volatile ICredentialsMapper _defaultCredentialsMapper;
         static volatile IRequestWriter _defaultRequestWriter;
@@ -36,27 +34,15 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        public static IUrlPathComposer DefaultUrlPathComposer
+        public static IUrlComposer DefaultUrlComposer
         {
-            get { return _defaultUrlPathComposer; }
+            get { return _defaultUrlComposer; }
             set
             {
                 if (value == null)
                     throw new ArgumentNullException("value");
 
-                _defaultUrlPathComposer = value;
-            }
-        }
-
-        public static IUrlQueryComposer DefaultUrlQueryComposer
-        {
-            get { return _defaultUrlQueryComposer; }
-            set
-            {
-                if(value == null)
-                    throw new ArgumentNullException("value");
-
-                _defaultUrlQueryComposer = value;
+                _defaultUrlComposer = value;
             }
         }
 
@@ -99,15 +85,13 @@ namespace DocaLabs.Http.Client.Binding
         static ClientModelBinders()
         {
             Mutators = new ConcurrentDictionary<Type, IMutator>();
-            UrlPathComposers = new ConcurrentDictionary<Type, IUrlPathComposer>();
-            UrlQueryComposers = new ConcurrentDictionary<Type, IUrlQueryComposer>();
+            UrlComposers = new ConcurrentDictionary<Type, IUrlComposer>();
             HeaderMappers = new ConcurrentDictionary<Type, IHeaderMapper>();
             CredentialsMappers = new ConcurrentDictionary<Type, ICredentialsMapper>();
             RequestWriters = new ConcurrentDictionary<Type, IRequestWriter>();
 
             _defaultMutator = new DefaultMutator();
-            _defaultUrlPathComposer = new DefaultUrlPathComposer();
-            _defaultUrlQueryComposer = new DefaultUrlQueryComposer();
+            _defaultUrlComposer = new DefaultUrlComposer();
             _defaultHeaderMapper = new DefaultHeaderMapper();
             _defaultCredentialsMapper = new DefaultCredentialsMapper();
             _defaultRequestWriter = new DefaultRequestWriter();
@@ -134,15 +118,9 @@ namespace DocaLabs.Http.Client.Binding
                 processed = true;
             }
 
-            if (binder is IUrlPathComposer)
+            if (binder is IUrlComposer)
             {
-                UrlPathComposers[type] = binder as IUrlPathComposer;
-                processed = true;
-            }
-
-            if (binder is IUrlQueryComposer)
-            {
-                UrlQueryComposers[type] = binder as IUrlQueryComposer;
+                UrlComposers[type] = binder as IUrlComposer;
                 processed = true;
             }
 
@@ -174,16 +152,10 @@ namespace DocaLabs.Http.Client.Binding
             return Mutators.TryGetValue(type, out mutator) ? mutator : _defaultMutator;
         }
 
-        public static IUrlPathComposer GetUrlPathComposer(Type type)
+        public static IUrlComposer GetUrlComposer(Type type)
         {
-            IUrlPathComposer pathComposer;
-            return UrlPathComposers.TryGetValue(type, out pathComposer) ? pathComposer : _defaultUrlPathComposer;
-        }
-
-        public static IUrlQueryComposer GetUrlQueryComposer(Type type)
-        {
-            IUrlQueryComposer queryComposer;
-            return UrlQueryComposers.TryGetValue(type, out queryComposer) ? queryComposer : _defaultUrlQueryComposer;
+            IUrlComposer composer;
+            return UrlComposers.TryGetValue(type, out composer) ? composer : _defaultUrlComposer;
         }
 
         public static IHeaderMapper GetHeaderMapper(Type type)

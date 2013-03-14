@@ -7,7 +7,7 @@ namespace DocaLabs.Http.Client.Binding
 {
     public static class BindingExtensions
     {
-        public static bool IsUrlOrderedPath(this PropertyInfo info)
+        public static bool IsExplicitUrlOrderedPath(this PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
@@ -19,7 +19,7 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
 
-        public static bool IsUrlNamedPath(this PropertyInfo info)
+        public static bool IsExplicitUrlNamedPath(this PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
@@ -31,14 +31,27 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
 
-        public static bool IsUrlQuery(this PropertyInfo info)
+        public static bool IsExplicitUrlQuery(this PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
                     info.GetGetMethod() != null &&
                     (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
-                    (info.GetCustomAttributes(typeof(RequestPathAttribute), true).Length == 0 || info.GetCustomAttribute<RequestQueryAttribute>(true) != null) &&
+                    info.GetCustomAttribute<RequestQueryAttribute>(true) != null &&
+                    info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
+                    info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
+        }
+
+        public static bool IsImplicitUrlPathOrQuery(this PropertyInfo info)
+        {
+            // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
+            return info.GetIndexParameters().Length == 0 &&
+                    info.GetGetMethod() != null &&
+                    (!info.IsHeader()) &&
+                    (!info.IsCredentials()) &&
+                    info.GetCustomAttributes(typeof(RequestPathAttribute), true).Length == 0 &&
+                    info.GetCustomAttribute<RequestQueryAttribute>(true) == null &&
                     info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }

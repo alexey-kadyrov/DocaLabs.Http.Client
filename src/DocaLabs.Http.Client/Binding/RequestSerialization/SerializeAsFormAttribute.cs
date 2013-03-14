@@ -38,21 +38,21 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
         /// <param name="request">Web request where to serialize to.</param>
         public override void Serialize(object obj, WebRequest request)
         {
-            if(request == null)
-                throw new ArgumentNullException("request");
+            //if(request == null)
+            //    throw new ArgumentNullException("request");
 
-            var form = obj == null 
-                ? "" 
-                : ClientModelBinders.GetUrlQueryComposer(obj.GetType()).Compose(obj, null);
+            //var form = obj == null 
+            //    ? "" 
+            //    : ClientModelBinders.GetUrlQueryComposer(obj.GetType()).Compose(obj, null);
 
-            var data = Encoding.GetEncoding(CharSet).GetBytes(form);
+            //var data = Encoding.GetEncoding(CharSet).GetBytes(form);
 
-            request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
+            //request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
             
-            if (string.IsNullOrWhiteSpace(RequestContentEncoding))
-                Write(data, request);
-            else
-                EncodeAndWrite(data, request);
+            //if (string.IsNullOrWhiteSpace(RequestContentEncoding))
+            //    Write(data, request);
+            //else
+            //    EncodeAndWrite(data, request);
         }
 
         static void Write(byte[] data, WebRequest request)

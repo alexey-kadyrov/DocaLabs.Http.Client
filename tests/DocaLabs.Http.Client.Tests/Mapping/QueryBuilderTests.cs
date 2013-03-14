@@ -1,6 +1,6 @@
 ﻿using System;
 using DocaLabs.Http.Client.Binding;
-using DocaLabs.Http.Client.Binding.UrlMapping;
+using DocaLabs.Http.Client.Binding.UrlComposing;
 using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
