@@ -8,16 +8,16 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.UrlComposing
 {
-    class QueryPropertyMap
+    abstract class QueryPropertyMapBase
     {
-        public IList<IPropertyConverter> Converters { get; private set; }
-
-        public QueryPropertyMap(Type type)
+        protected QueryPropertyMapBase(Type type)
         {
             Converters = Parse(type);
         }
 
-        static IList<IPropertyConverter> Parse(Type type)
+        public IList<IPropertyConverter> Converters { get; private set; }
+
+        IList<IPropertyConverter> Parse(Type type)
         {
             return type.IsSimpleType()
                        ? new List<IPropertyConverter>()
@@ -27,24 +27,26 @@ namespace DocaLabs.Http.Client.Binding.UrlComposing
                              .ToList();
         }
 
-        static IPropertyConverter ParseProperty(PropertyInfo info)
+        IPropertyConverter ParseProperty(PropertyInfo info)
         {
-            if (!info.IsExplicitUrlQuery())
+            if (!IsSuitableForUrlQuery(info))
                 return null;
 
             return TryGetCustomPropertyParser(info)
-                   ?? CollectionPropertyConverter.TryCreate(info)
+                   ?? CollectionPropertyConverter<RequestQueryAttribute>.TryCreate(info)
                    ?? SimplePropertyConverter<RequestQueryAttribute>.TryCreate(info)
-                   ?? ObjectPropertyConverter.TryCreate(info);
+                   ?? ObjectPropertyConverter<RequestQueryAttribute>.TryCreate(info);
         }
+
+        protected abstract bool IsSuitableForUrlQuery(PropertyInfo info);
 
         static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo info)
         {
             var attribute = info.GetCustomAttribute<CustomPropertyConverterAttribute>(true);
 
             return attribute != null
-                       ? attribute.GetConverter(info)
-                       : null;
+                ? attribute.GetConverter(info)
+                : null;
         }
     }
 }

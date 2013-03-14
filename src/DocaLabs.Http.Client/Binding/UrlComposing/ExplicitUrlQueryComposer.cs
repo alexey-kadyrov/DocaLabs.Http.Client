@@ -6,14 +6,14 @@ namespace DocaLabs.Http.Client.Binding.UrlComposing
 {
     static class ExplicitUrlQueryComposer
     {
-        readonly static ConcurrentDictionary<Type, QueryPropertyMap> ConverterMaps = new ConcurrentDictionary<Type, QueryPropertyMap>();
+        readonly static ConcurrentDictionary<Type, ExplicitQueryPropertyMap> ConverterMaps = new ConcurrentDictionary<Type, ExplicitQueryPropertyMap>();
 
         public static CustomNameValueCollection Compose(object model, Uri baseUrl)
         {
-            return ConvertModel(model, ConverterMaps.GetOrAdd(model.GetType(), x => new QueryPropertyMap(x)));
+            return ConvertModel(model, ConverterMaps.GetOrAdd(model.GetType(), x => new ExplicitQueryPropertyMap(x)));
         }
 
-        static CustomNameValueCollection ConvertModel(object obj, QueryPropertyMap map)
+        static CustomNameValueCollection ConvertModel(object obj, ExplicitQueryPropertyMap map)
         {
             var values = new CustomNameValueCollection();
 
