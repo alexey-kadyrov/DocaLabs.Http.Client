@@ -7,26 +7,14 @@ namespace DocaLabs.Http.Client.Binding
 {
     public static class BindingExtensions
     {
-        public static bool IsExplicitUrlOrderedPath(this PropertyInfo info)
+        public static bool IsExplicitUrlPath(this PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
                     info.GetGetMethod() != null &&
                     (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
-                    info.GetCustomAttribute<OrderedRequestPathAttribute>(true) != null &&
-                    info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
-                    info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
-        }
-
-        public static bool IsExplicitUrlNamedPath(this PropertyInfo info)
-        {
-            // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
-            return info.GetIndexParameters().Length == 0 &&
-                    info.GetGetMethod() != null &&
-                    (!info.IsHeader()) &&
-                    (!info.IsCredentials()) &&
-                    info.GetCustomAttribute<NamedRequestPathAttribute>(true) != null &&
+                    info.GetCustomAttribute<RequestPathAttribute>(true) != null &&
                     info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }

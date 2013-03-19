@@ -54,5 +54,10 @@ namespace DocaLabs.Http.Client.Utils
         /// true if the dictionary contains an element with the specified key; otherwise, false.
         /// </returns>
         bool TryGetValue(TKey key, out IList<TValue> value);
+
+        /// <summary>
+        /// Adds the elements of the specified collection to the DictionaryList.
+        /// </summary>
+        void AddRange(IEnumerable<KeyValuePair<TKey, IList<TValue>>> collection);
     }
 }

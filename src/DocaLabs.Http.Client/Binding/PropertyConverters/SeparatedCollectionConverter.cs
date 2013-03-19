@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Reflection;
 using System.Text;
-using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverters
@@ -10,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converter for enumerable properties that serializes into delimited string.
     /// </summary>
-    public class SeparatedCollectionConverter : PropertyConverterBase<RequestQueryAttribute>, IPropertyConverter
+    public class SeparatedCollectionConverter : PropertyConverterBase, IPropertyConverter
     {
         /// <summary>
         /// String's delimiter. The default value is pipe |.
@@ -20,11 +19,11 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         /// <summary>
         /// Initializes an instance of the SeparatedCollectionConverter class for a specified property.
         /// </summary>
-        public SeparatedCollectionConverter(PropertyInfo info)
-            : base(info)
+        public SeparatedCollectionConverter(PropertyInfo property, INamedPropertyConverterInfo info)
+            : base(property, info)
         {
-            if (info.GetIndexParameters().Length > 0)
-                throw new ArgumentException(Resources.Text.property_cannot_be_indexer, "info");
+            if (property.GetIndexParameters().Length > 0)
+                throw new ArgumentException(Resources.Text.property_cannot_be_indexer, "property");
 
             Separator = '|';
         }
@@ -40,7 +39,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
 
             if (obj != null)
             {
-                var collection = Info.GetValue(obj, null) as IEnumerable;
+                var collection = Property.GetValue(obj, null) as IEnumerable;
 
                 if (collection != null)
                 {

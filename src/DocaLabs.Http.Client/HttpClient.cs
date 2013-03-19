@@ -136,9 +136,9 @@ namespace DocaLabs.Http.Client
         /// <returns></returns>
         protected virtual string ComposeUrl(object model)
         {
-            return model == null 
+            return model == null
                 ? BaseUrl.AbsoluteUri 
-                : ClientModelBinders.GetUrlComposer(model.GetType()).Compose(model, this, BaseUrl);
+                : ClientModelBinders.GetUrlComposer(model.GetType()).Compose(model, BaseUrl);
         }
 
         /// <summary>

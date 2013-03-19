@@ -4,6 +4,6 @@ namespace DocaLabs.Http.Client.Binding
 {
     public interface IUrlComposer
     {
-        string Compose(object model, object client, Uri baseUrl);
+        string Compose(object model, Uri baseUrl);
     }
 }

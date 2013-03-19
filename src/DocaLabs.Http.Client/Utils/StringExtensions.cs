@@ -36,5 +36,19 @@ namespace DocaLabs.Http.Client.Utils
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Returns a value indicating wherever the specified value occurs in the string.
+        /// </summary>
+        static public bool Contains(this string str, string value, StringComparison comparison)
+        {
+            if(str == null)
+                throw new ArgumentNullException("str");
+
+            if(value == null)
+                throw new ArgumentNullException("value");
+
+            return str.IndexOf(value, comparison) >= 0;
+        }
     }
 }

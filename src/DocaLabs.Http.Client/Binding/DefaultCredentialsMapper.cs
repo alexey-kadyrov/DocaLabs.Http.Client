@@ -47,7 +47,6 @@ namespace DocaLabs.Http.Client.Binding
             return builder.CredentialCache;
         }
 
-
         class PropertyMap
         {
             public IList<PropertyInfo> Credentials { get; private set; }

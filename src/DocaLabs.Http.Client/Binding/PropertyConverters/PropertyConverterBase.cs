@@ -7,13 +7,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Base class for property converters.
     /// </summary>
-    public abstract class PropertyConverterBase<T>
-        where T : Attribute, INamedPropertyConverterInfo
+    public abstract class PropertyConverterBase
     {
         /// <summary>
         /// Gets the linked property info.
         /// </summary>
-        protected PropertyInfo Info { get; private set; }
+        protected PropertyInfo Property { get; private set; }
 
         /// <summary>
         /// Gets the name which should be used. If RequestQueryAttribute is not defined or the Name in the attribute
@@ -27,33 +26,30 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         public string Format { get; private set; }
 
         /// <summary>
-        /// Initializes Info, Name and Format properties.
+        /// Initializes Property, Name and Format properties.
         /// </summary>
-        protected PropertyConverterBase(PropertyInfo info)
+        protected PropertyConverterBase(PropertyInfo property, INamedPropertyConverterInfo info)
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
+            if (property == null)
+                throw new ArgumentNullException("property");
 
-            Info = info;
+            Property = property;
 
-            var attribute = info.GetCustomAttribute<T>(true);
-            if(attribute != null)
+            if(info != null)
             {
-                Name = attribute.Name;
-                Format = attribute.Format;
+                Name = info.Name;
+                Format = string.IsNullOrWhiteSpace(Format)
+                    ? null
+                    : "{0:" + info.Format + "}";
             }
 
             if(string.IsNullOrWhiteSpace(Name))
-            {
-                Name = Info.Name;
-            }
+                Name = Property.Name;
         }
 
         /// <summary>
         /// Converts a single to its string representation, if the Format is specified then string.Format is used.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public string ConvertValue(object value)
         {
             if (value == null)
@@ -61,7 +57,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
 
             return string.IsNullOrWhiteSpace(Format)
                        ? CustomConverter.Current.ChangeType<string>(value)
-                       : string.Format("{0:" + Format + "}", value);
+                       : string.Format(Format, value);
         }
     }
 }

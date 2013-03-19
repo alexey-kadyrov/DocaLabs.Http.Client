@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Attributes;
@@ -12,105 +10,50 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultHeaderMapper : IHeaderMapper
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _parsedMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly static ConcurrentDictionary<Type, HeaderPropertyMap> HeaderPropertyMaps = new ConcurrentDictionary<Type, HeaderPropertyMap>();
 
         public WebHeaderCollection Map(object model)
         {
-            return model == null ? 
-                new WebHeaderCollection() 
-                : GetHeaders(model, _parsedMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+            return Ignore(model) 
+                ? new WebHeaderCollection()
+                : GetHeaders(HeaderPropertyMaps.GetOrAdd(model.GetType(), x => new HeaderPropertyMap(x)).ConvertModel(model));
         }
 
-        static WebHeaderCollection GetHeaders(object model, PropertyMap map)
+        static bool Ignore(object model)
+        {
+            return model == null || model.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
+        }
+
+        static WebHeaderCollection GetHeaders(IDictionaryList<string, string> headers)
         {
             var collection = new WebHeaderCollection();
 
-            foreach (var property in map.Properties)
-                ProcessProperty(model, property, collection);
-
-            return collection;
-        }
-
-        static void ProcessProperty(object model, object property, NameValueCollection collection)
-        {
-            if(TryAsHeaderCollection(model, property, collection))
-                return;
-
-            TryConverter(model, property, collection);
-        }
-
-        static bool TryAsHeaderCollection(object model, object property, NameValueCollection collection)
-        {
-            var headerProperty = property as PropertyInfo;
-            if (headerProperty == null)
-                return false;
-
-            var headers = headerProperty.GetValue(model) as WebHeaderCollection;
-            if (headers == null)
-                return false;
-
-            collection.Add(headers);
-
-            return true;
-        }
-
-        static void TryConverter(object model, object property, NameValueCollection collection)
-        {
-            var converter = property as IPropertyConverter;
-            if (converter == null)
-                return;
-
-            var values = converter.GetValue(model);
-            if (values == null)
-                return;
-
-            foreach (var key in values.Keys)
+            foreach (var key in headers.Keys)
             {
-                foreach (var value in values[key])
+                foreach (var value in headers[key])
                 {
                     collection.Add(key, value);
                 }
             }
+
+            return collection;
         }
 
-        class PropertyMap
+        class HeaderPropertyMap : PropertyMap
         {
-            public IList<object> Properties { get; private set; }
-
-            public PropertyMap(Type type)
+            public HeaderPropertyMap(Type type)
+                : base(type)
             {
-                Properties = Parse(type);
             }
 
-            static IList<object> Parse(Type type)
+            protected override bool AcceptProperty(PropertyInfo info)
             {
-                if(type.IsSimpleType())
-                    return new List<object>();
-
-                var collection = new List<object>();
-
-                foreach (var property in type.GetAllInstancePublicProperties())
-                    ParseProperty(property, collection);
-
-                return collection;
+                return info.IsHeader();
             }
 
-            static void ParseProperty(PropertyInfo property, List<object> collection)
+            protected override INamedPropertyConverterInfo GetConverterInfo(PropertyInfo property)
             {
-                if (!property.IsHeader())
-                    return;
-
-                if (typeof (WebHeaderCollection).IsAssignableFrom(property.PropertyType))
-                {
-                    collection.Add(property);
-                    return;
-                }
-
-                var converter = SimplePropertyConverter<RequestHeaderAttribute>.TryCreate(property);
-                if (converter == null)
-                    throw new UnrecoverableHttpClientException(string.Format(Resources.Text.property_must_be_simple, property.Name, property.DeclaringType));
-
-                collection.Add(converter);
+                return property.GetCustomAttribute<RequestHeaderAttribute>();
             }
         }
     }

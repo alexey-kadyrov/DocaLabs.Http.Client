@@ -53,7 +53,6 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Binding\Attributes\NamedRequestPathAttribute.cs" />
     <Compile Include="Binding\Attributes\RequestPathAttribute.cs" />
     <Compile Include="Binding\BindingExtensions.cs" />
     <Compile Include="Binding\ClientModelBinders.cs" />
@@ -61,28 +60,22 @@
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultMutator.cs" />
     <Compile Include="Binding\IUrlComposer.cs" />
+    <Compile Include="Binding\PropertyConverters\CustomNameValueCollectionPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverters\NameValueCollectionPropertyConverter.cs" />
     <Compile Include="Binding\RequestSerialization\DefaultRequestWriter.cs" />
     <Compile Include="Binding\PropertyConverters\INamedPropertyConverterInfo.cs" />
-    <Compile Include="Binding\UrlComposing\DefaultUrlComposer.cs" />
-    <Compile Include="Binding\UrlComposing\ExplicitUrlPathComposer.cs" />
-    <Compile Include="Binding\UrlComposing\ExplicitUrlQueryComposer.cs" />
+    <Compile Include="Binding\DefaultUrlComposer.cs" />
+    <Compile Include="Binding\PropertyMap.cs" />
     <Compile Include="Binding\ICredentialsMapper.cs" />
     <Compile Include="Binding\IMutator.cs" />
     <Compile Include="Binding\IHeaderMapper.cs" />
     <Compile Include="Binding\IRequestWriter.cs" />
     <Compile Include="Binding\Attributes\RequestHeaderAttribute.cs" />
-    <Compile Include="Binding\Attributes\OrderedRequestPathAttribute.cs" />
-    <Compile Include="Binding\UrlComposing\ExplicitQueryPropertyMap.cs" />
-    <Compile Include="Binding\UrlComposing\QueryPropertyMapBase.cs" />
     <Compile Include="Configuration\RequestExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
     <Compile Include="Utils\CustomConverterFactory.cs" />
     <Compile Include="Utils\ICustomConverterFactory.cs" />
     <Compile Include="Utils\InheritanceComparer.cs" />
-    <Compile Include="Binding\UrlComposing\NamedPropertyConverter.cs" />
-    <Compile Include="Binding\UrlComposing\NamedPropertyMap.cs" />
-    <Compile Include="Binding\UrlComposing\OrderedPropertyConverter.cs" />
-    <Compile Include="Binding\UrlComposing\OrderedPropertyMap.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
     <Compile Include="Configuration\CredentialType.cs" />
@@ -149,7 +142,7 @@
     <Compile Include="ResponseDeserialization\DeserializeFromJsonAttribute.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsXmlAttribute.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromXmlAttribute.cs" />
-    <Compile Include="Binding\UrlComposing\QueryStringBuilder.cs" />
+    <Compile Include="Binding\QueryStringBuilder.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="HttpClientException.cs" />
     <Compile Include="HttpResponse.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using DocaLabs.Http.Client.Binding.RequestSerialization;
-using DocaLabs.Http.Client.Binding.UrlComposing;
 
 namespace DocaLabs.Http.Client.Binding
 {

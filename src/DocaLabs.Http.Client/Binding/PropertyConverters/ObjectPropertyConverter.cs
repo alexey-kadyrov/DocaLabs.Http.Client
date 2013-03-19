@@ -7,27 +7,25 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
     /// <summary>
     /// Converts reference type properties, like object, etc.
     /// </summary>
-    public class ObjectPropertyConverter<T> : PropertyConverterBase<T>, IPropertyConverter
-        where T : Attribute, INamedPropertyConverterInfo
+    public class ObjectPropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        ObjectPropertyConverter(PropertyInfo info)
-            : base(info)
+        ObjectPropertyConverter(PropertyInfo property, INamedPropertyConverterInfo info)
+            : base(property, info)
         {
         }
 
         /// <summary>
         /// Tries to create the converter for the specified property.
         /// </summary>
-        /// <param name="info">Property for which instance of the ObjectPropertyConverter should be created.</param>
         /// <returns>Instance of the ObjectPropertyConverter class if the info describes the reference type property otherwise null.</returns>
-        public static IPropertyConverter TryCreate(PropertyInfo info)
+        public static IPropertyConverter TryCreate(PropertyInfo property, INamedPropertyConverterInfo info)
         {
-            if(info == null)
-                throw new ArgumentNullException("info");
+            if(property == null)
+                throw new ArgumentNullException("property");
 
-            return info.PropertyType.IsSimpleType() || info.GetIndexParameters().Length > 0
+            return property.PropertyType.IsSimpleType() || property.GetIndexParameters().Length > 0
                 ? null
-                : new ObjectPropertyConverter<T>(info);
+                : new ObjectPropertyConverter(property, info);
         }
 
         /// <summary>
@@ -43,7 +41,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
 
             if (obj != null)
             {
-                var value = Info.GetValue(obj, null);
+                var value = Property.GetValue(obj, null);
 
                 if (value != null)
                 {
