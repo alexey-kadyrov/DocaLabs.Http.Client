@@ -18,6 +18,14 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             var serializer = GetSerializer(model, client);
             if (serializer != null)
                 serializer.Serialize(model, request);
+            else if (IsBodyRequired(request))
+                request.ContentLength = 0;
+        }
+
+        static bool IsBodyRequired(WebRequest request)
+        {
+            return string.Compare(request.Method, "POST", StringComparison.InvariantCultureIgnoreCase) == 0
+                   || string.Compare(request.Method, "PUT", StringComparison.InvariantCultureIgnoreCase) == 0;
         }
 
         static IRequestSerialization GetSerializer(object model, object client)
