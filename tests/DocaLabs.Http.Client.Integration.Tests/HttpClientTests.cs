@@ -53,6 +53,29 @@ namespace DocaLabs.Http.Client.Integration.Tests
     }
 
     [Subject(typeof(HttpClient<,>))]
+    class when_posting_http_service_without_any_body
+    {
+        static TestServerHost<TestService> host;
+        static ITestEmptyPostService1 client;
+        static DataResponse result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<ITestEmptyPostService1>(null, "emptyPostCall");
+            host = new TestServerHost<TestService>();
+        };
+
+        Because of =
+            () => result = client.EmptyPost(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
+
+        It should_call_the_service_and_return_data =
+            () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "POST EMPTY: Hello World!");
+    }
+
+    [Subject(typeof(HttpClient<,>))]
     class when_getting_http_service_without_any_authentication_which_returns_xml_object
     {
         static TestServerHost<TestService> host;

@@ -196,8 +196,17 @@ namespace DocaLabs.Http.Client
         protected virtual void TryWriteRequestData(TQuery query, WebRequest request)
         {
             var serializer = RequestBodySerializationFactory.GetSerializer(this, query);
+
             if(serializer != null)
                 serializer.Serialize(query, request);
+            else if(IsBodyRequired(request))
+                request.ContentLength = 0;
+        }
+
+        static bool IsBodyRequired(WebRequest request)
+        {
+            return string.Compare(request.Method, "POST", StringComparison.InvariantCultureIgnoreCase) == 0
+                   || string.Compare(request.Method, "PUT", StringComparison.InvariantCultureIgnoreCase) == 0;
         }
 
         /// <summary>
