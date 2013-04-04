@@ -27,6 +27,16 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
             };
         }
 
+        public DataResponse EmptyPost(int value1, string value2)
+        {
+            return new DataResponse
+            {
+                Value1 = value1,
+                Value2 = "POST EMPTY: " + value2,
+                Headers = GetHeaders()
+            };
+        }
+
         public DataResponse GetAsXml(int value1, string value2)
         {
             return new DataResponse

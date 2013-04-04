@@ -68,6 +68,7 @@
     <Compile Include="Configuration\RequestExtensionsTests.cs" />
     <Compile Include="HttpClientTests.cs" />
     <Compile Include="_Contract\DataRequest.cs" />
+    <Compile Include="_Contract\ITestEmptyPostService1.cs" />
     <Compile Include="_Contract\ITestGetService1.cs" />
     <Compile Include="_Contract\ITestPostJsonService1.cs" />
     <Compile Include="_Contract\ITestPostXmlService1.cs" />
