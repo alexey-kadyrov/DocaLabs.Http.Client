@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Reflection;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
@@ -18,14 +20,20 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             var serializer = GetSerializer(model, client);
             if (serializer != null)
                 serializer.Serialize(model, request);
-            else if (IsBodyRequired(request))
-                request.ContentLength = 0;
+            else
+                request.SetContentLengthToZeroIfBodyIsRequired();
         }
 
-        static bool IsBodyRequired(WebRequest request)
+        public bool ShouldWrite(object model)
         {
-            return string.Compare(request.Method, "POST", StringComparison.InvariantCultureIgnoreCase) == 0
-                   || string.Compare(request.Method, "PUT", StringComparison.InvariantCultureIgnoreCase) == 0;
+            if (model == null)
+                return false;
+
+            var modelType = model.GetType();
+
+            return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
+                   || GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
+                   || modelType.GetAllInstancePublicProperties().Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null);
         }
 
         static IRequestSerialization GetSerializer(object model, object client)

@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using DocaLabs.Http.Client.Binding.RequestSerialization;
+using DocaLabs.Http.Client.ResponseDeserialization;
 
 namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
     /// Provides global access to the HTTP client model binders for the application.
     /// </summary>
-    static public class ClientModelBinders
+    static public class ModelBinders
     {
         static readonly ConcurrentDictionary<Type, IMutator> Mutators;
         static readonly ConcurrentDictionary<Type, IUrlComposer> UrlComposers;
         static readonly ConcurrentDictionary<Type, IHeaderMapper> HeaderMappers;
         static readonly ConcurrentDictionary<Type, ICredentialsMapper> CredentialsMappers;
         static readonly ConcurrentDictionary<Type, IRequestWriter> RequestWriters;
+        static readonly ConcurrentDictionary<Type, IResponseReader> ResponseReaders;
 
         static volatile IMutator _defaultMutator;
         static volatile IUrlComposer _defaultUrlComposer;
         static volatile IHeaderMapper _defaultHeaderMapper;
         static volatile ICredentialsMapper _defaultCredentialsMapper;
         static volatile IRequestWriter _defaultRequestWriter;
+        static volatile IResponseReader _defaultResponseReader;
 
         public static IMutator DefaultMutator
         {
@@ -81,19 +84,33 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        static ClientModelBinders()
+        public static IResponseReader DefaultResponseReader
+        {
+            get { return _defaultResponseReader; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+
+                _defaultResponseReader = value;
+            }
+        }
+
+        static ModelBinders()
         {
             Mutators = new ConcurrentDictionary<Type, IMutator>();
             UrlComposers = new ConcurrentDictionary<Type, IUrlComposer>();
             HeaderMappers = new ConcurrentDictionary<Type, IHeaderMapper>();
             CredentialsMappers = new ConcurrentDictionary<Type, ICredentialsMapper>();
             RequestWriters = new ConcurrentDictionary<Type, IRequestWriter>();
+            ResponseReaders = new ConcurrentDictionary<Type, IResponseReader>();
 
             _defaultMutator = new DefaultMutator();
             _defaultUrlComposer = new DefaultUrlComposer();
             _defaultHeaderMapper = new DefaultHeaderMapper();
             _defaultCredentialsMapper = new DefaultCredentialsMapper();
             _defaultRequestWriter = new DefaultRequestWriter();
+            _defaultResponseReader = new DefaultResponseReader();
         }
 
         /// <summary>
@@ -141,6 +158,12 @@ namespace DocaLabs.Http.Client.Binding
                 processed = true;
             }
 
+            if (binder is IResponseReader)
+            {
+                ResponseReaders[type] = binder as IResponseReader;
+                processed = true;
+            }
+
             if(!processed)
                 throw new ArgumentException(string.Format(Resources.Text.binder_must_implement, binder.GetType().FullName), "binder");
         }
@@ -173,6 +196,12 @@ namespace DocaLabs.Http.Client.Binding
         {
             IRequestWriter writer;
             return RequestWriters.TryGetValue(type, out writer) ? writer : _defaultRequestWriter;
+        }
+
+        public static IResponseReader GetResponseReader(Type type)
+        {
+            IResponseReader writer;
+            return ResponseReaders.TryGetValue(type, out writer) ? writer : _defaultResponseReader;
         }
     }
 }

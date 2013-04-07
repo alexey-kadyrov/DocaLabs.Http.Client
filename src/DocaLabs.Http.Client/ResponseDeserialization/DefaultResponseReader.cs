@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
+using DocaLabs.Http.Client.Binding;
 
 namespace DocaLabs.Http.Client.ResponseDeserialization
 {
     /// <summary>
     /// Defines helper methods to deserialize a web response. All public methods are thread safe.
     /// </summary>
-    public static class ResponseParser
+    public class DefaultResponseReader : IResponseReader
     {
-        static readonly object Locker;
-        static IList<IResponseDeserializationProvider> _providers;
+        readonly object Locker;
+        IList<IResponseDeserializationProvider> _providers;
 
         /// <summary>
         /// Gets or sets the list of deserialization providers.
         /// </summary>
-        public static IList<IResponseDeserializationProvider> Providers
+        public IList<IResponseDeserializationProvider> Providers
         {
             get
             {
@@ -45,7 +45,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             }
         }
 
-        static ResponseParser()
+        public DefaultResponseReader()
         {
             Locker = new object();
 
@@ -58,23 +58,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             };
         }
 
-        /// <summary>
-        /// Gets the web response and tries to deserialize the response.
-        ///     1. To get ResponseDeserializationAttribute if defined on TResult class.
-        ///     2. Tries to find deserialization provider among the registered.
-        /// </summary>
-        public static object Parse(WebRequest request, Type resultType)
-        {
-            if(request == null)
-                throw new ArgumentNullException("request");
-
-            using (var response = new HttpResponse(request))
-            {
-                return TransformResult(response, resultType);
-            }
-        }
-
-        static object TransformResult(HttpResponse response, Type resultType)
+        public virtual object Read(HttpResponse response, Type resultType)
         {
             if(resultType == null)
                 throw new ArgumentNullException("resultType");
@@ -99,7 +83,7 @@ namespace DocaLabs.Http.Client.ResponseDeserialization
             throw new UnrecoverableHttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
 
-        static IResponseDeserialization FindProvider(HttpResponse response, Type resultType)
+        IResponseDeserialization FindProvider(HttpResponse response, Type resultType)
         {
             IList<IResponseDeserializationProvider> providers;
 

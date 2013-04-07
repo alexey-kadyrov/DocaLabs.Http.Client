@@ -43,7 +43,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
 
             //var form = obj == null 
             //    ? "" 
-            //    : ClientModelBinders.GetUrlQueryComposer(obj.GetType()).Compose(obj, null);
+            //    : ModelBinders.GetUrlQueryComposer(obj.GetType()).Compose(obj, null);
 
             //var data = Encoding.GetEncoding(CharSet).GetBytes(form);
 

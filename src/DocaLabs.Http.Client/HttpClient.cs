@@ -1,12 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using DocaLabs.Http.Client.Binding;
-using DocaLabs.Http.Client.Binding.RequestSerialization;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.ResponseDeserialization;
@@ -87,7 +84,7 @@ namespace DocaLabs.Http.Client
         ///   * Overriding TryMakeQueryString and/or TryWriteRequestData
         /// The output data deserialization behaviour can be altered by:
         ///   * Using one of the ResponseDeserializationAttribute derived classes (on the class level)
-        ///   * Adding or replacing existing deserialization providers in the ResponseParser static class
+        ///   * Adding or replacing existing deserialization providers in the DefaultResponseReader static class
         ///   * Overriding ParseResponse
         /// The remote call is wrapped into the retry strategy.
         /// </summary>
@@ -138,7 +135,7 @@ namespace DocaLabs.Http.Client
         {
             return model == null
                 ? BaseUrl.AbsoluteUri 
-                : ClientModelBinders.GetUrlComposer(model.GetType()).Compose(model, BaseUrl);
+                : ModelBinders.GetUrlComposer(model.GetType()).Compose(model, BaseUrl);
         }
 
         /// <summary>
@@ -180,19 +177,9 @@ namespace DocaLabs.Http.Client
             if (!string.IsNullOrWhiteSpace(Method))
                 return Method;
 
-            return ShouldSerializeToStream(model) ? WebRequestMethods.Http.Post : WebRequestMethods.Http.Get;
-        }
-
-        bool ShouldSerializeToStream(object model)
-        {
-            if (model == null)
-                return false;
-
-            var modelType = model.GetType();
-
-            return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || modelType.GetAllInstancePublicProperties().Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null);
+            return ModelBinders.GetRequestWriter(model.GetType()).ShouldWrite(model) 
+                ? WebRequestMethods.Http.Post 
+                : WebRequestMethods.Http.Get;
         }
 
         /// <summary>
@@ -201,7 +188,9 @@ namespace DocaLabs.Http.Client
         protected virtual void TryWriteRequestData(object model, WebRequest request)
         {
             if(model != null)
-                ClientModelBinders.GetRequestWriter(model.GetType()).Write(model, this, request);
+                ModelBinders.GetRequestWriter(model.GetType()).Write(model, this, request);
+            else
+                request.SetContentLengthToZeroIfBodyIsRequired();
         }
 
         /// <summary>
@@ -209,7 +198,10 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual TOutputModel ParseResponse(object query, WebRequest request)
         {
-            return (TOutputModel)ResponseParser.Parse(request, typeof(TOutputModel));
+            using (var response = new HttpResponse(request))
+            {
+                return (TOutputModel)ModelBinders.GetResponseReader(typeof(TOutputModel)).Read(response, typeof(TOutputModel));
+            }
         }
 
         /// <summary>

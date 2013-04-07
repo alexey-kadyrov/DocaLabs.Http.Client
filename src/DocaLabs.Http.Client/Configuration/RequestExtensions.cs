@@ -90,7 +90,7 @@ namespace DocaLabs.Http.Client.Configuration
             if (model == null)
                 return;
 
-            var headers = ClientModelBinders.GetHeaderMapper(model.GetType()).Map(model);
+            var headers = ModelBinders.GetHeaderMapper(model.GetType()).Map(model);
             if (headers != null)
                 request.Headers.Add(headers);
         }
@@ -99,7 +99,7 @@ namespace DocaLabs.Http.Client.Configuration
         {
             return model == null
                 ? null
-                : ClientModelBinders.GetCredentialsMapper(model.GetType()).Map(model, request.RequestUri);
+                : ModelBinders.GetCredentialsMapper(model.GetType()).Map(model, request.RequestUri);
         }
     }
 }

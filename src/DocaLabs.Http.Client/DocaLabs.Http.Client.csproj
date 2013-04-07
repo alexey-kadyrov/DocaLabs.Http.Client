@@ -55,10 +55,11 @@
     </Compile>
     <Compile Include="Binding\Attributes\RequestPathAttribute.cs" />
     <Compile Include="Binding\BindingExtensions.cs" />
-    <Compile Include="Binding\ClientModelBinders.cs" />
+    <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultMutator.cs" />
+    <Compile Include="Binding\IResponseReader.cs" />
     <Compile Include="Binding\IUrlComposer.cs" />
     <Compile Include="Binding\PropertyConverters\CustomNameValueCollectionPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverters\NameValueCollectionPropertyConverter.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="ResponseDeserialization\IResponseDeserializationProvider.cs" />
     <Compile Include="ResponseDeserialization\JsonResponseDeserializer.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
+    <Compile Include="Utils\WebRequestExtensions.cs" />
     <Compile Include="VoidType.cs" />
     <Compile Include="ContentEncoding\ContentDecoderFactory.cs" />
     <Compile Include="ContentEncoding\ContentEncoderFactory.cs" />
@@ -129,7 +131,7 @@
     <Compile Include="Configuration\ClientProxyElement.cs" />
     <Compile Include="Binding\RequestSerialization\IRequestSerialization.cs" />
     <Compile Include="ResponseDeserialization\IResponseDeserialization.cs" />
-    <Compile Include="ResponseDeserialization\ResponseParser.cs" />
+    <Compile Include="ResponseDeserialization\DefaultResponseReader.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Binding\Attributes\CustomPropertyConverterAttribute.cs" />
     <Compile Include="Binding\PropertyConverters\ObjectPropertyConverter.cs" />
