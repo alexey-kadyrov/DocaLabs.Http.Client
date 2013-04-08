@@ -2,6 +2,7 @@
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Attributes;
 using DocaLabs.Http.Client.Binding.RequestSerialization;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -63,5 +64,11 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null &&
                     typeof(ICredentials).IsAssignableFrom(info.PropertyType);
         }
+
+        public static bool IsFormProperty(this PropertyInfo info)
+        {
+            return info.GetIndexParameters().Length == 0 && info.GetGetMethod() != null && info.PropertyType.IsSimpleType();
+        }
+
     }
 }

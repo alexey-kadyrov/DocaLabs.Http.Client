@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
+using DocaLabs.Http.Client.Binding.Attributes;
+using DocaLabs.Http.Client.Binding.PropertyConverters;
 using DocaLabs.Http.Client.ContentEncoding;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
@@ -12,6 +17,8 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
     /// </summary>
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
+        readonly static ConcurrentDictionary<Type, FormPropertyMap> FormPropertyMaps = new ConcurrentDictionary<Type, FormPropertyMap>();
+
         /// <summary>
         /// Gets or sets the content encoding, if ContentEncoding blank or null no encoding is done.
         /// The encoder is supplied by ContentEncoderFactory.
@@ -34,25 +41,33 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
         /// <summary>
         /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
         /// </summary>
-        /// <param name="obj">Object to be serialized.</param>
+        /// <param name="model">Object to be serialized.</param>
         /// <param name="request">Web request where to serialize to.</param>
-        public override void Serialize(object obj, WebRequest request)
+        public override void Serialize(object model, WebRequest request)
         {
-            //if(request == null)
-            //    throw new ArgumentNullException("request");
+            if (request == null)
+                throw new ArgumentNullException("request");
 
-            //var form = obj == null 
-            //    ? "" 
-            //    : ModelBinders.GetUrlQueryComposer(obj.GetType()).Compose(obj, null);
+            var form = ToForm(model);
 
-            //var data = Encoding.GetEncoding(CharSet).GetBytes(form);
+            var data = Encoding.GetEncoding(CharSet).GetBytes(form);
 
-            //request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
-            
-            //if (string.IsNullOrWhiteSpace(RequestContentEncoding))
-            //    Write(data, request);
-            //else
-            //    EncodeAndWrite(data, request);
+            request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
+
+            if (string.IsNullOrWhiteSpace(RequestContentEncoding))
+                Write(data, request);
+            else
+                EncodeAndWrite(data, request);
+        }
+
+        static string ToForm(object model)
+        {
+            if (model == null)
+                return "";
+
+            var values = FormPropertyMaps.GetOrAdd(model.GetType(), x => new FormPropertyMap(x)).ConvertModel(model);
+
+            return new QueryStringBuilder().Add(values).ToString();
         }
 
         static void Write(byte[] data, WebRequest request)
@@ -72,6 +87,24 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             using (var dataStream = new MemoryStream(data))
             {
                 dataStream.CopyTo(compressionStream);
+            }
+        }
+
+        class FormPropertyMap : PropertyMap
+        {
+            public FormPropertyMap(Type type)
+                : base(type)
+            {
+            }
+
+            protected override bool AcceptProperty(PropertyInfo info)
+            {
+                return info.IsFormProperty();
+            }
+
+            protected override INamedPropertyConverterInfo GetConverterInfo(PropertyInfo property)
+            {
+                return property.GetCustomAttribute<RequestQueryAttribute>();
             }
         }
     }
