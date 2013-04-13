@@ -53,7 +53,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Binding\Attributes\RequestPathAttribute.cs" />
+    <Compile Include="Binding\Attributes\InRequestPathAttribute.cs" />
     <Compile Include="Binding\BindingExtensions.cs" />
     <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
@@ -61,17 +61,18 @@
     <Compile Include="Binding\DefaultMutator.cs" />
     <Compile Include="Binding\IResponseReader.cs" />
     <Compile Include="Binding\IUrlComposer.cs" />
-    <Compile Include="Binding\PropertyConverters\CustomNameValueCollectionPropertyConverter.cs" />
-    <Compile Include="Binding\PropertyConverters\NameValueCollectionPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\CustomNameValueCollectionPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\PropertyConverterExtensions.cs" />
     <Compile Include="Binding\RequestSerialization\DefaultRequestWriter.cs" />
-    <Compile Include="Binding\PropertyConverters\INamedPropertyConverterInfo.cs" />
+    <Compile Include="Binding\PropertyConverting\IPropertyConverterOverrides.cs" />
     <Compile Include="Binding\DefaultUrlComposer.cs" />
     <Compile Include="Binding\PropertyMap.cs" />
     <Compile Include="Binding\ICredentialsMapper.cs" />
     <Compile Include="Binding\IMutator.cs" />
     <Compile Include="Binding\IHeaderMapper.cs" />
     <Compile Include="Binding\IRequestWriter.cs" />
-    <Compile Include="Binding\Attributes\RequestHeaderAttribute.cs" />
+    <Compile Include="Binding\Attributes\InRequestHeaderAttribute.cs" />
     <Compile Include="Configuration\RequestExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
     <Compile Include="Utils\CustomConverterFactory.cs" />
@@ -133,11 +134,11 @@
     <Compile Include="ResponseDeserialization\IResponseDeserialization.cs" />
     <Compile Include="ResponseDeserialization\DefaultResponseReader.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsFormAttribute.cs" />
-    <Compile Include="Binding\Attributes\CustomPropertyConverterAttribute.cs" />
-    <Compile Include="Binding\PropertyConverters\ObjectPropertyConverter.cs" />
-    <Compile Include="Binding\PropertyConverters\PropertyConverterBase.cs" />
+    <Compile Include="Binding\PropertyConverting\CustomPropertyConverterAttribute.cs" />
+    <Compile Include="Binding\PropertyConverting\ObjectPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\PropertyConverterBase.cs" />
     <Compile Include="Binding\Attributes\IgnoreInRequestAttribute.cs" />
-    <Compile Include="Binding\Attributes\RequestQueryAttribute.cs" />
+    <Compile Include="Binding\Attributes\InRequestQueryAttribute.cs" />
     <Compile Include="Binding\RequestSerialization\RequestSerializationAttribute.cs" />
     <Compile Include="ResponseDeserialization\ResponseDeserializationAttribute.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsJsonAttribute.cs" />
@@ -148,11 +149,11 @@
     <Compile Include="HttpClient.cs" />
     <Compile Include="HttpClientException.cs" />
     <Compile Include="HttpResponse.cs" />
-    <Compile Include="Binding\PropertyConverters\CollectionPropertyConverter.cs" />
-    <Compile Include="Binding\PropertyConverters\SimplePropertyConverter.cs" />
-    <Compile Include="Binding\PropertyConverters\IPropertyConverter.cs" />
-    <Compile Include="Binding\PropertyConverters\SeparatedCollectionConverter.cs" />
-    <Compile Include="Binding\Attributes\SeparatedCollectionConverterAttribute.cs" />
+    <Compile Include="Binding\PropertyConverting\CollectionPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimplePropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\IPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Text.Designer.cs">
       <AutoGen>True</AutoGen>

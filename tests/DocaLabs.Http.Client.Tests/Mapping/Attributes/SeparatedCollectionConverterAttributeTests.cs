@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Attributes;
-using DocaLabs.Http.Client.Binding.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping.Attributes
@@ -47,10 +47,10 @@ namespace DocaLabs.Http.Client.Tests.Mapping.Attributes
             () => ((SeparatedCollectionConverter) converter).Separator.ShouldEqual(attribute.Separator);
 
         It should_be_able_to_get_the_key_as_property_name =
-            () => converter.GetValue(instance).First().Key.ShouldEqual("Countries");
+            () => converter.Convert(instance).First().Key.ShouldEqual("Countries");
 
         It should_be_able_to_get_value_of_property =
-            () => converter.GetValue(instance).First().Value[0].ShouldEqual("IE;UK");
+            () => converter.Convert(instance).First().Value[0].ShouldEqual("IE;UK");
 
         class TestClass
         {

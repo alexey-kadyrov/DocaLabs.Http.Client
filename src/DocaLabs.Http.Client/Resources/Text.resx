@@ -180,6 +180,9 @@
   <data name="property_must_be_simple" xml:space="preserve">
     <value>Type of property {0} in {1} must be simple.</value>
   </data>
+  <data name="separated_coll_attr_cannot_be_used_for_0_in_1" xml:space="preserve">
+    <value>SeparatedCollectionConverterAttribute cannot be used for property {0} in {1}.</value>
+  </data>
   <data name="service_url_is_not_defined" xml:space="preserve">
     <value>The Service URL is not defined in the constaructor paramter or is not in the configuration file.</value>
   </data>

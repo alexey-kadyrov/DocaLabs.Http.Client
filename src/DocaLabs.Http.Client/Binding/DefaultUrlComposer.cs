@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using DocaLabs.Http.Client.Binding.Attributes;
-using DocaLabs.Http.Client.Binding.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
@@ -168,9 +168,9 @@ namespace DocaLabs.Http.Client.Binding
                 return info.IsExplicitUrlPath();
             }
 
-            protected override INamedPropertyConverterInfo GetConverterInfo(PropertyInfo property)
+            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
             {
-                return property.GetCustomAttribute<RequestPathAttribute>();
+                return property.GetCustomAttribute<InRequestPathAttribute>();
             }
         }
 
@@ -186,9 +186,9 @@ namespace DocaLabs.Http.Client.Binding
                 return info.IsExplicitUrlQuery();
             }
 
-            protected override INamedPropertyConverterInfo GetConverterInfo(PropertyInfo property)
+            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
             {
-                return property.GetCustomAttribute<RequestQueryAttribute>();
+                return property.GetCustomAttribute<InRequestQueryAttribute>();
             }
         }
 

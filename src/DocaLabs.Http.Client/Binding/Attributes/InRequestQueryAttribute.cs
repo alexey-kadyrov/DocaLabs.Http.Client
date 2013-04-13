@@ -1,5 +1,5 @@
 ﻿using System;
-using DocaLabs.Http.Client.Binding.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 
 namespace DocaLabs.Http.Client.Binding.Attributes
 {
@@ -7,7 +7,7 @@ namespace DocaLabs.Http.Client.Binding.Attributes
     /// Specifies additional information about a property for serializing into a URI's query.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public class RequestQueryAttribute : Attribute, INamedPropertyConverterInfo
+    public class InRequestQueryAttribute : Attribute, IPropertyConverterOverrides
     {
         /// <summary>
         /// Gets or sets a name that should be used for the property in a URI's query.

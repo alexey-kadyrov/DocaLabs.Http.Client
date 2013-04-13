@@ -1,11 +1,10 @@
 using System;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.PropertyConverters;
 
-namespace DocaLabs.Http.Client.Binding.Attributes
+namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
     /// <summary>
-    /// Defines methods for a custom converter that should be used to convert a property for serializing into URI's query.
+    /// Defines methods to get a custom converter that should be used to convert a property into name-value pairs.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public abstract class CustomPropertyConverterAttribute : Attribute

@@ -16,73 +16,73 @@
 //    class when_trying_to_create_convert_simple_property
 //    {
 //        private It should_create_it_for_bool =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_char =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_byte =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_short =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_ushort =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_int =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_uint =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_long =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_ulong =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_float =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_double =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_decimal =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enum =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_guid =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_datetime =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_datetimeoffset =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_timespan =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_string =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_byte_array =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
 
 //        private It should_not_create_it_for_object =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_class =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_struct =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_indexer =
-//            () => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
+//            () => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
 
 //        class TestClass
 //        {
@@ -130,7 +130,7 @@
 //        static Exception exception;
 
 //        Because of =
-//            () => exception = Catch.Exception(() => SimplePropertyConverter<RequestQueryAttribute>.TryCreate(null));
+//            () => exception = Catch.Exception(() => SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(null));
 
 //        It should_throw_argument_null_exception =
 //            () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -146,10 +146,10 @@
 //        static CustomNameValueCollection result;
 
 //        Establish context = 
-//            () => converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            () => converter = SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
 
 //        Because of =
-//            () => result = converter.GetValue(null);
+//            () => result = converter.Convert(null);
 
 //        private It should_return_empty_collection =
 //            () => result.ShouldBeEmpty();
@@ -171,11 +171,11 @@
 //        {
 //            instance = new TestClass();
 
-//            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        private It should_return_empty_collection =
 //            () => result.ShouldBeEmpty();
@@ -196,11 +196,11 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = 42 };
-//            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_property_name =
 //            () => result.First().Key.ShouldEqual("Value");
@@ -224,11 +224,11 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = 42 };
-//            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_property_name =
 //            () => result.First().Key.ShouldEqual("Value");
@@ -253,11 +253,11 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = 42 };
-//            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_the_redefined_name =
 //            () => result.First().Key.ShouldEqual("Hello World");
@@ -282,11 +282,11 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = 42 };
-//            converter = SimplePropertyConverter<RequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = SimplePropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_the_redefined_name =
 //            () => result.First().Key.ShouldEqual("Value");

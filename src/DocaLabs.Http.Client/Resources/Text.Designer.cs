@@ -250,6 +250,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SeparatedCollectionConverterAttribute cannot be used for property {0} in {1}..
+        /// </summary>
+        internal static string separated_coll_attr_cannot_be_used_for_0_in_1 {
+            get {
+                return ResourceManager.GetString("separated_coll_attr_cannot_be_used_for_0_in_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Service URL is not defined in the constaructor paramter or is not in the configuration file..
         /// </summary>
         internal static string service_url_is_not_defined {

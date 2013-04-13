@@ -5,7 +5,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using DocaLabs.Http.Client.Binding.Attributes;
-using DocaLabs.Http.Client.Binding.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.Utils;
 
@@ -102,9 +102,9 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
                 return info.IsFormProperty();
             }
 
-            protected override INamedPropertyConverterInfo GetConverterInfo(PropertyInfo property)
+            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
             {
-                return property.GetCustomAttribute<RequestQueryAttribute>();
+                return property.GetCustomAttribute<InRequestQueryAttribute>();
             }
         }
     }

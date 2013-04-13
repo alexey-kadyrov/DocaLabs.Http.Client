@@ -1,5 +1,5 @@
 ﻿using System;
-using DocaLabs.Http.Client.Binding.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 
 namespace DocaLabs.Http.Client.Binding.Attributes
 {
@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Binding.Attributes
     /// The Url template can be specified like: http://contoso.com/{propertyName1}/{propertyName2}.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public class RequestPathAttribute : Attribute, INamedPropertyConverterInfo
+    public class InRequestPathAttribute : Attribute, IPropertyConverterOverrides
     {
         /// <summary>
         /// Gets or sets a format string that should be used when converting the property value.
@@ -22,16 +22,16 @@ namespace DocaLabs.Http.Client.Binding.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Initializes an instance of the RequestPathAttribute class.
+        /// Initializes an instance of the InRequestPathAttribute class.
         /// </summary>
-        public RequestPathAttribute()
+        public InRequestPathAttribute()
         {
         }
 
         /// <summary>
-        /// Initializes an instance of the RequestPathAttribute class with specified substitution lookup name.
+        /// Initializes an instance of the InRequestPathAttribute class with specified substitution lookup name.
         /// </summary>
-        public RequestPathAttribute(string name)
+        public InRequestPathAttribute(string name)
         {
             Name = name;
         }

@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetGetMethod() != null &&
                     (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
-                    info.GetCustomAttribute<RequestPathAttribute>(true) != null &&
+                    info.GetCustomAttribute<InRequestPathAttribute>(true) != null &&
                     info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
@@ -27,7 +27,7 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetGetMethod() != null &&
                     (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
-                    info.GetCustomAttribute<RequestQueryAttribute>(true) != null &&
+                    info.GetCustomAttribute<InRequestQueryAttribute>(true) != null &&
                     info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
@@ -39,8 +39,8 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetGetMethod() != null &&
                     (!info.IsHeader()) &&
                     (!info.IsCredentials()) &&
-                    info.GetCustomAttributes(typeof(RequestPathAttribute), true).Length == 0 &&
-                    info.GetCustomAttribute<RequestQueryAttribute>(true) == null &&
+                    info.GetCustomAttributes(typeof(InRequestPathAttribute), true).Length == 0 &&
+                    info.GetCustomAttribute<InRequestQueryAttribute>(true) == null &&
                     info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
@@ -52,7 +52,7 @@ namespace DocaLabs.Http.Client.Binding
                     info.GetGetMethod() != null &&
                     info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null &&
                     info.GetCustomAttribute<RequestSerializationAttribute>(true) == null &&
-                    (typeof(WebHeaderCollection).IsAssignableFrom(info.PropertyType) || info.GetCustomAttribute<RequestHeaderAttribute>() != null);
+                    (typeof(WebHeaderCollection).IsAssignableFrom(info.PropertyType) || info.GetCustomAttribute<InRequestHeaderAttribute>() != null);
         }
 
         public static bool IsCredentials(this PropertyInfo info)

@@ -2,30 +2,31 @@
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.PropertyConverters
+namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
     /// <summary>
     /// Converts reference type properties, like object, etc.
     /// </summary>
     public class ObjectPropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        ObjectPropertyConverter(PropertyInfo property, INamedPropertyConverterInfo info)
-            : base(property, info)
+        ObjectPropertyConverter(PropertyInfo property, IPropertyConverterOverrides overrides)
+            : base(property, overrides)
         {
         }
 
         /// <summary>
-        /// Tries to create the converter for the specified property.
+        /// Creates the converter if the specified property type:
+        ///     * Is not simple
+        ///     * Is not an indexer
         /// </summary>
-        /// <returns>Instance of the ObjectPropertyConverter class if the info describes the reference type property otherwise null.</returns>
-        public static IPropertyConverter TryCreate(PropertyInfo property, INamedPropertyConverterInfo info)
+        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
             return property.PropertyType.IsSimpleType() || property.GetIndexParameters().Length > 0
                 ? null
-                : new ObjectPropertyConverter(property, info);
+                : new ObjectPropertyConverter(property, overrides);
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverters
         /// </summary>
         /// <param name="obj">Instance of the object which "owns" the property.</param>
         /// <returns>One key-value pair.</returns>
-        public CustomNameValueCollection GetValue(object obj)
+        public CustomNameValueCollection Convert(object obj)
         {
             CustomNameValueCollection values = null;
 

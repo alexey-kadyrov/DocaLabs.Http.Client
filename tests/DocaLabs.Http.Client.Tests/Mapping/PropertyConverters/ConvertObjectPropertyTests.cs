@@ -150,7 +150,7 @@
 //            () => converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 
 //        Because of =
-//            () => result = converter.GetValue(null);
+//            () => result = converter.Convert(null);
 
 //        private It should_return_empty_collection =
 //            () => result.ShouldBeEmpty();
@@ -184,7 +184,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        private It should_return_empty_collection =
 //            () => result.ShouldBeEmpty();
@@ -219,7 +219,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_property_name =
 //            () => result.First().Key.ShouldEqual("Value");
@@ -255,7 +255,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_property_name =
 //            () => result.First().Key.ShouldEqual("Value");
@@ -292,7 +292,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_the_redefined_name =
 //            () => result.First().Key.ShouldEqual("Hello World");
@@ -329,7 +329,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_property_name =
 //            () => result.First().Key.ShouldEqual("Value");
@@ -366,7 +366,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_returned_by_custom_mapper =
 //            () => result.First().Key.ShouldEqual("Hello!");
@@ -402,7 +402,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_returned_by_custom_mapper =
 //            () => result.First().Key.ShouldEqual("Hello!");
@@ -439,7 +439,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_returned_by_custom_mapper =
 //            () => result.First().Key.ShouldEqual("Hello!");
@@ -476,7 +476,7 @@
 //        };
 
 //        Because of =
-//            () => result = converter.GetValue(instance);
+//            () => result = converter.Convert(instance);
 
 //        It should_be_able_to_get_the_key_as_returned_by_custom_mapper =
 //            () => result.First().Key.ShouldEqual("Hello!");

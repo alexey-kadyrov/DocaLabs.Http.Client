@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Attributes;
-using DocaLabs.Http.Client.Binding.PropertyConverters;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
@@ -51,9 +51,9 @@ namespace DocaLabs.Http.Client.Binding
                 return info.IsHeader();
             }
 
-            protected override INamedPropertyConverterInfo GetConverterInfo(PropertyInfo property)
+            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
             {
-                return property.GetCustomAttribute<RequestHeaderAttribute>();
+                return property.GetCustomAttribute<InRequestHeaderAttribute>();
             }
         }
     }
