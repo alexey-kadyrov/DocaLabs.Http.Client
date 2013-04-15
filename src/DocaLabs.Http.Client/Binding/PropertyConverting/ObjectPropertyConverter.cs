@@ -9,9 +9,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// </summary>
     public class ObjectPropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        ObjectPropertyConverter(PropertyInfo property, IPropertyConverterOverrides overrides)
+        readonly Func<object, PropertyMap> _propertyMapGetOrAddType;
+
+        ObjectPropertyConverter(PropertyInfo property, IPropertyConverterOverrides overrides, Func<object, PropertyMap> propertyMapGetOrAddType)
             : base(property, overrides)
         {
+            _propertyMapGetOrAddType = propertyMapGetOrAddType;
         }
 
         /// <summary>
@@ -19,40 +22,38 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is not simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides)
+        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides, Func<object, PropertyMap> propertyMapGetOrAddType)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
             return property.PropertyType.IsSimpleType() || property.GetIndexParameters().Length > 0
                 ? null
-                : new ObjectPropertyConverter(property, overrides);
+                : new ObjectPropertyConverter(property, overrides, propertyMapGetOrAddType);
         }
 
         /// <summary>
-        /// Serializes the property value to the string.
-        /// If the object implements ICustomQueryMapper it will use ToParameterDictionary method to serialize the property,
-        /// otherwise it will use ToString method.
+        /// Converts a property value.
+        /// If the obj is null or the value of the property is null then the return collection will be empty.
         /// </summary>
-        /// <param name="obj">Instance of the object which "owns" the property.</param>
-        /// <returns>One key-value pair.</returns>
+        /// <param name="obj">Instance of the object on which the property is defined.</param>
+        /// <returns>Key-value pairs.</returns>
         public CustomNameValueCollection Convert(object obj)
         {
-            CustomNameValueCollection values = null;
+            var values = new CustomNameValueCollection();
 
             if (obj != null)
-            {
-                var value = Property.GetValue(obj, null);
+                TryAddValues(obj, values);
 
-                if (value != null)
-                {
-                    var customeMapper = /*ModelBinders.GetUrlQueryComposer(obj.GetType());
+            return values;
+        }
 
-                    values = */ new CustomNameValueCollection { { Name, value.ToString() } };
-                }
-            }
+        void TryAddValues(object obj, IDictionaryList<string, string> values)
+        {
+            var value = Property.GetValue(obj, null);
 
-            return values ?? new CustomNameValueCollection();
+            if (value != null)
+                values.AddRange(_propertyMapGetOrAddType(value).ConvertModel(value));
         }
     }
 }

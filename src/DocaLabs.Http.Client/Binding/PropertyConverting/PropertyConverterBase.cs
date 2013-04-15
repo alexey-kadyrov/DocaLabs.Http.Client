@@ -68,5 +68,25 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 ? CustomConverter.Current.ChangeType<string>(value)
                 : string.Format(Format, value);
         }
+
+        /// <summary>
+        /// Helper method to get a key maker.
+        /// </summary>
+        protected Func<string, string> GetKeyMaker()
+        {
+            return IsNameOverridden
+                ? (Func<string, string>)MakeCompositeName
+                : GetNameAsIs;
+        }
+
+        static string GetNameAsIs(string name)
+        {
+            return name;
+        }
+
+        string MakeCompositeName(string name)
+        {
+            return Name + "." + name;
+        }
     }
 }

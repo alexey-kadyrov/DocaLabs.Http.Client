@@ -4,10 +4,9 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using DocaLabs.Http.Client.Binding.Attributes;
+using DocaLabs.Http.Client.Binding.Hints;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.ContentEncoding;
-using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
@@ -65,9 +64,14 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             if (model == null)
                 return "";
 
-            var values = FormPropertyMaps.GetOrAdd(model.GetType(), x => new FormPropertyMap(x)).ConvertModel(model);
+            var values = PropertyMapGetOrAddType(model).ConvertModel(model);
 
             return new QueryStringBuilder().Add(values).ToString();
+        }
+
+        static FormPropertyMap PropertyMapGetOrAddType(object model)
+        {
+            return FormPropertyMaps.GetOrAdd(model.GetType(), x => new FormPropertyMap(x, PropertyMapGetOrAddType));
         }
 
         static void Write(byte[] data, WebRequest request)
@@ -92,8 +96,8 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
 
         class FormPropertyMap : PropertyMap
         {
-            public FormPropertyMap(Type type)
-                : base(type)
+            public FormPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
+                : base(type, propertyMapGetOrAddType)
             {
             }
 
@@ -104,7 +108,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
 
             protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
             {
-                return property.GetCustomAttribute<InRequestQueryAttribute>();
+                return property.GetCustomAttribute<InRequestFormAttribute>();
             }
         }
     }

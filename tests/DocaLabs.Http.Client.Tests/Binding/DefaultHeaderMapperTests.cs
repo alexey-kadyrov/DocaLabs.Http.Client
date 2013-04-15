@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Net;
 using DocaLabs.Http.Client.Binding;
-using DocaLabs.Http.Client.Binding.Attributes;
+using DocaLabs.Http.Client.Binding.Hints;
 using Machine.Specifications;
 using DocaLabs.Testing.Common;
 

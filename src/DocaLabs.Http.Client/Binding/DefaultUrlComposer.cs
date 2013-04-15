@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using DocaLabs.Http.Client.Binding.Attributes;
+using DocaLabs.Http.Client.Binding.Hints;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 
@@ -15,9 +15,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer : IUrlComposer
     {
-        readonly ConcurrentDictionary<Type, ExplicitQueryPropertyMap> _explicitQueryPropertyMaps = new ConcurrentDictionary<Type, ExplicitQueryPropertyMap>();
-        readonly ConcurrentDictionary<Type, ExplicitPathPropertyMap> _explicitPathPropertyMaps = new ConcurrentDictionary<Type, ExplicitPathPropertyMap>();
-        readonly ConcurrentDictionary<Type, ImplicitPathOrQueryPropertyMap> _implicitPathOrQueryPropertyMaps = new ConcurrentDictionary<Type, ImplicitPathOrQueryPropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _explicitQueryPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _explicitPathPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _implicitPathOrQueryPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
@@ -100,7 +100,7 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessImplicitPathOrQuery(string existingPath, object model, IDictionaryList<string, string> path, IDictionaryList<string, string> query)
         {
-            var values = _implicitPathOrQueryPropertyMaps.GetOrAdd(model.GetType(), x => new ImplicitPathOrQueryPropertyMap(x)).ConvertModel(model);
+            var values = ImplicitPathOrQueryPropertyMapGetOrAddType(model).ConvertModel(model);
 
             foreach (var pair in values)
             {
@@ -113,12 +113,27 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessExplicitQuery(object model, IDictionaryList<string, string> query)
         {
-            query.AddRange(_explicitQueryPropertyMaps.GetOrAdd(model.GetType(), x => new ExplicitQueryPropertyMap(x)).ConvertModel(model));
+            query.AddRange(ExplicitQueryPropertyMapGetOrAddType(model).ConvertModel(model));
         }
 
         void ProcessExplicitPath(object model, IDictionaryList<string, string> path)
         {
-            path.AddRange(_explicitPathPropertyMaps.GetOrAdd(model.GetType(), x => new ExplicitPathPropertyMap(x)).ConvertModel(model));
+            path.AddRange(ExplicitPathPropertyMapGetOrAddType(model).ConvertModel(model));
+        }
+
+        PropertyMap ImplicitPathOrQueryPropertyMapGetOrAddType(object model)
+        {
+            return _implicitPathOrQueryPropertyMaps.GetOrAdd(model.GetType(), x => new ImplicitPathOrQueryPropertyMap(x, ImplicitPathOrQueryPropertyMapGetOrAddType));
+        }
+
+        PropertyMap ExplicitPathPropertyMapGetOrAddType(object model)
+        {
+            return _explicitPathPropertyMaps.GetOrAdd(model.GetType(), x => new ExplicitPathPropertyMap(x, ExplicitPathPropertyMapGetOrAddType));
+        }
+
+        PropertyMap ExplicitQueryPropertyMapGetOrAddType(object model)
+        {
+            return _explicitQueryPropertyMaps.GetOrAdd(model.GetType(), x => new ExplicitQueryPropertyMap(x, ExplicitQueryPropertyMapGetOrAddType));
         }
 
         static string ComposePath(IEnumerable<KeyValuePair<string, IList<string>>> path, string existingPath)
@@ -158,8 +173,8 @@ namespace DocaLabs.Http.Client.Binding
 
         class ExplicitPathPropertyMap : PropertyMap
         {
-            public ExplicitPathPropertyMap(Type type)
-                : base(type)
+            public ExplicitPathPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
+                : base(type, propertyMapGetOrAddType)
             {
             }
 
@@ -176,8 +191,8 @@ namespace DocaLabs.Http.Client.Binding
 
         class ExplicitQueryPropertyMap : PropertyMap
         {
-            public ExplicitQueryPropertyMap(Type type)
-                : base(type)
+            public ExplicitQueryPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
+                : base(type, propertyMapGetOrAddType)
             {
             }
 
@@ -194,8 +209,8 @@ namespace DocaLabs.Http.Client.Binding
 
         class ImplicitPathOrQueryPropertyMap : PropertyMap
         {
-            public ImplicitPathOrQueryPropertyMap(Type type)
-                : base(type)
+            public ImplicitPathOrQueryPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
+                : base(type, propertyMapGetOrAddType)
             {
             }
 

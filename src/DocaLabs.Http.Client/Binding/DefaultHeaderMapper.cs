@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Net;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Attributes;
+using DocaLabs.Http.Client.Binding.Hints;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 
@@ -10,13 +10,18 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultHeaderMapper : IHeaderMapper
     {
-        readonly static ConcurrentDictionary<Type, HeaderPropertyMap> HeaderPropertyMaps = new ConcurrentDictionary<Type, HeaderPropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _headerPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
         public WebHeaderCollection Map(object model)
         {
             return Ignore(model) 
                 ? new WebHeaderCollection()
-                : GetHeaders(HeaderPropertyMaps.GetOrAdd(model.GetType(), x => new HeaderPropertyMap(x)).ConvertModel(model));
+                : GetHeaders(PropertyMapGetOrAddType(model).ConvertModel(model));
+        }
+
+        PropertyMap PropertyMapGetOrAddType(object model)
+        {
+            return _headerPropertyMaps.GetOrAdd(model.GetType(), x => new HeaderPropertyMap(x, PropertyMapGetOrAddType));
         }
 
         static bool Ignore(object model)
@@ -41,8 +46,8 @@ namespace DocaLabs.Http.Client.Binding
 
         class HeaderPropertyMap : PropertyMap
         {
-            public HeaderPropertyMap(Type type)
-                : base(type)
+            public HeaderPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
+                : base(type, propertyMapGetOrAddType)
             {
             }
 

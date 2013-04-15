@@ -1,13 +1,13 @@
 ﻿using System;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 
-namespace DocaLabs.Http.Client.Binding.Attributes
+namespace DocaLabs.Http.Client.Binding.Hints
 {
     /// <summary>
     /// Specifies additional information about a property for serializing into a URI's query.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    public class InRequestQueryAttribute : Attribute, IPropertyConverterOverrides
+    public class InRequestFormAttribute : Attribute, IPropertyConverterOverrides
     {
         /// <summary>
         /// Gets or sets a name that should be used for the property in a URI's query.

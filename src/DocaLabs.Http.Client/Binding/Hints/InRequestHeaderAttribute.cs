@@ -1,7 +1,7 @@
 ﻿using System;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 
-namespace DocaLabs.Http.Client.Binding.Attributes
+namespace DocaLabs.Http.Client.Binding.Hints
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public class InRequestHeaderAttribute : Attribute, IPropertyConverterOverrides

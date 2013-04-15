@@ -59,22 +59,5 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             foreach (var key in collection.AllKeys)
                 values.Add(makeKey(key), collection[key]);
         }
-
-        Func<string, string> GetKeyMaker()
-        {
-            return IsNameOverridden
-                ? (Func<string, string>)MakeCompositeName
-                : GetNameAsIs;
-        }
-
-        static string GetNameAsIs(string name)
-        {
-            return name;
-        }
-
-        string MakeCompositeName(string name)
-        {
-            return Name + "." + name;
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.Binding.Attributes
+namespace DocaLabs.Http.Client.Binding.Hints
 {
     /// <summary>
     /// Indicates that a property must be ignored when serializing into a URI's query.
