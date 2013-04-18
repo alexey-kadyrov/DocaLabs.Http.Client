@@ -129,9 +129,9 @@
 //                return "ClassWithCustomConverterToString";
 //            }
 
-//            public CustomNameValueCollection ToParameterDictionary()
+//            public NameValueCollection ToParameterDictionary()
 //            {
-//                return new CustomNameValueCollection
+//                return new NameValueCollection
 //                {
 //                    { "ClassWithCustomConverterKey", "ClassWithCustomConverterValue"}
 //                };
@@ -190,9 +190,9 @@
 //        {
 //            public string Value { get; set; }
 
-//            public CustomNameValueCollection ToParameterDictionary()
+//            public NameValueCollection ToParameterDictionary()
 //            {
-//                return new CustomNameValueCollection
+//                return new NameValueCollection
 //                {
 //                    {"Key1", "Value1"},
 //                    {"Key2", "Value2"}

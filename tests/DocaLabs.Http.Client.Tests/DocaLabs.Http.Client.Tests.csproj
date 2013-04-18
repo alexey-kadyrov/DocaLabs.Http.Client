@@ -99,12 +99,9 @@
     <Compile Include="Mapping\QueryBuilderTests.cs" />
     <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverterTests.cs" />
     <Compile Include="Binding\UrlMapping\UrlBuilderTests.cs" />
-    <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\ContentTypeExtensionsTests.cs" />
     <Compile Include="Utils\CustomConverterFactoryTests.cs" />
     <Compile Include="Utils\CustomConverterTests.cs" />
-    <Compile Include="Utils\CustomNameValueCollectionTests.cs" />
-    <Compile Include="Utils\DictionaryListTests.cs" />
     <Compile Include="Utils\ReflectionExtensionsTests.cs" />
     <Compile Include="_Utils\IGenericService.cs" />
     <Compile Include="_Utils\ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute.cs" />

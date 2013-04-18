@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
@@ -17,12 +18,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             _converters = Parse(type);
         }
 
-        public CustomNameValueCollection ConvertModel(object obj)
+        public NameValueCollection ConvertModel(object obj)
         {
-            var values = new CustomNameValueCollection();
+            var values = new NameValueCollection();
 
             foreach (var converter in _converters)
-                values.AddRange(converter.Convert(obj));
+                values.Add(converter.Convert(obj));
 
             return values;
         }
@@ -55,7 +56,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         {
             return TryGetCustomPropertyParser(property)
                 ?? SimplePropertyConverter.TryCreate(property, overrides)
-                ?? CustomNameValueCollectionPropertyConverter.TryCreate(property, overrides)
                 ?? NameValueCollectionPropertyConverter.TryCreate(property, overrides)
                 ?? CollectionPropertyConverter.TryCreate(property, overrides)
                 ?? ObjectPropertyConverter.TryCreate(property, overrides, _propertyMapGetOrAddType);

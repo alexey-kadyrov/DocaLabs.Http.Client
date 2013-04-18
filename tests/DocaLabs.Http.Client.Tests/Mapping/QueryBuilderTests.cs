@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding;
-using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping
@@ -136,9 +136,9 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryStringBuilder();
 
-        Because of = () => builder.Add(new CustomNameValueCollection
+        Because of = () => builder.Add(new NameValueCollection
         {
-            { "oneKey", new [] {"oneValue"} }
+            { "oneKey", "oneValue" }
         });
 
         It should_form_valid_query_string =
@@ -153,9 +153,10 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryStringBuilder();
 
-        Because of = () => builder.Add(new CustomNameValueCollection
+        Because of = () => builder.Add(new NameValueCollection
         {
-            { "oneKey", new [] {"firstValue", "secondValue"} }
+            { "oneKey", "firstValue" },
+            { "oneKey", "secondValue" }
         });
 
         It should_form_valid_query_string =
@@ -170,10 +171,11 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryStringBuilder();
 
-        Because of = () => builder.Add(new CustomNameValueCollection
+        Because of = () => builder.Add(new NameValueCollection
         {
-            { "firstKey", new [] {"firstValue"} },
-            { "secondKey", new [] {"secondValue", "thirdValue"} }
+            { "firstKey", "firstValue" },
+            { "secondKey", "secondValue" },
+            { "secondKey", "thirdValue" }
         });
 
         It should_form_valid_query_string =
@@ -188,11 +190,11 @@ namespace DocaLabs.Http.Client.Tests.Mapping
         Establish context =
             () => builder = new QueryStringBuilder();
 
-        Because of = () => builder.Add(new CustomNameValueCollection
+        Because of = () => builder.Add(new NameValueCollection
         {
-            { "firstKey", new [] {"first Value"} },
-            { "secondKey", new [] {"second&Value"} },
-            { "thirdKey", new [] {"third+Value"} }
+            { "firstKey", "first Value" },
+            { "secondKey", "second&Value" },
+            { "thirdKey", "third+Value" }
         });
 
         It should_form_valid_query_string =

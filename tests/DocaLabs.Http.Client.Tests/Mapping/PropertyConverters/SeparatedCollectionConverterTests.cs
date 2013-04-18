@@ -77,7 +77,7 @@
 //        static PropertyInfo property_info;
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -113,7 +113,7 @@
 //    {
 //        static PropertyInfo property_info;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -143,7 +143,7 @@
 //        static PropertyInfo property_info;
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -175,7 +175,7 @@
 //        static PropertyInfo property_info;
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -213,7 +213,7 @@
 //        static PropertyInfo property_info;
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -251,7 +251,7 @@
 //        static PropertyInfo property_info;
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -289,7 +289,7 @@
 //        static PropertyInfo property_info;
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {

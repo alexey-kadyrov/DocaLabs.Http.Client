@@ -1,4 +1,4 @@
-﻿using DocaLabs.Http.Client.Utils;
+﻿using System.Collections.Specialized;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
@@ -12,6 +12,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="obj">Instance of the object on which the property is defined.</param>
         /// <returns>One key-value pairs where the key would normally be the property name.</returns>
-        CustomNameValueCollection Convert(object obj);
+        NameValueCollection Convert(object obj);
     }
 }

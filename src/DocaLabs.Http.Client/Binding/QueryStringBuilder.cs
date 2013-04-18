@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Specialized;
 using System.Text;
 using System.Web;
-using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -48,16 +48,18 @@ namespace DocaLabs.Http.Client.Binding
         /// Adds a new pairs of key/value from collection to the query string. The value is encoded using HttpUtility.UrlEncode.
         /// </summary>
         /// <returns>Self reference, useful for method chaining.</returns>
-        public QueryStringBuilder Add(CustomNameValueCollection collection)
+        public QueryStringBuilder Add(NameValueCollection collection)
         {
             if (collection == null)
                 return this;
 
-            foreach (var pair in collection)
+            foreach (var key in collection.AllKeys)
             {
-                foreach (var value in pair.Value)
+                var values = collection.GetValues(key);
+                if (values != null)
                 {
-                    Add(pair.Key, value);
+                    foreach (var value in values)
+                        Add(key, value);
                 }
             }
 

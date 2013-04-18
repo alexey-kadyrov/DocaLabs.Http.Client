@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
@@ -38,9 +39,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="obj">Instance of the object on which the property is defined.</param>
         /// <returns>Key-value pairs.</returns>
-        public CustomNameValueCollection Convert(object obj)
+        public NameValueCollection Convert(object obj)
         {
-            var values = new CustomNameValueCollection();
+            var values = new NameValueCollection();
 
             if (obj != null)
                 TryAddValues(obj, values);
@@ -48,12 +49,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return values;
         }
 
-        void TryAddValues(object obj, IDictionaryList<string, string> values)
+        void TryAddValues(object obj, NameValueCollection values)
         {
             var value = Property.GetValue(obj, null);
 
             if (value != null)
-                values.AddRange(_propertyMapGetOrAddType(value).ConvertModel(value));
+                values.Add(_propertyMapGetOrAddType(value).ConvertModel(value));
         }
     }
 }

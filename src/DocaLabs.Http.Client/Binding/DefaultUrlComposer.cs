@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -50,8 +50,8 @@ namespace DocaLabs.Http.Client.Binding
 
         Uri CreateUrlFrom(object model, Uri baseUrl)
         {
-            var path = new CustomNameValueCollection();
-            var query = new CustomNameValueCollection();
+            var path = new NameValueCollection();
+            var query = new NameValueCollection();
 
             var existingPath = GetExistingPath(baseUrl);
             var exstingQuery = GetExistingQuery(baseUrl);
@@ -98,27 +98,27 @@ namespace DocaLabs.Http.Client.Binding
                 : fragment;
         }
 
-        void ProcessImplicitPathOrQuery(string existingPath, object model, IDictionaryList<string, string> path, IDictionaryList<string, string> query)
+        void ProcessImplicitPathOrQuery(string existingPath, object model, NameValueCollection path, NameValueCollection query)
         {
             var values = ImplicitPathOrQueryPropertyMapGetOrAddType(model).ConvertModel(model);
 
-            foreach (var pair in values)
+            foreach (var key in values.AllKeys)
             {
-                if(existingPath.Contains(pair.Key, StringComparison.OrdinalIgnoreCase))
-                    path.Add(pair.Key, pair.Value);
+                if(existingPath.Contains(key, StringComparison.OrdinalIgnoreCase))
+                    path.Add(key, values.GetValues(key));
                 else
-                    query.Add(pair.Key, pair.Value);
+                    query.Add(key, values.GetValues(key));
             }
         }
 
-        void ProcessExplicitQuery(object model, IDictionaryList<string, string> query)
+        void ProcessExplicitQuery(object model, NameValueCollection query)
         {
-            query.AddRange(ExplicitQueryPropertyMapGetOrAddType(model).ConvertModel(model));
+            query.Add(ExplicitQueryPropertyMapGetOrAddType(model).ConvertModel(model));
         }
 
-        void ProcessExplicitPath(object model, IDictionaryList<string, string> path)
+        void ProcessExplicitPath(object model, NameValueCollection path)
         {
-            path.AddRange(ExplicitPathPropertyMapGetOrAddType(model).ConvertModel(model));
+            path.Add(ExplicitPathPropertyMapGetOrAddType(model).ConvertModel(model));
         }
 
         PropertyMap ImplicitPathOrQueryPropertyMapGetOrAddType(object model)
@@ -136,23 +136,27 @@ namespace DocaLabs.Http.Client.Binding
             return _explicitQueryPropertyMaps.GetOrAdd(model.GetType(), x => new ExplicitQueryPropertyMap(x, ExplicitQueryPropertyMapGetOrAddType));
         }
 
-        static string ComposePath(IEnumerable<KeyValuePair<string, IList<string>>> path, string existingPath)
+        static string ComposePath(NameValueCollection path, string existingPath)
         {
             if (string.IsNullOrWhiteSpace(existingPath))
                 return "";
 
-            foreach (var pair in path)
+            foreach (var key in path.AllKeys)
             {
-                var value = string.Join("/", pair.Value.Select(HttpUtility.UrlPathEncode));
+                var values = path.GetValues(key);
+                if (values != null)
+                {
+                    var value = string.Join("/", values.Select(HttpUtility.UrlPathEncode));
 
-                existingPath = existingPath.Replace(
-                    "{" + pair.Key + "}", string.IsNullOrWhiteSpace(value) ? "" : value, StringComparison.OrdinalIgnoreCase);
+                    existingPath = existingPath.Replace(
+                        "{" + key + "}", string.IsNullOrWhiteSpace(value) ? "" : value, StringComparison.OrdinalIgnoreCase);
+                }
             }
 
             return existingPath;
         }
 
-        static string ComposeQuery(CustomNameValueCollection query, string existingQuery)
+        static string ComposeQuery(NameValueCollection query, string existingQuery)
         {
             var modelQuery = new QueryStringBuilder().Add(query).ToString();
 

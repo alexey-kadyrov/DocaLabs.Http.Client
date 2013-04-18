@@ -62,7 +62,6 @@
     <Compile Include="Binding\DefaultMutator.cs" />
     <Compile Include="Binding\IResponseReader.cs" />
     <Compile Include="Binding\IUrlComposer.cs" />
-    <Compile Include="Binding\PropertyConverting\CustomNameValueCollectionPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
     <Compile Include="Binding\RequestSerialization\DefaultRequestWriter.cs" />
     <Compile Include="Binding\PropertyConverting\IPropertyConverterOverrides.cs" />
@@ -74,6 +73,7 @@
     <Compile Include="Binding\IRequestWriter.cs" />
     <Compile Include="Binding\Hints\InRequestHeaderAttribute.cs" />
     <Compile Include="Configuration\RequestExtensions.cs" />
+    <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
     <Compile Include="Utils\CustomConverterFactory.cs" />
     <Compile Include="Utils\ICustomConverterFactory.cs" />
@@ -100,11 +100,7 @@
     <Compile Include="JsonSerialization\IJsonDeserializer.cs" />
     <Compile Include="JsonSerialization\IJsonSerializer.cs" />
     <Compile Include="JsonSerialization\JsonSerializationProvider.cs" />
-    <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\ContentTypeExtensions.cs" />
-    <Compile Include="Utils\CustomNameValueCollection.cs" />
-    <Compile Include="Utils\DictionaryList.cs" />
-    <Compile Include="Utils\IDictionaryList.cs" />
     <Compile Include="Utils\LibraryExtensionsComposer.cs" />
     <Compile Include="Utils\ReflectionExtensions.cs" />
     <Compile Include="ResponseDeserialization\ImageResponseDeserializer.cs" />

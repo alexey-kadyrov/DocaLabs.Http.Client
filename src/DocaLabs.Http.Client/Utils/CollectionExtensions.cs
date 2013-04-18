@@ -1,26 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace DocaLabs.Http.Client.Utils
 {
-    /// <summary>
-    /// Collection extensions.
-    /// </summary>
     public static class CollectionExtensions
     {
-        /// <summary>
-        /// Adds a range of value to ICollection{T}
-        /// </summary>
-        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
+        public static void Add(this NameValueCollection collection, string key, IEnumerable<string> values)
         {
             if(collection == null)
                 throw new ArgumentNullException("collection");
 
-            if(items == null)
-                throw new ArgumentNullException("items");
+            if(values == null)
+                return;
 
-            foreach (var item in items)
-                collection.Add(item);
+            foreach (var value in values)
+                collection.Add(key, value);
         }
     }
 }

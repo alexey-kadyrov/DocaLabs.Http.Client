@@ -254,7 +254,7 @@
 //    class when_convert_collection_property_is_used_on_null_instance
 //    {
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context =
 //            () => converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
@@ -276,7 +276,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -301,7 +301,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -333,7 +333,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -365,7 +365,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -398,7 +398,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -431,7 +431,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {

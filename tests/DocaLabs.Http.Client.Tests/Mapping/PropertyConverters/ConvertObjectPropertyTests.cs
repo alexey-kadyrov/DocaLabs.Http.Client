@@ -144,7 +144,7 @@
 //    class when_convert_object_property_is_used_on_null_instance
 //    {
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context =
 //            () => converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -174,7 +174,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -210,7 +210,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -246,7 +246,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -283,7 +283,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -320,7 +320,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -357,7 +357,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -381,9 +381,9 @@
 
 //        class TestPropertyClass : ICustomQueryMapper
 //        {
-//            public CustomNameValueCollection ToParameterDictionary()
+//            public NameValueCollection ToParameterDictionary()
 //            {
-//                return new CustomNameValueCollection { { "Hello!", new [] { "42" } } };
+//                return new NameValueCollection { { "Hello!", new [] { "42" } } };
 //            }
 //        }
 //    }
@@ -393,7 +393,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -418,9 +418,9 @@
 
 //        class TestPropertyClass : ICustomQueryMapper
 //        {
-//            public CustomNameValueCollection ToParameterDictionary()
+//            public NameValueCollection ToParameterDictionary()
 //            {
-//                return new CustomNameValueCollection { { "Hello!", new[] { "42" } } };
+//                return new NameValueCollection { { "Hello!", new[] { "42" } } };
 //            }
 //        }
 //    }
@@ -430,7 +430,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -455,9 +455,9 @@
 
 //        class TestPropertyClass : ICustomQueryMapper
 //        {
-//            public CustomNameValueCollection ToParameterDictionary()
+//            public NameValueCollection ToParameterDictionary()
 //            {
-//                return new CustomNameValueCollection { { "Hello!", new[] { "42" } } };
+//                return new NameValueCollection { { "Hello!", new[] { "42" } } };
 //            }
 //        }
 //    }
@@ -467,7 +467,7 @@
 //    {
 //        static TestClass instance;
 //        static IPropertyConverter converter;
-//        static CustomNameValueCollection result;
+//        static NameValueCollection result;
 
 //        Establish context = () =>
 //        {
@@ -492,9 +492,9 @@
 
 //        class TestPropertyClass : ICustomQueryMapper
 //        {
-//            public CustomNameValueCollection ToParameterDictionary()
+//            public NameValueCollection ToParameterDictionary()
 //            {
-//                return new CustomNameValueCollection { { "Hello!", new[] { "42" } } };
+//                return new NameValueCollection { { "Hello!", new[] { "42" } } };
 //            }
 //        }
 //    }

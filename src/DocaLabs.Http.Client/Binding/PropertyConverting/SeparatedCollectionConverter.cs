@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Text;
 using DocaLabs.Http.Client.Utils;
@@ -49,9 +50,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="obj">Instance of the object on which the property is defined.</param>
         /// <returns>One key-value pair with single string as value which contains all items.</returns>
-        public CustomNameValueCollection Convert(object obj)
+        public NameValueCollection Convert(object obj)
         {
-            var values = new CustomNameValueCollection();
+            var values = new NameValueCollection();
 
             if (obj != null && (!string.IsNullOrWhiteSpace(Name)))
             {
@@ -61,7 +62,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return values;
         }
 
-        void TryAddValues(object obj, IDictionaryList<string, string> values)
+        void TryAddValues(object obj, NameValueCollection values)
         {
             var collection = Property.GetValue(obj, null) as IEnumerable;
 
@@ -69,7 +70,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 TryBuildString(values, collection);
         }
 
-        void TryBuildString(IDictionaryList<string, string> values, IEnumerable collection)
+        void TryBuildString(NameValueCollection values, IEnumerable collection)
         {
             var stringBuilder = new StringBuilder();
 

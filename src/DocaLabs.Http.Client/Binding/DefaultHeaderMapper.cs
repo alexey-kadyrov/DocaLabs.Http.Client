@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Specialized;
 using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Hints;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
-using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -29,19 +29,12 @@ namespace DocaLabs.Http.Client.Binding
             return model == null || model.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
         }
 
-        static WebHeaderCollection GetHeaders(IDictionaryList<string, string> headers)
+        static WebHeaderCollection GetHeaders(NameValueCollection headers)
         {
-            var collection = new WebHeaderCollection();
-
-            foreach (var key in headers.Keys)
+            return new WebHeaderCollection
             {
-                foreach (var value in headers[key])
-                {
-                    collection.Add(key, value);
-                }
-            }
-
-            return collection;
+                headers
+            };
         }
 
         class HeaderPropertyMap : PropertyMap
