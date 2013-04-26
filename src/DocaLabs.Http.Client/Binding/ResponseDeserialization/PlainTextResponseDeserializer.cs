@@ -1,7 +1,7 @@
 ﻿using System;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {
     /// <summary>
     /// Deserializes the response stream as plain string and then converts it to the resulting type.

@@ -8,7 +8,7 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
-    public class DefaultCredentialsMapper : ICredentialsMapper
+    public class DefaultCredentialsMapper
     {
         readonly ConcurrentDictionary<Type, PropertyMap> _propertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 

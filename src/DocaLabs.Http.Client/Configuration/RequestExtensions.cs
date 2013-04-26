@@ -12,7 +12,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// If headers are defined in the endpoint configuration then the methods adds them to the request.
         /// </summary>
-        static public void CopyHeadersFrom(this WebRequest request, IClientEndpoint endpoint, object model)
+        static public void CopyHeadersFrom(this WebRequest request, IClientEndpoint endpoint, IModelBinder binder, object httpClient, object model)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -21,7 +21,7 @@ namespace DocaLabs.Http.Client.Configuration
                 CopeHeadersFromConfiguration(endpoint, request);
 
             if(model != null)
-                MapHeadersFromModel(model, request);
+                MapHeadersFromModel(binder, httpClient, model, request);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// If the AuthenticationLevel and Credential are defined then the method copies them into the request.
         /// </summary>
-        static public void CopyCredentialsFrom(this WebRequest request, IClientEndpoint endpoint, object model)
+        static public void CopyCredentialsFrom(this WebRequest request, IClientEndpoint endpoint, IModelBinder binder, object httpClient, object model)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -56,11 +56,11 @@ namespace DocaLabs.Http.Client.Configuration
                 if (endpoint.AuthenticationLevel != null)
                     request.AuthenticationLevel = endpoint.AuthenticationLevel.GetValueOrDefault();
 
-                request.Credentials = GetCredentialsFromModel(model, request) ?? endpoint.Credential.GetCredential();
+                request.Credentials = GetCredentialsFromModel(binder, httpClient, model, request) ?? endpoint.Credential.GetCredential();
             }
             else
             {
-                request.Credentials = GetCredentialsFromModel(model, request);
+                request.Credentials = GetCredentialsFromModel(binder, httpClient, model, request);
             }
         }
 
@@ -85,21 +85,21 @@ namespace DocaLabs.Http.Client.Configuration
                 request.Headers.Add(name, endpoint.Headers[name].Value);
         }
 
-        static void MapHeadersFromModel(object model, WebRequest request)
+        static void MapHeadersFromModel(IModelBinder binder, object httpClient, object model, WebRequest request)
         {
             if (model == null)
                 return;
 
-            var headers = ModelBinders.GetHeaderMapper(model.GetType()).Map(model);
+            var headers = binder.GetHeaders(httpClient, model);
             if (headers != null)
                 request.Headers.Add(headers);
         }
 
-        static ICredentials GetCredentialsFromModel(object model, WebRequest request)
+        static ICredentials GetCredentialsFromModel(IModelBinder binder, object httpClient, object model, WebRequest request)
         {
             return model == null
                 ? null
-                : ModelBinders.GetCredentialsMapper(model.GetType()).Map(model, request.RequestUri);
+                : binder.GetCredentials(httpClient, model, request.RequestUri);
         }
     }
 }

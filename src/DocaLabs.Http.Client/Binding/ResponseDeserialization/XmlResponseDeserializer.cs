@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {
     /// <summary>
     /// Deserializes the response stream content using XML format.

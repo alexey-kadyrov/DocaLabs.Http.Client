@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Default URL composer.
     /// </summary>
-    public class DefaultUrlComposer : IUrlComposer
+    public class DefaultUrlComposer
     {
         readonly ConcurrentDictionary<Type, PropertyMap> _explicitQueryPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
         readonly ConcurrentDictionary<Type, PropertyMap> _explicitPathPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();

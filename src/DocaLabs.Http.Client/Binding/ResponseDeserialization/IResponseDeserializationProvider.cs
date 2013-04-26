@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {
     /// <summary>
     /// Defines methods for deserializing the response.

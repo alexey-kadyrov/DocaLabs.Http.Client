@@ -8,7 +8,7 @@ using DocaLabs.Http.Client.Binding.PropertyConverting;
 
 namespace DocaLabs.Http.Client.Binding
 {
-    public class DefaultHeaderMapper : IHeaderMapper
+    public class DefaultHeaderMapper
     {
         readonly ConcurrentDictionary<Type, PropertyMap> _headerPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {
     /// <summary>
     /// Defines methods that are used to deserialize objects from a web response stream.

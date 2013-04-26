@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding;
 
-namespace DocaLabs.Http.Client.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {
     /// <summary>
     /// Defines helper methods to deserialize a web response. All public methods are thread safe.
     /// </summary>
-    public class DefaultResponseReader : IResponseReader
+    public class DefaultResponseReader
     {
         readonly object Locker;
         IList<IResponseDeserializationProvider> _providers;

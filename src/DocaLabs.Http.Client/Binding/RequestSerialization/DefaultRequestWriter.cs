@@ -6,7 +6,7 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
-    public class DefaultRequestWriter : IRequestWriter
+    public class DefaultRequestWriter
     {
         /// <summary>
         /// Looks for IRequestSerialization on model or client level.
@@ -15,16 +15,23 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
         ///     2. One of it's properties
         ///     3. HttpClient level
         /// </summary>
-        public void Write(object model, object client, WebRequest request)
+        public void Write(object httpClient, object model, WebRequest request)
         {
-            var serializer = GetSerializer(model, client);
+            var serializer = GetSerializer(model, httpClient);
             if (serializer != null)
                 serializer.Serialize(model, request);
             else
                 request.SetContentLengthToZeroIfBodyIsRequired();
         }
 
-        public bool ShouldWrite(object model)
+        public string InferRequestMethod(object model)
+        {
+            return ShouldWrite(model)
+                ? WebRequestMethods.Http.Post
+                : WebRequestMethods.Http.Get;
+        }
+
+        bool ShouldWrite(object model)
         {
             if (model == null)
                 return false;
@@ -41,18 +48,14 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             if (client == null)
                 throw new ArgumentNullException("client");
 
-            if (model != null)
-            {
-                var serializer = TryQueryClassLevel(model);
-                if (serializer != null)
-                    return serializer;
+            if (model == null)
+                return null;
 
-                serializer = TryQueryPropertyLevel(model);
-                if (serializer != null)
-                    return serializer;
-            }
+            var serializer = TryQueryClassLevel(model);
+            if (serializer != null)
+                return serializer;
 
-            return TryHttpClientClassLevel(client);
+            return TryQueryPropertyLevel(model) ?? TryHttpClientClassLevel(client);
         }
 
         static IRequestSerialization TryQueryClassLevel(object query)

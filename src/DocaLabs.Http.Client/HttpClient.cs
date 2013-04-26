@@ -6,8 +6,6 @@ using System.Threading;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.ContentEncoding;
-using DocaLabs.Http.Client.ResponseDeserialization;
-using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client
 {
@@ -115,15 +113,19 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual TOutputModel ExecutePipeline(object model)
         {
-            var url = ComposeUrl(model);
+            var binder = ModelBinders.GetBinder(typeof (TInputModel));
+
+            model = binder.TransformInputModel(this, model);
+
+            var url = ComposeUrl(binder, model);
 
             var request = CreateRequest(url);
 
-            InitializeRequest(model, request);
+            InitializeRequest(binder, model, request);
 
-            TryWriteRequestData(model, request);
+            TryWriteRequestData(binder, model, request);
 
-            return ParseResponse(model, request);
+            return ParseResponse(binder, model, request);
         }
 
         /// <summary>
@@ -131,11 +133,9 @@ namespace DocaLabs.Http.Client
         /// which may be required in case of URL signing like for some Google services.
         /// </summary>
         /// <returns></returns>
-        protected virtual string ComposeUrl(object model)
+        protected virtual string ComposeUrl(IModelBinder binder, object model)
         {
-            return model == null
-                ? BaseUrl.AbsoluteUri 
-                : ModelBinders.GetUrlComposer(model.GetType()).Compose(model, BaseUrl);
+            return binder.ComposeUrl(this, model, BaseUrl);
         }
 
         /// <summary>
@@ -149,18 +149,18 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Initializes the request. If headers, client certificates, and a proxy are defined in the configuration they will be added to the request
         /// </summary>
-        protected virtual void InitializeRequest(object model, WebRequest request)
+        protected virtual void InitializeRequest(IModelBinder binder, object model, WebRequest request)
         {
             request.Timeout = Configuration.Timeout;
 
-            request.Method = GetRequestMethod(model);
+            request.Method = GetRequestMethod(binder, model);
 
             if (Configuration.AutoSetAcceptEncoding && (!typeof(Image).IsAssignableFrom(typeof(TOutputModel))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
-            request.CopyCredentialsFrom(Configuration, model);
+            request.CopyCredentialsFrom(Configuration, binder, this, model);
 
-            request.CopyHeadersFrom(Configuration, model);
+            request.CopyHeadersFrom(Configuration, binder, this, model);
 
             request.CopyClientCertificatesFrom(Configuration);
 
@@ -172,35 +172,29 @@ namespace DocaLabs.Http.Client
         /// by checking the model type.
         /// </summary>
         /// <returns></returns>
-        protected virtual string GetRequestMethod(object model)
+        protected virtual string GetRequestMethod(IModelBinder binder, object model)
         {
-            if (!string.IsNullOrWhiteSpace(Method))
-                return Method;
-
-            return ModelBinders.GetRequestWriter(model.GetType()).ShouldWrite(model) 
-                ? WebRequestMethods.Http.Post 
-                : WebRequestMethods.Http.Get;
+            return string.IsNullOrWhiteSpace(Method) 
+                ? binder.InferRequestMethod(this, model) 
+                : Method;
         }
 
         /// <summary>
         /// Tries to write data to the request's body by examining the model type.
         /// </summary>
-        protected virtual void TryWriteRequestData(object model, WebRequest request)
+        protected virtual void TryWriteRequestData(IModelBinder binder, object model, WebRequest request)
         {
-            if(model != null)
-                ModelBinders.GetRequestWriter(model.GetType()).Write(model, this, request);
-            else
-                request.SetContentLengthToZeroIfBodyIsRequired();
+            binder.Write(this, model, request);
         }
 
         /// <summary>
         /// Gets the response and parses it. 
         /// </summary>
-        protected virtual TOutputModel ParseResponse(object query, WebRequest request)
+        protected virtual TOutputModel ParseResponse(IModelBinder binder, object model, WebRequest request)
         {
             using (var response = new HttpResponse(request))
             {
-                return (TOutputModel)ModelBinders.GetResponseReader(typeof(TOutputModel)).Read(response, typeof(TOutputModel));
+                return (TOutputModel)binder.Read(this, model, response, typeof(TOutputModel));
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using DocaLabs.Http.Client.JsonSerialization;
 
-namespace DocaLabs.Http.Client.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {
     /// <summary>
     /// Deserializes JSON object from the web response.

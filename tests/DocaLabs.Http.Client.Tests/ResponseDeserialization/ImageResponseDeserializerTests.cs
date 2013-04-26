@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Text;
-using DocaLabs.Http.Client.ResponseDeserialization;
+using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using Machine.Specifications;
 
