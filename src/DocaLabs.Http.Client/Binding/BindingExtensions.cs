@@ -17,6 +17,7 @@ namespace DocaLabs.Http.Client.Binding
         public static bool IsImplicitUrlPathOrQuery(this PropertyInfo info)
         {
             return CanPropertyBeUsedInRequest(info) &&
+                info.PropertyType.IsSimpleType() &&
                 !info.IsExplicitUrlPath() &&
                 !info.IsExplicitUrlQuery() &&
                 !info.IsHeader() &&
