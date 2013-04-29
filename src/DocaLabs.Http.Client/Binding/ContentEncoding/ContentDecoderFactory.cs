@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using DocaLabs.Http.Client.Resources;
 
-namespace DocaLabs.Http.Client.ContentEncoding
+namespace DocaLabs.Http.Client.Binding.ContentEncoding
 {
     /// <summary>
     /// Defines a decoder factory. By default the factory is populated by decoders that use 

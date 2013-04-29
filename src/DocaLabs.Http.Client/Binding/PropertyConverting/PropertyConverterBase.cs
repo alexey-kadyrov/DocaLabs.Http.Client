@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Binding.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
@@ -47,11 +47,11 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 IsNameOverridden = true;
             }
 
-            if (!string.IsNullOrWhiteSpace(Name))
-                return;
-
-            Name = Property.Name;
-            IsNameOverridden = false;
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                Name = Property.Name;
+                IsNameOverridden = false;
+            }
         }
 
         /// <summary>

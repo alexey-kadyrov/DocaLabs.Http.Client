@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.Hints
 {
     /// <summary>
     /// Deserializes xml object from the web response.

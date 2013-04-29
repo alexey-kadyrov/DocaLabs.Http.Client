@@ -4,8 +4,8 @@ using System.Drawing;
 using System.Net;
 using System.Threading;
 using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Binding.ContentEncoding;
 using DocaLabs.Http.Client.Configuration;
-using DocaLabs.Http.Client.ContentEncoding;
 
 namespace DocaLabs.Http.Client
 {
@@ -113,19 +113,31 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual TOutputModel ExecutePipeline(object model)
         {
-            var binder = ModelBinders.GetBinder(typeof (TInputModel));
+            var binder = ModelBinders.GetBinder(GetInputModelType(model));
 
-            model = binder.TransformInputModel(this, model);
+            var context = new BindingContext(this, model, Configuration, BaseUrl);
 
-            var url = ComposeUrl(binder, model);
+            context.Model = binder.TransformInputModel(context);
+
+            var url = ComposeUrl(binder, context);
 
             var request = CreateRequest(url);
 
-            InitializeRequest(binder, model, request);
+            InitializeRequest(binder, context, request);
 
-            TryWriteRequestData(binder, model, request);
+            TryWriteRequestData(binder, context, request);
 
-            return ParseResponse(binder, model, request);
+            return ParseResponse(binder, context, request);
+        }
+
+        /// <summary>
+        /// Gets the input model type, if the model is null it returns typeof(TInputModel).
+        /// </summary>
+        protected virtual Type GetInputModelType(object model)
+        {
+            return model == null
+                ? typeof(TInputModel)
+                : model.GetType();
         }
 
         /// <summary>
@@ -133,9 +145,9 @@ namespace DocaLabs.Http.Client
         /// which may be required in case of URL signing like for some Google services.
         /// </summary>
         /// <returns></returns>
-        protected virtual string ComposeUrl(IModelBinder binder, object model)
+        protected virtual string ComposeUrl(IModelBinder binder, BindingContext context)
         {
-            return binder.ComposeUrl(this, model, BaseUrl);
+            return binder.ComposeUrl(context);
         }
 
         /// <summary>
@@ -149,18 +161,18 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Initializes the request. If headers, client certificates, and a proxy are defined in the configuration they will be added to the request
         /// </summary>
-        protected virtual void InitializeRequest(IModelBinder binder, object model, WebRequest request)
+        protected virtual void InitializeRequest(IModelBinder binder, BindingContext context, WebRequest request)
         {
             request.Timeout = Configuration.Timeout;
 
-            request.Method = GetRequestMethod(binder, model);
+            request.Method = GetRequestMethod(binder, context);
 
             if (Configuration.AutoSetAcceptEncoding && (!typeof(Image).IsAssignableFrom(typeof(TOutputModel))))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
-            request.CopyCredentialsFrom(Configuration, binder, this, model);
+            request.CopyCredentialsFrom(binder, context);
 
-            request.CopyHeadersFrom(Configuration, binder, this, model);
+            request.CopyHeadersFrom(binder, context);
 
             request.CopyClientCertificatesFrom(Configuration);
 
@@ -172,29 +184,29 @@ namespace DocaLabs.Http.Client
         /// by checking the model type.
         /// </summary>
         /// <returns></returns>
-        protected virtual string GetRequestMethod(IModelBinder binder, object model)
+        protected virtual string GetRequestMethod(IModelBinder binder, BindingContext context)
         {
             return string.IsNullOrWhiteSpace(Method) 
-                ? binder.InferRequestMethod(this, model) 
+                ? binder.InferRequestMethod(context) 
                 : Method;
         }
 
         /// <summary>
         /// Tries to write data to the request's body by examining the model type.
         /// </summary>
-        protected virtual void TryWriteRequestData(IModelBinder binder, object model, WebRequest request)
+        protected virtual void TryWriteRequestData(IModelBinder binder, BindingContext context, WebRequest request)
         {
-            binder.Write(this, model, request);
+            binder.Write(context, request);
         }
 
         /// <summary>
         /// Gets the response and parses it. 
         /// </summary>
-        protected virtual TOutputModel ParseResponse(IModelBinder binder, object model, WebRequest request)
+        protected virtual TOutputModel ParseResponse(IModelBinder binder, BindingContext context, WebRequest request)
         {
             using (var response = new HttpResponse(request))
             {
-                return (TOutputModel)binder.Read(this, model, response, typeof(TOutputModel));
+                return (TOutputModel)binder.Read(context, response, typeof(TOutputModel));
             }
         }
 

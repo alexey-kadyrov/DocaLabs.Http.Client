@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DocaLabs.Http.Client.JsonSerialization;
+using DocaLabs.Http.Client.Binding.JsonSerialization;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.JsonSerialization

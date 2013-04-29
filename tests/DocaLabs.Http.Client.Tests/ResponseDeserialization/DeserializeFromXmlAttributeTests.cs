@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using DocaLabs.Http.Client.Binding.Hints;
 using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Testing.Common;

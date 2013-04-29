@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Binding.Utils;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Utils

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace DocaLabs.Http.Client.ContentEncoding
+namespace DocaLabs.Http.Client.Binding.ContentEncoding
 {
     /// <summary>
     /// Defines methods to get an encoder stream for the http content.

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
-namespace DocaLabs.Http.Client.Utils
+namespace DocaLabs.Http.Client.Binding.Utils
 {
     /// <summary>
     /// Provides means to discover alternative implementations (extensions) using MEF.

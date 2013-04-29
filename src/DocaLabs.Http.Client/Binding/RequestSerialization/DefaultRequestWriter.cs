@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Binding.Utils;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {
@@ -17,21 +17,27 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
         /// </summary>
         public void Write(object httpClient, object model, WebRequest request)
         {
-            var serializer = GetSerializer(model, httpClient);
+            if (httpClient == null)
+                throw new ArgumentNullException("httpClient");
+
+            var serializer = GetSerializer(httpClient, model);
             if (serializer != null)
                 serializer.Serialize(model, request);
             else
                 request.SetContentLengthToZeroIfBodyIsRequired();
         }
 
-        public string InferRequestMethod(object model)
+        public string InferRequestMethod(object httpClient, object model)
         {
-            return ShouldWrite(model)
+            if (httpClient == null)
+                throw new ArgumentNullException("httpClient");
+
+            return ShouldWrite(httpClient, model)
                 ? WebRequestMethods.Http.Post
                 : WebRequestMethods.Http.Get;
         }
 
-        bool ShouldWrite(object model)
+        bool ShouldWrite(object httpClient, object model)
         {
             if (model == null)
                 return false;
@@ -39,15 +45,12 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             var modelType = model.GetType();
 
             return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || modelType.GetAllInstancePublicProperties().Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null);
+                   || httpClient.GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
+                   || modelType.GetAllInstancePublicProperties().Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null || !x.PropertyType.IsSimpleType());
         }
 
-        static IRequestSerialization GetSerializer(object model, object client)
+        static IRequestSerialization GetSerializer(object httpClient, object model)
         {
-            if (client == null)
-                throw new ArgumentNullException("client");
-
             if (model == null)
                 return null;
 
@@ -55,7 +58,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             if (serializer != null)
                 return serializer;
 
-            return TryQueryPropertyLevel(model) ?? TryHttpClientClassLevel(client);
+            return TryQueryPropertyLevel(model) ?? TryHttpClientClassLevel(httpClient);
         }
 
         static IRequestSerialization TryQueryClassLevel(object query)

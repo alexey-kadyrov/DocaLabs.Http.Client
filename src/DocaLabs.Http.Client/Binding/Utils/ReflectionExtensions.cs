@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DocaLabs.Http.Client.Utils
+namespace DocaLabs.Http.Client.Binding.Utils
 {
     /// <summary>
     /// Reflection extension methods.

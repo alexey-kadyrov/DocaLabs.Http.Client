@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace DocaLabs.Http.Client.Utils
+namespace DocaLabs.Http.Client.Binding.Utils
 {
     public static class CollectionExtensions
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Binding.Utils;
 
 namespace DocaLabs.Http.Client
 {

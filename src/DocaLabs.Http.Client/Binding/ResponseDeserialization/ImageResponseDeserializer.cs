@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Binding.Utils;
 
 namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {

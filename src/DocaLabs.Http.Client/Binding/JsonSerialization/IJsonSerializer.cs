@@ -1,4 +1,4 @@
-﻿namespace DocaLabs.Http.Client.JsonSerialization
+﻿namespace DocaLabs.Http.Client.Binding.JsonSerialization
 {
     /// <summary>
     /// Defines methods to serialize an object using JSON notation.

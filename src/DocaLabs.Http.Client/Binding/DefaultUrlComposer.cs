@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Web;
 using DocaLabs.Http.Client.Binding.Hints;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
-using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Binding.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {

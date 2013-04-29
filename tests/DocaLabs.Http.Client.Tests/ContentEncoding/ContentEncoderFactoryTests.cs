@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using DocaLabs.Http.Client.ContentEncoding;
+using DocaLabs.Http.Client.Binding.ContentEncoding;
 using Machine.Specifications;
 using It = Machine.Specifications.It;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocaLabs.Http.Client.JsonSerialization
+namespace DocaLabs.Http.Client.Binding.JsonSerialization
 {
     /// <summary>
     /// Defines methods to deserialize an object from string in JSON notation.

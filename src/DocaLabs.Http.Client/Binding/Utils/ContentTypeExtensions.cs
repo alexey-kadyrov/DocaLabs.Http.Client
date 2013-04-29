@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Mime;
 
-namespace DocaLabs.Http.Client.Utils
+namespace DocaLabs.Http.Client.Binding.Utils
 {
     /// <summary>
     /// Content type extensions.

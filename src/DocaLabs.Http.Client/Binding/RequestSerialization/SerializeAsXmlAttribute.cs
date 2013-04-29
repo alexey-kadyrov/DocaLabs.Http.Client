@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using System.Xml.Serialization;
-using DocaLabs.Http.Client.ContentEncoding;
+using DocaLabs.Http.Client.Binding.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {

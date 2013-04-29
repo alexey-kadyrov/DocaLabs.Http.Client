@@ -1,4 +1,4 @@
-﻿namespace DocaLabs.Http.Client.ContentEncoding
+﻿namespace DocaLabs.Http.Client.Binding.ContentEncoding
 {
     /// <summary>
     /// Provides known content encodings.

@@ -1,6 +1,7 @@
 ﻿using System;
+using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 
-namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.Hints
 {
     /// <summary>
     /// Defines base class for attributes that are used to deserialize objects from a web response stream.

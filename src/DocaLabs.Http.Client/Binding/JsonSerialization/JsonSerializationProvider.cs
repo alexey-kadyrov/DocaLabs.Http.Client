@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Binding.Utils;
 
-namespace DocaLabs.Http.Client.JsonSerialization
+namespace DocaLabs.Http.Client.Binding.JsonSerialization
 {
     /// <summary>
     /// Provides implementations for serialization objects in JSON notation. All public methods and properties are thread safe.

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using DocaLabs.Http.Client.Resources;
 
-namespace DocaLabs.Http.Client.ContentEncoding
+namespace DocaLabs.Http.Client.Binding.ContentEncoding
 {
     /// <summary>
     /// Defines an encoder factory. By default the factory is populated by encoders that use

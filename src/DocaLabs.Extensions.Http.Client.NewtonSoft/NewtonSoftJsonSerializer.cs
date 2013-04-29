@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.Composition;
-using DocaLabs.Http.Client.JsonSerialization;
+using DocaLabs.Http.Client.Binding.JsonSerialization;
 using Newtonsoft.Json;
 
 namespace DocaLabs.Extensions.Http.Client.NewtonSoft

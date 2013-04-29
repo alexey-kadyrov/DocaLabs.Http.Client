@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Script.Serialization;
 
-namespace DocaLabs.Http.Client.JsonSerialization
+namespace DocaLabs.Http.Client.Binding.JsonSerialization
 {
     /// <summary>
     /// Implements IJsonDeserializer using JavaScriptSerializer.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace DocaLabs.Http.Client.Utils
+namespace DocaLabs.Http.Client.Binding.Utils
 {
     /// <summary>
     /// String type extension methods.

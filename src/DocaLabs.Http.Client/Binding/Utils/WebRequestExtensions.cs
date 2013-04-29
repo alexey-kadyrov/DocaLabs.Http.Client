@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace DocaLabs.Http.Client.Utils
+namespace DocaLabs.Http.Client.Binding.Utils
 {
     /// <summary>
     /// WebRequest extensions.
