@@ -7,9 +7,9 @@ using DocaLabs.Http.Client.Binding.Utils;
 namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
-    /// Binding extensions.
+    /// Property binding extensions to determine how a property should be serialized.
     /// </summary>
-    public static class BindingExtensions
+    public static class PropertyBindingExtensions
     {
         /// <summary>
         /// Returns true if the property is can pass its data to the either query or path part of URL.
@@ -17,6 +17,7 @@ namespace DocaLabs.Http.Client.Binding
         public static bool IsImplicitUrlPathOrQuery(this PropertyInfo info)
         {
             return CanPropertyBeUsedInRequest(info) &&
+                info.GetCustomAttribute<RequestSerializationAttribute>(true) == null &&
                 info.PropertyType.IsSimpleType() &&
                 !info.IsExplicitUrlPath() &&
                 !info.IsExplicitUrlQuery() &&
@@ -59,6 +60,20 @@ namespace DocaLabs.Http.Client.Binding
         {
             return CanPropertyBeUsedInRequest(info) &&
                 (typeof(ICredentials).IsAssignableFrom(info.PropertyType) && info.GetCustomAttribute<RequestSerializationAttribute>(true) == null);
+        }
+
+        /// <summary>
+        /// Returns true if the property can be used to serialize into request stream.
+        /// </summary>
+        public static bool IsRequestStream(this PropertyInfo info)
+        {
+            return CanPropertyBeUsedInRequest(info) &&
+                (info.GetCustomAttribute<RequestSerializationAttribute>(true) != null || 
+                    ((  !info.PropertyType.IsSimpleType()) &&
+                        !info.IsExplicitUrlPath() &&
+                        !info.IsExplicitUrlQuery() &&
+                        !info.IsHeader() &&
+                        !info.IsCredentials()));
         }
 
         /// <summary>

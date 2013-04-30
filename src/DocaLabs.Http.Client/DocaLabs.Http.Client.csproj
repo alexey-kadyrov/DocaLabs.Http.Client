@@ -56,7 +56,7 @@
     <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\Hints\InRequestFormAttribute.cs" />
     <Compile Include="Binding\Hints\InRequestPathAttribute.cs" />
-    <Compile Include="Binding\BindingExtensions.cs" />
+    <Compile Include="Binding\PropertyBindingExtensions.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultModelBinder.cs" />

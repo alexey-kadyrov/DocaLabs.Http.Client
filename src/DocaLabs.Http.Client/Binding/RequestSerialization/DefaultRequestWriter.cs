@@ -37,7 +37,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
                 : WebRequestMethods.Http.Get;
         }
 
-        bool ShouldWrite(object httpClient, object model)
+        static bool ShouldWrite(object httpClient, object model)
         {
             if (model == null)
                 return false;
@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
 
             return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
                    || httpClient.GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || modelType.GetAllInstancePublicProperties().Any(x => x.GetCustomAttribute<RequestSerializationAttribute>(true) != null || !x.PropertyType.IsSimpleType());
+                   || modelType.GetAllInstancePublicProperties().Any(x => x.IsRequestStream());
         }
 
         static IRequestSerialization GetSerializer(object httpClient, object model)
