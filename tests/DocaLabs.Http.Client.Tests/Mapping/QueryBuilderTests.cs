@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding;
-using DocaLabs.Http.Client.Binding.Utils;
+using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Mapping

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using System.Text;
-using DocaLabs.Http.Client.Binding.ContentEncoding;
+using DocaLabs.Http.Client.Utils.ContentEncoding;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.ContentEncoding

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using DocaLabs.Http.Client.Binding.ContentEncoding;
 using DocaLabs.Http.Client.Binding.RequestSerialization;
 using DocaLabs.Http.Client.Tests._Utils;
+using DocaLabs.Http.Client.Utils.ContentEncoding;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 

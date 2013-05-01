@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Hints;
 
 namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {

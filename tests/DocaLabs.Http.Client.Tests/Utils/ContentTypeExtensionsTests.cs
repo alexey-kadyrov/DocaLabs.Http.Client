@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
-using DocaLabs.Http.Client.Binding.Utils;
+using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Utils

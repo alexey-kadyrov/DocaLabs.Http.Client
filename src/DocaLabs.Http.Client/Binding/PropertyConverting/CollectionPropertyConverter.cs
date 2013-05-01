@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Utils;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {

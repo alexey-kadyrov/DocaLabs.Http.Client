@@ -1,5 +1,5 @@
 using System;
-using DocaLabs.Http.Client.Binding.Utils;
+using DocaLabs.Http.Client.Utils;
 using Moq;
 using NUnit.Framework;
 

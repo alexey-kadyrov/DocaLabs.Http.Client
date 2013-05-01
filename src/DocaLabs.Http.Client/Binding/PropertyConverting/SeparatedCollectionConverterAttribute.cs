@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Hints;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {

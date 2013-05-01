@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Configuration;
 using Machine.Specifications;
 using Moq;

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Utils;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
 {

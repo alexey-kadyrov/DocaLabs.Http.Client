@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using DocaLabs.Http.Client.Binding.Utils;
+using DocaLabs.Http.Client.Utils;
 using NUnit.Framework;
 
 namespace DocaLabs.Http.Client.Tests.Utils

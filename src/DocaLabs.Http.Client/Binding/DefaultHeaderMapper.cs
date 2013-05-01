@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Specialized;
 using System.Net;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.Hints;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 
 namespace DocaLabs.Http.Client.Binding

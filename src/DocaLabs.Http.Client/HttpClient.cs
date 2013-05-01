@@ -4,8 +4,8 @@ using System.Drawing;
 using System.Net;
 using System.Threading;
 using DocaLabs.Http.Client.Binding;
-using DocaLabs.Http.Client.Binding.ContentEncoding;
 using DocaLabs.Http.Client.Configuration;
+using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client
 {

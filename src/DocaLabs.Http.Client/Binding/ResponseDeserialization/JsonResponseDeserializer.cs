@@ -1,6 +1,6 @@
 ﻿using System;
-using DocaLabs.Http.Client.Binding.JsonSerialization;
-using DocaLabs.Http.Client.Binding.Utils;
+using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Utils.JsonSerialization;
 
 namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 {
