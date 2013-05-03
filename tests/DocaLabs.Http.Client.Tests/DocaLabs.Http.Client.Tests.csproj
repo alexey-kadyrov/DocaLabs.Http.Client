@@ -130,7 +130,6 @@
     <Compile Include="_Utils\TestsQuery.cs" />
     <Compile Include="_Utils\TestHttpClientInterfaceBuilder.cs" />
     <Compile Include="Binding\RequestSerialization\DefaultRequestWriterTests.cs" />
-    <Compile Include="ResponseDeserialization\ImageResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\PlainTextResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\ResponseParserTests.cs" />
     <Compile Include="ResponseDeserialization\XmlResponseDeserializerTests.cs" />

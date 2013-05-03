@@ -52,8 +52,7 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
             {
                 new JsonResponseDeserializer(),
                 new XmlResponseDeserializer(),
-                new PlainTextResponseDeserializer(),
-                new ImageResponseDeserializer()
+                new PlainTextResponseDeserializer()
             };
         }
 

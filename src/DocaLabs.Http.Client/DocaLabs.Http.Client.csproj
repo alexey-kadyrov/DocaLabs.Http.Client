@@ -98,7 +98,6 @@
     <Compile Include="Binding\ResponseDeserialization\ContentTypeExtensions.cs" />
     <Compile Include="Utils\LibraryExtensionsComposer.cs" />
     <Compile Include="Utils\ReflectionExtensions.cs" />
-    <Compile Include="Binding\ResponseDeserialization\ImageResponseDeserializer.cs" />
     <Compile Include="Binding\ResponseDeserialization\PlainTextResponseDeserializer.cs" />
     <Compile Include="Binding\ResponseDeserialization\XmlResponseDeserializer.cs" />
     <Compile Include="Binding\ResponseDeserialization\IResponseDeserializationProvider.cs" />
