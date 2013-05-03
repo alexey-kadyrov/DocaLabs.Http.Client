@@ -211,8 +211,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => exception = Catch.Exception(() => new DefaultHeaderMapper().Map(model));
 
-        It should_thow_unrecoverable_http_client_exception =
-            () => exception.ShouldBeOfType<UnrecoverableHttpClientException>();
+        It should_thow_http_client_exception =
+            () => exception.ShouldBeOfType<HttpClientException>();
 
         class TestModel
         {

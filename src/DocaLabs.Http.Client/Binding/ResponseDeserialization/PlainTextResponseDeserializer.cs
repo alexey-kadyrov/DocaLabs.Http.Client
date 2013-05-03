@@ -29,7 +29,7 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
             }
             catch (Exception e)
             {
-                throw new UnrecoverableHttpClientException(e.Message, e);
+                throw new HttpClientException(e.Message, e);
             }
         }
 

@@ -60,7 +60,7 @@ namespace DocaLabs.Http.Client
 
             RawResponseStream = Response.GetResponseStream();
             if (RawResponseStream == null)
-                throw new HttpClientException(Resources.Text.null_response_stream);
+                throw new Exception(Resources.Text.null_response_stream);
         }
 
         /// <summary>

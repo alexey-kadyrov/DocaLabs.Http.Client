@@ -78,7 +78,7 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
             if (resultType == typeof(VoidType))
                 return VoidType.Value;
 
-            throw new UnrecoverableHttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
+            throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
 
         IResponseDeserialization FindProvider(HttpResponse response, Type resultType)

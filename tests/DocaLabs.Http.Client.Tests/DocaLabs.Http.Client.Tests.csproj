@@ -135,7 +135,6 @@
     <Compile Include="ResponseDeserialization\XmlResponseDeserializerTests.cs" />
     <Compile Include="ResponseDeserialization\DeserializeFromXmlAttributeTests.cs" />
     <Compile Include="ResponseDeserialization\JsonResponseDeserializerTests.cs" />
-    <Compile Include="UnrecoverableHttpClientExceptionTests.cs" />
     <Compile Include="_Utils\request_serialization_test_context.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsFormAttributeTests.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsJsonAttributeTests.cs" />

@@ -32,13 +32,13 @@ namespace DocaLabs.Http.Client.Binding
                     ? baseUrl.AbsoluteUri
                     : CreateUrlFrom(model, baseUrl).AbsoluteUri;
             }
-            catch (UnrecoverableHttpClientException)
+            catch (HttpClientException)
             {
                 throw;
             }
             catch (Exception e)
             {
-                throw new UnrecoverableHttpClientException(string.Format(Resources.Text.failed_create_url, baseUrl), e);
+                throw new HttpClientException(string.Format(Resources.Text.failed_create_url, baseUrl), e);
             }
         }
 

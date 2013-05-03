@@ -145,8 +145,8 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Because of =
             () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, typeof(int)));
 
-        It should_throw_unrecoverable_http_client_exception =
-            () => exception.ShouldBeOfType<UnrecoverableHttpClientException>();
+        It should_throw_http_client_exception =
+            () => exception.ShouldBeOfType<HttpClientException>();
 
         It should_wrap_original_exception =
             () => exception.InnerException.ShouldNotBeNull();

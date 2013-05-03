@@ -233,7 +233,7 @@ namespace DocaLabs.Http.Client
                 {
                     throw;
                 }
-                catch (UnrecoverableHttpClientException)
+                catch (HttpClientException)
                 {
                     throw;
                 }
