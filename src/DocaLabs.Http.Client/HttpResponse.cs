@@ -44,7 +44,7 @@ namespace DocaLabs.Http.Client
         public WebHeaderCollection Headers { get { return Response.Headers; } }
 
         /// <returns>
-        /// Returns <see cref="T:System.Boolean"/>.
+        /// Returns whenever the request supports headers.
         /// </returns>
         public bool SupportsHeaders { get { return Response.SupportsHeaders; } }
 

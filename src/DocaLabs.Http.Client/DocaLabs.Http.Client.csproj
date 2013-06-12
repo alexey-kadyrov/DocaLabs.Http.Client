@@ -64,7 +64,7 @@
     <Compile Include="Binding\IModelBinder.cs" />
     <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
-    <Compile Include="Binding\RequestSerialization\DefaultRequestWriter.cs" />
+    <Compile Include="Binding\DefaultRequestWriter.cs" />
     <Compile Include="Binding\PropertyConverting\IPropertyConverterOverrides.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyMap.cs" />
     <Compile Include="Binding\PropertyConverting\InRequestHeaderAttribute.cs" />
@@ -121,7 +121,7 @@
     <Compile Include="Configuration\ClientProxyElement.cs" />
     <Compile Include="Binding\RequestSerialization\IRequestSerialization.cs" />
     <Compile Include="Binding\ResponseDeserialization\IResponseDeserialization.cs" />
-    <Compile Include="Binding\ResponseDeserialization\DefaultResponseReader.cs" />
+    <Compile Include="Binding\DefaultResponseReader.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\CustomPropertyConverterAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\ObjectPropertyConverter.cs" />
