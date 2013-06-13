@@ -2,6 +2,6 @@
 {
     public interface IServiceWithMethodWithMoreThanOneArg
     {
-        TestResult GetResult(TestsQuery query, string notOk);
+        TestResultValue GetResult(TestsQuery query, string notOk);
     }
 }

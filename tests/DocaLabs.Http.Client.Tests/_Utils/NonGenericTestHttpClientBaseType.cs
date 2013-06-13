@@ -2,7 +2,7 @@
 
 namespace DocaLabs.Http.Client.Tests._Utils
 {
-    public class NonGenericTestHttpClientBaseType : TestHttpClientBaseType<TestsQuery, TestResult>
+    public class NonGenericTestHttpClientBaseType : TestHttpClientBaseType<TestsQuery, TestResultValue>
     {
         public NonGenericTestHttpClientBaseType(Uri baseUrl, string configurationName)
             : base(baseUrl, configurationName)

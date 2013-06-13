@@ -2,6 +2,6 @@
 {
     public abstract class ServiceClassInsteadOfInterface
     {
-        public abstract TestResult GetResult(TestsQuery query);
+        public abstract TestResultValue GetResult(TestsQuery query);
     }
 }

@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
             ConfigurationName = configurationName;
         }
 
-        public TestResult Execute(string query)
+        public TestResultValue Execute(string query)
         {
             return null;
         }

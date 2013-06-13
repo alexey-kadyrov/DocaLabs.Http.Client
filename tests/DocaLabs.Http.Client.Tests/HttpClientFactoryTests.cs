@@ -24,10 +24,10 @@ namespace DocaLabs.Http.Client.Tests
     [Subject(typeof(HttpClientFactory))]
     class when_creating_instance_for_generic_interface
     {
-        static IGenericService<TestsQuery, TestResult> instance;
+        static IGenericService<TestsQuery, TestResultValue> instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IGenericService<TestsQuery, TestResult>>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => instance = HttpClientFactory.CreateInstance<IGenericService<TestsQuery, TestResultValue>>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
             () => instance.GetResult(new TestsQuery { Value = "Hello!" }).Value.ShouldEqual("Hello!");
@@ -112,7 +112,7 @@ namespace DocaLabs.Http.Client.Tests
             () => instance = HttpClientFactory.CreateInstance<IServiceWithResultOnly>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.Get().ShouldBeOfType<TestResult>();
+            () => instance.Get().ShouldBeOfType<TestResultValue>();
     }
 
     [Subject(typeof(HttpClientFactory))]
@@ -353,7 +353,7 @@ namespace DocaLabs.Http.Client.Tests
         {
             interfaces = new List<Type>();
             for (var i = 0; i < 1000; i++)
-                interfaces.Add(TestHttpClientInterfaceBuilder.CreateInterface(i, typeof(TestsQuery), typeof(TestResult)));
+                interfaces.Add(TestHttpClientInterfaceBuilder.CreateInterface(i, typeof(TestsQuery), typeof(TestResultValue)));
         };
 
         Because of = () => Parallel.ForEach(interfaces, x =>
@@ -362,7 +362,7 @@ namespace DocaLabs.Http.Client.Tests
 
             var result = s.GetType().GetMethod("CallService").Invoke(s, new object[] { new TestsQuery { Value = "Hello!" } });
 
-            ((TestResult)result).Value.ShouldEqual("Hello!");
+            ((TestResultValue)result).Value.ShouldEqual("Hello!");
 
             Interlocked.Increment(ref count);
         });

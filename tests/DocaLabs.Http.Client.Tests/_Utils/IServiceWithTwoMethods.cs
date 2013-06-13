@@ -2,7 +2,7 @@
 {
     public interface IServiceWithTwoMethods
     {
-        TestResult GetResult(TestsQuery query);
-        TestResult GetAnotherResult(TestsQuery query);
+        TestResultValue GetResult(TestsQuery query);
+        TestResultValue GetAnotherResult(TestsQuery query);
     }
 }
