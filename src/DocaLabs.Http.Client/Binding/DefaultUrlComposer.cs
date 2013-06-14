@@ -103,7 +103,7 @@ namespace DocaLabs.Http.Client.Binding
 
             foreach (var key in values.AllKeys)
             {
-                if(existingPath.Contains(key, StringComparison.OrdinalIgnoreCase))
+                if (existingPath.IndexOf(key, StringComparison.OrdinalIgnoreCase) >= 0)
                     path.Add(key, values.GetValues(key));
                 else
                     query.Add(key, values.GetValues(key));

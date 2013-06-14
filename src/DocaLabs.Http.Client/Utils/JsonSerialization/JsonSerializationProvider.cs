@@ -97,10 +97,10 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
 
         class ExtensionLoader
         {
-            [Import]
+            [Import(AllowDefault = true)]
             public IJsonSerializer SerializerExtension { get; set; }
 
-            [Import]
+            [Import(AllowDefault = true)]
             public IJsonDeserializer DeserializerExtension { get; set; }
         }
     }

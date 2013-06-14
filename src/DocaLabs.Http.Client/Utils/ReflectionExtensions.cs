@@ -57,40 +57,17 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
-        /// Gets all properties defined on the type and all interfaces that it implements.
+        /// Gets all public instance properties defined on the type and all interfaces that it implements.
+        /// Useful for interfaces as when you define interface inheritance chain the "sub-interface" 
+        /// is not derived from them - it "implements" them.
         /// </summary>
-        public static IList<PropertyInfo> GetAllProperties(this Type type, BindingFlags flags)
-        {
-            if (type == null)
-                throw new ArgumentNullException("type");
-
-            flags |= BindingFlags.FlattenHierarchy;
-
-            var list = type.GetProperties(flags).ToList();
-
-            if (!type.IsInterface)
-                return list;
-
-            foreach (var @interface in type.GetInterfaces())
-            {
-                var properties = @interface.GetProperties(flags);
-
-                list.AddRange(properties);
-            }
-
-            return list;
-        }
-
-        /// <summary>
-        /// Gets all properties defined on the type and all interfaces that it implements.
-        /// </summary>
-        public static IList<PropertyInfo> GetAllInstancePublicProperties(this Type type)
+        public static IList<PropertyInfo> GetAllPublicInstanceProperties(this Type type)
         {
             return type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance);
         }
 
         /// <summary>
-        /// Checks whenever the type is enumerable, string or byte[] are not considered enumerable.
+        /// Checks whenever the type is enumerable, note that string or byte[] are not considered enumerable.
         /// </summary>
         public static bool IsEnumerable(this Type type)
         {
@@ -104,9 +81,8 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
-        /// Returns enumerable element type, string or byte[] are not considered enumerable..
+        /// Returns enumerable element type, note that string or byte[] are not considered enumerable.
         /// </summary>
-        /// <param name="type"></param>
         /// <returns>Enumerable element type or null if the type is not enumerable.</returns>
         public static Type GetEnumerableElementType(this Type type)
         {
@@ -130,6 +106,28 @@ namespace DocaLabs.Http.Client.Utils
             return genericEnumerable != null
                 ? genericEnumerable.GetGenericArguments()[0]
                 : typeof(object);
+        }
+
+        static IList<PropertyInfo> GetAllProperties(this Type type, BindingFlags flags)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            flags |= BindingFlags.FlattenHierarchy;
+
+            var list = type.GetProperties(flags).ToList();
+
+            if (!type.IsInterface)
+                return list;
+
+            foreach (var @interface in type.GetInterfaces())
+            {
+                var properties = @interface.GetProperties(flags);
+
+                list.AddRange(properties);
+            }
+
+            return list;
         }
     }
 }

@@ -2,7 +2,7 @@
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Extensions.Http.Client.NewtonSoft
+namespace DocaLabs.Http.Client.Extension.NewtonSoft
 {
     /// <summary>
     /// Implements IJsonSerializer using Newtonsoft JsonConvert.

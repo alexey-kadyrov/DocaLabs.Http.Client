@@ -48,6 +48,7 @@
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
@@ -67,6 +68,7 @@
     <Compile Include="Configuration\ConfigurationExtensionsTests.cs" />
     <Compile Include="Configuration\RequestExtensionsTests.cs" />
     <Compile Include="HttpClientTests.cs" />
+    <Compile Include="Utils\LibraryExtensionsComposerTests.cs" />
     <Compile Include="_Contract\DataRequest.cs" />
     <Compile Include="_Contract\ITestEmptyPostService1.cs" />
     <Compile Include="_Contract\ITestGetService1.cs" />
@@ -84,6 +86,10 @@
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</Project>
       <Name>DocaLabs.Http.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DocaLabs.Http.Client.Extension.Test.Example\DocaLabs.Http.Client.Extension.Test.Example.csproj">
+      <Project>{07ff9ea5-faa8-433a-95ef-b7a9da2efff6}</Project>
+      <Name>DocaLabs.Http.Client.Extension.Test.Example</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Testing.Common\DocaLabs.Testing.Common.csproj">
       <Project>{40A96AE2-C931-4AC1-A38E-5FBB3045216C}</Project>

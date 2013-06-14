@@ -7,8 +7,8 @@
     <ProjectGuid>{BFC334E3-25E4-4973-89B8-6B25276859B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocaLabs.Extensions.Http.Client.NewtonSoft</RootNamespace>
-    <AssemblyName>DocaLabs.Extensions.Http.Client.NewtonSoft</AssemblyName>
+    <RootNamespace>DocaLabs.Http.Client.Extension.NewtonSoft</RootNamespace>
+    <AssemblyName>DocaLabs.Http.Client.Extension.NewtonSoft</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -32,7 +32,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         {
             return type.IsSimpleType()
                 ? new List<IPropertyConverter>()
-                : type.GetAllInstancePublicProperties()
+                : type.GetAllPublicInstanceProperties()
                         .Select(ParseProperty)
                         .Where(x => x != null)
                         .ToList();

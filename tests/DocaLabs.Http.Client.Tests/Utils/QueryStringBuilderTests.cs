@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Specialized;
-using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.Mapping
+namespace DocaLabs.Http.Client.Tests.Utils
 {
     [Subject(typeof(QueryStringBuilder))]
     class when_adding_single_key_value_pair_once
@@ -58,7 +57,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
     }
 
     [Subject(typeof(QueryStringBuilder))]
-    class when_adding_values_that_contain_simbols_required_encodings
+    class when_adding_keys_and_values_that_contain_simbols_required_encodings
     {
         static QueryStringBuilder builder;
 
@@ -67,13 +66,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
         Because of = () =>
         {
-            builder.Add("firstKey", "first Value");
-            builder.Add("secondKey", "second&Value");
-            builder.Add("thirdKey", "third+Value");
+            builder.Add("first Key", "first Value");
+            builder.Add("second&Key", "second&Value");
+            builder.Add("third+Key", "third+Value");
         };
 
         It should_form_valid_query_string =
-            () => builder.ToString().ShouldEqual("firstKey=first+Value&secondKey=second%26Value&thirdKey=third%2bValue");
+            () => builder.ToString().ShouldEqual("first+Key=first+Value&second%26Key=second%26Value&third%2bKey=third%2bValue");
     }
 
     [Subject(typeof(QueryStringBuilder))]
@@ -184,7 +183,7 @@ namespace DocaLabs.Http.Client.Tests.Mapping
     }
 
     [Subject(typeof(QueryStringBuilder))]
-    class when_adding_values_that_contain_simbols_required_encodings_using_enumerable_overload
+    class when_adding_keys_and_values_that_contain_simbols_required_encodings_using_enumerable_overload
     {
         static QueryStringBuilder builder;
 
@@ -193,13 +192,13 @@ namespace DocaLabs.Http.Client.Tests.Mapping
 
         Because of = () => builder.Add(new NameValueCollection
         {
-            { "firstKey", "first Value" },
-            { "secondKey", "second&Value" },
-            { "thirdKey", "third+Value" }
+            { "first Key", "first Value" },
+            { "second&Key", "second&Value" },
+            { "third+Key", "third+Value" }
         });
 
         It should_form_valid_query_string =
-            () => builder.ToString().ShouldEqual("firstKey=first+Value&secondKey=second%26Value&thirdKey=third%2bValue");
+            () => builder.ToString().ShouldEqual("first+Key=first+Value&second%26Key=second%26Value&third%2bKey=third%2bValue");
     }
 
     [Subject(typeof(QueryStringBuilder))]

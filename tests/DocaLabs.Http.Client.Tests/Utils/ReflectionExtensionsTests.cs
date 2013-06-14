@@ -283,65 +283,13 @@ namespace DocaLabs.Http.Client.Tests.Utils
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("attribute");
     }
 
-    [Subject(typeof(ReflectionExtensions), "GetAllProperties")]
-    class when_getting_all_properties_on_a_type
-    {
-        It should_return_all_requested_properties_for_a_base_interface =
-            () => typeof (IInterface1).GetAllProperties(BindingFlags.Public | BindingFlags.Instance).Count.ShouldEqual(2);
-
-        It should_return_all_requested_properties_for_a_subclassed_interface =
-            () => typeof(IInterface2).GetAllProperties(BindingFlags.Public | BindingFlags.Instance).Count.ShouldEqual(5);
-
-        It should_return_all_requested_properties_for_a_class =
-            () => typeof(TestClass).GetAllProperties(BindingFlags.Public | BindingFlags.Instance).Count.ShouldEqual(5);
-
-
-        interface IInterface1
-        {
-            string Property1 { get; set; }
-            int this[int i] { get; set; }
-        }
-
-        interface IInterface2 : IInterface1
-        {
-            string Property2 { get; set; }
-            int this[int i, int k] { get; set; }
-            int this[string i] { get; set; }
-        }
-
-        class BaseClass
-        {
-            public string BaseProperty1 { get; set; }
-            protected string BaseProperty2 { get; set; }
-            public string Property { get; set; }
-        }
-
-        class TestClass : BaseClass, IInterface1
-        {
-            public new string Property { get; set; }
-
-            public string Property1 { get; set; }
-
-            public int this[int i]
-            {
-                get { return 0; }
-                set {  }
-            }
-
-            public string Property22 { get; set; }
-            public static string Property33 { get; set; }
-            string Property44 { get; set; }
-            static string Property55 { get; set; }
-        }
-    }
-
-    [Subject(typeof(ReflectionExtensions), "GetAllProperties")]
-    class when_getting_all_properties_on_a_null_type
+    [Subject(typeof(ReflectionExtensions), "GetAllPublicInstanceProperties")]
+    class when_getting_all_public_instance_properties_on_a_null_type
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => ((Type)null).GetAllProperties(BindingFlags.Instance));
+            () => exception = Catch.Exception(() => ((Type)null).GetAllPublicInstanceProperties());
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -350,17 +298,17 @@ namespace DocaLabs.Http.Client.Tests.Utils
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
     }
 
-    [Subject(typeof(ReflectionExtensions), "GetAllInstancePublicProperties")]
-    class when_getting_all_instance_public_properties_on_a_type
+    [Subject(typeof(ReflectionExtensions), "GetAllPublicInstanceProperties")]
+    class when_getting_all_public_instance_properties_on_a_type
     {
         It should_return_all_requested_properties_for_a_base_interface =
-            () => typeof(IInterface1).GetAllInstancePublicProperties().Count.ShouldEqual(2);
+            () => typeof(IInterface1).GetAllPublicInstanceProperties().Count.ShouldEqual(2);
 
         It should_return_all_requested_properties_for_a_subclassed_interface =
-            () => typeof(IInterface2).GetAllInstancePublicProperties().Count.ShouldEqual(5);
+            () => typeof(IInterface2).GetAllPublicInstanceProperties().Count.ShouldEqual(5);
 
         It should_return_all_requested_properties_for_a_class =
-            () => typeof(TestClass).GetAllInstancePublicProperties().Count.ShouldEqual(5);
+            () => typeof(TestClass).GetAllPublicInstanceProperties().Count.ShouldEqual(5);
 
 
         interface IInterface1

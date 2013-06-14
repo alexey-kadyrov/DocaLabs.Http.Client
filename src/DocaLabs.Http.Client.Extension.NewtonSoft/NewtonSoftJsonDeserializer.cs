@@ -3,7 +3,7 @@ using System.ComponentModel.Composition;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Extensions.Http.Client.NewtonSoft
+namespace DocaLabs.Http.Client.Extension.NewtonSoft
 {
     /// <summary>
     /// Implements IJsonDeserializer using Newtonsoft JsonConvert.

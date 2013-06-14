@@ -21,11 +21,11 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
-        /// Adds a new pair key/value to the query string. The value is encoded using HttpUtility.UrlEncode.
+        /// Adds a new pair key/value to the query string. The key and value are encoded using HttpUtility.UrlEncode.
         /// </summary>
         /// <param name="key">Query parameter name.</param>
         /// <param name="value">Parameter's value.</param>
-        /// <returns>Self reference, useful for method chaining.</returns>
+        /// <returns>Self reference.</returns>
         public QueryStringBuilder Add(string key, string value)
         {
             if(key == null)
@@ -34,6 +34,7 @@ namespace DocaLabs.Http.Client.Utils
             if (value == null)
                 return this;
 
+            key = HttpUtility.UrlEncode(key);
             value = HttpUtility.UrlEncode(value);
 
             if (_builder.Length == 0)
@@ -45,9 +46,9 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
-        /// Adds a new pairs of key/value from collection to the query string. The value is encoded using HttpUtility.UrlEncode.
+        /// Adds a new pairs of key/value from collection to the query string. The key and value are encoded using HttpUtility.UrlEncode.
         /// </summary>
-        /// <returns>Self reference, useful for method chaining.</returns>
+        /// <returns>Self reference.</returns>
         public QueryStringBuilder Add(NameValueCollection collection)
         {
             if (collection == null)

@@ -9,24 +9,37 @@ namespace DocaLabs.Http.Client.Utils
     /// </summary>
     public class LibraryExtensionsComposer : IDisposable
     {
+        /// <summary>
+        /// Defines the default search pattern for searching assemblies.
+        /// </summary>
+        public const string DeafultSearchPattern = "DocaLabs.Http.Client.Extension.*";
+
         readonly CompositionContainer _compositionContainer;
 
         /// <summary>
-        /// Initializes an instance of the LibraryExtensionsComposer class.
+        /// Initializes an instance of the LibraryExtensionsComposer class with the default search pattern.
         /// </summary>
-        public LibraryExtensionsComposer(string searchPattern = "DocaLabs.Extensions.Http.Client.*")
+        public LibraryExtensionsComposer()
+            : this(DeafultSearchPattern)
         {
-            // An aggregate catalogue that combines multiple catalogues
+        }
+
+        /// <summary>
+        /// Initializes an instance of the LibraryExtensionsComposer class with the specified search pattern.
+        /// </summary>
+        public LibraryExtensionsComposer(string searchPattern)
+        {
+            if(searchPattern == null)
+                throw new ArgumentNullException("searchPattern");
+
             var catalog = new AggregateCatalog();
 
-            // Adds all the parts found in the base folder where current assembly resolver looks for.
             // Cannot use BaseDirectory as the first choice due that in the web application it will be the parent of the "bin" folder.
             catalog.Catalogs.Add(new DirectoryCatalog(
                     string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.RelativeSearchPath)
                         ? AppDomain.CurrentDomain.BaseDirectory
                         : AppDomain.CurrentDomain.RelativeSearchPath, searchPattern));
 
-            // Create the CompositionContainer with the parts in the catalogue.
             _compositionContainer = new CompositionContainer(catalog);
         }
 
@@ -34,18 +47,9 @@ namespace DocaLabs.Http.Client.Utils
         /// Fill the imports of the object.
         /// </summary>
         /// <param name="o">The object to compose for.</param>
-        /// <param name="isOptional">If the parameter is false and there is no import found the CompositionException will be thrown.</param>
-        public void ComposePartsFor(object o, bool isOptional = true)
+        public void ComposePartsFor(object o)
         {
-            try
-            {
-                _compositionContainer.ComposeParts(o);
-            }
-            catch (CompositionException)
-            {
-                if (!isOptional)
-                    throw;
-            }
+            _compositionContainer.ComposeParts(o);
         }
 
         /// <summary>

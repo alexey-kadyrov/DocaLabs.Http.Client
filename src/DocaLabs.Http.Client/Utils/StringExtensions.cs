@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Utils
     {
         /// <summary>
         /// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string.
-        /// Thanks for the idea: http://stackoverflow.com/a/244933
+        /// Thanks for the idea: <see cref="http://stackoverflow.com/a/244933"/>
         /// </summary>
         /// <param name="str">The current string.</param>
         /// <param name="oldValue">The string to be replaced.</param>
@@ -19,6 +19,12 @@ namespace DocaLabs.Http.Client.Utils
         /// <returns>A string that is equivalent to the current string except that all instances of oldValue are replaced with newValue.</returns>
         static public string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
         {
+            if(str == null)
+                throw new ArgumentNullException("str");
+
+            if (oldValue == null)
+                throw new ArgumentNullException("oldValue");
+
             var sb = new StringBuilder();
             var previousIndex = 0;
             var index = str.IndexOf(oldValue, comparison);
@@ -35,20 +41,6 @@ namespace DocaLabs.Http.Client.Utils
             sb.Append(str.Substring(previousIndex));
 
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Returns a value indicating wherever the specified value occurs in the string.
-        /// </summary>
-        static public bool Contains(this string str, string value, StringComparison comparison)
-        {
-            if(str == null)
-                throw new ArgumentNullException("str");
-
-            if(value == null)
-                throw new ArgumentNullException("value");
-
-            return str.IndexOf(value, comparison) >= 0;
         }
     }
 }

@@ -47,7 +47,7 @@ namespace DocaLabs.Http.Client.Binding
 
             return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
                    || httpClient.GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || modelType.GetAllInstancePublicProperties().Any(x => x.IsRequestStream());
+                   || modelType.GetAllPublicInstanceProperties().Any(x => x.IsRequestStream());
         }
 
         static IRequestSerialization GetSerializer(object httpClient, object model)

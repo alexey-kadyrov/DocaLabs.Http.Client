@@ -97,13 +97,14 @@
     <Compile Include="Mapping\PropertyConverters\ConvertCollectionPropertyTests.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertObjectPropertyTests.cs" />
     <Compile Include="Mapping\PropertyConverters\ConvertSimplePropertyTests.cs" />
-    <Compile Include="Mapping\QueryBuilderTests.cs" />
+    <Compile Include="Utils\QueryStringBuilderTests.cs" />
     <Compile Include="Mapping\PropertyConverters\SeparatedCollectionConverterTests.cs" />
     <Compile Include="Binding\UrlMapping\UrlBuilderTests.cs" />
     <Compile Include="Utils\ContentTypeExtensionsTests.cs" />
     <Compile Include="Utils\CustomConverterFactoryTests.cs" />
     <Compile Include="Utils\CustomConverterTests.cs" />
     <Compile Include="Utils\ReflectionExtensionsTests.cs" />
+    <Compile Include="Utils\StringExtensionsTests.cs" />
     <Compile Include="_Utils\IGenericService.cs" />
     <Compile Include="_Utils\ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute.cs" />
     <Compile Include="_Utils\IDecoratedService.cs" />
