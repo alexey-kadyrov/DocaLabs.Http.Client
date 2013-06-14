@@ -31,7 +31,6 @@ syntax: glob
 obj/
 [Rr]elease*/
 _ReSharper*/
-[Tt]est[Rr]esult*
 [Bb]uild[Ll]og.*
 *.[Pp]ublish.xml
 glob:*/ServiceDefinition.build.csdef
