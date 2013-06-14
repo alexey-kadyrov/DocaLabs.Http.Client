@@ -310,29 +310,6 @@ namespace DocaLabs.Http.Client.Tests.Utils
         [TestCase(typeof(Guid))]
         [TestCase(typeof(int))]
         [TestCase(typeof(long))]
-        [TestCase(typeof(string))]
-        [TestCase(typeof(byte[]))]
-        public void ConverterReturnsDefaultValueWhenInputValueIsNull(Type type)
-        {
-            var target = new CustomConverterFactory();
-
-            var converter = target.GetConverter(type);
-
-            var result = converter(null);
-
-            Assert.AreEqual(CustomConverter.GetDefaultValue(type), result);
-        }
-
-        [Test]
-        [TestCase(typeof(bool))]
-        [TestCase(typeof(DateTime))]
-        [TestCase(typeof(DateTimeOffset))]
-        [TestCase(typeof(TimeSpan))]
-        [TestCase(typeof(decimal))]
-        [TestCase(typeof(double))]
-        [TestCase(typeof(Guid))]
-        [TestCase(typeof(int))]
-        [TestCase(typeof(long))]
         public void NullableConverterReturnsNullWhenInputValueIsNull(Type type)
         {
             var target = new CustomConverterFactory();

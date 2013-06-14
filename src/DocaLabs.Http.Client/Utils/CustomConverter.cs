@@ -60,26 +60,6 @@ namespace DocaLabs.Http.Client.Utils
             return converter == null ? Convert.ChangeType(value, conversionType) : converter(value);
         }
 
-        /// <summary>
-        /// Specifies the default value of the type parameter.
-        /// </summary>
-        /// <typeparam name="T">A reference type or a value type.</typeparam>
-        /// <returns>Default value for the type.</returns>
-        public static T GetDefault<T>()
-        {
-            return default(T);
-        }
-
-        /// <summary>
-        /// Specifies the default value of the type parameter.
-        /// </summary>
-        /// <param name="type">A reference type or a value type.</param>
-        /// <returns>Default value for the type.</returns>
-        public static object GetDefaultValue(Type type)
-        {
-            return typeof(CustomConverter).GetMethod("GetDefault").MakeGenericMethod(type).Invoke(null, null);
-        }
-
         static class DefaultLazyCustomConverter
         {
             internal static CustomConverter LazyConverter { get; private set; }

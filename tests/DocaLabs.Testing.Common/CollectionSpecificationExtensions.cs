@@ -4,7 +4,7 @@ using Machine.Specifications;
 
 namespace DocaLabs.Testing.Common
 {
-    public static class CollectionExtensions
+    public static class CollectionSpecificationExtensions
     {
         public static void ShouldContainOnly(this NameValueCollection collection, params KeyValuePair<string, string> [] valuePairs)
         {

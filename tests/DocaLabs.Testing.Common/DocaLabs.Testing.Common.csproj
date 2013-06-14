@@ -73,7 +73,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="CollectionSpecificationExtensions.cs" />
     <Compile Include="ExceptionStandardBehaviours.cs" />
     <Compile Include="SimilarExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

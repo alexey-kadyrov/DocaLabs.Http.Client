@@ -1,9 +1,8 @@
 ﻿using System.Net.Mime;
-using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.Utils
+namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
 {
     [Subject(typeof(ContentTypeExtensions))]
     class when_checking_media_type_for_null_content_type

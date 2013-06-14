@@ -115,27 +115,5 @@ namespace DocaLabs.Http.Client.Tests.Utils
             Assert.IsInstanceOf<int>(result);
             Assert.AreEqual(42, result);
         }
-
-        [Test]
-        public void GetDefaultValueReturnsDefaultValueForType()
-        {
-            Assert.AreEqual(null, CustomConverter.GetDefaultValue(typeof(CustomConverterTests)));
-            Assert.AreEqual(null, CustomConverter.GetDefaultValue(typeof(string)));
-            Assert.AreEqual(0, CustomConverter.GetDefaultValue(typeof(int)));
-            Assert.AreEqual(0L, CustomConverter.GetDefaultValue(typeof(long)));
-            Assert.AreEqual(Guid.Empty, CustomConverter.GetDefaultValue(typeof(Guid)));
-            Assert.AreEqual(DateTime.MinValue, CustomConverter.GetDefaultValue(typeof(DateTime)));
-        }
-
-        [Test]
-        public void GenericGetDefaultReturnsDefaultValueForType()
-        {
-            Assert.AreEqual(null, CustomConverter.GetDefault<CustomConverterTests>());
-            Assert.AreEqual(null, CustomConverter.GetDefault<string>());
-            Assert.AreEqual(0, CustomConverter.GetDefault<int>());
-            Assert.AreEqual(0L, CustomConverter.GetDefault<long>());
-            Assert.AreEqual(Guid.Empty, CustomConverter.GetDefault<Guid>());
-            Assert.AreEqual(DateTime.MinValue, CustomConverter.GetDefault<DateTime>());
-        }
     }
 }
