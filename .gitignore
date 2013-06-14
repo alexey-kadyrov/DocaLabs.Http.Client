@@ -37,3 +37,4 @@ glob:*/ServiceDefinition.build.csdef
 PartCover/
 *sln.DotSettings
 *.svclog
+packages/
