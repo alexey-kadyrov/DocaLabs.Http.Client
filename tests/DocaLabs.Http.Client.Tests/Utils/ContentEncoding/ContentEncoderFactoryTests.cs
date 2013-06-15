@@ -4,9 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 using Machine.Specifications;
-using It = Machine.Specifications.It;
 
-namespace DocaLabs.Http.Client.Tests.ContentEncoding
+namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 {
     [Subject(typeof(ContentEncoderFactory))]
     class when_using_in_default_configuration

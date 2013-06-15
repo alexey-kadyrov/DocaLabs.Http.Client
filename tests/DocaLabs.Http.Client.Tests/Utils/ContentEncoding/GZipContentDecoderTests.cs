@@ -4,23 +4,26 @@ using System.Text;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.ContentEncoding
+namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 {
-    [Subject(typeof(DeflateContentEncoder))]
-    class when_deflate_encoder_is_used
+    [Subject(typeof(GZipContentDecoder))]
+    class when_gzip_decoder_is_used
     {
-        static DeflateContentEncoder encoder;
+        static GZipContentDecoder decoder;
         static MemoryStream comressed_stream;
+        static Stream decompression_stream;
 
-        Establish context =
-            () => encoder = new DeflateContentEncoder();
+        Cleanup after_each =
+            () => decompression_stream.Dispose();
 
-        Because of = () =>
+        Establish context = () =>
         {
-            using (var comressedStream = new MemoryStream())
+            decoder = new GZipContentDecoder();
+
+            using(var comressedStream = new MemoryStream())
             {
                 using (var uncomressedStream = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")))
-                using (var compressionStream = encoder.GetCompressionStream(comressedStream))
+                using (var compressionStream = new GZipStream(comressedStream, CompressionMode.Compress))
                 {
                     uncomressedStream.CopyTo(compressionStream);
                 }
@@ -29,16 +32,19 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
             }
         };
 
-        It should_be_able_to_comress =
+        Because of =
+            () => decompression_stream = decoder.GetDecompressionStream(comressed_stream);
+
+        It should_be_able_to_decomress =
             () => DecomressData().ShouldEqual("Hello World!");
 
         static string DecomressData()
         {
             using (var data = new MemoryStream())
             {
-                using (var decompressionStream = new DeflateStream(comressed_stream, CompressionMode.Decompress))
+                using (decompression_stream)
                 {
-                    decompressionStream.CopyTo(data);
+                    decompression_stream.CopyTo(data);
                 }
 
                 return Encoding.UTF8.GetString(data.ToArray());

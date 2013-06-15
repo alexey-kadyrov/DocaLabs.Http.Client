@@ -5,7 +5,7 @@ using DocaLabs.Http.Client.Utils.JsonSerialization;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.JsonSerialization
+namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 {
     [Subject(typeof(DefaultJsonDeserializer))]
     class when_default_json_deserializer_is_used

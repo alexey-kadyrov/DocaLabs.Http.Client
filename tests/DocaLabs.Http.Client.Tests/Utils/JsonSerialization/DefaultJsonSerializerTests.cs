@@ -6,7 +6,7 @@ using DocaLabs.Testing.Common;
 using Machine.Specifications;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Tests.JsonSerialization
+namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 {
     [Subject(typeof(DefaultJsonSerializer))]
     class when_default_json_serializer_is_used

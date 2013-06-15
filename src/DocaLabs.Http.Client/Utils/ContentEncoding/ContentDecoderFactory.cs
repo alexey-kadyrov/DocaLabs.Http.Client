@@ -69,6 +69,9 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
         /// </summary>
         static public void AddAcceptEncodings(WebRequest request)
         {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
             foreach (var decoder in GetSupportedEncodings())
                 request.Headers.Add("Accept-Encoding", decoder);
         }

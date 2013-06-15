@@ -8,7 +8,7 @@ using Machine.Specifications;
 using Moq;
 using It = Machine.Specifications.It;
 
-namespace DocaLabs.Http.Client.Tests.ContentEncoding
+namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 {
     [Subject(typeof(ContentDecoderFactory))]
     class when_using_content_decoder_factory_in_default_configuration
@@ -82,6 +82,21 @@ namespace DocaLabs.Http.Client.Tests.ContentEncoding
 
         It should_add_all_supported_content_encodings_into_header = () => headers["accept-encoding"].Split(',')
             .ShouldContainOnly(KnownContentEncodings.Deflate, KnownContentEncodings.Gzip, KnownContentEncodings.XGzip);
+    }
+
+    [Subject(typeof(ContentDecoderFactory))]
+    class when_adding_accept_encodings_header_to_null_web_request
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => ContentDecoderFactory.AddAcceptEncodings(null));
+
+        It should_throw_argumant_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_request_argument =
+            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("request");
     }
 
     [Subject(typeof(ContentDecoderFactory))]

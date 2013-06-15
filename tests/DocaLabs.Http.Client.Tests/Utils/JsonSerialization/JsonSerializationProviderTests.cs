@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.JsonSerialization
+namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 {
     [Subject(typeof(JsonSerializationProvider))]
     class when_json_serialization_provider_is_used_in_default_configuration_without_any_extension_library_with_json_serialization
