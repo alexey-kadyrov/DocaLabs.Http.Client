@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.Configuration
     // ReSharper disable AssignNullToNotNullAttribute
 
     /// <summary>
-    /// Contains a base collection type to implement configuration collections.
+    /// Defines a base collection type to implement configuration collections.
     /// </summary>
     public abstract class ConfigurationElementCollectionBase<TKey, TElement> : ConfigurationElementCollection
         where TKey : class

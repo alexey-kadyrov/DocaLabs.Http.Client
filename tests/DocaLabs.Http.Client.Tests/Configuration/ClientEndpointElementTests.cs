@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Security;
 using DocaLabs.Http.Client.Configuration;
 using Machine.Specifications;
 using It = Machine.Specifications.It;
@@ -63,6 +64,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             element.Method = "PUT";
             element.Timeout = 1;
             element.AutoSetAcceptEncoding = false;
+            element.AuthenticationLevel = AuthenticationLevel.MutualAuthRequired;
         };
 
         It should_change_name =
@@ -79,5 +81,8 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
         It should_change_auto_set_accept_encoding =
             () => element.AutoSetAcceptEncoding.ShouldBeFalse();
+
+        It should_change_authentication_level =
+            () => element.AuthenticationLevel.ShouldEqual(AuthenticationLevel.MutualAuthRequired);
     }
 }

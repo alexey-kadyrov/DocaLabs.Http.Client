@@ -5,7 +5,7 @@ using System.IO;
 namespace DocaLabs.Http.Client.Configuration
 {
     /// <summary>
-    /// Defines methods to get an endpoint configuration
+    /// Defines methods to get an endpoint configuration using the application/web configuration file.
     /// </summary>
     public class DefaultEndpointConfigurationProvider : IEndpointConfigurationProvider
     {

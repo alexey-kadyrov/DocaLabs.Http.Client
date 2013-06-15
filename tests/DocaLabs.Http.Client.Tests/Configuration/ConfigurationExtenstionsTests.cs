@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using DocaLabs.Http.Client.Configuration;
 using Machine.Specifications;
 
@@ -81,5 +82,35 @@ namespace DocaLabs.Http.Client.Tests.Configuration
 
         It should_return_fully_initialized_network_credential_object =
             () => ((NetworkCredential)credentials).ShouldMatch(x => x.UserName == "user1" && x.Password == "password1" && x.Domain == "domain1");
+    }
+
+    [Subject(typeof(ClientNetworkCredentialElement))]
+    class when_getting_credentials_for_null
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => ((IClientNetworkCredential)null).GetCredential());
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_credential_argument =
+            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("credential");
+    }
+
+    [Subject(typeof(ClientNetworkCredentialElement))]
+    class when_finding_certificate_for_null_reference
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => ((IClientCertificateReference)null).Find());
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_reference_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("reference");
     }
 }

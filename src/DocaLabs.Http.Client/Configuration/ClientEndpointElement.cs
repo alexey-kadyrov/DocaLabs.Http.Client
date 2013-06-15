@@ -116,7 +116,7 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         [ConfigurationProperty(BaseUrlProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
-        public Uri BaseUrlElement
+        Uri BaseUrlElement
         {
             get { return ((Uri)base[BaseUrlProperty]); }
             set { base[BaseUrlProperty] = value; }
