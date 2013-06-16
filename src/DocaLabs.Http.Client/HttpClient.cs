@@ -209,8 +209,10 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Gets's the configured default strategy. It has 3 retries with initial timeout of 1 sec and step back of 1 sec.
-        /// So the timeouts will be: 1 sec after the initial call, 2 sec after the first retry, 3 sec after the second retry.
+        /// Gets's the configured default strategy. The timeouts are: 
+        ///     1 second between the initial call and the first retry, 
+        ///     2 seconds between the first and second retries, 
+        ///     5 seconds between the second and third retries.
         /// </summary>
         protected IExecuteStrategy<TOutputModel> GetDefaultExecuteStrategy()
         {
