@@ -1,8 +1,6 @@
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Net;
-using System.Threading;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
@@ -50,20 +48,20 @@ namespace DocaLabs.Http.Client
         protected IClientEndpoint Configuration { get; private set; }
 
         /// <summary>
-        /// Retry strategy for calling the remote endpoint.
+        /// Execute strategy for calling the remote endpoint.
         /// </summary>
-        protected Func<Func<TOutputModel>, TOutputModel> RetryStrategy { get; private set; }
+        protected IExecuteStrategy<TOutputModel> ExecuteStrategy { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the HttpClient.
         /// </summary>
         /// <param name="baseUrl">The URL of the service.</param>
         /// <param name="configurationName">If the configuration name is not null it'll be used to get the endpoint configuration from the config file.</param>
-        /// <param name="retryStrategy">If the parameter null then the default retry strategy will be used.</param>
-        public HttpClient(Uri baseUrl = null, string configurationName = null, Func<Func<TOutputModel>, TOutputModel> retryStrategy = null)
+        /// <param name="executeStrategy">If the parameter null then the default retry strategy will be used.</param>
+        public HttpClient(Uri baseUrl = null, string configurationName = null, IExecuteStrategy<TOutputModel> executeStrategy = null)
         {
             BaseUrl = baseUrl;
-            RetryStrategy = retryStrategy ?? GetDefaultRetryStrategy();
+            ExecuteStrategy = executeStrategy ?? GetDefaultExecuteStrategy();
 
             ReadConfiguration(configurationName);
 
@@ -92,7 +90,7 @@ namespace DocaLabs.Http.Client
         {
             try
             {
-                return RetryStrategy(() => ExecutePipeline(model));
+                return ExecuteStrategy.Execute(() => ExecutePipeline(model));
             }
             catch (HttpClientException)
             {
@@ -211,66 +209,15 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Simple retry strategy to call the remote server, if the call fails it will be retried the defines number of times after each time increasing the timeout by stepbackIncrease.
-        /// </summary>
-        protected TOutputModel DefaultRetryStrategy(Func<TOutputModel> action, int retries, int initialTimeout, int stepbackIncrease)
-        {
-            var timeout = initialTimeout;
-
-            var attempt = 1;
-
-            while (true)
-            {
-                try
-                {
-                    return action();
-                }
-                catch (ArgumentException)
-                {
-                    throw;
-                }
-                catch (NullReferenceException)
-                {
-                    throw;
-                }
-                catch (HttpClientException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    if (retries <= 0)
-                        throw;
-
-                    OnLogRetry(++attempt, e);
-
-                    --retries;
-
-                    Thread.Sleep(timeout);
-
-                    timeout += stepbackIncrease;
-                }
-            }
-        }
-    
-        /// <summary>
-        /// Is called each time before retry. The default implementation uses Debug.Write.
-        /// </summary>
-        protected virtual void OnLogRetry(int attempt, Exception e)
-        {
-            if(e == null)
-                Trace.WriteLine(string.Format(Resources.Text.will_try_again, attempt));
-            else
-                Trace.WriteLine(string.Format(Resources.Text.will_try_again, attempt) + ": " + e);
-        }
-
-        /// <summary>
         /// Gets's the configured default strategy. It has 3 retries with initial timeout of 1 sec and step back of 1 sec.
         /// So the timeouts will be: 1 sec after the initial call, 2 sec after the first retry, 3 sec after the second retry.
         /// </summary>
-        protected Func<Func<TOutputModel>, TOutputModel> GetDefaultRetryStrategy()
+        protected IExecuteStrategy<TOutputModel> GetDefaultExecuteStrategy()
         {
-            return action => DefaultRetryStrategy(action, 3, 1000, 1000);
+            return new DefaultExecuteStrategy<TOutputModel>(new[]
+            {
+                TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5)
+            });
         }
        
         void ReadConfiguration(string configurationName)

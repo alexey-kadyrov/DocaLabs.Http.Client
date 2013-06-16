@@ -196,6 +196,6 @@
     <value>Value {0} is not defined for enum {1}.</value>
   </data>
   <data name="will_try_again" xml:space="preserve">
-    <value>Failed to execute the service query, will try again. Attempt {0}.</value>
+    <value>Failed to execute the service query, will try again. Attempt {0} out of {1} : {2}</value>
   </data>
 </root>

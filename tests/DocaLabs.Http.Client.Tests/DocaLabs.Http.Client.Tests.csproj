@@ -83,7 +83,8 @@
     <Compile Include="Configuration\ClientProxyElementTests.cs" />
     <Compile Include="Configuration\ClientNetworkCredentialsElementTests.cs" />
     <Compile Include="Configuration\EndpointConfigurationTests.cs" />
-    <Compile Include="Configuration\RequestExtensionsTests.cs" />
+    <Compile Include="Binding\RequestExtensionsTests.cs" />
+    <Compile Include="DefaultExecuteStrategyTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="Utils\ContentEncoding\GZipContentDecoderTests.cs" />

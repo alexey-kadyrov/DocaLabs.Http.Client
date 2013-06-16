@@ -69,6 +69,8 @@
     <Compile Include="Binding\PropertyConverting\PropertyMap.cs" />
     <Compile Include="Binding\PropertyConverting\InRequestHeaderAttribute.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
+    <Compile Include="DefaultExecuteStrategy.cs" />
+    <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
     <Compile Include="Utils\CustomConverterFactory.cs" />

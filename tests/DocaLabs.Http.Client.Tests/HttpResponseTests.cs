@@ -73,8 +73,8 @@ namespace DocaLabs.Http.Client.Tests
         Because of =
             () => exception = Catch.Exception(() => new HttpResponse(mock_request.Object));
 
-        It should_throw_http_client_exception =
-            () => exception.ShouldBeOfType<HttpClientException>();
+        It should_throw_exception =
+            () => exception.ShouldBeOfType<Exception>();
 
         It should_report_that_the_response_stream_is_null =
             () => exception.Message.ShouldContain("Response stream is null");
