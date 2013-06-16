@@ -455,7 +455,27 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>), "checking inheritance behaviour")]
+    [Subject(typeof(DefaultExecuteStrategy<>))]
+    class when_executing_null_action
+    {
+        static DefaultExecuteStrategy<string> strategy;
+        static int attempts;
+        static Exception exception;
+
+        Establish context =
+            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
+
+        Because of = 
+            () => exception = Catch.Exception(() => strategy.Execute(null));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_action_argument =
+            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("action");
+    }
+
+    [Subject(typeof(DefaultExecuteStrategy<>), "inheritable behaviour")]
     class when_using_derived_startgey_to_execute_action_which_succeeds_first_time
     {
         static DerivedStrategy strategy;
@@ -516,7 +536,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>), "checking inheritance behaviour")]
+    [Subject(typeof(DefaultExecuteStrategy<>), "inheritable behaviour")]
     class when_using_derived_startgey_to_execute_action_which_fails_all_retries
     {
         static DerivedStrategy strategy;

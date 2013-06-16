@@ -28,6 +28,9 @@ namespace DocaLabs.Http.Client
         /// <returns>The return value of the action.</returns>
         public T Execute(Func<T> action)
         {
+            if(action == null)
+                throw new ArgumentNullException("action");
+
             var attempt = 0;
 
             while (true)
