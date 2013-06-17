@@ -5,10 +5,10 @@ using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
+namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
 {
     [Subject(typeof(PlainTextResponseDeserializer), "deserialization")]
-    class when_plain_text_deserializer_is_used_for_string_result : response_deserialization_test_context
+    class when_plain_text_deserializer_is_used_for_string_result_on_plain_text : response_deserialization_test_context
     {
         const string data = "Hello World!";
         static PlainTextResponseDeserializer deserializer;
@@ -24,6 +24,86 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
             () => target = (string)deserializer.Deserialize(http_response, typeof(string));
 
         It should_deserialize_string = 
+            () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_html_text : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static PlainTextResponseDeserializer deserializer;
+        static string target;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("text/html; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+
+        It should_deserialize_string =
+            () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_text_xml : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static PlainTextResponseDeserializer deserializer;
+        static string target;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+
+        It should_deserialize_string =
+            () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_application_xml : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static PlainTextResponseDeserializer deserializer;
+        static string target;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+
+        It should_deserialize_string =
+            () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_application_json : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static PlainTextResponseDeserializer deserializer;
+        static string target;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+
+        It should_deserialize_string =
             () => target.ShouldEqual("Hello World!");
     }
 
@@ -215,7 +295,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
-    class when_plain_text_deserializer_is_checking_response_with_none_plain_text_or_html_content_type : response_deserialization_test_context
+    class when_plain_text_deserializer_is_checking_response_with_unsupported_content_type : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
         static PlainTextResponseDeserializer deserializer;
@@ -224,7 +304,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new PlainTextResponseDeserializer();
-            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("image/gif", new MemoryStream(Encoding.UTF8.GetBytes(data)));
         };
 
         Because of =
@@ -347,7 +427,7 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
-    class when_html_text_deserializer_is_checking_response_with_plain_text_content_type : response_deserialization_test_context
+    class when_plain_text_deserializer_is_checking_response_with_text_html_content_type : response_deserialization_test_context
     {
         const string data = "";
         static PlainTextResponseDeserializer deserializer;
@@ -403,7 +483,175 @@ namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
     }
 
     [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
-    class when_html_text_deserializer_is_checking_response_with_plain_text_content_type_but_without_charset : response_deserialization_test_context
+    class when_plain_text_deserializer_is_checking_response_with_text_xml_content_type : response_deserialization_test_context
+    {
+        const string data = "";
+        static PlainTextResponseDeserializer deserializer;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        It should_be_able_to_deserialize_for_string =
+            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+
+        It should_not_be_able_to_deserialize_for_int =
+            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_long =
+            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_double =
+            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_decimal =
+            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_guid =
+            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetime =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetimeoffset =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_timespan =
+            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_enum =
+            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_bool =
+            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_char =
+            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_refrence_type =
+            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+
+        enum TestEnum
+        {
+        }
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
+    class when_plain_text_deserializer_is_checking_response_with_application_xml_content_type : response_deserialization_test_context
+    {
+        const string data = "";
+        static PlainTextResponseDeserializer deserializer;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("application/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        It should_be_able_to_deserialize_for_string =
+            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+
+        It should_not_be_able_to_deserialize_for_int =
+            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_long =
+            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_double =
+            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_decimal =
+            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_guid =
+            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetime =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetimeoffset =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_timespan =
+            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_enum =
+            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_bool =
+            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_char =
+            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_refrence_type =
+            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+
+        enum TestEnum
+        {
+        }
+    }
+
+    [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
+    class when_plain_textdeserializer_is_checking_response_with_application_json_content_type : response_deserialization_test_context
+    {
+        const string data = "";
+        static PlainTextResponseDeserializer deserializer;
+
+        Establish context = () =>
+        {
+            deserializer = new PlainTextResponseDeserializer();
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        It should_be_able_to_deserialize_for_string =
+            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+
+        It should_not_be_able_to_deserialize_for_int =
+            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_long =
+            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_double =
+            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_decimal =
+            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_guid =
+            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetime =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_datetimeoffset =
+            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_timespan =
+            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_enum =
+            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_bool =
+            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_char =
+            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+
+        It should_not_be_able_to_deserialize_for_refrence_type =
+            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+
+        enum TestEnum
+        {
+        }
+    }
+   
+    [Subject(typeof(PlainTextResponseDeserializer), "checking that can deserialize")]
+    class when_plain_text_deserializer_is_checking_response_with_html_text_content_type_but_without_charset : response_deserialization_test_context
     {
         const string data = "";
         static PlainTextResponseDeserializer deserializer;

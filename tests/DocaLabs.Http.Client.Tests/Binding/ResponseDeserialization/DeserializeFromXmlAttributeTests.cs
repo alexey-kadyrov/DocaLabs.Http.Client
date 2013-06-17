@@ -7,7 +7,7 @@ using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
+namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
 {
     [Subject(typeof(DeserializeFromXmlAttribute))]
     class when_deserialize_from_xml_attribute_is_used : response_deserialization_test_context

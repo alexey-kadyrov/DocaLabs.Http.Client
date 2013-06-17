@@ -6,7 +6,7 @@ using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
+namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
 {
     [Subject(typeof(JsonResponseDeserializer), "deserialization")]
     class when_json_deserializer_is_used : response_deserialization_test_context

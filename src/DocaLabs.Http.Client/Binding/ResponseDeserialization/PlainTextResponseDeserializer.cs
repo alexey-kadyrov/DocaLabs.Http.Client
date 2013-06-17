@@ -35,7 +35,7 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 
         /// <summary>
         /// Returns true if the content type is 'text/plain' and the TResult is "simple type", like int, string, Guid, double, etc.
-        /// or if the content type is 'text/html' and the TResult is string.
+        /// or if the content type is one of 'text/html', 'text/xml', 'application/xml', 'application/json' and the TResult is string.
         /// </summary>
         public bool CanDeserialize(HttpResponse response, Type resultType)
         {
@@ -48,7 +48,15 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
             return (
                         (response.ContentType.Is("text/plain") && resultType.IsSimpleType()) 
                         ||
-                        (response.ContentType.Is("text/html") && resultType == typeof(string))
+                        (
+                            resultType == typeof(string) &&
+                            (
+                                response.ContentType.Is("text/html") ||
+                                response.ContentType.Is("text/xml") ||
+                                response.ContentType.Is("application/xml") ||
+                                response.ContentType.Is("application/json")
+                            )
+                        )
                     );
         }
     }
