@@ -111,9 +111,11 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual TOutputModel ExecutePipeline(object model)
         {
-            var binder = ModelBinders.GetBinder(GetInputModelType(model));
-
             var context = new BindingContext(this, model, Configuration, BaseUrl);
+
+            var inputModelType = GetInputModelType(model);
+
+            var binder = ModelBinders.GetBinder(inputModelType);
 
             context.Model = binder.TransformInputModel(context);
 
@@ -125,7 +127,7 @@ namespace DocaLabs.Http.Client
 
             TryWriteRequestData(binder, context, request);
 
-            return ParseResponse(binder, context, request);
+            return ParseResponse(context, request);
         }
 
         /// <summary>
@@ -200,11 +202,11 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Gets the response and parses it. 
         /// </summary>
-        protected virtual TOutputModel ParseResponse(IModelBinder binder, BindingContext context, WebRequest request)
+        protected virtual TOutputModel ParseResponse(BindingContext context, WebRequest request)
         {
             using (var response = new HttpResponse(request))
             {
-                return (TOutputModel)binder.Read(context, response, typeof(TOutputModel));
+                return (TOutputModel)ModelBinders.GetReader(typeof(TOutputModel)).Read(context, response, typeof(TOutputModel));
             }
         }
 

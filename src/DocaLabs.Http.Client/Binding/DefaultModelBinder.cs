@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using DocaLabs.Http.Client.Binding.RequestSerialization;
-using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -14,7 +12,6 @@ namespace DocaLabs.Http.Client.Binding
         readonly DefaultRequestWriter _requestWriter;
         readonly DefaultHeaderMapper _headerMapper;
         readonly DefaultCredentialsMapper _credentialsMapper;
-        readonly DefaultResponseReader _responseReader;
 
         /// <summary>
         /// Initializes a new instance of the DefaultModelBinder class.
@@ -25,7 +22,6 @@ namespace DocaLabs.Http.Client.Binding
             _requestWriter = new DefaultRequestWriter();
             _headerMapper = new DefaultHeaderMapper();
             _credentialsMapper = new DefaultCredentialsMapper();
-            _responseReader = new DefaultResponseReader();
         }
 
         /// <summary>
@@ -74,14 +70,6 @@ namespace DocaLabs.Http.Client.Binding
         public virtual void Write(BindingContext context, WebRequest request)
         {
             _requestWriter.Write(context.HttpClient, context.Model, request);
-        }
-
-        /// <summary>
-        /// Uses DefaultResponseReader to process response.
-        /// </summary>
-        public virtual object Read(BindingContext context, HttpResponse response, Type resultType)
-        {
-            return _responseReader.Read(response, resultType);
         }
     }
 }

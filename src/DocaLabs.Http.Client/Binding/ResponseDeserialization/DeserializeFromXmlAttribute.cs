@@ -34,8 +34,6 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            // cannot wrap into UnrecoverableHttpClientException as the XmlSerializer reads from the stream  so it may throw network exception
-
             // stream is disposed by the reader
             using (var reader = XmlReader.Create(response.GetDataStream(), GetXmlReaderSettings()))
             {

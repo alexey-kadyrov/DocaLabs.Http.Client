@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Defines helper methods to deserialize a web response. All public methods are thread safe.
     /// </summary>
-    public class DefaultResponseReader
+    public class DefaultResponseReader : IResponseReader
     {
         readonly object Locker;
         IList<IResponseDeserializationProvider> _providers;
@@ -57,7 +57,7 @@ namespace DocaLabs.Http.Client.Binding
             };
         }
 
-        public virtual object Read(HttpResponse response, Type resultType)
+        public virtual object Read(BindingContext context, HttpResponse response, Type resultType)
         {
             if(resultType == null)
                 throw new ArgumentNullException("resultType");

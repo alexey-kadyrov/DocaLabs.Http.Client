@@ -53,14 +53,5 @@ namespace DocaLabs.Http.Client.Binding
         /// <param name="context">The binding context.</param>
         /// <param name="request">The request.</param>
         void Write(BindingContext context, WebRequest request);
-
-        /// <summary>
-        /// Reads the response string and returns an object if there is anything there.
-        /// </summary>
-        /// <param name="context">The binding context.</param>
-        /// <param name="response">The response.</param>
-        /// <param name="resultType">Expected type for the return value.</param>
-        /// <returns>Return value from the stream or null.</returns>
-        object Read(BindingContext context, HttpResponse response, Type resultType);
     }
 }

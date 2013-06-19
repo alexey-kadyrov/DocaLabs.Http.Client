@@ -54,6 +54,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Binding\BindingContext.cs" />
+    <Compile Include="Binding\IResponseReader.cs" />
     <Compile Include="Binding\RequestSerialization\InRequestFormAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\InRequestPathAttribute.cs" />
     <Compile Include="Binding\PropertyBindingExtensions.cs" />
