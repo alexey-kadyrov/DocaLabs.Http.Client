@@ -22,7 +22,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)deserializer.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)deserializer.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -45,7 +45,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)deserializer.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)deserializer.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -68,7 +68,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)deserializer.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)deserializer.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_return_null_object =
             () => target.ShouldBeNull();
@@ -88,7 +88,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, null));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response_stream, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -130,7 +130,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response_stream, typeof(TestTarget)));
 
         It should_throw_http_client_exception =
             () => exception.ShouldBeOfType<HttpClientException>();
@@ -153,7 +153,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => deserializer.CanDeserialize(http_response, null));
+            () => exception = Catch.Exception(() => deserializer.CanDeserialize(http_response_stream, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -195,7 +195,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(TestTarget));
 
         It should_be_able_to_deserialize =
             () => can_deserialize.ShouldBeTrue();
@@ -216,7 +216,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(TestTarget));
 
         It should_be_able_to_deserialize =
             () => can_deserialize.ShouldBeTrue();
@@ -236,7 +236,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(TestTarget));
 
         It should_be_able_to_deserialize =
             () => can_deserialize.ShouldBeTrue();
@@ -256,7 +256,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(string));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(string));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();
@@ -276,7 +276,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(TestTarget));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();
@@ -296,7 +296,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(TestTarget));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(TestTarget));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Mime;
@@ -8,15 +8,35 @@ using DocaLabs.Http.Client.Utils.ContentEncoding;
 namespace DocaLabs.Http.Client
 {
     /// <summary>
-    /// A wrapper around WebResponse instance.
+    /// Wraps around the response stream.
     /// </summary>
-    public class HttpResponse : IDisposable
+    public class HttpResponseStream : Stream
     {
         ContentType _contentType;
 
         WebResponse Response { get; set; }
 
         Stream RawResponseStream { get; set; }
+
+        Stream _dataStream;
+
+        /// <summary>
+        /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by ContentDecoderFactory.
+        /// </summary>
+        Stream DataStream
+        {
+            get
+            {
+                if (_dataStream != null)
+                    return _dataStream;
+
+                var httpResponse = Response as HttpWebResponse;
+                if (httpResponse == null || string.IsNullOrWhiteSpace(httpResponse.ContentEncoding))
+                    return (_dataStream = RawResponseStream);
+
+                return (_dataStream = ContentDecoderFactory.Get(httpResponse.ContentEncoding).GetDecompressionStream(RawResponseStream));
+            }
+        }
 
         /// <summary>
         /// Gets a value that indicates whether mutual authentication occurred.
@@ -51,7 +71,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Initializes an instance of the HttpResponse class for the provided WebRequest instance.
         /// </summary>
-        public HttpResponse(WebRequest request)
+        public HttpResponseStream(WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -70,10 +90,7 @@ namespace DocaLabs.Http.Client
         {
             using (var memoryStream = new MemoryStream())
             {
-                using (var stream = GetDataStream())
-                {
-                    stream.CopyTo(memoryStream);
-                }
+                DataStream.CopyTo(memoryStream);
 
                 return memoryStream.ToArray();
             }
@@ -85,8 +102,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         public string AsString()
         {
-            // stream is disposed by the reader
-            using (var reader = new StreamReader(GetDataStream(), TryGetEncoding()))
+            using (var reader = new StreamReader(DataStream, TryGetEncoding(), true, 2048, true))
             {
                 return reader.ReadToEnd();
             }
@@ -116,39 +132,23 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by ContentDecoderFactory.
-        /// </summary>
-        /// <returns>RawResponseStream or a stream containing decoded content.</returns>
-        public Stream GetDataStream()
-        {
-            var httpResponse = Response as HttpWebResponse;
-            if (httpResponse == null || string.IsNullOrWhiteSpace(httpResponse.ContentEncoding))
-                return RawResponseStream;
-
-            return ContentDecoderFactory.Get(httpResponse.ContentEncoding).GetDecompressionStream(RawResponseStream);
-        }
-
-        /// <summary>
         /// Releases the response and the stream.
         /// </summary>
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Dispose(true);
-        }
+            if (disposing)
+            {
+                if(_dataStream != null)
+                    _dataStream.Dispose();
 
-        /// <summary>
-        /// Releases the response and the stream.
-        /// </summary>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing == false)
-                return;
+                if (RawResponseStream != null)
+                    RawResponseStream.Dispose();
 
-            if(RawResponseStream != null)
-                RawResponseStream.Dispose();
+                if (Response != null)
+                    Response.Close();
+            }
 
-            if(Response != null)
-                Response.Close();
+            base.Dispose(disposing);
         }
 
         ContentType InitializeContentType()
@@ -168,5 +168,77 @@ namespace DocaLabs.Http.Client
             return (_contentType = new ContentType());
             // ReSharper restore EmptyGeneralCatchClause
         }
+
+        #region Stream
+
+        public override bool CanRead
+        {
+            get { return DataStream.CanRead; }
+        }
+
+        public override bool CanSeek
+        {
+            get { return DataStream.CanSeek; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return DataStream.CanWrite; }
+        }
+
+        public override bool CanTimeout
+        {
+            get { return DataStream.CanTimeout; }
+        }
+
+        public override long Length
+        {
+            get { return DataStream.Length; }
+        }
+
+        public override long Position
+        {
+            get { return DataStream.Position; }
+            set { DataStream.Position = value; }
+        }
+
+        public override int ReadTimeout
+        {
+            get { return DataStream.ReadTimeout; }
+            set { DataStream.ReadTimeout = value; }
+        }
+
+        public override int WriteTimeout
+        {
+            get { return DataStream.WriteTimeout; }
+            set { DataStream.WriteTimeout = value; }
+        }
+
+        public override void Flush()
+        {
+            DataStream.Flush();
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            return DataStream.Seek(offset, origin);
+        }
+
+        public override void SetLength(long value)
+        {
+            DataStream.SetLength(value);
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            return DataStream.Read(buffer, offset, count);
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            DataStream.Write(buffer, offset, count);
+        }
+
+        #endregion Stream
     }
 }

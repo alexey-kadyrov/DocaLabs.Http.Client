@@ -8,8 +8,8 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
     public interface IResponseDeserialization
     {
         /// <summary>
-        /// When is overridden in derived class it deserializes an object from the web response.
+        /// When is overridden in derived class it deserializes an object from the web response stream.
         /// </summary>
-        object Deserialize(HttpResponse response, Type resultType);
+        object Deserialize(HttpResponseStream responseStream, Type resultType);
     }
 }

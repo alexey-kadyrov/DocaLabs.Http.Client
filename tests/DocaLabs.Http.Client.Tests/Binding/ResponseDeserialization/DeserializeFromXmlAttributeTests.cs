@@ -23,7 +23,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)attribute.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)attribute.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -69,7 +69,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)attribute.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -96,7 +96,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)attribute.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -123,7 +123,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => attribute.Deserialize(http_response_stream, typeof(TestTarget)));
 
         It should_throw_an_exception =
             () => exception.ShouldNotBeNull();
@@ -147,7 +147,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => attribute.Deserialize(http_response_stream, typeof(TestTarget)));
 
         It should_throw_an_exception =
             () => exception.ShouldNotBeNull();
@@ -171,7 +171,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (TestTarget)attribute.Deserialize(http_response, typeof(TestTarget));
+            () => target = (TestTarget)attribute.Deserialize(http_response_stream, typeof(TestTarget));
 
         It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
         {
@@ -194,7 +194,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => attribute.Deserialize(http_response_stream, typeof(TestTarget)));
 
         It should_throw_an_exception =
             () => exception.ShouldNotBeNull();
@@ -214,7 +214,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, null));
+            () => exception = Catch.Exception(() => attribute.Deserialize(http_response_stream, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -256,7 +256,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => attribute.Deserialize(http_response, typeof(TestTarget)));
+            () => exception = Catch.Exception(() => attribute.Deserialize(http_response_stream, typeof(TestTarget)));
 
         It should_throw_an_exception =
             () => exception.ShouldNotBeNull();

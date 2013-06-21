@@ -26,16 +26,16 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// <summary>
         /// Deserializes xml object from the web response.
         /// </summary>
-        public override object Deserialize(HttpResponse response, Type resultType)
+        public override object Deserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
             // stream is disposed by the reader
-            using (var reader = XmlReader.Create(response.GetDataStream(), GetXmlReaderSettings()))
+            using (var reader = XmlReader.Create(responseStream, GetXmlReaderSettings()))
             {
                 return new XmlSerializer(resultType).Deserialize(reader);
             }
@@ -46,7 +46,8 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
             return new XmlReaderSettings
             {
                 DtdProcessing = DtdProcessing,
-                ValidationType = DtdProcessing == DtdProcessing.Parse ? ValidationType.DTD : ValidationType.None
+                ValidationType = DtdProcessing == DtdProcessing.Parse ? ValidationType.DTD : ValidationType.None,
+                CloseInput = false
             };
         }
     }

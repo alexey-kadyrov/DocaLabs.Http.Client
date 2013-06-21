@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Tests
         public string Value2 { get; set; }
     }
 
-    [Subject(typeof(HttpResponse))]
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_disposed_it_releases_all_resources : response_deserialization_test_context
     {
         static Stream response_stream;
@@ -27,7 +27,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => http_response.Dispose();
+            () => http_response_stream.Dispose();
 
         It should_close_the_underlying_web_response =
             () => mock_response.Verify(x => x.Close(), Times.AtLeastOnce());
@@ -36,13 +36,13 @@ namespace DocaLabs.Http.Client.Tests
             () => (Catch.Exception(() => response_stream.ReadByte()) as ObjectDisposedException).ShouldNotBeNull();
     }
 
-    [Subject(typeof(HttpResponse))]
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_newed_with_null_request
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => new HttpResponse(null));
+            () => exception = Catch.Exception(() => new HttpResponseStream(null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -51,7 +51,7 @@ namespace DocaLabs.Http.Client.Tests
             () => ((ArgumentNullException)exception).ParamName.ShouldContain("request");
     }
 
-    [Subject(typeof(HttpResponse))]
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_newed_and_the_stream_is_null
     {
         static Mock<WebRequest> mock_request;
@@ -71,7 +71,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => exception = Catch.Exception(() => new HttpResponse(mock_request.Object));
+            () => exception = Catch.Exception(() => new HttpResponseStream(mock_request.Object));
 
         It should_throw_exception =
             () => exception.ShouldBeOfType<Exception>();
@@ -80,32 +80,32 @@ namespace DocaLabs.Http.Client.Tests
             () => exception.Message.ShouldContain("Response stream is null");
     }
 
-    [Subject(typeof(HttpResponse))]
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_used_with_byte_array_data : response_deserialization_test_context
     {
         Establish context = 
             () => Setup("application/octet-stream", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
 
         It should_return_all_byte_array_data =
-            () => Encoding.UTF8.GetString(http_response.AsByteArray()).ShouldEqual("Hello World!");
+            () => Encoding.UTF8.GetString(http_response_stream.AsByteArray()).ShouldEqual("Hello World!");
     }
 
-    [Subject(typeof(HttpResponse))]
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_used_with_plain_text_data : response_deserialization_test_context
     {
         Establish context =
             () => Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
 
         It should_deserialize_string_data =
-            () => http_response.AsString().ShouldEqual("Hello World!");
+            () => http_response_stream.AsString().ShouldEqual("Hello World!");
     }
 
-    [Subject(typeof(HttpResponse))]
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_newed_for_request
     {
         static Mock<WebRequest> mock_request;
         static Mock<WebResponse> mock_response;
-        static HttpResponse http_response;
+        static HttpResponseStream http_response_stream;
 
         Establish context = () =>
         {
@@ -124,30 +124,30 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => http_response = new HttpResponse(mock_request.Object);
+            () => http_response_stream = new HttpResponseStream(mock_request.Object);
 
         It should_return_is_mutually_authenticated_from_wrapped_web_response =
-            () => http_response.IsMutuallyAuthenticated.ShouldBeTrue();
+            () => http_response_stream.IsMutuallyAuthenticated.ShouldBeTrue();
 
         It should_return_content_length_from_wrapped_web_response =
-            () => http_response.ContentLength.ShouldEqual(42);
+            () => http_response_stream.ContentLength.ShouldEqual(42);
 
         It should_return_media_type_from_wrapped_web_response =
-            () => http_response.ContentType.MediaType.ShouldEqual("text/plain");
+            () => http_response_stream.ContentType.MediaType.ShouldEqual("text/plain");
 
         It should_return_charset_from_wrapped_web_response =
-            () => http_response.ContentType.CharSet.ShouldEqual("utf-8");
+            () => http_response_stream.ContentType.CharSet.ShouldEqual("utf-8");
 
         It should_return_http_encoding =
-            () => http_response.TryGetEncoding().ToString().ShouldEqual(Encoding.UTF8.ToString());
+            () => http_response_stream.TryGetEncoding().ToString().ShouldEqual(Encoding.UTF8.ToString());
 
         It should_return_response_uri_from_wrapped_web_response =
-            () => http_response.ResponseUri.ShouldBeTheSameAs(mock_response.Object.ResponseUri);
+            () => http_response_stream.ResponseUri.ShouldBeTheSameAs(mock_response.Object.ResponseUri);
 
         It should_return_headers_from_wrapped_web_response =
-            () => http_response.Headers.ShouldBeTheSameAs(mock_response.Object.Headers);
+            () => http_response_stream.Headers.ShouldBeTheSameAs(mock_response.Object.Headers);
 
         It should_return_supports_headers_from_wrapped_web_response =
-            () => http_response.SupportsHeaders.ShouldBeTrue();
+            () => http_response_stream.SupportsHeaders.ShouldBeTrue();
     }
 }

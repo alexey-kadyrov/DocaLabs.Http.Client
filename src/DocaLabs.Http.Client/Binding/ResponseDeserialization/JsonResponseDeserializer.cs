@@ -14,15 +14,15 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// The method is using Newtonsoft deserializer with default settings.
         /// If the response stream content is empty then the default(TResult) is returned.
         /// </summary>
-        public object Deserialize(HttpResponse response, Type resultType)
+        public object Deserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            var s = response.AsString();
+            var s = responseStream.AsString();
 
             try
             {
@@ -39,15 +39,15 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// <summary>
         /// Returns true if the content type is 'application/json' and the TResult is not "simple type", like int, string, Guid, double, etc.
         /// </summary>
-        public bool CanDeserialize(HttpResponse response, Type resultType)
+        public bool CanDeserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            return response.ContentType.Is("application/json") && (!resultType.IsSimpleType());
+            return responseStream.ContentType.Is("application/json") && (!resultType.IsSimpleType());
         }
     }
 }

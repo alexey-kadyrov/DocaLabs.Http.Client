@@ -11,15 +11,15 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// <summary>
         /// Deserializes JSON object from the web response.
         /// </summary>
-        public override object Deserialize(HttpResponse response, Type resultType)
+        public override object Deserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            var s = response.AsString();
+            var s = responseStream.AsString();
 
             try
             {

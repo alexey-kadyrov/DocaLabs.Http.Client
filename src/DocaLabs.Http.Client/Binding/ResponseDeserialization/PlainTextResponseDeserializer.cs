@@ -11,15 +11,15 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// <summary>
         /// Deserializes the response stream as plain string and then converts to the resulting type.
         /// </summary>
-        public object Deserialize(HttpResponse response, Type resultType)
+        public object Deserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            var value = response.AsString();
+            var value = responseStream.AsString();
 
             try
             {
@@ -37,24 +37,24 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// Returns true if the content type is 'text/plain' and the TResult is "simple type", like int, string, Guid, double, etc.
         /// or if the content type is one of 'text/html', 'text/xml', 'application/xml', 'application/json' and the TResult is string.
         /// </summary>
-        public bool CanDeserialize(HttpResponse response, Type resultType)
+        public bool CanDeserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
             return (
-                        (response.ContentType.Is("text/plain") && resultType.IsSimpleType()) 
+                        (responseStream.ContentType.Is("text/plain") && resultType.IsSimpleType()) 
                         ||
                         (
                             resultType == typeof(string) &&
                             (
-                                response.ContentType.Is("text/html") ||
-                                response.ContentType.Is("text/xml") ||
-                                response.ContentType.Is("application/xml") ||
-                                response.ContentType.Is("application/json")
+                                responseStream.ContentType.Is("text/html") ||
+                                responseStream.ContentType.Is("text/xml") ||
+                                responseStream.ContentType.Is("application/xml") ||
+                                responseStream.ContentType.Is("application/json")
                             )
                         )
                     );

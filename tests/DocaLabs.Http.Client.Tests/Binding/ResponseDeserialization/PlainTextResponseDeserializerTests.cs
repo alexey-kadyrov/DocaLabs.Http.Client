@@ -21,7 +21,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
 
         It should_deserialize_string = 
             () => target.ShouldEqual("Hello World!");
@@ -41,7 +41,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
 
         It should_deserialize_string =
             () => target.ShouldEqual("Hello World!");
@@ -61,7 +61,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
 
         It should_deserialize_string =
             () => target.ShouldEqual("Hello World!");
@@ -81,7 +81,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
 
         It should_deserialize_string =
             () => target.ShouldEqual("Hello World!");
@@ -101,7 +101,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
 
         It should_deserialize_string =
             () => target.ShouldEqual("Hello World!");
@@ -121,7 +121,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (decimal)deserializer.Deserialize(http_response, typeof(decimal));
+            () => target = (decimal)deserializer.Deserialize(http_response_stream, typeof(decimal));
 
         It should_deserialize_decimal =
             () => target.ShouldEqual(42.55M);
@@ -141,7 +141,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (string)deserializer.Deserialize(http_response, typeof(string));
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
 
         It should_return_null =
             () => target.ShouldBeNull();
@@ -161,7 +161,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => target = (decimal)deserializer.Deserialize(http_response, typeof(decimal));
+            () => target = (decimal)deserializer.Deserialize(http_response_stream, typeof(decimal));
 
         It should_return_default_value_for_decimal =
             () => target.ShouldEqual(default(decimal));
@@ -181,7 +181,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, null));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response_stream, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -223,7 +223,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response, typeof(int)));
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response_stream, typeof(int)));
 
         It should_throw_http_client_exception =
             () => exception.ShouldBeOfType<HttpClientException>();
@@ -246,7 +246,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => exception = Catch.Exception(() => deserializer.CanDeserialize(http_response, null));
+            () => exception = Catch.Exception(() => deserializer.CanDeserialize(http_response_stream, null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -288,7 +288,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(string));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(string));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();
@@ -308,7 +308,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         Because of =
-            () => can_deserialize = deserializer.CanDeserialize(http_response, typeof(string));
+            () => can_deserialize = deserializer.CanDeserialize(http_response_stream, typeof(string));
 
         It should_not_be_able_to_deserialize =
             () => can_deserialize.ShouldBeFalse();
@@ -327,43 +327,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         It should_be_able_to_deserialize_for_string =
-            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(string)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_int =
-            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(int)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_long =
-            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(long)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_double =
-            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(double)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_decimal =
-            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(decimal)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_guid =
-            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(Guid)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_datetime =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTime)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_datetimeoffset =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTimeOffset)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_timespan =
-            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TimeSpan)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_enum =
-            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestEnum)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_bool =
-            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(bool)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_char =
-            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(char)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum
         {
@@ -383,43 +383,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         It should_be_able_to_deserialize_for_string =
-            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(string)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_int =
-            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(int)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_long =
-            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(long)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_double =
-            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(double)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_decimal =
-            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(decimal)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_guid =
-            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(Guid)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_datetime =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTime)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_datetimeoffset =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTimeOffset)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_timespan =
-            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TimeSpan)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_enum =
-            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestEnum)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_bool =
-            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(bool)).ShouldBeTrue();
 
         It should_be_able_to_deserialize_for_char =
-            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(char)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum
         {
@@ -439,43 +439,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         It should_be_able_to_deserialize_for_string =
-            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(string)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_int =
-            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(int)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_long =
-            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(long)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_double =
-            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(double)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_decimal =
-            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(decimal)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_guid =
-            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(Guid)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetime =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTime)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetimeoffset =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTimeOffset)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_timespan =
-            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TimeSpan)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_enum =
-            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestEnum)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_bool =
-            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(bool)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_char =
-            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(char)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum 
         {
@@ -495,43 +495,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         It should_be_able_to_deserialize_for_string =
-            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(string)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_int =
-            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(int)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_long =
-            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(long)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_double =
-            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(double)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_decimal =
-            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(decimal)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_guid =
-            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(Guid)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetime =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTime)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetimeoffset =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTimeOffset)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_timespan =
-            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TimeSpan)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_enum =
-            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestEnum)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_bool =
-            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(bool)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_char =
-            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(char)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum
         {
@@ -551,43 +551,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         It should_be_able_to_deserialize_for_string =
-            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(string)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_int =
-            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(int)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_long =
-            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(long)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_double =
-            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(double)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_decimal =
-            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(decimal)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_guid =
-            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(Guid)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetime =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTime)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetimeoffset =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTimeOffset)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_timespan =
-            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TimeSpan)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_enum =
-            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestEnum)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_bool =
-            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(bool)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_char =
-            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(char)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum
         {
@@ -607,43 +607,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         It should_be_able_to_deserialize_for_string =
-            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(string)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_int =
-            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(int)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_long =
-            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(long)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_double =
-            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(double)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_decimal =
-            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(decimal)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_guid =
-            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(Guid)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetime =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTime)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetimeoffset =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTimeOffset)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_timespan =
-            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TimeSpan)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_enum =
-            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestEnum)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_bool =
-            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(bool)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_char =
-            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(char)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum
         {
@@ -663,43 +663,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         };
 
         It should_be_able_to_deserialize_for_string =
-            () => deserializer.CanDeserialize(http_response, typeof(string)).ShouldBeTrue();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(string)).ShouldBeTrue();
 
         It should_not_be_able_to_deserialize_for_int =
-            () => deserializer.CanDeserialize(http_response, typeof(int)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(int)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_long =
-            () => deserializer.CanDeserialize(http_response, typeof(long)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(long)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_double =
-            () => deserializer.CanDeserialize(http_response, typeof(double)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(double)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_decimal =
-            () => deserializer.CanDeserialize(http_response, typeof(decimal)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(decimal)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_guid =
-            () => deserializer.CanDeserialize(http_response, typeof(Guid)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(Guid)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetime =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTime)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTime)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_datetimeoffset =
-            () => deserializer.CanDeserialize(http_response, typeof(DateTimeOffset)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(DateTimeOffset)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_timespan =
-            () => deserializer.CanDeserialize(http_response, typeof(TimeSpan)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TimeSpan)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_enum =
-            () => deserializer.CanDeserialize(http_response, typeof(TestEnum)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestEnum)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_bool =
-            () => deserializer.CanDeserialize(http_response, typeof(bool)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(bool)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_char =
-            () => deserializer.CanDeserialize(http_response, typeof(char)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(char)).ShouldBeFalse();
 
         It should_not_be_able_to_deserialize_for_refrence_type =
-            () => deserializer.CanDeserialize(http_response, typeof(TestTarget)).ShouldBeFalse();
+            () => deserializer.CanDeserialize(http_response_stream, typeof(TestTarget)).ShouldBeFalse();
 
         enum TestEnum
         {

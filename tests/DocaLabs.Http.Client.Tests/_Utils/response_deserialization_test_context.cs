@@ -8,7 +8,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
     {
         protected static Mock<WebRequest> mock_request;
         protected static Mock<WebResponse> mock_response;
-        protected static HttpResponse http_response;
+        protected static HttpResponseStream http_response_stream;
 
         protected static void Setup(string contentType, Stream stream)
         {
@@ -21,7 +21,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
             mock_request = new Mock<WebRequest>();
             mock_request.Setup(x => x.GetResponse()).Returns(mock_response.Object);
 
-            http_response = new HttpResponse(mock_request.Object);
+            http_response_stream = new HttpResponseStream(mock_request.Object);
         }
     }
 }

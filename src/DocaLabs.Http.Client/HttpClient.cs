@@ -204,10 +204,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual TOutputModel ParseResponse(BindingContext context, WebRequest request)
         {
-            using (var response = new HttpResponse(request))
-            {
-                return (TOutputModel)ModelBinders.GetReader(typeof(TOutputModel)).Read(context, response, typeof(TOutputModel));
-            }
+            return (TOutputModel)ModelBinders.GetReader(typeof(TOutputModel)).Read(context, request, typeof(TOutputModel));
         }
 
         /// <summary>

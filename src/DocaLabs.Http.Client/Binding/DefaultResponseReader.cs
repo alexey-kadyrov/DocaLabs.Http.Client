@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.ResponseDeserialization;
 
@@ -57,32 +59,53 @@ namespace DocaLabs.Http.Client.Binding
             };
         }
 
-        public virtual object Read(BindingContext context, HttpResponse response, Type resultType)
+        public virtual object Read(BindingContext context, WebRequest request, Type resultType)
         {
             if(resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
-            if (deserializer != null)
-                return deserializer.Deserialize(response, resultType);
+            var responseStream = new HttpResponseStream(request);
 
-            var provider = FindProvider(response, resultType);
-            if (provider != null)
-                return provider.Deserialize(response, resultType);
+            try
+            {
+                var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
+                if (deserializer != null)
+                    return deserializer.Deserialize(responseStream, resultType);
 
-            if (resultType == typeof(string))
-                return response.AsString();
+                deserializer = context.HttpClient.GetType().GetCustomAttribute<ResponseDeserializationAttribute>(true);
+                if (deserializer != null)
+                    return deserializer.Deserialize(responseStream, resultType);
 
-            if (resultType == typeof(byte[]))
-                return response.AsByteArray();
+                var provider = FindProvider(responseStream, resultType);
+                if (provider != null)
+                    return provider.Deserialize(responseStream, resultType);
 
-            if (resultType == typeof(VoidType))
-                return VoidType.Value;
+                if (resultType == typeof (string))
+                    return responseStream.AsString();
+
+                if (resultType == typeof (byte[]))
+                    return responseStream.AsByteArray();
+
+                if (resultType == typeof (Stream))
+                {
+                    var ret = responseStream;
+                    responseStream = null;
+                    return ret;
+                }
+
+                if (resultType == typeof (VoidType))
+                    return VoidType.Value;
+            }
+            finally
+            {
+                if (responseStream != null)
+                    responseStream.Dispose();
+            }
 
             throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
 
-        IResponseDeserialization FindProvider(HttpResponse response, Type resultType)
+        IResponseDeserialization FindProvider(HttpResponseStream responseStream, Type resultType)
         {
             IList<IResponseDeserializationProvider> providers;
 
@@ -91,7 +114,7 @@ namespace DocaLabs.Http.Client.Binding
                 providers = _providers;
             }
 
-            return providers.FirstOrDefault(x => x.CanDeserialize(response, resultType));
+            return providers.FirstOrDefault(x => x.CanDeserialize(responseStream, resultType));
         }
     }
 }

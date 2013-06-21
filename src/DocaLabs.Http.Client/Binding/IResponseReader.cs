@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -11,9 +12,9 @@ namespace DocaLabs.Http.Client.Binding
         /// Reads the response string and returns an object if there is anything there.
         /// </summary>
         /// <param name="context">The binding context.</param>
-        /// <param name="response">The response.</param>
+        /// <param name="request">The WebRequest object.</param>
         /// <param name="resultType">Expected type for the return value.</param>
         /// <returns>Return value from the stream or null.</returns>
-        object Read(BindingContext context, HttpResponse response, Type resultType);
+        object Read(BindingContext context, WebRequest request, Type resultType);
     }
 }

@@ -80,16 +80,16 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// Deserializes the response stream content using JSON format.
         /// The method is using XmlSerializer with default settings except the DTD processing is set to ignore.
         /// </summary>
-        public object Deserialize(HttpResponse response, Type resultType)
+        public object Deserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
             // stream is disposed by the reader
-            using (var reader = XmlReader.Create(response.GetDataStream(), GetXmlReaderSettings()))
+            using (var reader = XmlReader.Create(responseStream, GetXmlReaderSettings()))
             {
                 return new XmlSerializer(resultType).Deserialize(reader);
             }
@@ -98,10 +98,10 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
         /// <summary>
         /// Returns true if the content type is 'text/xml' and the TResult is not "simple type", like int, string, Guid, double, etc.
         /// </summary>
-        public bool CanDeserialize(HttpResponse response, Type resultType)
+        public bool CanDeserialize(HttpResponseStream responseStream, Type resultType)
         {
-            if (response == null)
-                throw new ArgumentNullException("response");
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
 
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
@@ -111,7 +111,7 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
 
             lock (Locker)
             {
-                return _supportedTypes.Contains(response.ContentType.MediaType);
+                return _supportedTypes.Contains(responseStream.ContentType.MediaType);
             }
         }
 
@@ -121,6 +121,7 @@ namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
             {
                 DtdProcessing = DtdProcessing,
                 ValidationType = DtdProcessing == DtdProcessing.Parse ? ValidationType.DTD : ValidationType.None,
+                CloseInput = false
             };
         }
     }
