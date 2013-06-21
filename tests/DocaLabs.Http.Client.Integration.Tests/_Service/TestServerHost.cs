@@ -34,21 +34,28 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
 
         void Listener()
         {
+            ServiceHost host = null;
+
             try
             {
                 ServerStopped.Reset();
 
-                using (var host = new ServiceHost(typeof(TService)))
-                {
-                    host.Open();
-                    ServerReady.Set();
-                    StopServer.WaitOne();
-                }
+                host = new ServiceHost(typeof (TService));
+
+                host.Open();
+
+                ServerReady.Set();
+                StopServer.WaitOne();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 ServerReady.Set();
+            }
+            finally
+            {
+                if(host != null)
+                    ((IDisposable)host).Dispose();
             }
 
             ServerStopped.Set();
