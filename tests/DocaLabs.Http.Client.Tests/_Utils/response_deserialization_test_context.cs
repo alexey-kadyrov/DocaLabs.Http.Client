@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Net;
+using DocaLabs.Http.Client.Binding;
 using Moq;
 
 namespace DocaLabs.Http.Client.Tests._Utils

@@ -5,7 +5,7 @@ using System.Net.Mime;
 using System.Text;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
-namespace DocaLabs.Http.Client
+namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
     /// Wraps around the response stream.

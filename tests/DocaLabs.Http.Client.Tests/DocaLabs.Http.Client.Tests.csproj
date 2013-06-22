@@ -93,7 +93,7 @@
     <Compile Include="Utils\ContentEncoding\DeflateContentEncoderTests.cs" />
     <Compile Include="HttpClientExceptionTests.cs" />
     <Compile Include="HttpClientFactoryTests.cs" />
-    <Compile Include="HttpResponseTests.cs" />
+    <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Mapping\Attributes\SeparatedCollectionConverterAttributeTests.cs" />
     <Compile Include="Mapping\QueryMapperTests.cs" />
     <Compile Include="Mapping\TypeMapTests.cs" />

@@ -1,4 +1,4 @@
-﻿namespace DocaLabs.Http.Client
+﻿namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
     /// Defines empty type which can be used as a generic parameter for HttpClient in place of void.

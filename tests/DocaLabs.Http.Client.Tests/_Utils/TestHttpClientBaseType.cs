@@ -1,4 +1,5 @@
 ﻿using System;
+using DocaLabs.Http.Client.Binding;
 
 namespace DocaLabs.Http.Client.Tests._Utils
 {

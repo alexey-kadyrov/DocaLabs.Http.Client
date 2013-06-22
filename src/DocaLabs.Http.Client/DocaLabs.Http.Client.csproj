@@ -70,7 +70,7 @@
     <Compile Include="Binding\PropertyConverting\PropertyMap.cs" />
     <Compile Include="Binding\PropertyConverting\InRequestHeaderAttribute.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
-    <Compile Include="HttpResponseStream.cs" />
+    <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
     <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
@@ -107,7 +107,7 @@
     <Compile Include="Binding\ResponseDeserialization\IResponseDeserializationProvider.cs" />
     <Compile Include="Binding\ResponseDeserialization\JsonResponseDeserializer.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
-    <Compile Include="VoidType.cs" />
+    <Compile Include="Binding\VoidType.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactory.cs" />
     <Compile Include="Utils\ContentEncoding\ContentEncoderFactory.cs" />
     <Compile Include="Utils\ContentEncoding\KnownContentEncodings.cs" />
