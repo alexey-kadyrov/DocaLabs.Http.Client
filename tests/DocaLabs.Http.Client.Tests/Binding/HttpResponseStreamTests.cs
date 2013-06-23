@@ -135,6 +135,16 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(HttpResponseStream))]
+    class when_reading_with_plain_text_data_without_defined_charset_as_string_and_overriding_encoding  : response_deserialization_test_context
+    {
+        Establish context =
+            () => Setup("text/plain", new MemoryStream(Encoding.UTF32.GetBytes("Hello World!")));
+
+        It should_deserialize_string_data_using_provided_encoding =
+            () => http_response_stream.AsString(Encoding.UTF32).ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(HttpResponseStream))]
     class when_reading_with_plain_text_data_with_defined_charset_as_string_using_specific_matching_encoding : response_deserialization_test_context
     {
         Establish context =
