@@ -115,13 +115,33 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(HttpResponseStream))]
-    class when_http_response_is_used_with_plain_text_data : response_deserialization_test_context
+    class when_reading_with_plain_text_data_with_defined_charset_as_string : response_deserialization_test_context
     {
         Establish context =
             () => Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
 
         It should_deserialize_string_data =
             () => http_response_stream.AsString().ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(HttpResponseStream))]
+    class when_reading_with_plain_text_data_without_defined_charset_as_string : response_deserialization_test_context
+    {
+        Establish context =
+            () => Setup("text/plain", new MemoryStream(Encoding.GetEncoding("ISO-8859-1").GetBytes("Hello World!")));
+
+        It should_deserialize_string_data_assuming_iso_8859_1 =
+            () => http_response_stream.AsString().ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(HttpResponseStream))]
+    class when_reading_with_plain_text_data_with_defined_charset_as_string_using_specific_matching_encoding : response_deserialization_test_context
+    {
+        Establish context =
+            () => Setup("text/plain; charset=utf-32", new MemoryStream(Encoding.UTF32.GetBytes("Hello World!")));
+
+        It should_deserialize_string_data =
+            () => http_response_stream.AsString(Encoding.UTF32).ShouldEqual("Hello World!");
     }
 
     [Subject(typeof(HttpResponseStream))]
@@ -161,9 +181,6 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_return_charset_from_wrapped_web_response =
             () => http_response_stream.ContentType.CharSet.ShouldEqual("utf-8");
-
-        It should_return_http_encoding =
-            () => http_response_stream.TryGetEncoding().ToString().ShouldEqual(Encoding.UTF8.ToString());
 
         It should_return_response_uri_from_wrapped_web_response =
             () => http_response_stream.ResponseUri.ShouldBeTheSameAs(mock_response.Object.ResponseUri);

@@ -53,9 +53,9 @@ namespace DocaLabs.Http.Client.Binding
 
             _providers = new List<IResponseDeserializationProvider>
             {
-                new JsonResponseDeserializer(),
-                new XmlResponseDeserializer(),
-                new PlainTextResponseDeserializer()
+                new DeserializeFromJsonAttribute(),
+                new DeserializeFromXmlAttribute(),
+                new DeserializeFromPlainTextAttribute()
             };
         }
 

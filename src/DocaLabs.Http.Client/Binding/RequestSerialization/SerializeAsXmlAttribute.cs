@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding.RequestSerialization
@@ -13,6 +15,8 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
     /// </summary>
     public class SerializeAsXmlAttribute : RequestSerializationAttribute
     {
+        string _encoding;
+
         /// <summary>
         /// Gets or sets the content encoding, if RequestContentEncoding blank or null no encoding is done.
         /// The encoder is supplied by ContentEncoderFactory.
@@ -22,7 +26,17 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
         /// <summary>
         /// Gets or sets the type of text encoding to be used for Xml serialization. The default value is UTF-8.
         /// </summary>
-        public string Encoding { get; set; }
+        public string Encoding
+        {
+            get { return _encoding; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentNullException("value");
+
+                _encoding = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether to indent elements. The default values is true.
@@ -65,7 +79,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
         /// </summary>
         public SerializeAsXmlAttribute()
         {
-            Encoding = System.Text.Encoding.UTF8.WebName;
+            Encoding = CharSets.Utf8;
             Indent = true;
             IndentChars = "\t";
             MediaType = "application/xml";
@@ -87,17 +101,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             if (string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(obj, request);
             else
-                EncodeAndWrite(obj, request);
-        }
-
-        XmlWriterSettings GetSettings()
-        {
-            return new XmlWriterSettings
-            {
-                Encoding = System.Text.Encoding.GetEncoding(Encoding),
-                Indent = Indent,
-                IndentChars = IndentChars
-            };
+                CompressAndWrite(obj, request);
         }
 
         void Write(object obj, WebRequest request)
@@ -111,7 +115,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             }
         }
 
-        void EncodeAndWrite(object obj, WebRequest request)
+        void CompressAndWrite(object obj, WebRequest request)
         {
             request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
 
@@ -131,6 +135,28 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
                 {
                     dataStream.CopyTo(compressionStream);
                 }
+            }
+        }
+
+        XmlWriterSettings GetSettings()
+        {
+            return new XmlWriterSettings
+            {
+                Encoding = GetEncoding(),
+                Indent = Indent,
+                IndentChars = IndentChars
+            };
+        }
+
+        Encoding GetEncoding()
+        {
+            try
+            {
+                return System.Text.Encoding.GetEncoding(Encoding);
+            }
+            catch (Exception e)
+            {
+                throw new HttpClientException(e.Message, e);
             }
         }
 

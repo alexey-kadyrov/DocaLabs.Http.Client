@@ -73,6 +73,7 @@
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
     <Compile Include="IExecuteStrategy.cs" />
+    <Compile Include="Utils\CharSets.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
     <Compile Include="Utils\CustomConverterFactory.cs" />
@@ -102,10 +103,9 @@
     <Compile Include="Binding\ResponseDeserialization\ContentTypeExtensions.cs" />
     <Compile Include="Utils\LibraryExtensionsComposer.cs" />
     <Compile Include="Utils\ReflectionExtensions.cs" />
-    <Compile Include="Binding\ResponseDeserialization\PlainTextResponseDeserializer.cs" />
-    <Compile Include="Binding\ResponseDeserialization\XmlResponseDeserializer.cs" />
+    <Compile Include="Binding\ResponseDeserialization\DeserializeFromPlainTextAttribute.cs" />
     <Compile Include="Binding\ResponseDeserialization\IResponseDeserializationProvider.cs" />
-    <Compile Include="Binding\ResponseDeserialization\JsonResponseDeserializer.cs" />
+    <Compile Include="Binding\ResponseDeserialization\DeserializeFromJsonAttribute.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Binding\VoidType.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactory.cs" />
@@ -135,7 +135,6 @@
     <Compile Include="Binding\RequestSerialization\RequestSerializationAttribute.cs" />
     <Compile Include="Binding\ResponseDeserialization\ResponseDeserializationAttribute.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsJsonAttribute.cs" />
-    <Compile Include="Binding\ResponseDeserialization\DeserializeFromJsonAttribute.cs" />
     <Compile Include="Binding\RequestSerialization\SerializeAsXmlAttribute.cs" />
     <Compile Include="Binding\ResponseDeserialization\DeserializeFromXmlAttribute.cs" />
     <Compile Include="Utils\QueryStringBuilder.cs" />

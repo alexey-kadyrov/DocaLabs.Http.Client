@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Mime;
 using System.Text;
+using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding
@@ -12,6 +13,8 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class HttpResponseStream : Stream
     {
+        static readonly Encoding DefaultTextEncoding = Encoding.GetEncoding(CharSets.Iso88591);
+
         ContentType _contentType;
 
         WebResponse Response { get; set; }
@@ -97,42 +100,24 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// Returns the content of the response stream as a string.
-        /// If the encoding cannot be inferred from the response then UTF-8 is assumed.
+        /// Returns the content of the response stream as a string using the specified encoding.
+        /// If the encoding is null it will try to infer the encoding from the response's character set.
+        /// If the encoding cannot be inferred then it assumes text data and uses ISO-8859-1 
+        /// (see 3.7.1 of RFC 2616 for default charset for text subtypes).
         /// </summary>
-        public string AsString()
+        public string AsString(Encoding encoding = null)
         {
-            using (var reader = new StreamReader(DataStream, TryGetEncoding(), true, 2048, true))
+            if (encoding == null)
+                encoding = GetEncoding();
+
+            using (var reader = new StreamReader(DataStream, encoding, true, 2048, true))
             {
                 return reader.ReadToEnd();
             }
         }
 
         /// <summary>
-        /// Tries to infer the response encoding for WebResponse or returns UTF-8 otherwise.
-        /// </summary>
-        /// <returns></returns>
-        public Encoding TryGetEncoding()
-        {
-            try
-            {
-                var httpResponse = Response as HttpWebResponse;
-
-                if (httpResponse != null && (!string.IsNullOrWhiteSpace(httpResponse.CharacterSet)))
-                    return Encoding.GetEncoding(httpResponse.CharacterSet);
-
-                return ContentType.CharSet == null 
-                    ? Encoding.UTF8 
-                    : Encoding.GetEncoding(ContentType.CharSet);
-            }
-            catch
-            {
-                return Encoding.UTF8;
-            }
-        }
-
-        /// <summary>
-        /// Releases the response and the stream.
+        /// Releases the response and the streams.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -167,6 +152,25 @@ namespace DocaLabs.Http.Client.Binding
 
             return (_contentType = new ContentType());
             // ReSharper restore EmptyGeneralCatchClause
+        }
+
+        Encoding GetEncoding()
+        {
+            try
+            {
+                var httpResponse = Response as HttpWebResponse;
+
+                if (httpResponse != null && (!string.IsNullOrWhiteSpace(httpResponse.CharacterSet)))
+                    return Encoding.GetEncoding(httpResponse.CharacterSet);
+
+                return string.IsNullOrWhiteSpace(ContentType.CharSet)
+                    ? DefaultTextEncoding
+                    : Encoding.GetEncoding(ContentType.CharSet);
+            }
+            catch
+            {
+                return DefaultTextEncoding;
+            }
         }
 
         #region Stream

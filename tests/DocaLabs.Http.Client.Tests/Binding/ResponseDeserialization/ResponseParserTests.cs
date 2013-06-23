@@ -21,7 +21,7 @@
 //        It should_have_json_xml_plain_text_and_image_deserializers = () => DefaultResponseReader.Providers.ShouldMatch(x =>
 //            x[0].GetType() == typeof(JsonResponseDeserializer) &&
 //            x[1].GetType() == typeof(XmlResponseDeserializer) &&
-//            x[2].GetType() == typeof(PlainTextResponseDeserializer) &&
+//            x[2].GetType() == typeof(DeserializeFromPlainTextAttribute) &&
 //            x[3].GetType() == typeof(ImageResponseDeserializer));
 //    }
 

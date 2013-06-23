@@ -17,6 +17,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
         readonly static ConcurrentDictionary<Type, FormPropertyMap> FormPropertyMaps = new ConcurrentDictionary<Type, FormPropertyMap>();
+        string _charSet;
 
         /// <summary>
         /// Gets or sets the content encoding, if ContentEncoding blank or null no encoding is done.
@@ -27,14 +28,24 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
         /// <summary>
         /// Gets or sets the type of text encoding to be used for Xml serialization. The default value is UTF-8.
         /// </summary>
-        public string CharSet { get; set; }
+        public string CharSet
+        {
+            get { return _charSet; }
+            set
+            {
+                if(string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentNullException("value");
+
+                _charSet = value;
+            }
+        }
 
         /// <summary>
         /// Initializes an instance of the SerializeAsFormAttribute class.
         /// </summary>
         public SerializeAsFormAttribute()
         {
-            CharSet = Encoding.UTF8.WebName;
+            CharSet = CharSets.Utf8;
         }
 
         /// <summary>
@@ -49,14 +60,16 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
 
             var form = ToForm(model);
 
-            var data = Encoding.GetEncoding(CharSet).GetBytes(form);
+            var encoding = GetEncoding();
+
+            var data = encoding.GetBytes(form);
 
             request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
 
             if (string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(data, request);
             else
-                EncodeAndWrite(data, request);
+                CompressAndWrite(data, request);
         }
 
         static string ToForm(object model)
@@ -67,6 +80,18 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             var values = PropertyMapGetOrAddType(model).ConvertModel(model);
 
             return new QueryStringBuilder().Add(values).ToString();
+        }
+
+        Encoding GetEncoding()
+        {
+            try
+            {
+                return Encoding.GetEncoding(CharSet);
+            }
+            catch (Exception e)
+            {
+                throw new HttpClientException(e.Message, e);
+            }
         }
 
         static FormPropertyMap PropertyMapGetOrAddType(object model)
@@ -82,7 +107,7 @@ namespace DocaLabs.Http.Client.Binding.RequestSerialization
             }
         }
 
-        void EncodeAndWrite(byte[] data, WebRequest request)
+        void CompressAndWrite(byte[] data, WebRequest request)
         {
             request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
 
