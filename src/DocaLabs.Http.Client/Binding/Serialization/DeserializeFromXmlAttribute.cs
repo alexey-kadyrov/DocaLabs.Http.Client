@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
     /// Deserializes xml object from the web response.

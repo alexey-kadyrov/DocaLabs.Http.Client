@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using DocaLabs.Http.Client.Binding.ResponseDeserialization;
+using DocaLabs.Http.Client.Binding.Serialization;
 
 namespace DocaLabs.Http.Client.Binding
 {

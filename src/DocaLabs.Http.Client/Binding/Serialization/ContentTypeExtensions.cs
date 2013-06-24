@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Mime;
 
-namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
     /// Content type extensions.

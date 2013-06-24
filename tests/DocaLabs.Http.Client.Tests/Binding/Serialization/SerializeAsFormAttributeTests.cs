@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
-using DocaLabs.Http.Client.Binding.RequestSerialization;
+using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.Binding.RequestSerialization
+namespace DocaLabs.Http.Client.Tests.Binding.Serialization
 {
     [Subject(typeof(SerializeAsFormAttribute))]
     class when_serialize_as_form_attribute_is_used : request_serialization_test_context

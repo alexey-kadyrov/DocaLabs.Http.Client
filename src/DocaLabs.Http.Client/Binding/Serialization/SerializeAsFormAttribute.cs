@@ -8,7 +8,7 @@ using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
-namespace DocaLabs.Http.Client.Binding.RequestSerialization
+namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
     /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).

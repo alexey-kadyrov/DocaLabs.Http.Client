@@ -1,7 +1,7 @@
 ﻿using System;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 
-namespace DocaLabs.Http.Client.Binding.RequestSerialization
+namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
     /// Specifies additional information about a property for serializing into a URI's query.

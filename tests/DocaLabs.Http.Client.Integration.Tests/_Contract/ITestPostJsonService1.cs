@@ -1,4 +1,4 @@
-﻿using DocaLabs.Http.Client.Binding.RequestSerialization;
+﻿using DocaLabs.Http.Client.Binding.Serialization;
 
 namespace DocaLabs.Http.Client.Integration.Tests._Contract
 {

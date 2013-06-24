@@ -3,7 +3,7 @@ using System.Text;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 
-namespace DocaLabs.Http.Client.Binding.ResponseDeserialization
+namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
     /// Deserializes the response stream content using JSON format.

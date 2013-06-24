@@ -1,15 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using DocaLabs.Http.Client.Binding.ResponseDeserialization;
+using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
+using DocaLabs.Http.Client.Utils;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
+namespace DocaLabs.Http.Client.Tests.Binding.Serialization
 {
     [Subject(typeof(DeserializeFromJsonAttribute), "deserialization")]
-    class when_json_deserializer_is_used : response_deserialization_test_context
+    class when_json_deserializer_is_used_with_null_charset_and_the_response_has_content_type_with_charset : response_deserialization_test_context
     {
         const string data = "{Value1:2012, Value2:\"Hello World!\"}";
         static DeserializeFromJsonAttribute deserializer;
@@ -18,7 +19,82 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         Establish context = () =>
         {
             deserializer = new DeserializeFromJsonAttribute();
-            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+            Setup("application/json; charset=utf-16", new MemoryStream(Encoding.Unicode.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (TestTarget)deserializer.Deserialize(http_response_stream, typeof(TestTarget));
+
+        It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(DeserializeFromJsonAttribute), "deserialization")]
+    class when_json_deserializer_is_used_with_null_charset_and_the_response_does_not_have_charset_in_content_type : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static DeserializeFromJsonAttribute deserializer;
+        static TestTarget target;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromJsonAttribute();
+            Setup("text/plain", new MemoryStream(Encoding.GetEncoding(CharSets.Iso88591).GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (TestTarget)deserializer.Deserialize(http_response_stream, typeof(TestTarget));
+
+        It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(DeserializeFromJsonAttribute), "deserialization")]
+    class when_json_deserializer_is_used_with_empty_charset_and_the_response_does_not_have_charset_in_content_type : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static DeserializeFromJsonAttribute deserializer;
+        static TestTarget target;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromJsonAttribute
+            {
+                CharSet = ""
+            };
+            Setup("application/json", new MemoryStream(Encoding.GetEncoding(CharSets.Iso88591).GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (TestTarget)deserializer.Deserialize(http_response_stream, typeof(TestTarget));
+
+        It should_deserialize_object = () => target.ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(DeserializeFromJsonAttribute), "deserialization")]
+    class when_json_deserializer_is_used_with_specified_charset : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static DeserializeFromJsonAttribute deserializer;
+        static TestTarget target;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromJsonAttribute
+            {
+                CharSet = CharSets.Utf16
+            };
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.GetEncoding(CharSets.Utf16).GetBytes(data)));
         };
 
         Because of =
@@ -139,6 +215,32 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
             () => exception.InnerException.ShouldNotBeNull();
     }
 
+    [Subject(typeof(DeserializeFromJsonAttribute), "deserialization")]
+    class when_json_deserializer_is_used_with_bad_charset : response_deserialization_test_context
+    {
+        const string data = "{Value1:2012, Value2:\"Hello World!\"}";
+        static DeserializeFromJsonAttribute deserializer;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromJsonAttribute
+            {
+                CharSet = "-bad-charset-"
+            };
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response_stream, typeof(TestTarget)));
+
+        It should_throw_http_client_exception =
+            () => exception.ShouldBeOfType<HttpClientException>();
+
+        It should_wrap_original_exception =
+            () => exception.InnerException.ShouldNotBeNull();
+    }
+
     [Subject(typeof(DeserializeFromJsonAttribute), "checking that can deserialize")]
     class when_json_deserializer_is_checking_with_null_result_type : response_deserialization_test_context
     {
@@ -200,7 +302,6 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
         It should_be_able_to_deserialize =
             () => can_deserialize.ShouldBeTrue();
     }
-
 
     [Subject(typeof(DeserializeFromJsonAttribute), "checking that can deserialize")]
     class when_json_deserializer_is_checking_response_with_json_content_type_but_without_charset : response_deserialization_test_context

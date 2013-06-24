@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Text;
-using DocaLabs.Http.Client.Binding.RequestSerialization;
+using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.Binding.RequestSerialization
+namespace DocaLabs.Http.Client.Tests.Binding.Serialization
 {
     [Subject(typeof(SerializeAsXmlAttribute))]
     public class when_serialize_as_xml_attribute_is_used_in_default_configuration : request_serialization_test_context

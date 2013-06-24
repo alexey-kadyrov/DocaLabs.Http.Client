@@ -6,7 +6,7 @@ using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 
-namespace DocaLabs.Http.Client.Binding.RequestSerialization
+namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
     /// Serializes a given object into the web request in json format.

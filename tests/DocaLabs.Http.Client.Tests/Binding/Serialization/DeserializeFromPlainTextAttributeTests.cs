@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using DocaLabs.Http.Client.Binding.ResponseDeserialization;
+using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
+using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
 
-namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
+namespace DocaLabs.Http.Client.Tests.Binding.Serialization
 {
     [Subject(typeof(DeserializeFromPlainTextAttribute), "deserialization")]
-    class when_plain_text_deserializer_is_used_for_string_result_on_plain_text : response_deserialization_test_context
+    class when_plain_text_deserializer_is_used_for_string_result_on_plain_text_with_null_charset_and_the_response_has_content_type_with_charset : response_deserialization_test_context
     {
         const string data = "Hello World!";
         static DeserializeFromPlainTextAttribute deserializer;
@@ -25,6 +26,98 @@ namespace DocaLabs.Http.Client.Tests.Binding.ResponseDeserialization
 
         It should_deserialize_string = 
             () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(DeserializeFromPlainTextAttribute), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_plain_text_with_null_charset_and_the_response_does_not_have_charset_in_content_type : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static DeserializeFromPlainTextAttribute deserializer;
+        static string target;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromPlainTextAttribute();
+            Setup("text/plain", new MemoryStream(Encoding.GetEncoding(CharSets.Iso88591).GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
+
+        It should_deserialize_string =
+            () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(DeserializeFromPlainTextAttribute), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_plain_text_with_empty_charset_and_the_response_does_not_have_charset_in_content_type : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static DeserializeFromPlainTextAttribute deserializer;
+        static string target;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromPlainTextAttribute
+            {
+                CharSet = ""
+            };
+            Setup("text/plain", new MemoryStream(Encoding.GetEncoding(CharSets.Iso88591).GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
+
+        It should_deserialize_string =
+            () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(DeserializeFromPlainTextAttribute), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_plain_text_with_specified_charset : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static DeserializeFromPlainTextAttribute deserializer;
+        static string target;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromPlainTextAttribute
+            {
+                CharSet = CharSets.Utf16
+            };
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.Unicode.GetBytes(data)));
+        };
+
+        Because of =
+            () => target = (string)deserializer.Deserialize(http_response_stream, typeof(string));
+
+        It should_deserialize_string =
+            () => target.ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(DeserializeFromPlainTextAttribute), "deserialization")]
+    class when_plain_text_deserializer_is_used_for_string_result_on_plain_text_with_bad_charset : response_deserialization_test_context
+    {
+        const string data = "Hello World!";
+        static DeserializeFromPlainTextAttribute deserializer;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            deserializer = new DeserializeFromPlainTextAttribute
+            {
+                CharSet = "-bad-charset-"
+            };
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.Unicode.GetBytes(data)));
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => deserializer.Deserialize(http_response_stream, typeof(string)));
+
+        It should_throw_http_client_exception =
+            () => exception.ShouldBeOfType<HttpClientException>();
+
+        It should_wrap_original_exception =
+            () => exception.InnerException.ShouldNotBeNull();
     }
 
     [Subject(typeof(DeserializeFromPlainTextAttribute), "deserialization")]
