@@ -12,34 +12,34 @@
 
 //namespace DocaLabs.Http.Client.Tests.ResponseDeserialization
 //{
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_response_parser_is_used_in_default_configuration
 //    {
 //        It should_have_four_providers =
-//            () => DefaultResponseReader.Providers.Count.ShouldEqual(4);
+//            () => DefaultResponseBinder.Providers.Count.ShouldEqual(4);
 
-//        It should_have_json_xml_plain_text_and_image_deserializers = () => DefaultResponseReader.Providers.ShouldMatch(x =>
+//        It should_have_json_xml_plain_text_and_image_deserializers = () => DefaultResponseBinder.Providers.ShouldMatch(x =>
 //            x[0].GetType() == typeof(JsonResponseDeserializer) &&
 //            x[1].GetType() == typeof(XmlResponseDeserializer) &&
 //            x[2].GetType() == typeof(DeserializeFromPlainTextAttribute) &&
 //            x[3].GetType() == typeof(ImageResponseDeserializer));
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_setting_a_new_collection_of_providers_and_parsing_for_types_that_can_be_deserialized : response_deserialization_test_context
 //    {
 //        static IList<IResponseDeserializationProvider> original_providers;
 
 //        Cleanup after_each =
-//            () => DefaultResponseReader.Providers = original_providers;
+//            () => DefaultResponseBinder.Providers = original_providers;
 
 //        Establish context = () =>
 //        {
 //            Setup("application/json; charset=utf-8", new MemoryStream());
 
-//            original_providers = DefaultResponseReader.Providers;
+//            original_providers = DefaultResponseBinder.Providers;
 
-//            DefaultResponseReader.Providers = new List<IResponseDeserializationProvider>
+//            DefaultResponseBinder.Providers = new List<IResponseDeserializationProvider>
 //            {
 //                new FirstDeserializer(),
 //                new SecondDeserializer(),
@@ -48,27 +48,27 @@
 //        };
 
 //        It should_have_three_providers =
-//            () => DefaultResponseReader.Providers.Count.ShouldEqual(3);
+//            () => DefaultResponseBinder.Providers.Count.ShouldEqual(3);
 
-//        It should_have_configured_deserializers = () => DefaultResponseReader.Providers.ShouldMatch(x =>
+//        It should_have_configured_deserializers = () => DefaultResponseBinder.Providers.ShouldMatch(x =>
 //            x[0].GetType() == typeof(FirstDeserializer) &&
 //            x[1].GetType() == typeof(SecondDeserializer) &&
 //            x[2].GetType() == typeof(ThirdDeserializer));
 
 //        It should_be_able_to_deserialize_using_first_provider =
-//            () => DefaultResponseReader.Parse(mock_request.Object, typeof(FirstResult)).ShouldBeOfType<FirstResult>();
+//            () => DefaultResponseBinder.Parse(mock_request.Object, typeof(FirstResult)).ShouldBeOfType<FirstResult>();
 
 //        It should_be_able_to_deserialize_using_second_provider =
-//            () => DefaultResponseReader.Parse(mock_request.Object, typeof(SecondResult)).ShouldBeOfType<SecondResult>();
+//            () => DefaultResponseBinder.Parse(mock_request.Object, typeof(SecondResult)).ShouldBeOfType<SecondResult>();
 
 //        It should_be_able_to_deserialize_using_attribute_instead_of_third_provider =
-//            () => DefaultResponseReader.Parse(mock_request.Object, typeof(ThirdResult)).ShouldBeOfType<ThirdResult>();
+//            () => DefaultResponseBinder.Parse(mock_request.Object, typeof(ThirdResult)).ShouldBeOfType<ThirdResult>();
 
 //        It should_return_deafult_void_type_if_result_type_is_void_type =
-//            () => DefaultResponseReader.Parse(mock_request.Object, typeof (VoidType)).ShouldNotBeTheSameAs(VoidType.Value);
+//            () => DefaultResponseBinder.Parse(mock_request.Object, typeof (VoidType)).ShouldNotBeTheSameAs(VoidType.Value);
 
 //        It should_throw_unrecoverable_http_client_exception_for_type_which_deserialization_is_unknown =
-//            () => Catch.Exception(() => DefaultResponseReader.Parse(mock_request.Object, typeof(ForthResult))).ShouldBeOfType<UnrecoverableHttpClientException>();
+//            () => Catch.Exception(() => DefaultResponseBinder.Parse(mock_request.Object, typeof(ForthResult))).ShouldBeOfType<UnrecoverableHttpClientException>();
 
 //        class FirstResult
 //        {
@@ -135,7 +135,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_parsing_response_parsers_are_choosen_in_order_that_they_were_set : response_deserialization_test_context
 //    {
 //        static IList<IResponseDeserializationProvider> original_providers;
@@ -143,7 +143,7 @@
 //        static Result result;
 
 //        Cleanup after_each =
-//            () => DefaultResponseReader.Providers = original_providers;
+//            () => DefaultResponseBinder.Providers = original_providers;
 
 //        Establish context = () =>
 //        {
@@ -151,9 +151,9 @@
 
 //            Setup("application/json; charset=utf-8", new MemoryStream());
 
-//            original_providers = DefaultResponseReader.Providers;
+//            original_providers = DefaultResponseBinder.Providers;
 
-//            DefaultResponseReader.Providers = new List<IResponseDeserializationProvider>
+//            DefaultResponseBinder.Providers = new List<IResponseDeserializationProvider>
 //            {
 //                new FirstDeserializer(),
 //                new SecondDeserializer(),
@@ -162,7 +162,7 @@
 //        };
 
 //        Because of =
-//            () => result = (Result) DefaultResponseReader.Parse(mock_request.Object, typeof (Result));
+//            () => result = (Result) DefaultResponseBinder.Parse(mock_request.Object, typeof (Result));
 
 //        It should_deserialize =
 //            () => result.Value.ShouldEqual(3);
@@ -228,7 +228,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_response_parser_is_used_to_deserialize_into_string : response_deserialization_test_context
 //    {
 //        const string data = "Hello World!";
@@ -237,10 +237,10 @@
 //            () => Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes(data)));
 
 //        It should_be_able_to_deserialize =
-//            () => DefaultResponseReader.Parse(mock_request.Object, typeof (string)).ShouldEqual(data);
+//            () => DefaultResponseBinder.Parse(mock_request.Object, typeof (string)).ShouldEqual(data);
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_response_parser_is_used_to_deserialize_into_byte_array : response_deserialization_test_context
 //    {
 //        static byte[] data = new byte[] { 1, 2, 3, 4, 5, 6, 7 };
@@ -249,10 +249,10 @@
 //            () => Setup("application/json; charset=utf-8", new MemoryStream(data));
 
 //        It should_be_able_to_deserialize =
-//            () => DefaultResponseReader.Parse(mock_request.Object, typeof(byte[])).ShouldEqual(data);
+//            () => DefaultResponseBinder.Parse(mock_request.Object, typeof(byte[])).ShouldEqual(data);
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_response_parser_is_used_concurrently 
 //    {
 //        static IList<IResponseDeserializationProvider> original_providers;
@@ -262,13 +262,13 @@
 //        static Random random;
 
 //        Cleanup after_each =
-//            () => DefaultResponseReader.Providers = original_providers;
+//            () => DefaultResponseBinder.Providers = original_providers;
 
 //        Establish context = () =>
 //        {
-//            original_providers = DefaultResponseReader.Providers;
+//            original_providers = DefaultResponseBinder.Providers;
 
-//            DefaultResponseReader.Providers = new List<IResponseDeserializationProvider>
+//            DefaultResponseBinder.Providers = new List<IResponseDeserializationProvider>
 //            {
 //                new FirstDeserializer(),
 //                new SecondDeserializer(),
@@ -294,7 +294,7 @@
 //            switch (ii)
 //            {
 //                case 0:
-//                    DefaultResponseReader.Providers = new List<IResponseDeserializationProvider>
+//                    DefaultResponseBinder.Providers = new List<IResponseDeserializationProvider>
 //                    {
 //                        new FirstDeserializer(),
 //                        new SecondDeserializer(),
@@ -302,22 +302,22 @@
 //                    };
 //                    break;
 //                case 1:
-//                    DefaultResponseReader.Providers.Count.ShouldEqual(3);
+//                    DefaultResponseBinder.Providers.Count.ShouldEqual(3);
 //                    break;
 //                case 2:
-//                    DefaultResponseReader.Parse(request, typeof(FirstResult)).ShouldBeOfType<FirstResult>();
+//                    DefaultResponseBinder.Parse(request, typeof(FirstResult)).ShouldBeOfType<FirstResult>();
 //                    break;
 //                case 3:
-//                    DefaultResponseReader.Parse(request, typeof(SecondResult)).ShouldBeOfType<SecondResult>();
+//                    DefaultResponseBinder.Parse(request, typeof(SecondResult)).ShouldBeOfType<SecondResult>();
 //                    break;
 //                case 4:
-//                    DefaultResponseReader.Parse(request, typeof(ThirdResult)).ShouldBeOfType<ThirdResult>();
+//                    DefaultResponseBinder.Parse(request, typeof(ThirdResult)).ShouldBeOfType<ThirdResult>();
 //                    break;
 //                case 5:
-//                    DefaultResponseReader.Parse(request, typeof(VoidType)).ShouldNotBeTheSameAs(VoidType.Value);
+//                    DefaultResponseBinder.Parse(request, typeof(VoidType)).ShouldNotBeTheSameAs(VoidType.Value);
 //                    break;
 //                case 6:
-//                    Catch.Exception(() => DefaultResponseReader.Parse(request, typeof(ForthResult))).ShouldBeOfType<UnrecoverableHttpClientException>();
+//                    Catch.Exception(() => DefaultResponseBinder.Parse(request, typeof(ForthResult))).ShouldBeOfType<UnrecoverableHttpClientException>();
 //                    break;
 //            }
 
@@ -408,13 +408,13 @@
 //        }
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_parsing_response_for_null_request
 //    {
 //        static Exception exception;
 
 //        Because of =
-//            () => exception = Catch.Exception(() => DefaultResponseReader.Parse(null, typeof (TestTarget)));
+//            () => exception = Catch.Exception(() => DefaultResponseBinder.Parse(null, typeof (TestTarget)));
 
 //        It should_throw_argument_null_exception =
 //            () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -423,13 +423,13 @@
 //            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("request");
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_parsing_response_for_null_result_type : response_deserialization_test_context
 //    {
 //        static Exception exception;
 
 //        Because of =
-//            () => exception = Catch.Exception(() => DefaultResponseReader.Parse(mock_request.Object, null));
+//            () => exception = Catch.Exception(() => DefaultResponseBinder.Parse(mock_request.Object, null));
 
 //        It should_throw_argument_null_exception =
 //            () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -438,13 +438,13 @@
 //            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("resultType");
 //    }
 
-//    [Subject(typeof(DefaultResponseReader))]
+//    [Subject(typeof(DefaultResponseBinder))]
 //    class when_provider_collection_to_null
 //    {
 //        static Exception exception;
 
 //        Because of =
-//            () => exception = Catch.Exception(() => DefaultResponseReader.Providers = null);
+//            () => exception = Catch.Exception(() => DefaultResponseBinder.Providers = null);
 
 //        It should_throw_argument_null_exception =
 //            () => exception.ShouldBeOfType<ArgumentNullException>();

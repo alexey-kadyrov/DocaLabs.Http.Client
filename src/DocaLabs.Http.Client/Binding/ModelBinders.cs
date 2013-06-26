@@ -8,34 +8,55 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     static public class ModelBinders
     {
-        static readonly ConcurrentDictionary<Type, IModelBinder> Binders;
-        static readonly ConcurrentDictionary<Type, IResponseReader> Readers;
-        static volatile IModelBinder _defaultModelBinder;
-        static volatile IResponseReader _defaultResponseReader;
+        static readonly ConcurrentDictionary<Type, IRequestBinder> RequestBinders;
+        static readonly ConcurrentDictionary<Type, IResponseBinder> ResponseBinders;
+        static volatile IRequestBinder _defaultRequestBinder;
+        static volatile IResponseBinder _defaultResponseBinder;
 
-        public static IModelBinder DefaultModelBinder
+        /// <summary>
+        /// Gets or sets the default request binder which is used if there is no input model specific binder set.
+        /// By default it's DefaultRequestBinder.
+        /// </summary>
+        public static IRequestBinder DefaultRequestBinder
         {
-            get { return _defaultModelBinder; }
+            get { return _defaultRequestBinder; }
             set
             {
                 if(value == null)
                     throw new ArgumentNullException("value");
 
-                _defaultModelBinder = value;
+                _defaultRequestBinder = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the default request binder which is used if there is no output model specific binder set.
+        /// By default it's DefaultResponseBinder.
+        /// </summary>
+        public static IResponseBinder DefaultResponseBinder
+        {
+            get { return _defaultResponseBinder; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+
+                _defaultResponseBinder = value;
             }
         }
 
         static ModelBinders()
         {
-            Binders = new ConcurrentDictionary<Type, IModelBinder>();
-            _defaultModelBinder = new DefaultModelBinder();
-            _defaultResponseReader = new DefaultResponseReader();
+            RequestBinders = new ConcurrentDictionary<Type, IRequestBinder>();
+            ResponseBinders = new ConcurrentDictionary<Type, IResponseBinder>();
+            _defaultRequestBinder = new DefaultRequestBinder();
+            _defaultResponseBinder = new DefaultResponseBinder();
         }
 
         /// <summary>
-        /// Adds the specified item to the model reader dictionary.
+        /// Adds the specified item to the input model binder dictionary.
         /// </summary>
-        public static void Add(Type type, IModelBinder binder)
+        public static void Add(Type type, IRequestBinder binder)
         {
             if(type == null)
                 throw new ArgumentNullException("type");
@@ -43,37 +64,45 @@ namespace DocaLabs.Http.Client.Binding
             if(binder == null)
                 throw new ArgumentNullException("binder");
 
-            Binders[type] = binder;
+            RequestBinders[type] = binder;
         }
 
         /// <summary>
-        /// Adds the specified item to the model reader dictionary.
+        /// Adds the specified item to the output model binder dictionary.
         /// </summary>
-        public static void Add(Type type, IResponseReader reader)
+        public static void Add(Type type, IResponseBinder binder)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            if (reader == null)
-                throw new ArgumentNullException("reader");
+            if (binder == null)
+                throw new ArgumentNullException("binder");
 
-            Readers[type] = reader;
+            ResponseBinders[type] = binder;
         }
 
-        public static IModelBinder GetBinder(Type type)
+        /// <summary>
+        /// Gets a custom request binder associated with the input model. 
+        /// If there is no binders registered for the model then DefaultRequestBinder is returned.
+        /// </summary>
+        public static IRequestBinder GetRequestBinder(Type modelType)
         {
-            IModelBinder binder;
-            return Binders.TryGetValue(type, out binder) 
+            IRequestBinder binder;
+            return RequestBinders.TryGetValue(modelType, out binder) 
                 ? binder 
-                : _defaultModelBinder;
+                : DefaultRequestBinder;
         }
 
-        public static IResponseReader GetReader(Type type)
+        /// <summary>
+        /// Gets a custom request binder associated with the output model. 
+        /// If there is no binders registered for the model then DefaultResponseBinder is returned.
+        /// </summary>
+        public static IResponseBinder GetResponseBinder(Type modelType)
         {
-            IResponseReader responseReader;
-            return Readers.TryGetValue(type, out responseReader)
-                ? responseReader
-                : _defaultResponseReader;
+            IResponseBinder responseBinder;
+            return ResponseBinders.TryGetValue(modelType, out responseBinder)
+                ? responseBinder
+                : DefaultResponseBinder;
         }
     }
 }

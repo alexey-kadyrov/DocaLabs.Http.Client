@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Property binding extensions to determine how a property should be serialized.
     /// </summary>
-    public static class PropertyBindingExtensions
+    public static class PropertyInfoExtensions
     {
         /// <summary>
         /// Returns true if the property is can pass its data to the either query or path part of URL.

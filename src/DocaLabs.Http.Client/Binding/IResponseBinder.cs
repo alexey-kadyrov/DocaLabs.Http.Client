@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Defines methods to read a model from the http response.
     /// </summary>
-    public interface IResponseReader
+    public interface IResponseBinder
     {
         /// <summary>
         /// Reads the response string and returns an object if there is anything there.

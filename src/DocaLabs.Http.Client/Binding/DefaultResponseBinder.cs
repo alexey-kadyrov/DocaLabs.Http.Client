@@ -11,7 +11,7 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Defines helper methods to deserialize a web response. All public methods are thread safe.
     /// </summary>
-    public class DefaultResponseReader : IResponseReader
+    public class DefaultResponseBinder : IResponseBinder
     {
         readonly object Locker;
         IList<IResponseDeserializationProvider> _providers;
@@ -47,7 +47,7 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        public DefaultResponseReader()
+        public DefaultResponseBinder()
         {
             Locker = new object();
 

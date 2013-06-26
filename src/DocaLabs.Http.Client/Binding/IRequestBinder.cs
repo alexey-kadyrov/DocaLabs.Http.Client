@@ -1,12 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
     /// Defines the methods that are required for a model binder.
     /// </summary>
-    public interface IModelBinder
+    public interface IRequestBinder
     {
         /// <summary>
         /// Transforms an input model to an instance of some other type which will be used in the rest of the request pipeline.
@@ -14,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <returns>A new or the same model, depends on your logic. The method may return null if the baseURL is enough to call the remote endpoint.</returns>
-        object TransformInputModel(BindingContext context);
+        object TransformModel(BindingContext context);
 
         /// <summary>
         /// Composes a request's URL using an input model and a base URL.
@@ -42,9 +41,8 @@ namespace DocaLabs.Http.Client.Binding
         /// Gets credentials that may be defined in an input model.
         /// </summary>
         /// <param name="context">The binding context.</param>
-        /// <param name="url">The request's URL.</param>
         /// <returns>Credentials or null if nothing is defined in the model.</returns>
-        ICredentials GetCredentials(BindingContext context, Uri url);
+        ICredentials GetCredentials(BindingContext context);
 
         /// <summary>
         /// The method is called to write data to the request's stream. It's expected that the method will set correctly

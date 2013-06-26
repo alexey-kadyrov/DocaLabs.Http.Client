@@ -54,15 +54,15 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Binding\BindingContext.cs" />
-    <Compile Include="Binding\IResponseReader.cs" />
+    <Compile Include="Binding\IResponseBinder.cs" />
     <Compile Include="Binding\Serialization\InRequestFormAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\InRequestPathAttribute.cs" />
-    <Compile Include="Binding\PropertyBindingExtensions.cs" />
+    <Compile Include="Binding\PropertyInfoExtensions.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
-    <Compile Include="Binding\DefaultModelBinder.cs" />
+    <Compile Include="Binding\DefaultRequestBinder.cs" />
     <Compile Include="Binding\DefaultUrlComposer.cs" />
-    <Compile Include="Binding\IModelBinder.cs" />
+    <Compile Include="Binding\IRequestBinder.cs" />
     <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
     <Compile Include="Binding\DefaultRequestWriter.cs" />
@@ -125,7 +125,7 @@
     <Compile Include="Configuration\ClientProxyElement.cs" />
     <Compile Include="Binding\Serialization\IRequestSerialization.cs" />
     <Compile Include="Binding\Serialization\IResponseDeserialization.cs" />
-    <Compile Include="Binding\DefaultResponseReader.cs" />
+    <Compile Include="Binding\DefaultResponseBinder.cs" />
     <Compile Include="Binding\Serialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\CustomPropertyConverterAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\ObjectPropertyConverter.cs" />

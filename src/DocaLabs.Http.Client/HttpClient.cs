@@ -61,6 +61,7 @@ namespace DocaLabs.Http.Client
         public HttpClient(Uri baseUrl = null, string configurationName = null, IExecuteStrategy<TOutputModel> executeStrategy = null)
         {
             BaseUrl = baseUrl;
+
             ExecuteStrategy = executeStrategy ?? GetDefaultExecuteStrategy();
 
             ReadConfiguration(configurationName);
@@ -80,9 +81,15 @@ namespace DocaLabs.Http.Client
         ///   * Overriding TryMakeQueryString and/or TryWriteRequestData
         /// The output data deserialization behaviour can be altered by:
         ///   * Using one of the ResponseDeserializationAttribute derived classes (on the class level)
-        ///   * Adding or replacing existing deserialization providers in the DefaultResponseReader static class
+        ///   * Adding or replacing existing deserialization providers in the DefaultResponseBinder static class
         ///   * Overriding ParseResponse
         /// The remote call is wrapped into the retry strategy.
+        /// The execution pipeline is:
+        ///     1. Transforms the input model (the default behaviour is to return the same input model)
+        ///     1. Builds full URL using the model class by calling UrlBuilder.Compose(BaseUrl, model)
+        ///     2. Creates web request (if headers, client certificates, and a proxy are defined in the configuration they will be added to the request)
+        ///     3. Writes to the request's body if there is something to write
+        ///     4. Gets response from the remote server and parses it
         /// </summary>
         /// <param name="model">Input parameters.</param>
         /// <returns>Output data.</returns>
@@ -103,34 +110,6 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// Executes the actual request execution pipeline.
-        ///     1. Builds full URL using the model class by calling UrlBuilder.Compose(BaseUrl, model)
-        ///     2. Creates web request (if headers, client certificates, and a proxy are defined in the configuration they will be added to the request)
-        ///     3. Writes to the request's body if there is something to write
-        ///     4. Gets response from the remote server and parses it
-        /// </summary>
-        protected virtual TOutputModel ExecutePipeline(object model)
-        {
-            var context = new BindingContext(this, model, Configuration, BaseUrl);
-
-            var inputModelType = GetInputModelType(model);
-
-            var binder = ModelBinders.GetBinder(inputModelType);
-
-            context.Model = binder.TransformInputModel(context);
-
-            var url = ComposeUrl(binder, context);
-
-            var request = CreateRequest(url);
-
-            InitializeRequest(binder, context, request);
-
-            TryWriteRequestData(binder, context, request);
-
-            return ParseResponse(context, request);
-        }
-
-        /// <summary>
         /// Gets the input model type, if the model is null it returns typeof(TInputModel).
         /// </summary>
         protected virtual Type GetInputModelType(object model)
@@ -145,7 +124,7 @@ namespace DocaLabs.Http.Client
         /// which may be required in case of URL signing like for some Google services.
         /// </summary>
         /// <returns></returns>
-        protected virtual string ComposeUrl(IModelBinder binder, BindingContext context)
+        protected virtual string ComposeUrl(IRequestBinder binder, BindingContext context)
         {
             return binder.ComposeUrl(context);
         }
@@ -161,7 +140,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Initializes the request. If headers, client certificates, and a proxy are defined in the configuration they will be added to the request
         /// </summary>
-        protected virtual void InitializeRequest(IModelBinder binder, BindingContext context, WebRequest request)
+        protected virtual void InitializeRequest(IRequestBinder binder, BindingContext context, WebRequest request)
         {
             request.Timeout = Configuration.Timeout;
 
@@ -184,7 +163,7 @@ namespace DocaLabs.Http.Client
         /// by checking the model type.
         /// </summary>
         /// <returns></returns>
-        protected virtual string GetRequestMethod(IModelBinder binder, BindingContext context)
+        protected virtual string GetRequestMethod(IRequestBinder binder, BindingContext context)
         {
             return string.IsNullOrWhiteSpace(Method) 
                 ? binder.InferRequestMethod(context) 
@@ -194,7 +173,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Tries to write data to the request's body by examining the model type.
         /// </summary>
-        protected virtual void TryWriteRequestData(IModelBinder binder, BindingContext context, WebRequest request)
+        protected virtual void TryWriteRequestData(IRequestBinder binder, BindingContext context, WebRequest request)
         {
             binder.Write(context, request);
         }
@@ -204,7 +183,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual TOutputModel ParseResponse(BindingContext context, WebRequest request)
         {
-            return (TOutputModel)ModelBinders.GetReader(typeof(TOutputModel)).Read(context, request, typeof(TOutputModel));
+            return (TOutputModel)ModelBinders.GetResponseBinder(typeof(TOutputModel)).Read(context, request, typeof(TOutputModel));
         }
 
         /// <summary>
@@ -220,17 +199,6 @@ namespace DocaLabs.Http.Client
                 TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5)
             });
         }
-       
-        void ReadConfiguration(string configurationName)
-        {
-            Configuration = GetConfigurationElement(configurationName);
-
-            if (Configuration.BaseUrl != null)
-                BaseUrl = Configuration.BaseUrl;
-
-            if (string.IsNullOrWhiteSpace(Method))
-                Method = Configuration.Method;
-        }
 
         /// <summary>
         /// Returns endpoint configuration. If configuration is not found in the app.config (or web.config) then the default will be used.
@@ -243,6 +211,40 @@ namespace DocaLabs.Http.Client
                 configurationName = GetType().FullName;
 
             return EndpointConfiguration.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
+        }
+
+        void ReadConfiguration(string configurationName)
+        {
+            Configuration = GetConfigurationElement(configurationName);
+
+            if (Configuration.BaseUrl != null)
+                BaseUrl = Configuration.BaseUrl;
+
+            if (string.IsNullOrWhiteSpace(Method))
+                Method = Configuration.Method;
+        }
+
+        TOutputModel ExecutePipeline(object model)
+        {
+            var context = new BindingContext(this, model, Configuration, BaseUrl);
+
+            var inputModelType = GetInputModelType(model);
+
+            var binder = ModelBinders.GetRequestBinder(inputModelType);
+
+            context.Model = binder.TransformModel(context);
+
+            var url = ComposeUrl(binder, context);
+
+            var request = CreateRequest(url);
+
+            context.RequestUrl = request.RequestUri;
+
+            InitializeRequest(binder, context, request);
+
+            TryWriteRequestData(binder, context, request);
+
+            return ParseResponse(context, request);
         }
     }
 }

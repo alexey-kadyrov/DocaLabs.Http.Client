@@ -14,6 +14,16 @@ namespace DocaLabs.Http.Client.Binding
         public object HttpClient { get; private set; }
 
         /// <summary>
+        /// Gets the HttpClient's endpoint configuration.
+        /// </summary>
+        public IClientEndpoint Configuration { get; private set; }
+
+        /// <summary>
+        /// Gets the base URL for the service endpoint.
+        /// </summary>
+        public Uri BaseUrl { get; private set; }
+
+        /// <summary>
         /// Gets the original input model which was passed to the HttpClient.Execute method, 
         /// it could be different from the Model due the transformation.
         /// </summary>
@@ -25,14 +35,9 @@ namespace DocaLabs.Http.Client.Binding
         public object Model { get; internal set; }
 
         /// <summary>
-        /// Gets the HttpClient's endpoint configuration.
+        /// Gets the base URL for the service endpoint.
         /// </summary>
-        public IClientEndpoint Configuration { get; private set; }
-
-        /// <summary>
-        /// Gets the base URL fro the service endpoint.
-        /// </summary>
-        public Uri BaseUrl { get; private set; }
+        public Uri RequestUrl { get; internal set; }
 
         /// <summary>
         /// Initializes in instance of the BindingContext class.

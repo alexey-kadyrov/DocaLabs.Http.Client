@@ -1,12 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
-    /// Default implementation of the IModelBinder
+    /// Default implementation of the IRequestBinder
     /// </summary>
-    public class DefaultModelBinder : IModelBinder
+    public class DefaultRequestBinder : IRequestBinder
     {
         readonly DefaultUrlComposer _urlComposer;
         readonly DefaultRequestWriter _requestWriter;
@@ -14,9 +13,9 @@ namespace DocaLabs.Http.Client.Binding
         readonly DefaultCredentialsMapper _credentialsMapper;
 
         /// <summary>
-        /// Initializes a new instance of the DefaultModelBinder class.
+        /// Initializes a new instance of the DefaultRequestBinder class.
         /// </summary>
-        public DefaultModelBinder()
+        public DefaultRequestBinder()
         {
             _urlComposer = new DefaultUrlComposer();
             _requestWriter = new DefaultRequestWriter();
@@ -27,7 +26,7 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Returns the input model as its passed without any modification.
         /// </summary>
-        public virtual object TransformInputModel(BindingContext context)
+        public virtual object TransformModel(BindingContext context)
         {
             return context.OriginalModel;
         }
@@ -59,9 +58,9 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Uses DefaultCredentialsMapper to get credentials from an input model.
         /// </summary>
-        public virtual ICredentials GetCredentials(BindingContext context, Uri url)
+        public virtual ICredentials GetCredentials(BindingContext context)
         {
-            return _credentialsMapper.Map(context.Model, url);
+            return _credentialsMapper.Map(context.Model, context.RequestUrl);
         }
 
         /// <summary>

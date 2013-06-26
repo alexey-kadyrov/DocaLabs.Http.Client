@@ -3,25 +3,33 @@ using DocaLabs.Http.Client.Binding;
 
 namespace DocaLabs.Http.Client.Tests._Utils
 {
-    public class TestHttpClientBaseType<TQuery, TResult> : HttpClient<TQuery, TResult>
+    public class TestHttpClientBaseType<TInputModel, TOutputModel> : HttpClient<TInputModel, TOutputModel>
     {
+        public TInputModel Model { get; set; }
         public string ExecutionMarker { get; set; }
 
-        public TestHttpClientBaseType(Uri baseUrl, string configurationName)
-            : base(baseUrl, configurationName)
+        public TestHttpClientBaseType(Uri baseUrl, string configurationName, TInputModel model)
+            : base(baseUrl, configurationName, new TestExecuteStrategy())
         {
+            Model = model;
+            ((TestExecuteStrategy) ExecuteStrategy).Client = this;
         }
 
-        protected override TResult ExecutePipeline(object model)
+        class TestExecuteStrategy : IExecuteStrategy<TOutputModel>
         {
-            var result = Activator.CreateInstance<TResult>();
+            public TestHttpClientBaseType<TInputModel, TOutputModel> Client { get; set; }
 
-            if(typeof(TQuery) != typeof(VoidType) && typeof(TResult) != typeof(VoidType))
-                typeof(TResult).GetProperty("Value").SetValue(result, typeof(TQuery).GetProperty("Value").GetValue(model, null));
+            public TOutputModel Execute(Func<TOutputModel> action)
+            {
+                var result = Activator.CreateInstance<TOutputModel>();
 
-            ExecutionMarker = "Pipeline was executed.";
+                if (typeof(TInputModel) != typeof(VoidType) && typeof(TOutputModel) != typeof(VoidType))
+                    typeof(TOutputModel).GetProperty("Value").SetValue(result, typeof(TInputModel).GetProperty("Value").GetValue(Client.Model, null));
 
-            return result;
+                Client.ExecutionMarker = "Pipeline was executed.";
+
+                return result;
+            }
         }
     }
 }

@@ -4,27 +4,35 @@ using DocaLabs.Http.Client.Binding;
 
 namespace DocaLabs.Http.Client.Tests._Utils
 {
-    public class TestHttpClientBaseTypeForConcurrentRun<TQuery, TResult> : HttpClient<TQuery, TResult>
+    public class TestHttpClientBaseTypeForConcurrentRun<TInputModel, TOutputModel> : HttpClient<TInputModel, TOutputModel>
     {
+        public TInputModel Model { get; set; }
         public string ExecutionMarker { get; set; }
 
-        public TestHttpClientBaseTypeForConcurrentRun(Uri baseUrl, string configurationName)
-            : base(baseUrl, configurationName)
+        public TestHttpClientBaseTypeForConcurrentRun(Uri baseUrl, string configurationName, TInputModel model)
+            : base(baseUrl, configurationName, new TestExecuteStrategy())
         {
+            Model = model;
+            ((TestExecuteStrategy)ExecuteStrategy).Client = this;
         }
 
-        protected override TResult ExecutePipeline(object model)
+        class TestExecuteStrategy : IExecuteStrategy<TOutputModel>
         {
-            var result = Activator.CreateInstance<TResult>();
+            public TestHttpClientBaseTypeForConcurrentRun<TInputModel, TOutputModel> Client { get; set; }
 
-            if(typeof(TQuery) != typeof(VoidType) && typeof(TResult) != typeof(VoidType))
-                typeof(TResult).GetProperty("Value").SetValue(result, typeof(TQuery).GetProperty("Value").GetValue(model, null));
+            public TOutputModel Execute(Func<TOutputModel> action)
+            {
+                var result = Activator.CreateInstance<TOutputModel>();
 
-            ExecutionMarker = "Pipeline was executed.";
+                if (typeof(TInputModel) != typeof(VoidType) && typeof(TOutputModel) != typeof(VoidType))
+                    typeof(TOutputModel).GetProperty("Value").SetValue(result, typeof(TInputModel).GetProperty("Value").GetValue(Client.Model, null));
 
-            Thread.Sleep(10);
+                Client.ExecutionMarker = "Pipeline was executed.";
 
-            return result;
+                Thread.Sleep(10);
+
+                return result;
+            }
         }
     }
 }
