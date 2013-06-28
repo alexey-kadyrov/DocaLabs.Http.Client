@@ -18,7 +18,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             _converters = Parse(type);
         }
 
-        public NameValueCollection ConvertModel(object obj)
+        public NameValueCollection Convert(object obj)
         {
             var values = new NameValueCollection();
 

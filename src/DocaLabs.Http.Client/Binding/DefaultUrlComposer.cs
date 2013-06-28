@@ -88,9 +88,12 @@ namespace DocaLabs.Http.Client.Binding
                 : baseUrl.GetComponents(UriComponents.Query, baseUrl.UserEscaped ? UriFormat.UriEscaped : UriFormat.Unescaped);
         }
 
-        static string GetFragmentWithoutSharpMark(Uri url)
+        static string GetFragmentWithoutSharpMark(Uri baseUrl)
         {
-            var fragment = url.Fragment;
+            if (baseUrl == null)
+                return "";
+
+            var fragment = baseUrl.Fragment;
 
             return fragment.StartsWith("#")
                 ? fragment.Substring(1)
@@ -99,7 +102,7 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessImplicitPathOrQuery(string existingPath, object model, NameValueCollection path, NameValueCollection query)
         {
-            var values = ImplicitPathOrQueryPropertyMapGetOrAddType(model).ConvertModel(model);
+            var values = ImplicitPathOrQueryPropertyMapGetOrAddType(model).Convert(model);
 
             foreach (var key in values.AllKeys)
             {
@@ -112,12 +115,12 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessExplicitQuery(object model, NameValueCollection query)
         {
-            query.Add(ExplicitQueryPropertyMapGetOrAddType(model).ConvertModel(model));
+            query.Add(ExplicitQueryPropertyMapGetOrAddType(model).Convert(model));
         }
 
         void ProcessExplicitPath(object model, NameValueCollection path)
         {
-            path.Add(ExplicitPathPropertyMapGetOrAddType(model).ConvertModel(model));
+            path.Add(ExplicitPathPropertyMapGetOrAddType(model).Convert(model));
         }
 
         PropertyMap ImplicitPathOrQueryPropertyMapGetOrAddType(object model)
@@ -145,7 +148,7 @@ namespace DocaLabs.Http.Client.Binding
                 var values = path.GetValues(key);
                 if (values != null)
                 {
-                    var value = string.Join("/", values.Select(HttpUtility.UrlPathEncode));
+                    var value = string.Join("/", values.Where(x => !string.IsNullOrWhiteSpace(x)).Select(HttpUtility.UrlPathEncode));
 
                     existingPath = existingPath.Replace(
                         "{" + key + "}", string.IsNullOrWhiteSpace(value) ? "" : value, StringComparison.OrdinalIgnoreCase);

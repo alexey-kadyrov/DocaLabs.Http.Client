@@ -54,7 +54,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             var value = Property.GetValue(obj, null);
 
             if (value != null)
-                values.Add(_propertyMapGetOrAddType(value).ConvertModel(value));
+                values.Add(_propertyMapGetOrAddType(value).Convert(value));
         }
     }
 }

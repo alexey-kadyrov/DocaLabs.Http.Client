@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Binding
         {
             return Ignore(model) 
                 ? new WebHeaderCollection()
-                : GetHeaders(PropertyMapGetOrAddType(model).ConvertModel(model));
+                : GetHeaders(PropertyMapGetOrAddType(model).Convert(model));
         }
 
         PropertyMap PropertyMapGetOrAddType(object model)

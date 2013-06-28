@@ -12,7 +12,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
     /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
-    /// The class uses QueryMapper.ToQueryString for serialization.
     /// </summary>
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
@@ -77,7 +76,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if (model == null)
                 return "";
 
-            var values = PropertyMapGetOrAddType(model).ConvertModel(model);
+            var values = PropertyMapGetOrAddType(model).Convert(model);
 
             return new QueryStringBuilder().Add(values).ToString();
         }
