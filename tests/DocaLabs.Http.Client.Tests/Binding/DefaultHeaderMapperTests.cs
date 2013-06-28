@@ -31,7 +31,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class TestModel
         {
-            [InRequestHeader]
+            [Use(RequestUsage.InHeader)]
             public string MyHeader { get; set; }
 
             public string JustValue { get; set; }
@@ -62,12 +62,12 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class TestModel
         {
-            [InRequestHeader]
+            [Use(RequestUsage.InHeader)]
             public string MyHeader { get; set; }
 
             public string JustValue { get; set; }
 
-            [InRequestHeader]
+            [Use(RequestUsage.InHeader)]
             public string AnotherMyHeader { get; set; }
         }
     }
@@ -133,7 +133,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class TestModel
         {
-            [InRequestHeader]
+            [Use(RequestUsage.InHeader)]
             public string MyHeader { get; set; }
 
             public string JustValue { get; set; }
@@ -162,7 +162,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class TestModel
         {
-            [InRequestHeader(Name = "xx-header-xx")]
+            [Use(RequestUsage.InHeader, Name = "xx-header-xx")]
             public string MyHeader { get; set; }
 
             public string JustValue { get; set; }
@@ -189,7 +189,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class TestModel
         {
-            [InRequestHeader(Name = "xx-header-xx", Format = "0000")]
+            [Use(RequestUsage.InHeader, Name = "xx-header-xx", Format = "0000")]
             public int MyHeader { get; set; }
 
             public string JustValue { get; set; }
@@ -216,7 +216,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class TestModel
         {
-            [InRequestHeader]
+            [Use(RequestUsage.InHeader)]
             public InnerTestClass MyHeader { get; set; }
 
             public string JustValue { get; set; }
@@ -305,10 +305,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class TestModel
         {
-            [InRequestHeader]
+            [Use(RequestUsage.InHeader)]
             public string MyHeader { get; set; }
 
-            [InRequestHeader]
+            [Use(RequestUsage.InHeader)]
             public string MyHeader2 { get; set; }
 
             public string JustValue { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -7,14 +8,21 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
-    public abstract class PropertyMap
+    public class PropertyMap
     {
+        readonly ConcurrentDictionary<Type, PropertyMap> _nestedTypes;
         readonly IList<IPropertyConverter> _converters;
-        readonly Func<object, PropertyMap> _propertyMapGetOrAddType;
+        readonly Func<PropertyInfo, bool> _acceptPropertyCheck;
 
-        protected PropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
+        public PropertyMap(Type type, Func<PropertyInfo, bool> acceptPropertyCheck)
+            : this(type, acceptPropertyCheck, new ConcurrentDictionary<Type, PropertyMap>())
         {
-            _propertyMapGetOrAddType = propertyMapGetOrAddType;
+        }
+
+        public PropertyMap(Type type, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, PropertyMap> nestedTypes)
+        {
+            _nestedTypes = nestedTypes;
+            _acceptPropertyCheck = acceptPropertyCheck;
             _converters = Parse(type);
         }
 
@@ -40,25 +48,18 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         IPropertyConverter ParseProperty(PropertyInfo property)
         {
-            return AcceptProperty(property)
-                ? GetConverter(property, GetPropertyConverterOverrides(property)) 
+            return _acceptPropertyCheck(property)
+                ? GetConverter(property) 
                 : null;
         }
 
-        protected abstract bool AcceptProperty(PropertyInfo property);
-
-        protected virtual IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
-        {
-            return null;
-        }
-
-        IPropertyConverter GetConverter(PropertyInfo property, IPropertyConverterOverrides overrides)
+        IPropertyConverter GetConverter(PropertyInfo property)
         {
             return TryGetCustomPropertyParser(property)
-                ?? SimplePropertyConverter.TryCreate(property, overrides)
-                ?? NameValueCollectionPropertyConverter.TryCreate(property, overrides)
-                ?? CollectionPropertyConverter.TryCreate(property, overrides)
-                ?? ObjectPropertyConverter.TryCreate(property, overrides, _propertyMapGetOrAddType);
+                ?? SimplePropertyConverter.TryCreate(property)
+                ?? NameValueCollectionPropertyConverter.TryCreate(property)
+                ?? SimpleCollectionPropertyConverter.TryCreate(property)
+                ?? NestedTypesPropertyConverter.TryCreate(property, _acceptPropertyCheck, _nestedTypes);
         }
 
         static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo info)

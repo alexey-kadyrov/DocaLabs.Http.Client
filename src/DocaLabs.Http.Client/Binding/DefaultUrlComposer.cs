@@ -14,9 +14,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _explicitQueryPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
-        readonly ConcurrentDictionary<Type, PropertyMap> _explicitPathPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
-        readonly ConcurrentDictionary<Type, PropertyMap> _implicitPathOrQueryPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _explicitQueryMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _explicitPathMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _implicitPathOrQueryMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
@@ -44,7 +44,12 @@ namespace DocaLabs.Http.Client.Binding
 
         static bool Ignore(object model)
         {
-            return  model == null || model.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
+            if (model == null)
+                return false;
+
+            var useAttribute = model.GetType().GetCustomAttribute<UseAttribute>(true);
+
+            return useAttribute != null && useAttribute.Usage == RequestUsage.Ignore;
         }
 
         Uri CreateUrlFrom(object model, Uri baseUrl)
@@ -102,7 +107,7 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessImplicitPathOrQuery(string existingPath, object model, NameValueCollection path, NameValueCollection query)
         {
-            var values = ImplicitPathOrQueryPropertyMapGetOrAddType(model).Convert(model);
+            var values = GetImplicitPathOrQueryMap(model).Convert(model);
 
             foreach (var key in values.AllKeys)
             {
@@ -115,27 +120,27 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessExplicitQuery(object model, NameValueCollection query)
         {
-            query.Add(ExplicitQueryPropertyMapGetOrAddType(model).Convert(model));
+            query.Add(GetExplicitQueryMap(model).Convert(model));
         }
 
         void ProcessExplicitPath(object model, NameValueCollection path)
         {
-            path.Add(ExplicitPathPropertyMapGetOrAddType(model).Convert(model));
+            path.Add(GetExplicitPathMap(model).Convert(model));
         }
 
-        PropertyMap ImplicitPathOrQueryPropertyMapGetOrAddType(object model)
+        PropertyMap GetImplicitPathOrQueryMap(object model)
         {
-            return _implicitPathOrQueryPropertyMaps.GetOrAdd(model.GetType(), x => new ImplicitPathOrQueryPropertyMap(x, ImplicitPathOrQueryPropertyMapGetOrAddType));
+            return _implicitPathOrQueryMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsImplicitUrlPathOrQuery));
         }
 
-        PropertyMap ExplicitPathPropertyMapGetOrAddType(object model)
+        PropertyMap GetExplicitPathMap(object model)
         {
-            return _explicitPathPropertyMaps.GetOrAdd(model.GetType(), x => new ExplicitPathPropertyMap(x, ExplicitPathPropertyMapGetOrAddType));
+            return _explicitPathMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsExplicitUrlPath));
         }
 
-        PropertyMap ExplicitQueryPropertyMapGetOrAddType(object model)
+        PropertyMap GetExplicitQueryMap(object model)
         {
-            return _explicitQueryPropertyMaps.GetOrAdd(model.GetType(), x => new ExplicitQueryPropertyMap(x, ExplicitQueryPropertyMapGetOrAddType));
+            return _explicitQueryMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsExplicitUrlQuery));
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)
@@ -175,55 +180,6 @@ namespace DocaLabs.Http.Client.Binding
             return leftPart.EndsWith("&")
                     ? leftPart + rightPart
                     : leftPart + "&" + rightPart;
-        }
-
-        class ExplicitPathPropertyMap : PropertyMap
-        {
-            public ExplicitPathPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
-                : base(type, propertyMapGetOrAddType)
-            {
-            }
-
-            protected override bool AcceptProperty(PropertyInfo info)
-            {
-                return info.IsExplicitUrlPath();
-            }
-
-            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
-            {
-                return property.GetCustomAttribute<InRequestPathAttribute>();
-            }
-        }
-
-        class ExplicitQueryPropertyMap : PropertyMap
-        {
-            public ExplicitQueryPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
-                : base(type, propertyMapGetOrAddType)
-            {
-            }
-
-            protected override bool AcceptProperty(PropertyInfo info)
-            {
-                return info.IsExplicitUrlQuery();
-            }
-
-            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
-            {
-                return property.GetCustomAttribute<InRequestQueryAttribute>();
-            }
-        }
-
-        class ImplicitPathOrQueryPropertyMap : PropertyMap
-        {
-            public ImplicitPathOrQueryPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
-                : base(type, propertyMapGetOrAddType)
-            {
-            }
-
-            protected override bool AcceptProperty(PropertyInfo info)
-            {
-                return info.IsImplicitUrlPathOrQuery();
-            }
         }
     }
 }

@@ -10,8 +10,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// </summary>
     public class SimplePropertyConverter : PropertyConverterBase, IPropertyConverter 
     {
-        SimplePropertyConverter(PropertyInfo property, IPropertyConverterOverrides overrides)
-            : base(property, overrides)
+        SimplePropertyConverter(PropertyInfo property)
+            : base(property)
         {
         }
 
@@ -20,13 +20,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides)
+        public static IPropertyConverter TryCreate(PropertyInfo property)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
             return property.PropertyType.IsSimpleType() && property.GetIndexParameters().Length == 0
-                ? new SimplePropertyConverter(property, overrides) 
+                ? new SimplePropertyConverter(property) 
                 : null;
         }
 

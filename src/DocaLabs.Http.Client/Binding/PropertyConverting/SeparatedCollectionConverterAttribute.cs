@@ -26,7 +26,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         public override IPropertyConverter GetConverter(PropertyInfo property)
         {
-            var converter = SeparatedCollectionConverter.TryCreate(property, property.GetCustomAttribute<InRequestQueryAttribute>(), Separator);
+            var converter = SeparatedCollectionConverter.TryCreate(property, Separator);
 
             if(converter == null)
                 throw new ArgumentException(string.Format(Resources.Text.separated_coll_attr_cannot_be_used_for_0_in_1, property.Name, property.DeclaringType), "property");

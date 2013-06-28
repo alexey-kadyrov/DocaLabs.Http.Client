@@ -9,10 +9,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converts enumerable type properties.
     /// </summary>
-    public class CollectionPropertyConverter : PropertyConverterBase, IPropertyConverter
+    public class SimpleCollectionPropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        CollectionPropertyConverter(PropertyInfo property, IPropertyConverterOverrides overrides)
-            : base(property, overrides)
+        SimpleCollectionPropertyConverter(PropertyInfo property)
+            : base(property)
         {
         }
 
@@ -22,7 +22,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * The enumerable element type is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides)
+        public static IPropertyConverter TryCreate(PropertyInfo property)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
@@ -30,7 +30,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             var type = property.PropertyType;
 
             return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && property.GetIndexParameters().Length == 0
-                ? new CollectionPropertyConverter(property, overrides)
+                ? new SimpleCollectionPropertyConverter(property)
                 : null;
         }
 

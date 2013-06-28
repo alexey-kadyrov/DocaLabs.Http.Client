@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Specialized;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
@@ -8,14 +9,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converts reference type properties, like object, etc.
     /// </summary>
-    public class ObjectPropertyConverter : PropertyConverterBase, IPropertyConverter
+    public class NestedTypesPropertyConverter : PropertyConverterBase, IPropertyConverter
     {
-        readonly Func<object, PropertyMap> _propertyMapGetOrAddType;
+        readonly PropertyMap _propertyMap;
 
-        ObjectPropertyConverter(PropertyInfo property, IPropertyConverterOverrides overrides, Func<object, PropertyMap> propertyMapGetOrAddType)
-            : base(property, overrides)
+        NestedTypesPropertyConverter(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, PropertyMap> nestedTypes)
+            : base(property)
         {
-            _propertyMapGetOrAddType = propertyMapGetOrAddType;
+            _propertyMap = new PropertyMap(property.PropertyType, acceptPropertyCheck, nestedTypes);
         }
 
         /// <summary>
@@ -23,14 +24,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is not simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides, Func<object, PropertyMap> propertyMapGetOrAddType)
+        public static IPropertyConverter TryCreate(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, PropertyMap> nestedTypes)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
             return property.PropertyType.IsSimpleType() || property.GetIndexParameters().Length > 0
                 ? null
-                : new ObjectPropertyConverter(property, overrides, propertyMapGetOrAddType);
+                : new NestedTypesPropertyConverter(property, acceptPropertyCheck, nestedTypes);
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             var value = Property.GetValue(obj, null);
 
             if (value != null)
-                values.Add(_propertyMapGetOrAddType(value).Convert(value));
+                values.Add(_propertyMap.Convert(value));
         }
     }
 }

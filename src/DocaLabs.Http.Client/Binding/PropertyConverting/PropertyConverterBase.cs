@@ -33,17 +33,19 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <summary>
         /// Initializes the instance of the PropertyConverterBase class for the provided property and optionally overrides.
         /// </summary>
-        protected PropertyConverterBase(PropertyInfo property, IPropertyConverterOverrides overrides)
+        protected PropertyConverterBase(PropertyInfo property)
         {
             if (property == null)
                 throw new ArgumentNullException("property");
 
             Property = property;
 
-            if (overrides != null)
+            var useAttribute = property.GetCustomAttribute<UseAttribute>();
+
+            if (useAttribute != null)
             {
-                Name = overrides.Name;
-                Format = overrides.Format;
+                Name = useAttribute.Name;
+                Format = useAttribute.Format;
                 IsNameOverridden = true;
             }
 

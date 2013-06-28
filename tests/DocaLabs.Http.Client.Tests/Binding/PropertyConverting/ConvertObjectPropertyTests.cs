@@ -13,77 +13,77 @@
 //    // ReSharper disable ValueParameterNotUsed
 //    // ReSharper disable UnusedParameter.Local
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_trying_to_create_convert_object_property_for_object_properties
 //    {
 //        private It should_not_create_it_for_bool =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_char =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_byte =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_short =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_ushort =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_int =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_uint =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_long =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_ulong =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_float =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_double =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_decimal =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_enum =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_guid =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_datetime =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_datetimeoffset =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_timespan =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_string =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_byte_array =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldBeNull();
 
 //        private It should_create_it_for_object =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldNotBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_class =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldNotBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_struct =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldNotBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldNotBeNull();
 
 //        private It should_not_create_it_for_indexer =
-//            () => ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
+//            () => NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
 
 //        class TestClass
 //        {
@@ -125,13 +125,13 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_trying_to_create_convert_object_property_for_null_property_info
 //    {
 //        static Exception exception;
 
 //        Because of =
-//            () => exception = Catch.Exception(() => ObjectPropertyConverter.TryCreate(null));
+//            () => exception = Catch.Exception(() => NestedTypesPropertyConverter.TryCreate(null));
 
 //        It should_throw_argument_null_exception =
 //            () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -140,14 +140,14 @@
 //            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("info");
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_null_instance
 //    {
 //        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context =
-//            () => converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            () => converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 
 //        Because of =
 //            () => result = converter.Convert(null);
@@ -169,7 +169,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_null_property
 //    {
 //        static TestClass instance;
@@ -180,7 +180,7 @@
 //        {
 //            instance = new TestClass();
 
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -205,7 +205,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper
 //    {
 //        static TestClass instance;
@@ -215,7 +215,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -241,7 +241,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper_together_with_query_parameter_where_name_and_format_are_not_set
 //    {
 //        static TestClass instance;
@@ -251,7 +251,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -278,7 +278,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper_and_which_name_is_redefined_using_query_parameter_attribute
 //    {
 //        static TestClass instance;
@@ -288,7 +288,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -315,7 +315,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper_and_custom_format_applied
 //    {
 //        static TestClass instance;
@@ -325,7 +325,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -352,7 +352,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper
 //    {
 //        static TestClass instance;
@@ -362,7 +362,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -388,7 +388,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper_together_with_query_parameter_where_name_and_format_are_not_set
 //    {
 //        static TestClass instance;
@@ -398,7 +398,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -425,7 +425,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper_and_which_name_is_redefined_using_query_parameter_attribute
 //    {
 //        static TestClass instance;
@@ -435,7 +435,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =
@@ -462,7 +462,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(ObjectPropertyConverter))]
+//    [Subject(typeof(NestedTypesPropertyConverter))]
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper_and_custom_format_applied
 //    {
 //        static TestClass instance;
@@ -472,7 +472,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass { Value = new TestPropertyClass() };
-//            converter = ObjectPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+//            converter = NestedTypesPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 //        };
 
 //        Because of =

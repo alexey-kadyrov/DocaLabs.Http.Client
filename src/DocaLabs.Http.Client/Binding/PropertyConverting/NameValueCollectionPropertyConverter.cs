@@ -9,8 +9,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// </summary>
     public class NameValueCollectionPropertyConverter : PropertyConverterBase, IPropertyConverter 
     {
-        NameValueCollectionPropertyConverter(PropertyInfo property, IPropertyConverterOverrides overrides)
-            : base(property, overrides)
+        NameValueCollectionPropertyConverter(PropertyInfo property)
+            : base(property)
         {
         }
 
@@ -19,13 +19,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is derived from NameValueCollection
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides)
+        public static IPropertyConverter TryCreate(PropertyInfo property)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
             return typeof (NameValueCollection).IsAssignableFrom(property.PropertyType) && property.GetIndexParameters().Length == 0
-                ? new NameValueCollectionPropertyConverter(property, overrides) 
+                ? new NameValueCollectionPropertyConverter(property) 
                 : null;
         }
 

@@ -9,23 +9,28 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultHeaderMapper
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _headerPropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, PropertyMap> _maps = new ConcurrentDictionary<Type, PropertyMap>();
 
         public WebHeaderCollection Map(object model)
         {
             return Ignore(model) 
                 ? new WebHeaderCollection()
-                : GetHeaders(PropertyMapGetOrAddType(model).Convert(model));
+                : GetHeaders(GetMap(model).Convert(model));
         }
 
-        PropertyMap PropertyMapGetOrAddType(object model)
+        PropertyMap GetMap(object model)
         {
-            return _headerPropertyMaps.GetOrAdd(model.GetType(), x => new HeaderPropertyMap(x, PropertyMapGetOrAddType));
+            return _maps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsHeader));
         }
 
         static bool Ignore(object model)
         {
-            return model == null || model.GetType().GetCustomAttribute<IgnoreInRequestAttribute>(true) != null;
+            if (model == null)
+                return false;
+
+            var useAttribute = model.GetType().GetCustomAttribute<UseAttribute>(true);
+
+            return useAttribute != null && useAttribute.Usage == RequestUsage.Ignore;
         }
 
         static WebHeaderCollection GetHeaders(NameValueCollection headers)
@@ -34,24 +39,6 @@ namespace DocaLabs.Http.Client.Binding
             {
                 headers
             };
-        }
-
-        class HeaderPropertyMap : PropertyMap
-        {
-            public HeaderPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
-                : base(type, propertyMapGetOrAddType)
-            {
-            }
-
-            protected override bool AcceptProperty(PropertyInfo info)
-            {
-                return info.IsHeader();
-            }
-
-            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
-            {
-                return property.GetCustomAttribute<InRequestHeaderAttribute>();
-            }
         }
     }
 }

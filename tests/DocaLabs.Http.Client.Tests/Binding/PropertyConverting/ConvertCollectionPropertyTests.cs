@@ -15,158 +15,158 @@
 //    // ReSharper disable ValueParameterNotUsed
 //    // ReSharper disable UnusedParameter.Local
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_trying_to_create_convert_collection_property
 //    {
 //        private It should_not_create_it_for_bool =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_char =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_byte =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_short =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_ushort =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_int =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_uint =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_long =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_ulong =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_float =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_double =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_decimal =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_enum =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_guid =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_datetime =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_datetimeoffset =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_timespan =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_string =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_byte_array =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_object =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_class =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_struct =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
 
 //        private It should_create_it_for_enumerable_of_strings =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableStringProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableStringProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_list_of_string =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ListStringProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ListStringProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_ilist_of_string =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IListStringProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IListStringProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_array_of_string =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ArrayStringProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ArrayStringProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_byte_arrays =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableByteArrayProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableByteArrayProperty")).ShouldNotBeNull();
 
 //        private It should_not_create_it_for_enumerable_of_object =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldBeNull();
 
 //        private It should_not_create_it_for_enumerable =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldBeNull();
 
 //        private It should_create_it_for_enumerable_of_bool =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableBoolProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableBoolProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_char =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableCharProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableCharProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_byte =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableByteProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableByteProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_short =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableShortProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableShortProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_ushort =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableUShortProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableUShortProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_int =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableIntProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableIntProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_list_of_int =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ListIntProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ListIntProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_ilist_of_int =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IListIntProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("IListIntProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_array_of_int =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ArrayIntProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("ArrayIntProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_uint =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableUIntProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableUIntProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_long =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableLongProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableLongProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_ulong =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableULongProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableULongProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_float =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableFloatProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableFloatProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_double =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDoubleProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDoubleProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_decimal =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDecimalProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDecimalProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_enum =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableEnumProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableEnumProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_guid =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableGuidProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableGuidProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_datetime =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_datetimeoffset =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeOffsetProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeOffsetProperty")).ShouldNotBeNull();
 
 //        private It should_create_it_for_enumerable_of_timespan =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableTimeSpanProperty")).ShouldNotBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("EnumerableTimeSpanProperty")).ShouldNotBeNull();
 
 //        private It should_not_create_it_for_indexer =
-//            () => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
+//            () => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
 
 //        class TestClass
 //        {
@@ -235,13 +235,13 @@
 //        }
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_trying_to_create_convert_collection_property_for_null_property_info
 //    {
 //        static Exception exception;
 
 //        Because of =
-//            () => exception = Catch.Exception(() => CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(null));
+//            () => exception = Catch.Exception(() => SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(null));
 
 //        It should_throw_argument_null_exception =
 //            () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -250,14 +250,14 @@
 //            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("info");
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used_on_null_instance
 //    {
 //        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context =
-//            () => converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
+//            () => converter = SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
 
 //        Because of =
 //            () => result = converter.Convert(null);
@@ -271,7 +271,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used_on_null_property
 //    {
 //        static TestClass instance;
@@ -281,7 +281,7 @@
 //        Establish context = () =>
 //        {
 //            instance = new TestClass();
-//            converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
+//            converter = SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
 //        };
 
 //        Because of =
@@ -296,7 +296,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used
 //    {
 //        static TestClass instance;
@@ -310,7 +310,7 @@
 //                Values = new[] { 27, 42 }
 //            };
 
-//            converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
+//            converter = SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
 //        };
 
 //        Because of =
@@ -328,7 +328,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used_on_collection_property_where_some_values_are_null
 //    {
 //        static TestClass instance;
@@ -342,7 +342,7 @@
 //                Values = new[] { null, "Hello", null }
 //            };
 
-//            converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
+//            converter = SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
 //        };
 
 //        Because of =
@@ -360,7 +360,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used_together_with_query_parameter_where_name_and_format_are_not_set
 //    {
 //        static TestClass instance;
@@ -374,7 +374,7 @@
 //                Values = new[] { 27, 42 }
 //            };
 
-//            converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
+//            converter = SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
 //        };
 
 //        Because of =
@@ -393,7 +393,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used_on_property_which_name_is_redefined_using_query_parameter_attribute
 //    {
 //        static TestClass instance;
@@ -407,7 +407,7 @@
 //                Values = new[] { 27, 42 }
 //            };
 
-//            converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
+//            converter = SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
 //        };
 
 //        Because of =
@@ -426,7 +426,7 @@
 //        }
 //    }
 
-//    [Subject(typeof(CollectionPropertyConverter<>))]
+//    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used_on_property_with_custom_format_applied
 //    {
 //        static TestClass instance;
@@ -440,7 +440,7 @@
 //                Values = new[] { 27, 42 }
 //            };
 
-//            converter = CollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
+//            converter = SimpleCollectionPropertyConverter<InRequestQueryAttribute>.TryCreate(typeof(TestClass).GetProperty("Values"));
 //        };
 
 //        Because of =

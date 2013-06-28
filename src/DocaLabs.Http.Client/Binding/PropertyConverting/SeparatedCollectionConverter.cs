@@ -17,8 +17,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         public char Separator { get; set; }
 
-        SeparatedCollectionConverter(PropertyInfo property, IPropertyConverterOverrides overrides, char separator)
-            : base(property, overrides)
+        SeparatedCollectionConverter(PropertyInfo property, char separator)
+            : base(property)
         {
             if (property.GetIndexParameters().Length > 0)
                 throw new ArgumentException(Resources.Text.property_cannot_be_indexer, "property");
@@ -32,7 +32,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * The enumerable element type is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, IPropertyConverterOverrides overrides, char separator = '|')
+        public static IPropertyConverter TryCreate(PropertyInfo property, char separator = '|')
         {
             if (property == null)
                 throw new ArgumentNullException("property");
@@ -40,7 +40,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             var type = property.PropertyType;
 
             return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && property.GetIndexParameters().Length == 0
-                ? new SeparatedCollectionConverter(property, overrides, separator)
+                ? new SeparatedCollectionConverter(property, separator)
                 : null;
         }
 

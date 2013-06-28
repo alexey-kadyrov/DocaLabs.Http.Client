@@ -30,8 +30,12 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsExplicitUrlPath(this PropertyInfo info)
         {
-            return CanPropertyBeUsedInRequest(info) &&
-                info.GetCustomAttribute<InRequestPathAttribute>(true) != null;
+            if (!CanPropertyBeUsedInRequest(info))
+                return false;
+
+            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+
+            return useAttribute != null && (useAttribute.Usage & RequestUsage.InPath) != 0;
         }
 
         /// <summary>
@@ -39,8 +43,12 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsExplicitUrlQuery(this PropertyInfo info)
         {
-            return CanPropertyBeUsedInRequest(info) &&
-                info.GetCustomAttribute<InRequestQueryAttribute>(true) != null;
+            if (!CanPropertyBeUsedInRequest(info))
+                return false;
+
+            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+
+            return useAttribute != null && (useAttribute.Usage & RequestUsage.InQuery) != 0;
         }
 
         /// <summary>
@@ -48,9 +56,17 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsHeader(this PropertyInfo info)
         {
-            return CanPropertyBeUsedInRequest(info) &&
-                ((typeof(WebHeaderCollection).IsAssignableFrom(info.PropertyType) && info.GetCustomAttribute<RequestSerializationAttribute>(true) == null)
-                    || info.GetCustomAttribute<InRequestHeaderAttribute>() != null);
+            if (!CanPropertyBeUsedInRequest(info))
+                return false;
+
+            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+
+            if (useAttribute != null)
+                return (useAttribute.Usage & RequestUsage.InHeader) != 0;
+
+            return 
+                typeof (WebHeaderCollection).IsAssignableFrom(info.PropertyType) && 
+                info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
 
         /// <summary>
@@ -90,9 +106,12 @@ namespace DocaLabs.Http.Client.Binding
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
-            return info.GetIndexParameters().Length == 0 &&
-                info.GetGetMethod() != null &&
-                info.GetCustomAttribute<IgnoreInRequestAttribute>(true) == null;
+            if (info.GetIndexParameters().Length > 0 || info.GetGetMethod() == null)
+                return false;
+
+            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+
+            return useAttribute == null || useAttribute.Usage != RequestUsage.Ignore;
         }
     }
 }

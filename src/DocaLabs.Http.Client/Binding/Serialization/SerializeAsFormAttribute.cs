@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
@@ -15,7 +14,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
-        readonly static ConcurrentDictionary<Type, FormPropertyMap> FormPropertyMaps = new ConcurrentDictionary<Type, FormPropertyMap>();
+        readonly static ConcurrentDictionary<Type, PropertyMap> Maps = new ConcurrentDictionary<Type, PropertyMap>();
         string _charSet;
 
         /// <summary>
@@ -76,7 +75,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if (model == null)
                 return "";
 
-            var values = PropertyMapGetOrAddType(model).Convert(model);
+            var values = GetMap(model).Convert(model);
 
             return new QueryStringBuilder().Add(values).ToString();
         }
@@ -93,9 +92,9 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
-        static FormPropertyMap PropertyMapGetOrAddType(object model)
+        static PropertyMap GetMap(object model)
         {
-            return FormPropertyMaps.GetOrAdd(model.GetType(), x => new FormPropertyMap(x, PropertyMapGetOrAddType));
+            return Maps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsFormProperty));
         }
 
         static void Write(byte[] data, WebRequest request)
@@ -115,24 +114,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             using (var dataStream = new MemoryStream(data))
             {
                 dataStream.CopyTo(compressionStream);
-            }
-        }
-
-        class FormPropertyMap : PropertyMap
-        {
-            public FormPropertyMap(Type type, Func<object, PropertyMap> propertyMapGetOrAddType)
-                : base(type, propertyMapGetOrAddType)
-            {
-            }
-
-            protected override bool AcceptProperty(PropertyInfo info)
-            {
-                return info.IsFormProperty();
-            }
-
-            protected override IPropertyConverterOverrides GetPropertyConverterOverrides(PropertyInfo property)
-            {
-                return property.GetCustomAttribute<InRequestFormAttribute>();
             }
         }
     }
