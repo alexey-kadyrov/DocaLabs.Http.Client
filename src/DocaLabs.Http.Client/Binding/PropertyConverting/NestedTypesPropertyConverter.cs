@@ -13,10 +13,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     {
         readonly PropertyMap _propertyMap;
 
-        NestedTypesPropertyConverter(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, PropertyMap> nestedTypes)
+        NestedTypesPropertyConverter(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, IPropertyConverter> nestedConverters)
             : base(property)
         {
-            _propertyMap = new PropertyMap(property.PropertyType, acceptPropertyCheck, nestedTypes);
+            _propertyMap = new PropertyMap(property.PropertyType, acceptPropertyCheck, nestedConverters);
         }
 
         /// <summary>
@@ -24,14 +24,20 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is not simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, PropertyMap> nestedTypes)
+        public static IPropertyConverter TryCreate(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, IPropertyConverter> nestedConverters)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
-            return property.PropertyType.IsSimpleType() || property.GetIndexParameters().Length > 0
-                ? null
-                : new NestedTypesPropertyConverter(property, acceptPropertyCheck, nestedTypes);
+            var type = property.PropertyType;
+
+            if( type.IsSimpleType() || property.GetIndexParameters().Length > 0)
+                return null;
+
+            IPropertyConverter converter;
+            return nestedConverters.TryGetValue(type, out converter) 
+                ? converter 
+                : new NestedTypesPropertyConverter(property, acceptPropertyCheck, nestedConverters);
         }
 
         /// <summary>

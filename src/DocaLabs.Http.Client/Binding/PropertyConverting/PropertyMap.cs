@@ -8,20 +8,20 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
-    public class PropertyMap
+    public class PropertyMap : IPropertyConverter
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _nestedTypes;
+        readonly ConcurrentDictionary<Type, IPropertyConverter> _nestedConverters;
         readonly IList<IPropertyConverter> _converters;
         readonly Func<PropertyInfo, bool> _acceptPropertyCheck;
 
         public PropertyMap(Type type, Func<PropertyInfo, bool> acceptPropertyCheck)
-            : this(type, acceptPropertyCheck, new ConcurrentDictionary<Type, PropertyMap>())
+            : this(type, acceptPropertyCheck, new ConcurrentDictionary<Type, IPropertyConverter>())
         {
         }
 
-        public PropertyMap(Type type, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, PropertyMap> nestedTypes)
+        public PropertyMap(Type type, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, IPropertyConverter> nestedConverters)
         {
-            _nestedTypes = nestedTypes;
+            _nestedConverters = nestedConverters;
             _acceptPropertyCheck = acceptPropertyCheck;
             _converters = Parse(type);
         }
@@ -38,6 +38,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         IList<IPropertyConverter> Parse(Type type)
         {
+            _nestedConverters[type] = this;
+
             return type.IsSimpleType()
                 ? new List<IPropertyConverter>()
                 : type.GetAllPublicInstanceProperties()
@@ -59,7 +61,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 ?? SimplePropertyConverter.TryCreate(property)
                 ?? NameValueCollectionPropertyConverter.TryCreate(property)
                 ?? SimpleCollectionPropertyConverter.TryCreate(property)
-                ?? NestedTypesPropertyConverter.TryCreate(property, _acceptPropertyCheck, _nestedTypes);
+                ?? NestedTypesPropertyConverter.TryCreate(property, _acceptPropertyCheck, _nestedConverters);
         }
 
         static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo info)
