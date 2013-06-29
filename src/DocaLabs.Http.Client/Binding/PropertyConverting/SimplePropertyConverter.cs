@@ -8,11 +8,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converts simple properties, like int, string, Guid, etc.
     /// </summary>
-    public class SimplePropertyConverter : PropertyConverterBase, IPropertyConverter 
+    public class SimplePropertyConverter : PropertyConverterBase, IConverter 
     {
         SimplePropertyConverter(PropertyInfo property)
             : base(property)
         {
+            if (string.IsNullOrWhiteSpace(Name))
+                Name = Property.Name;
         }
 
         /// <summary>
@@ -20,12 +22,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property)
+        public static IConverter TryCreate(PropertyInfo property)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
-            return property.PropertyType.IsSimpleType() && property.GetIndexParameters().Length == 0
+            return CanConvert(property)
                 ? new SimplePropertyConverter(property) 
                 : null;
         }
@@ -51,6 +53,11 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             var value = Property.GetValue(obj, null);
             if (value != null)
                 values.Add(Name, ConvertSimpleValue(value));
+        }
+
+        static bool CanConvert(PropertyInfo property)
+        {
+            return property.PropertyType.IsSimpleType() && property.GetIndexParameters().Length == 0;
         }
     }
 }

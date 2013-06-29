@@ -9,11 +9,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converts enumerable type properties.
     /// </summary>
-    public class SimpleCollectionPropertyConverter : PropertyConverterBase, IPropertyConverter
+    public class SimpleCollectionPropertyConverter : PropertyConverterBase, IConverter
     {
         SimpleCollectionPropertyConverter(PropertyInfo property)
             : base(property)
         {
+            if (string.IsNullOrWhiteSpace(Name))
+                Name = Property.Name;
         }
 
         /// <summary>
@@ -22,14 +24,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * The enumerable element type is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property)
+        public static IConverter TryCreate(PropertyInfo property)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
 
-            var type = property.PropertyType;
-
-            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && property.GetIndexParameters().Length == 0
+            return CanConvert(property)
                 ? new SimpleCollectionPropertyConverter(property)
                 : null;
         }
@@ -58,6 +58,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             foreach (var value in collection)
                 values.Add(Name, ConvertSimpleValue(value));
+        }
+
+        static bool CanConvert(PropertyInfo property)
+        {
+            var type = property.PropertyType;
+
+            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && property.GetIndexParameters().Length == 0;
         }
     }
 }

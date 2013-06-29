@@ -98,7 +98,7 @@
     <Compile Include="Binding\PropertyConverting\TypeMapTests.cs" />
     <Compile Include="Binding\PropertyConverting\ConvertCollectionPropertyTests.cs" />
     <Compile Include="Binding\PropertyConverting\ConvertObjectPropertyTests.cs" />
-    <Compile Include="Binding\PropertyConverting\ConvertSimplePropertyTests.cs" />
+    <Compile Include="Binding\PropertyConverting\SimplePropertyConverterTests.cs" />
     <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\QueryStringBuilderTests.cs" />
     <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterTests.cs" />

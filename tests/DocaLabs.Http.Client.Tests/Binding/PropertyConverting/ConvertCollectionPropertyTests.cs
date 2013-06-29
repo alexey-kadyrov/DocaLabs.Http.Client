@@ -253,7 +253,7 @@
 //    [Subject(typeof(SimpleCollectionPropertyConverter<>))]
 //    class when_convert_collection_property_is_used_on_null_instance
 //    {
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context =
@@ -275,7 +275,7 @@
 //    class when_convert_collection_property_is_used_on_null_property
 //    {
 //        static TestClass instance;
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -300,7 +300,7 @@
 //    class when_convert_collection_property_is_used
 //    {
 //        static TestClass instance;
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -332,7 +332,7 @@
 //    class when_convert_collection_property_is_used_on_collection_property_where_some_values_are_null
 //    {
 //        static TestClass instance;
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -364,7 +364,7 @@
 //    class when_convert_collection_property_is_used_together_with_query_parameter_where_name_and_format_are_not_set
 //    {
 //        static TestClass instance;
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -397,7 +397,7 @@
 //    class when_convert_collection_property_is_used_on_property_which_name_is_redefined_using_query_parameter_attribute
 //    {
 //        static TestClass instance;
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -430,7 +430,7 @@
 //    class when_convert_collection_property_is_used_on_property_with_custom_format_applied
 //    {
 //        static TestClass instance;
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>

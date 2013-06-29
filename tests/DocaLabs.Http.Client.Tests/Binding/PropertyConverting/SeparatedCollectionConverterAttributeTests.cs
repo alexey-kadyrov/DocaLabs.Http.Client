@@ -24,7 +24,7 @@
 //        static PropertyInfo property_info;
 //        static SeparatedCollectionConverterAttribute attribute;
 //        static TestClass instance;
-//        static IPropertyConverter converter;
+//        static IConverter converter;
 
 //        Establish context = () =>
 //        {

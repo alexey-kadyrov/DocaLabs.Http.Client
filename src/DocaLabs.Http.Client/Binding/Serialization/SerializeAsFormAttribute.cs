@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
-        readonly static ConcurrentDictionary<Type, PropertyMap> Maps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly static ConcurrentDictionary<Type, TypeConverter> Maps = new ConcurrentDictionary<Type, TypeConverter>();
         string _charSet;
 
         /// <summary>
@@ -92,9 +92,9 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
-        static PropertyMap GetMap(object model)
+        static TypeConverter GetMap(object model)
         {
-            return Maps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsFormProperty));
+            return Maps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsFormProperty));
         }
 
         static void Write(byte[] data, WebRequest request)

@@ -5,7 +5,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Defines methods to convert a property value to name-value pairs.
     /// </summary>
-    public interface IPropertyConverter
+    public interface IConverter
     {
         /// <summary>
         /// Converts a property value.

@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converter for enumerable properties that serializes into delimited string.
     /// </summary>
-    public class SeparatedCollectionConverter : PropertyConverterBase, IPropertyConverter
+    public class SeparatedCollectionConverter : PropertyConverterBase, IConverter
     {
         /// <summary>
         /// String's delimiter. The default value is pipe |.
@@ -32,7 +32,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * The enumerable element type is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IPropertyConverter TryCreate(PropertyInfo property, char separator = '|')
+        public static IConverter TryCreate(PropertyInfo property, char separator = '|')
         {
             if (property == null)
                 throw new ArgumentNullException("property");

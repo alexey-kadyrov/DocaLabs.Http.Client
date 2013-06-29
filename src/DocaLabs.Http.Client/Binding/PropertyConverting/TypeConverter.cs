@@ -8,20 +8,20 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
-    public class PropertyMap : IPropertyConverter
+    public class TypeConverter : IConverter
     {
-        readonly ConcurrentDictionary<Type, IPropertyConverter> _nestedConverters;
-        readonly IList<IPropertyConverter> _converters;
         readonly Func<PropertyInfo, bool> _acceptPropertyCheck;
+        readonly IList<IConverter> _converters;
+        readonly ConcurrentDictionary<Type, TypeConverter> _processedTypes;
 
-        public PropertyMap(Type type, Func<PropertyInfo, bool> acceptPropertyCheck)
-            : this(type, acceptPropertyCheck, new ConcurrentDictionary<Type, IPropertyConverter>())
+        public TypeConverter(Type type, Func<PropertyInfo, bool> acceptPropertyCheck)
+            : this(type, acceptPropertyCheck, new ConcurrentDictionary<Type, TypeConverter>())
         {
         }
 
-        public PropertyMap(Type type, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, IPropertyConverter> nestedConverters)
+        public TypeConverter(Type type, Func<PropertyInfo, bool> acceptPropertyCheck, ConcurrentDictionary<Type, TypeConverter> processedTypes)
         {
-            _nestedConverters = nestedConverters;
+            _processedTypes = processedTypes;
             _acceptPropertyCheck = acceptPropertyCheck;
             _converters = Parse(type);
         }
@@ -36,35 +36,35 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return values;
         }
 
-        IList<IPropertyConverter> Parse(Type type)
+        IList<IConverter> Parse(Type type)
         {
-            _nestedConverters[type] = this;
+            _processedTypes[type] = this;
 
             return type.IsSimpleType()
-                ? new List<IPropertyConverter>()
+                ? new List<IConverter>()
                 : type.GetAllPublicInstanceProperties()
                         .Select(ParseProperty)
                         .Where(x => x != null)
                         .ToList();
         }
 
-        IPropertyConverter ParseProperty(PropertyInfo property)
+        IConverter ParseProperty(PropertyInfo property)
         {
             return _acceptPropertyCheck(property)
                 ? GetConverter(property) 
                 : null;
         }
 
-        IPropertyConverter GetConverter(PropertyInfo property)
+        IConverter GetConverter(PropertyInfo property)
         {
             return TryGetCustomPropertyParser(property)
                 ?? SimplePropertyConverter.TryCreate(property)
                 ?? NameValueCollectionPropertyConverter.TryCreate(property)
                 ?? SimpleCollectionPropertyConverter.TryCreate(property)
-                ?? NestedTypesPropertyConverter.TryCreate(property, _acceptPropertyCheck, _nestedConverters);
+                ?? ObjectPropertyConverter.TryCreate(property, _acceptPropertyCheck, _processedTypes);
         }
 
-        static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo info)
+        static IConverter TryGetCustomPropertyParser(PropertyInfo info)
         {
             var attribute = info.GetCustomAttribute<CustomPropertyConverterAttribute>(true);
 

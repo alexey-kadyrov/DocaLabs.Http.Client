@@ -14,9 +14,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _explicitQueryMaps = new ConcurrentDictionary<Type, PropertyMap>();
-        readonly ConcurrentDictionary<Type, PropertyMap> _explicitPathMaps = new ConcurrentDictionary<Type, PropertyMap>();
-        readonly ConcurrentDictionary<Type, PropertyMap> _implicitPathOrQueryMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, TypeConverter> _explicitQueryMaps = new ConcurrentDictionary<Type, TypeConverter>();
+        readonly ConcurrentDictionary<Type, TypeConverter> _explicitPathMaps = new ConcurrentDictionary<Type, TypeConverter>();
+        readonly ConcurrentDictionary<Type, TypeConverter> _implicitPathOrQueryMaps = new ConcurrentDictionary<Type, TypeConverter>();
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
@@ -128,19 +128,19 @@ namespace DocaLabs.Http.Client.Binding
             path.Add(GetExplicitPathMap(model).Convert(model));
         }
 
-        PropertyMap GetImplicitPathOrQueryMap(object model)
+        TypeConverter GetImplicitPathOrQueryMap(object model)
         {
-            return _implicitPathOrQueryMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsImplicitUrlPathOrQuery));
+            return _implicitPathOrQueryMaps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsImplicitUrlPathOrQuery));
         }
 
-        PropertyMap GetExplicitPathMap(object model)
+        TypeConverter GetExplicitPathMap(object model)
         {
-            return _explicitPathMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsExplicitUrlPath));
+            return _explicitPathMaps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsExplicitUrlPath));
         }
 
-        PropertyMap GetExplicitQueryMap(object model)
+        TypeConverter GetExplicitQueryMap(object model)
         {
-            return _explicitQueryMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsExplicitUrlQuery));
+            return _explicitQueryMaps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsExplicitUrlQuery));
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)

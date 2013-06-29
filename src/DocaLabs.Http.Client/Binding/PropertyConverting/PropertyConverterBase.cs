@@ -17,18 +17,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <summary>
         /// Gets the name which should be used.
         /// </summary>
-        protected string Name { get; private set; }
+        protected string Name { get; set; }
 
         /// <summary>
         /// Gets the custom format string, if the format is non white space string then 
         /// the converter will use string.Format to convert the property value.
         /// </summary>
-        protected string Format { get; private set; }
-
-        /// <summary>
-        /// Gets a flag whenever the property name was overridden by IPropertyConverterOverrides.
-        /// </summary>
-        protected bool IsNameOverridden { get; private set; }
+        protected string Format { get; set; }
 
         /// <summary>
         /// Initializes the instance of the PropertyConverterBase class for the provided property and optionally overrides.
@@ -41,18 +36,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             Property = property;
 
             var useAttribute = property.GetCustomAttribute<UseAttribute>();
-
             if (useAttribute != null)
             {
                 Name = useAttribute.Name;
                 Format = useAttribute.Format;
-                IsNameOverridden = true;
-            }
-
-            if (string.IsNullOrWhiteSpace(Name))
-            {
-                Name = Property.Name;
-                IsNameOverridden = false;
             }
         }
 
@@ -69,26 +56,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return string.IsNullOrWhiteSpace(Format)
                 ? CustomConverter.Current.ChangeType<string>(value)
                 : string.Format(Format, value);
-        }
-
-        /// <summary>
-        /// Helper method to get a key maker.
-        /// </summary>
-        protected Func<string, string> GetKeyMaker()
-        {
-            return IsNameOverridden
-                ? (Func<string, string>)MakeCompositeName
-                : GetNameAsIs;
-        }
-
-        static string GetNameAsIs(string name)
-        {
-            return name;
-        }
-
-        string MakeCompositeName(string name)
-        {
-            return Name + "." + name;
         }
     }
 }

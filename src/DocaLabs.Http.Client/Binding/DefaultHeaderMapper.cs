@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding
 {
     public class DefaultHeaderMapper
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _maps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly ConcurrentDictionary<Type, TypeConverter> _maps = new ConcurrentDictionary<Type, TypeConverter>();
 
         public WebHeaderCollection Map(object model)
         {
@@ -18,9 +18,9 @@ namespace DocaLabs.Http.Client.Binding
                 : GetHeaders(GetMap(model).Convert(model));
         }
 
-        PropertyMap GetMap(object model)
+        TypeConverter GetMap(object model)
         {
-            return _maps.GetOrAdd(model.GetType(), x => new PropertyMap(x, PropertyInfoExtensions.IsHeader));
+            return _maps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsHeader));
         }
 
         static bool Ignore(object model)
