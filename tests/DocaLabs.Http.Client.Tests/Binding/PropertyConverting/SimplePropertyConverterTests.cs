@@ -242,6 +242,35 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimplePropertyConverter))]
+    class when_simple_property_converter_is_used_together_with_use_attribute_where_name_and_format_are_empty_strings
+    {
+        static TestClass instance;
+        static IConverter converter;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            instance = new TestClass { Value = 42 };
+            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+        };
+
+        Because of =
+            () => result = converter.Convert(instance);
+
+        It should_be_able_to_get_the_key_as_property_name =
+            () => result.AllKeys.ShouldContainOnly("Value");
+
+        It should_be_able_to_get_value_of_property =
+            () => result["Value"].ShouldEqual("42");
+
+        class TestClass
+        {
+            [Use(RequestUsage.InQuery, Name = "", Format = "")]
+            public int Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(SimplePropertyConverter))]
     class when_simple_property_converter_is_used_on_property_which_name_is_redefined_using_use_attribute
     {
         static TestClass instance;
