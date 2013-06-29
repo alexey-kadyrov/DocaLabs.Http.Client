@@ -7,7 +7,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// 
     /// </summary>
     [Flags]
-    public enum RequestUsage
+    public enum RequestUseTargets
     {
         /// <summary>
         /// Ignore.
@@ -17,21 +17,21 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <summary>
         /// To the URL's query.
         /// </summary>
-        InQuery = 1,
+        UrlQuery = 1,
 
         /// <summary>
         /// To the URL's path.
         /// </summary>
-        InPath = 2,
+        UrlPath = 2,
 
         /// <summary>
         /// To the web request header.
         /// </summary>
-        InHeader = 4,
+        RequestHeader = 4,
 
         /// <summary>
         /// To the web request's form.
         /// </summary>
-        InRequestForm = 8
+        RequestBodyAsForm = 8
     }
 }

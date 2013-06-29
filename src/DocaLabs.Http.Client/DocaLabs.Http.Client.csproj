@@ -55,8 +55,8 @@
     </Compile>
     <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
-    <Compile Include="Binding\PropertyConverting\RequestUsage.cs" />
-    <Compile Include="Binding\PropertyConverting\UseAttribute.cs" />
+    <Compile Include="Binding\PropertyConverting\RequestUseTargets.cs" />
+    <Compile Include="Binding\PropertyConverting\RequestUseAttribute.cs" />
     <Compile Include="Binding\PropertyInfoExtensions.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />

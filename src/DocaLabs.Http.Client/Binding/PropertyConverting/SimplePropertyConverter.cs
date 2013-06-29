@@ -34,7 +34,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         /// <summary>
         /// Converts a property value.
-        /// If the name is white space or obj is null or the value of the property is null then the return collection will be empty.
+        /// If the value of the property is null then the return collection will be empty.
         /// </summary>
         /// <param name="obj">Instance of the object on which the property is defined.</param>
         /// <returns>One key-value pair.</returns>
@@ -42,7 +42,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         {
             var values = new NameValueCollection();
 
-            if (obj != null && (!string.IsNullOrWhiteSpace(Name)))
+            if (obj != null)
                 TryAddValue(obj, values);
 
             return values;

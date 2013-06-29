@@ -30,12 +30,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         protected PropertyConverterBase(PropertyInfo property)
         {
-            if (property == null)
-                throw new ArgumentNullException("property");
-
             Property = property;
 
-            var useAttribute = property.GetCustomAttribute<UseAttribute>();
+            var useAttribute = property.GetCustomAttribute<RequestUseAttribute>();
             if (useAttribute != null)
             {
                 Name = useAttribute.Name;

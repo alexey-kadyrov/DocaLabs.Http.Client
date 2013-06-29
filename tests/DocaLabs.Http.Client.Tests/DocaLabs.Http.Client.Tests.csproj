@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Binding\DefaultHeaderMapperTests.cs" />
     <Compile Include="Binding\DefaultUrlComposerTests.cs" />
+    <Compile Include="Binding\PropertyConverting\RequestUseAttributeTests.cs" />
     <Compile Include="Configuration\ClientHeaderElementTests.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterAttributeTests.cs" />
     <Compile Include="Binding\PropertyConverting\TypeMapTests.cs" />
-    <Compile Include="Binding\PropertyConverting\ConvertCollectionPropertyTests.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleCollectionPropertyConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\ConvertObjectPropertyTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimplePropertyConverterTests.cs" />
     <Compile Include="Utils\CollectionExtensionsTests.cs" />

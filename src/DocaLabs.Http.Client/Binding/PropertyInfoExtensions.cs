@@ -33,9 +33,9 @@ namespace DocaLabs.Http.Client.Binding
             if (!CanPropertyBeUsedInRequest(info))
                 return false;
 
-            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+            var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
-            return useAttribute != null && (useAttribute.Usage & RequestUsage.InPath) != 0;
+            return useAttribute != null && (useAttribute.Targets & RequestUseTargets.UrlPath) != 0;
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace DocaLabs.Http.Client.Binding
             if (!CanPropertyBeUsedInRequest(info))
                 return false;
 
-            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+            var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
-            return useAttribute != null && (useAttribute.Usage & RequestUsage.InQuery) != 0;
+            return useAttribute != null && (useAttribute.Targets & RequestUseTargets.UrlQuery) != 0;
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace DocaLabs.Http.Client.Binding
             if (!CanPropertyBeUsedInRequest(info))
                 return false;
 
-            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+            var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
             if (useAttribute != null)
-                return (useAttribute.Usage & RequestUsage.InHeader) != 0;
+                return (useAttribute.Targets & RequestUseTargets.RequestHeader) != 0;
 
             return 
                 typeof (WebHeaderCollection).IsAssignableFrom(info.PropertyType) && 
@@ -109,9 +109,9 @@ namespace DocaLabs.Http.Client.Binding
             if (info.GetIndexParameters().Length > 0 || info.GetGetMethod() == null)
                 return false;
 
-            var useAttribute = info.GetCustomAttribute<UseAttribute>(true);
+            var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
-            return useAttribute == null || useAttribute.Usage != RequestUsage.Ignore;
+            return useAttribute == null || useAttribute.Targets != RequestUseTargets.Ignore;
         }
     }
 }

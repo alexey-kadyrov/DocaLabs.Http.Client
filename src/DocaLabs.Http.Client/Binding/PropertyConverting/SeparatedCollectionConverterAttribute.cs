@@ -4,7 +4,7 @@ using System.Reflection;
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
     /// <summary>
-    /// Defines attribute to get custom converter for enumerable properties that converts into delimited string.
+    /// Defines attribute to get custom converter for enumerable properties that converts their values into delimited string.
     /// </summary>
     public class SeparatedCollectionConverterAttribute : CustomPropertyConverterAttribute
     {

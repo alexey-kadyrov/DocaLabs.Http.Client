@@ -11,7 +11,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     // ReSharper disable UnusedParameter.Local
 
     [Subject(typeof(SimplePropertyConverter))]
-    class when_trying_to_create_convert_simple_property
+    class when_trying_to_create_simple_property_converter
     {
         private It should_create_it_for_bool =
             () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
@@ -204,7 +204,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result.AllKeys.ShouldContainOnly("Value");
 
         It should_be_able_to_get_value_of_property =
-            () => result["Value"].ShouldEqual("42");
+            () => result.GetValues("Value").ShouldContainOnly("42");
 
         class TestClass
         {
@@ -213,7 +213,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimplePropertyConverter))]
-    class when_simple_property_converter_is_used_together_with_use_attribute_where_name_and_format_are_not_set
+    class when_simple_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_not_set
     {
         static TestClass instance;
         static IConverter converter;
@@ -232,17 +232,17 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result.AllKeys.ShouldContainOnly("Value");
 
         It should_be_able_to_get_value_of_property =
-            () => result["Value"].ShouldEqual("42");
+            () => result.GetValues("Value").ShouldContainOnly("42");
 
         class TestClass
         {
-            [Use(RequestUsage.InQuery)]
+            [RequestUse(RequestUseTargets.UrlQuery)]
             public int Value { get; set; }
         }
     }
 
     [Subject(typeof(SimplePropertyConverter))]
-    class when_simple_property_converter_is_used_together_with_use_attribute_where_name_and_format_are_empty_strings
+    class when_simple_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_empty_strings
     {
         static TestClass instance;
         static IConverter converter;
@@ -261,17 +261,17 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result.AllKeys.ShouldContainOnly("Value");
 
         It should_be_able_to_get_value_of_property =
-            () => result["Value"].ShouldEqual("42");
+            () => result.GetValues("Value").ShouldContainOnly("42");
 
         class TestClass
         {
-            [Use(RequestUsage.InQuery, Name = "", Format = "")]
+            [RequestUse(Name = "", Format = "")]
             public int Value { get; set; }
         }
     }
 
     [Subject(typeof(SimplePropertyConverter))]
-    class when_simple_property_converter_is_used_on_property_which_name_is_redefined_using_use_attribute
+    class when_simple_property_converter_is_used_on_property_which_name_is_redefined
     {
         static TestClass instance;
         static IConverter converter;
@@ -290,11 +290,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result.AllKeys.ShouldContainOnly("Hello World");
 
         It should_be_able_to_get_value_of_property =
-            () => result["Hello World"].ShouldEqual("42");
+            () => result.GetValues("Hello World").ShouldContainOnly("42");
 
         class TestClass
         {
-            [Use(Name = "Hello World")]
+            [RequestUse(Name = "Hello World")]
             public int Value { get; set; }
         }
     }
@@ -319,11 +319,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result.AllKeys.ShouldContainOnly("Value");
 
         It should_be_able_to_get_value_of_property =
-            () => result["Value"].ShouldEqual("2A");
+            () => result.GetValues("Value").ShouldContainOnly("2A");
 
         class TestClass
         {
-            [Use(Format = "{0:X}")]
+            [RequestUse(Format = "{0:X}")]
             public int Value { get; set; }
         }
     }

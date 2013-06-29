@@ -8,22 +8,22 @@ using DocaLabs.Http.Client.Utils;
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
     /// <summary>
-    /// Converter for enumerable properties that serializes into delimited string.
+    /// Converter for enumerable properties that serializes their values into delimited string.
     /// </summary>
     public class SeparatedCollectionConverter : PropertyConverterBase, IConverter
     {
         /// <summary>
-        /// String's delimiter. The default value is pipe |.
+        /// String's delimiter.
         /// </summary>
         public char Separator { get; set; }
 
         SeparatedCollectionConverter(PropertyInfo property, char separator)
             : base(property)
         {
-            if (property.GetIndexParameters().Length > 0)
-                throw new ArgumentException(Resources.Text.property_cannot_be_indexer, "property");
-
             Separator = separator;
+
+            if (string.IsNullOrWhiteSpace(Name))
+                Name = Property.Name;
         }
 
         /// <summary>
@@ -39,22 +39,22 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             var type = property.PropertyType;
 
-            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && property.GetIndexParameters().Length == 0
+            return CanConvert(property, type)
                 ? new SeparatedCollectionConverter(property, separator)
                 : null;
         }
 
         /// <summary>
         /// Converts a property value.
-        /// If the name is white space or obj is null or the value of the property is null (or eventually empty string) then the return collection will be empty.
+        /// If the value of the property is null (or eventually empty string) then the return collection will be empty.
         /// </summary>
         /// <param name="obj">Instance of the object on which the property is defined.</param>
-        /// <returns>One key-value pair with single string as value which contains all items.</returns>
+        /// <returns>One key-value pair with single string as value which contains all items separated by the provided separator.</returns>
         public NameValueCollection Convert(object obj)
         {
             var values = new NameValueCollection();
 
-            if (obj != null && (!string.IsNullOrWhiteSpace(Name)))
+            if (obj != null)
             {
                 TryAddValues(obj, values);
             }
@@ -88,6 +88,11 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             if (stringBuilder.Length > 0)
                 values.Add(Name, stringBuilder.ToString());
+        }
+
+        static bool CanConvert(PropertyInfo property, Type type)
+        {
+            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && property.GetIndexParameters().Length == 0;
         }
     }
 }

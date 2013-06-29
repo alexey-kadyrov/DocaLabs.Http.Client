@@ -8,12 +8,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// The Url template can be specified like: http://contoso.com/{propertyName1}/{propertyName2}.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, Inherited = true, AllowMultiple = false)]
-    public class UseAttribute : Attribute
+    public class RequestUseAttribute : Attribute
     {
         /// <summary>
         /// Gets or sets where the property should be mapped, e.g. URL's query, path or request headers
         /// </summary>
-        public RequestUsage Usage { get; set; }
+        public RequestUseTargets Targets { get; set; }
 
         /// <summary>
         /// Gets or sets a name that overrides the property name which is used by default.
@@ -28,27 +28,27 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         public string Format { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the UseAttribute to be mapped to the URL's query by default.
+        /// Initializes a new instance of the RequestUseAttribute to be mapped to the URL's query by default.
         /// </summary>
-        public UseAttribute()
+        public RequestUseAttribute()
         {
-            Usage = RequestUsage.InQuery;
+            Targets = RequestUseTargets.UrlQuery;
         }
 
         /// <summary>
-        /// Initializes a new instance of the UseAttribute with specified mapping.
+        /// Initializes a new instance of the RequestUseAttribute with specified mapping.
         /// </summary>
-        public UseAttribute(RequestUsage usage)
+        public RequestUseAttribute(RequestUseTargets targets)
         {
-            Usage = usage;
+            Targets = targets;
         }
 
         /// <summary>
-        /// Initializes a new instance of the UseAttribute with specified mapping and name.
+        /// Initializes a new instance of the RequestUseAttribute with specified mapping and name.
         /// </summary>
-        public UseAttribute(RequestUsage usage, string name)
+        public RequestUseAttribute(RequestUseTargets targets, string name)
         {
-            Usage = usage;
+            Targets = targets;
             Name = name;
         }
     }

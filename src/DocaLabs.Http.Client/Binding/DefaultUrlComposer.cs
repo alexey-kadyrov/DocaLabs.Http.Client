@@ -47,9 +47,9 @@ namespace DocaLabs.Http.Client.Binding
             if (model == null)
                 return false;
 
-            var useAttribute = model.GetType().GetCustomAttribute<UseAttribute>(true);
+            var useAttribute = model.GetType().GetCustomAttribute<RequestUseAttribute>(true);
 
-            return useAttribute != null && useAttribute.Usage == RequestUsage.Ignore;
+            return useAttribute != null && useAttribute.Targets == RequestUseTargets.Ignore;
         }
 
         Uri CreateUrlFrom(object model, Uri baseUrl)
