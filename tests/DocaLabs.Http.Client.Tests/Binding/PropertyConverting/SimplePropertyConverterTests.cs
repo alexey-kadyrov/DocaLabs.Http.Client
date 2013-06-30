@@ -14,73 +14,70 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_trying_to_create_simple_property_converter
     {
         private It should_create_it_for_bool =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(bool), typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_char =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(char), typeof(TestClass).GetProperty("CharProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_byte =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(byte), typeof(TestClass).GetProperty("ByteProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_short =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(short), typeof(TestClass).GetProperty("ShortProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_ushort =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(ushort), typeof(TestClass).GetProperty("UShortProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(int), typeof(TestClass).GetProperty("IntProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_uint =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(uint), typeof(TestClass).GetProperty("UIntProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_long =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(long), typeof(TestClass).GetProperty("LongProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_ulong =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(ulong), typeof(TestClass).GetProperty("ULongProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_float =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(float), typeof(TestClass).GetProperty("FloatProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_double =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(double), typeof(TestClass).GetProperty("DoubleProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_decimal =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(decimal), typeof(TestClass).GetProperty("DecimalProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_enum =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(TestEnum), typeof(TestClass).GetProperty("EnumProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_guid =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(Guid), typeof(TestClass).GetProperty("GuidProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_datetime =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(DateTime), typeof(TestClass).GetProperty("DateTimeProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_datetimeoffset =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(DateTimeOffset), typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_timespan =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(TimeSpan), typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_string =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(string), typeof(TestClass).GetProperty("StringProperty")).ShouldNotBeNull();
 
         private It should_create_it_for_byte_array =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(byte[]), typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
 
         private It should_not_create_it_for_object =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(object), typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
 
         private It should_not_create_it_for_class =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass), typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
 
         private It should_not_create_it_for_struct =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
-
-        private It should_not_create_it_for_indexer =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(TestStruct), typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
 
         class TestClass
         {
@@ -106,11 +103,6 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public object ObjectProperty { get; set; }
             public TestClass ClassProperty { get; set; }
             public TestStruct StructProperty { get; set; }
-            public int this[int index]
-            {
-                get { return 0; }
-                set { }
-            }
         }
 
         enum TestEnum
@@ -128,7 +120,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => SimplePropertyConverter.TryCreate(null));
+            () => exception = Catch.Exception(() => SimplePropertyConverter.TryCreate(typeof(int), null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -138,13 +130,33 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimplePropertyConverter))]
+    class when_trying_to_create_simple_property_converter_for_null_type
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => SimplePropertyConverter.TryCreate(null, typeof(TestClass).GetProperty("Value")));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_property_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
+
+        class TestClass
+        {
+            public int Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(SimplePropertyConverter))]
     class when_simple_property_converter_is_used_on_null_instance
     {
         static IConverter converter;
         static NameValueCollection result;
 
         Establish context =
-            () => converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            () => converter = SimplePropertyConverter.TryCreate(typeof(int), typeof(TestClass).GetProperty("Value"));
 
         Because of =
             () => result = converter.Convert(null);
@@ -169,11 +181,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass();
 
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter.TryCreate(typeof(string), typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance.Value);
 
         private It should_return_empty_collection =
             () => result.ShouldBeEmpty();
@@ -194,11 +206,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter.TryCreate(typeof(int), typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance.Value);
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Value");
@@ -222,11 +234,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter.TryCreate(typeof(int), typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance.Value);
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Value");
@@ -251,11 +263,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter.TryCreate(typeof(int), typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance.Value);
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Value");
@@ -280,11 +292,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter.TryCreate(typeof(int), typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance.Value);
 
         It should_be_able_to_get_the_key_as_the_redefined_name =
             () => result.AllKeys.ShouldContainOnly("Hello World");
@@ -309,11 +321,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Establish context = () =>
         {
             instance = new TestClass { Value = 42 };
-            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+            converter = SimplePropertyConverter.TryCreate(typeof(int), typeof(TestClass).GetProperty("Value"));
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance.Value);
 
         It should_be_able_to_get_the_key_as_the_redefined_name =
             () => result.AllKeys.ShouldContainOnly("Value");

@@ -14,50 +14,44 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             : base(property)
         {
             if (string.IsNullOrWhiteSpace(Name))
-                Name = Property.Name;
+                Name = property.Name;
         }
 
         /// <summary>
         /// Creates the converter if the specified property type:
         ///     * Is simple
-        ///     * Is not an indexer
         /// </summary>
-        public static IConverter TryCreate(PropertyInfo property)
+        public static IConverter TryCreate(Type type, PropertyInfo property)
         {
-            if(property == null)
+            if(type == null)
+                throw new ArgumentNullException("type");
+
+            if (property == null)
                 throw new ArgumentNullException("property");
 
-            return CanConvert(property)
+            return CanConvert(type)
                 ? new SimplePropertyConverter(property) 
                 : null;
         }
 
         /// <summary>
         /// Converts a property value.
-        /// If the value of the property is null then the return collection will be empty.
         /// </summary>
-        /// <param name="obj">Instance of the object on which the property is defined.</param>
-        /// <returns>One key-value pair.</returns>
-        public NameValueCollection Convert(object obj)
+        /// <param name="value">Value of the property.</param>
+        /// <returns>One key-value pair. If the value of the property is null then the return collection will be empty.</returns>
+        public NameValueCollection Convert(object value)
         {
             var values = new NameValueCollection();
 
-            if (obj != null)
-                TryAddValue(obj, values);
+            if (value != null)
+                values.Add(Name, ConvertSimpleValue(value));
 
             return values;
         }
 
-        void TryAddValue(object obj, NameValueCollection values)
+        static bool CanConvert(Type type)
         {
-            var value = Property.GetValue(obj, null);
-            if (value != null)
-                values.Add(Name, ConvertSimpleValue(value));
-        }
-
-        static bool CanConvert(PropertyInfo property)
-        {
-            return property.PropertyType.IsSimpleType() && property.GetIndexParameters().Length == 0;
+            return type.IsSimpleType();
         }
     }
 }

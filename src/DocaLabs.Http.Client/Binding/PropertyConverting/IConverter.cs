@@ -10,8 +10,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <summary>
         /// Converts a property value.
         /// </summary>
-        /// <param name="obj">Instance of the object on which the property is defined.</param>
+        /// <param name="value">Value of the property.</param>
         /// <returns>One key-value pairs where the key would normally be the property name.</returns>
-        NameValueCollection Convert(object obj);
+        NameValueCollection Convert(object value);
     }
 }

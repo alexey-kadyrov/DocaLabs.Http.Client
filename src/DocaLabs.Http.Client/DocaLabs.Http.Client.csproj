@@ -55,7 +55,6 @@
     </Compile>
     <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
-    <Compile Include="Binding\PropertyConverting\IPropertyOverride.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseTargets.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseAttribute.cs" />

@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             : base(property)
         {
             if (Name == null)
-                Name = Property.Name;
+                Name = property.Name;
         }
 
         /// <summary>
@@ -21,12 +21,15 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is derived from NameValueCollection
         ///     * Is not an indexer
         /// </summary>
-        public static IConverter TryCreate(PropertyInfo property)
+        public static IConverter TryCreate(Type type, PropertyInfo property)
         {
-            if(property == null)
+            if(type == null)
+                throw new ArgumentNullException("type");
+
+            if (property == null)
                 throw new ArgumentNullException("property");
 
-            return CanConvert(property)
+            return CanConvert(type)
                 ? new NameValueCollectionPropertyConverter(property) 
                 : null;
         }
@@ -37,21 +40,21 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// If the Name was overridden (The IsOverridden is true) then it will be added to the key from the collection,
         /// e.g. key = Name + "." + itemKey
         /// </summary>
-        /// <param name="obj">Instance of the object on which the property is defined.</param>
+        /// <param name="value">Value of the property.</param>
         /// <returns>Key-value pairs.</returns>
-        public NameValueCollection Convert(object obj)
+        public NameValueCollection Convert(object value)
         {
             var values = new NameValueCollection();
 
-            if (obj != null)
-                TryAddValues(obj, values);
+            if (value != null)
+                TryAddValues(value, values);
 
             return values;
         }
 
-        void TryAddValues(object obj, NameValueCollection values)
+        void TryAddValues(object value, NameValueCollection values)
         {
-            var collection = Property.GetValue(obj, null) as NameValueCollection;
+            var collection = value as NameValueCollection;
             if (collection == null)
                 return;
 
@@ -61,9 +64,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 values.Add(makeName(key), collection[key]);
         }
 
-        static bool CanConvert(PropertyInfo property)
+        static bool CanConvert(Type type)
         {
-            return typeof(NameValueCollection).IsAssignableFrom(property.PropertyType) && property.GetIndexParameters().Length == 0;
+            return typeof(NameValueCollection).IsAssignableFrom(type);
         }
 
         Func<string, string> GetNameMaker()

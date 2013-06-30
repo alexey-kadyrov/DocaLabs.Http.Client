@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
@@ -9,11 +8,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// </summary>
     public abstract class PropertyConverterBase
     {
-        /// <summary>
-        /// Gets the linked property info.
-        /// </summary>
-        protected PropertyInfo Property { get; private set; }
-
         /// <summary>
         /// Gets the name which should be used.
         /// </summary>
@@ -30,8 +24,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         protected PropertyConverterBase(PropertyInfo property)
         {
-            Property = property;
-
             var useAttribute = property.GetCustomAttribute<RequestUseAttribute>();
             if (useAttribute != null)
             {

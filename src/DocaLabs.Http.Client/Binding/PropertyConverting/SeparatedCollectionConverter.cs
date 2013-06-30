@@ -23,7 +23,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             Separator = separator;
 
             if (string.IsNullOrWhiteSpace(Name))
-                Name = Property.Name;
+                Name = property.Name;
         }
 
         /// <summary>
@@ -48,23 +48,23 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// Converts a property value.
         /// If the value of the property is null (or eventually empty string) then the return collection will be empty.
         /// </summary>
-        /// <param name="obj">Instance of the object on which the property is defined.</param>
+        /// <param name="value">Instance of the object on which the property is defined.</param>
         /// <returns>One key-value pair with single string as value which contains all items separated by the provided separator.</returns>
-        public NameValueCollection Convert(object obj)
+        public NameValueCollection Convert(object value)
         {
             var values = new NameValueCollection();
 
-            if (obj != null)
+            if (value != null)
             {
-                TryAddValues(obj, values);
+                TryAddValues(value, values);
             }
 
             return values;
         }
 
-        void TryAddValues(object obj, NameValueCollection values)
+        void TryAddValues(object value, NameValueCollection values)
         {
-            var collection = Property.GetValue(obj, null) as IEnumerable;
+            var collection = value as IEnumerable;
 
             if (collection != null)
                 TryBuildString(values, collection);
