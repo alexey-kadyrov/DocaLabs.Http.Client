@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
@@ -14,9 +13,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer
     {
-        readonly ConcurrentDictionary<Type, TypeConverter> _explicitQueryMaps = new ConcurrentDictionary<Type, TypeConverter>();
-        readonly ConcurrentDictionary<Type, TypeConverter> _explicitPathMaps = new ConcurrentDictionary<Type, TypeConverter>();
-        readonly ConcurrentDictionary<Type, TypeConverter> _implicitPathOrQueryMaps = new ConcurrentDictionary<Type, TypeConverter>();
+        readonly PropertyMaps _implicitPathOrQueryMaps = new PropertyMaps(PropertyInfoExtensions.IsImplicitUrlPathOrQuery);
+        readonly PropertyMaps _explicitQueryMaps = new PropertyMaps(PropertyInfoExtensions.IsExplicitUrlQuery);
+        readonly PropertyMaps _explicitPathMaps = new PropertyMaps(PropertyInfoExtensions.IsExplicitUrlPath);
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
@@ -107,7 +106,7 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessImplicitPathOrQuery(string existingPath, object model, NameValueCollection path, NameValueCollection query)
         {
-            var values = GetImplicitPathOrQueryMap(model).Convert(model);
+            var values = _implicitPathOrQueryMaps.GetOrAdd(model).Convert(model);
 
             foreach (var key in values.AllKeys)
             {
@@ -120,27 +119,12 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessExplicitQuery(object model, NameValueCollection query)
         {
-            query.Add(GetExplicitQueryMap(model).Convert(model));
+            query.Add(_explicitQueryMaps.GetOrAdd(model).Convert(model));
         }
 
         void ProcessExplicitPath(object model, NameValueCollection path)
         {
-            path.Add(GetExplicitPathMap(model).Convert(model));
-        }
-
-        TypeConverter GetImplicitPathOrQueryMap(object model)
-        {
-            return _implicitPathOrQueryMaps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsImplicitUrlPathOrQuery));
-        }
-
-        TypeConverter GetExplicitPathMap(object model)
-        {
-            return _explicitPathMaps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsExplicitUrlPath));
-        }
-
-        TypeConverter GetExplicitQueryMap(object model)
-        {
-            return _explicitQueryMaps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsExplicitUrlQuery));
+            path.Add(_explicitPathMaps.GetOrAdd(model).Convert(model));
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)

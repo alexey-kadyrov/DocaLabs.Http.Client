@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -14,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
-        readonly static ConcurrentDictionary<Type, TypeConverter> Maps = new ConcurrentDictionary<Type, TypeConverter>();
+        readonly static PropertyMaps Maps = new PropertyMaps(PropertyInfoExtensions.IsFormProperty);
         string _charSet;
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if (model == null)
                 return "";
 
-            var values = GetMap(model).Convert(model);
+            var values = Maps.GetOrAdd(model).Convert(model);
 
             return new QueryStringBuilder().Add(values).ToString();
         }
@@ -90,11 +89,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             {
                 throw new HttpClientException(e.Message, e);
             }
-        }
-
-        static TypeConverter GetMap(object model)
-        {
-            return Maps.GetOrAdd(model.GetType(), x => new TypeConverter(x, PropertyInfoExtensions.IsFormProperty));
         }
 
         static void Write(byte[] data, WebRequest request)
