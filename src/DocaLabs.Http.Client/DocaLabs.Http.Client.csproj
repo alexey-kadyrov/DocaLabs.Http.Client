@@ -55,7 +55,10 @@
     </Compile>
     <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
-    <Compile Include="Binding\PropertyConverting\IPropertyOverride.cs" />
+    <Compile Include="Binding\PropertyConverting\IValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleCollectionValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseTargets.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseAttribute.cs" />
@@ -128,7 +131,6 @@
     <Compile Include="Binding\DefaultResponseBinder.cs" />
     <Compile Include="Binding\Serialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\CustomPropertyConverterAttribute.cs" />
-    <Compile Include="Binding\PropertyConverting\PropertyConverterBase.cs" />
     <Compile Include="Binding\Serialization\RequestSerializationAttribute.cs" />
     <Compile Include="Binding\Serialization\ResponseDeserializationAttribute.cs" />
     <Compile Include="Binding\Serialization\SerializeAsJsonAttribute.cs" />
@@ -139,7 +141,7 @@
     <Compile Include="HttpClientException.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleCollectionPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimplePropertyConverter.cs" />
-    <Compile Include="Binding\PropertyConverting\IConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\IPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -12,6 +12,17 @@ namespace DocaLabs.Http.Client.Utils
     public static class ReflectionExtensions
     {
         /// <summary>
+        /// Return true if the property is an indexer.
+        /// </summary>
+        public static bool IsIndexer(this PropertyInfo property)
+        {
+            if (property == null)
+                throw new ArgumentNullException("property");
+
+            return property.GetIndexParameters().Length > 0;
+        }
+
+        /// <summary>
         /// Returns true if the type is primitive, enum or string/decimal/Guid/dateTime/TimeSpan/DateTimeOffset/byte[].
         /// </summary>
         public static bool IsSimpleType(this Type type)

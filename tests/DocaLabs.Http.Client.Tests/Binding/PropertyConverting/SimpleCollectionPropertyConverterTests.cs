@@ -245,13 +245,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => exception.ShouldBeOfType<ArgumentNullException>();
 
         It should_report_info_argument =
-            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("property");
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("RequestProperty");
     }
 
     [Subject(typeof(SimpleCollectionPropertyConverter))]
     class when_simple_collection_property_converter_is_used_on_null_instance
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context =
@@ -273,7 +273,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_simple_collection_property_converter_is_used_on_null_property
     {
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -298,7 +298,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_simple_collection_property_converter_is_used
     {
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -330,7 +330,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_simple_collection_property_converter_is_used_on_collection_property_where_some_values_are_null
     {
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -362,7 +362,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_simple_collection_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_not_set
     {
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -395,7 +395,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_simple_collection_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_empty_strings
     {
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -428,7 +428,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_simple_collection_property_converter_is_used_on_property_which_name_is_redefined
     {
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -461,7 +461,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_simple_collection_property_converter_is_used_on_property_with_custom_format_applied
     {
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>

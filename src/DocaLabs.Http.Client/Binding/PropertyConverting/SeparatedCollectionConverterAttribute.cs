@@ -24,7 +24,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <summary>
         /// Returns a new instance of the SeparatedCollectionConverter class for the property.
         /// </summary>
-        public override IConverter GetConverter(PropertyInfo property)
+        public override IPropertyConverter GetConverter(PropertyInfo property)
         {
             var converter = SeparatedCollectionConverter.TryCreate(property, Separator);
 

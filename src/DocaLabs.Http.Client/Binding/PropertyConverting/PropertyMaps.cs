@@ -15,12 +15,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             AcceptPropertyCheck = acceptPropertyCheck;
         }
 
-        public PropertyMap GetOrAdd(object o)
+        public PropertyMap GetOrAdd(object instance)
         {
-            if(o == null)
-                throw new ArgumentNullException("o");
+            if(instance == null)
+                return new PropertyMap(this);
 
-            var type = o.GetType();
+            var type = instance.GetType();
 
             PropertyMap map;
 
@@ -31,7 +31,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             _maps.TryAdd(type, map);
 
-            map.Parse(o);
+            map.Parse(instance);
 
             return map;
         }

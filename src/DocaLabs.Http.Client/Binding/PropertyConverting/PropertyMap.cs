@@ -10,115 +10,143 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     public class PropertyMap
     {
         readonly PropertyMaps _maps;
-        readonly List<IConverter> _converters;
+        List<IPropertyConverter> _converters;
 
-        public PropertyMap(PropertyMaps maps)
+        internal PropertyMap(PropertyMaps maps)
         {
             if(maps == null)
                 throw new ArgumentNullException("maps");
 
             _maps = maps;
-            _converters = new List<IConverter>();
         }
 
-        public void Parse(object o)
+        internal void Parse(object instance)
         {
-            if(o == null)
-                throw new ArgumentNullException("o");
+            if(instance == null)
+                throw new ArgumentNullException("instance");
 
-            var type = o.GetType();
+            var type = instance.GetType();
 
-            _converters.Clear();
-
-            if (!type.IsSimpleType())
-            {
-                _converters.AddRange(
-                    type.GetAllPublicInstanceProperties()
-                        .Select(x => ParseProperty(x, o))
+            _converters = type.IsSimpleType()
+                ? new List<IPropertyConverter>() 
+                : type.GetAllPublicInstanceProperties()
+                        .Select(ParseProperty)
                         .Where(x => x != null)
-                        .ToList());
-            }
+                        .ToList();
         }
 
-        public NameValueCollection Convert(object o)
+        public NameValueCollection Convert(object instance)
         {
             var values = new NameValueCollection();
 
+            if (_converters == null)
+                return values;
+
             foreach (var converter in _converters)
-                values.Add(converter.Convert(o));
+                values.Add(converter.Convert(instance));
 
             return values;
         }
 
-        IConverter ParseProperty(PropertyInfo property, object o)
+        IPropertyConverter ParseProperty(PropertyInfo propertyInfo)
         {
-            return _maps.AcceptPropertyCheck(property)
-                ? GetConverter(property, o) 
+            return _maps.AcceptPropertyCheck(propertyInfo) 
+                ? GetConverter(propertyInfo) 
                 : null;
         }
 
-        IConverter GetConverter(PropertyInfo property, object o)
+        IPropertyConverter GetConverter(PropertyInfo property)
         {
             return TryGetCustomPropertyParser(property)
-                ?? SimplePropertyConverter.TryCreate(property)
                 ?? NameValueCollectionPropertyConverter.TryCreate(property)
+                ?? SimplePropertyConverter.TryCreate(property)
                 ?? SimpleCollectionPropertyConverter.TryCreate(property)
-                ?? ObjectPropertyConverter.TryCreate(property, o, _maps);
+                ?? ObjectPropertyConverter.TryCreate(property, _maps);
         }
 
-        static IConverter TryGetCustomPropertyParser(PropertyInfo info)
+        static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo property)
         {
-            var attribute = info.GetCustomAttribute<CustomPropertyConverterAttribute>(true);
+            var customConverter = property.GetCustomAttribute<CustomPropertyConverterAttribute>(true);
 
-            return attribute != null
-                ? attribute.GetConverter(info)
+            return customConverter != null
+                ? customConverter.GetConverter(property)
                 : null;
         }
 
-        class ObjectPropertyConverter : PropertyConverterBase, IConverter
+        class ObjectPropertyConverter : IPropertyConverter
         {
             readonly PropertyMaps _maps;
+            readonly PropertyInfo _property;
+            readonly string _name;
+            readonly string _format;
 
             ObjectPropertyConverter(PropertyInfo property, PropertyMaps maps)
-                : base(property)
             {
-                if (string.IsNullOrWhiteSpace(Name))
-                    Name = Property.Name;
-
+                _property = property;
                 _maps = maps;
+
+                var requestUse = property.GetCustomAttribute<RequestUseAttribute>();
+                if (requestUse != null)
+                {
+                    _name = requestUse.Name;
+                    _format = requestUse.Format;
+                }
+
+                if (string.IsNullOrWhiteSpace(_name))
+                    _name = _property.Name;
             }
 
-            public static IConverter TryCreate(PropertyInfo property, object o, PropertyMaps maps)
+            public static IPropertyConverter TryCreate(PropertyInfo property, PropertyMaps maps)
             {
                 if (property == null)
                     throw new ArgumentNullException("property");
 
-                if (!CanConvert(property))
-                    return null;
-
-                return new ObjectPropertyConverter(property, maps);
+                return CanConvert(property) 
+                    ? new ObjectPropertyConverter(property, maps) 
+                    : null;
             }
 
-            public NameValueCollection Convert(object obj)
+            public NameValueCollection Convert(object instance)
             {
-                var values = new NameValueCollection();
+                if (instance != null)
+                {
+                    var value = _property.GetValue(instance);
+                    if (value != null)
+                    {
+                        var converter = GetConverter(value);
+                        if (converter != null)
+                            return converter.Convert(value);
 
-                if (obj != null)
-                    TryAddValues(obj, values);
+                        return ConvertObject(value);
+                    }
+                }
 
-                return values;
+                return new NameValueCollection();
             }
 
-            void TryAddValues(object o, NameValueCollection values)
+            IValueConverter GetConverter(object value)
             {
-                var value = Property.GetValue(o, null);
+                if (value is NameValueCollection)
+                    return new NameValueCollectionValueConverter(_name, _format);
 
+                var type = value.GetType();
+
+                if (type.IsSimpleType())
+                    return new SimpleValueConverter(_name, _format);
+
+                if (type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType())
+                    return new SimpleCollectionValueConverter(_name, _format);
+
+                return null;
+            }
+
+            NameValueCollection ConvertObject(object value)
+            {
                 var makeName = GetNameMaker();
 
-                if (value == null)
-                    return;
+                var nestedValues = _maps.GetOrAdd(value).Convert(value);
 
-                var nestedValues = _maps.GetOrAdd(o).Convert(value);
+                var values = new NameValueCollection();
 
                 foreach (var key in nestedValues.AllKeys)
                 {
@@ -131,18 +159,18 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         }
                     }
                 }
+
+                return values;
             }
 
             static bool CanConvert(PropertyInfo property)
             {
-                var type = property.PropertyType;
-
-                return !type.IsSimpleType() && !type.IsEnumerable() && property.GetIndexParameters().Length == 0;
+                return !property.IsIndexer();
             }
 
             Func<string, string> GetNameMaker()
             {
-                return string.IsNullOrWhiteSpace(Name)
+                return string.IsNullOrWhiteSpace(_name)
                     ? GetNameAsIs
                     : (Func<string, string>)MakeCompositeName;
             }
@@ -154,7 +182,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             string MakeCompositeName(string name)
             {
-                return Name + "." + name;
+                return string.IsNullOrWhiteSpace(_name)
+                    ? name
+                    : _name + "." + name;
             }
         }
     }

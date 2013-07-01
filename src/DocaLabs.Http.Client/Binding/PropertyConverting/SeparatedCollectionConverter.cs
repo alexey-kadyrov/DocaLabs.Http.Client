@@ -10,20 +10,31 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converter for enumerable properties that serializes their values into delimited string.
     /// </summary>
-    public class SeparatedCollectionConverter : PropertyConverterBase, IConverter
+    public class SeparatedCollectionConverter : IPropertyConverter
     {
+        readonly PropertyInfo _property;
+        readonly string _name;
+        readonly string _format;
+
         /// <summary>
         /// String's delimiter.
         /// </summary>
         public char Separator { get; set; }
 
         SeparatedCollectionConverter(PropertyInfo property, char separator)
-            : base(property)
         {
+            _property = property;
             Separator = separator;
 
-            if (string.IsNullOrWhiteSpace(Name))
-                Name = Property.Name;
+            var requestUse = property.GetCustomAttribute<RequestUseAttribute>();
+            if (requestUse != null)
+            {
+                _name = requestUse.Name;
+                _format = requestUse.Format;
+            }
+
+            if (string.IsNullOrWhiteSpace(_name))
+                _name = _property.Name;
         }
 
         /// <summary>
@@ -32,7 +43,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * The enumerable element type is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IConverter TryCreate(PropertyInfo property, char separator = '|')
+        public static IPropertyConverter TryCreate(PropertyInfo property, char separator = '|')
         {
             if (property == null)
                 throw new ArgumentNullException("property");
@@ -48,26 +59,20 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// Converts a property value.
         /// If the value of the property is null (or eventually empty string) then the return collection will be empty.
         /// </summary>
-        /// <param name="obj">Instance of the object on which the property is defined.</param>
+        /// <param name="instance">Instance of the object on which the property is defined.</param>
         /// <returns>One key-value pair with single string as value which contains all items separated by the provided separator.</returns>
-        public NameValueCollection Convert(object obj)
+        public NameValueCollection Convert(object instance)
         {
             var values = new NameValueCollection();
 
-            if (obj != null)
+            if (instance != null)
             {
-                TryAddValues(obj, values);
+                var collection = _property.GetValue(instance) as IEnumerable;
+                if (collection != null)
+                    TryBuildString(values, collection);
             }
 
             return values;
-        }
-
-        void TryAddValues(object obj, NameValueCollection values)
-        {
-            var collection = Property.GetValue(obj, null) as IEnumerable;
-
-            if (collection != null)
-                TryBuildString(values, collection);
         }
 
         void TryBuildString(NameValueCollection values, IEnumerable collection)
@@ -76,18 +81,18 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             var first = true;
 
-            foreach (var value in collection)
+            foreach (var item in collection)
             {
                 if (!first)
                     stringBuilder.Append(Separator);
 
-                stringBuilder.Append(ConvertSimpleValue(value));
+                stringBuilder.Append(CustomConverter.ChangeToString(_format, item));
 
                 first = false;
             }
 
             if (stringBuilder.Length > 0)
-                values.Add(Name, stringBuilder.ToString());
+                values.Add(_name, stringBuilder.ToString());
         }
 
         static bool CanConvert(PropertyInfo property, Type type)

@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Countries"));
@@ -45,13 +45,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => exception.ShouldBeOfType<ArgumentNullException>();
 
         It should_report_info_argument =
-            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("property");
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("RequestProperty");
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_indexer
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperties()[0]);
@@ -72,7 +72,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_string
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -89,7 +89,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_byte_array
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -106,7 +106,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_non_collection_type
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -125,7 +125,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -158,7 +158,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_separated_collection_converter_is_used_on_null_instance
     {
         static PropertyInfo property_info;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -184,7 +184,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -211,7 +211,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -246,7 +246,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -281,7 +281,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -316,7 +316,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>

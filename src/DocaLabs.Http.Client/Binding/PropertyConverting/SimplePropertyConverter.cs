@@ -8,13 +8,28 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converts simple properties, like int, string, Guid, etc.
     /// </summary>
-    public class SimplePropertyConverter : PropertyConverterBase, IConverter 
+    public class SimplePropertyConverter :  IPropertyConverter
     {
+        readonly PropertyInfo _property;
+        readonly IValueConverter _valueConverter;
+
         SimplePropertyConverter(PropertyInfo property)
-            : base(property)
         {
-            if (string.IsNullOrWhiteSpace(Name))
-                Name = Property.Name;
+            _property = property;
+
+            string name = null, format = null;
+
+            var requestUse = property.GetCustomAttribute<RequestUseAttribute>();
+            if (requestUse != null)
+            {
+                name = requestUse.Name;
+                format = requestUse.Format;
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+                name = _property.Name;
+
+            _valueConverter = new SimpleValueConverter(name, format);
         }
 
         /// <summary>
@@ -22,7 +37,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * Is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IConverter TryCreate(PropertyInfo property)
+        public static IPropertyConverter TryCreate(PropertyInfo property)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
@@ -36,28 +51,16 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// Converts a property value.
         /// If the value of the property is null then the return collection will be empty.
         /// </summary>
-        /// <param name="obj">Instance of the object on which the property is defined.</param>
+        /// <param name="instance">Instance of the object on which the property is defined.</param>
         /// <returns>One key-value pair.</returns>
-        public NameValueCollection Convert(object obj)
+        public NameValueCollection Convert(object instance)
         {
-            var values = new NameValueCollection();
-
-            if (obj != null)
-                TryAddValue(obj, values);
-
-            return values;
-        }
-
-        void TryAddValue(object obj, NameValueCollection values)
-        {
-            var value = Property.GetValue(obj, null);
-            if (value != null)
-                values.Add(Name, ConvertSimpleValue(value));
+            return _valueConverter.Convert(_property.GetValue(instance));
         }
 
         static bool CanConvert(PropertyInfo property)
         {
-            return property.PropertyType.IsSimpleType() && property.GetIndexParameters().Length == 0;
+            return property.PropertyType.IsSimpleType() && !property.IsIndexer();
         }
     }
 }

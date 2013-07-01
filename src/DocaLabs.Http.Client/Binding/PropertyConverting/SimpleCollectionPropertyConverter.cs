@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
@@ -9,13 +8,28 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Converts enumerable type properties.
     /// </summary>
-    public class SimpleCollectionPropertyConverter : PropertyConverterBase, IConverter
+    public class SimpleCollectionPropertyConverter : IPropertyConverter
     {
+        readonly PropertyInfo _property;
+        readonly IValueConverter _valueConverter;
+
         SimpleCollectionPropertyConverter(PropertyInfo property)
-            : base(property)
         {
-            if (string.IsNullOrWhiteSpace(Name))
-                Name = Property.Name;
+            _property = property;
+
+            string name = null, format = null;
+
+            var requestUse = property.GetCustomAttribute<RequestUseAttribute>();
+            if (requestUse != null)
+            {
+                name = requestUse.Name;
+                format = requestUse.Format;
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+                name = _property.Name;
+
+            _valueConverter = new SimpleCollectionValueConverter(name, format);
         }
 
         /// <summary>
@@ -24,7 +38,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         ///     * The enumerable element type is simple
         ///     * Is not an indexer
         /// </summary>
-        public static IConverter TryCreate(PropertyInfo property)
+        public static IPropertyConverter TryCreate(PropertyInfo property)
         {
             if(property == null)
                 throw new ArgumentNullException("property");
@@ -35,36 +49,20 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         }
 
         /// <summary>
-        /// Converts a property value.
-        /// If the value of the property is null then the return collection will be empty.
+        /// Converts a property value. If the value of the property is null then the return collection will be empty.
         /// </summary>
-        /// <param name="obj">Instance of the object on which the property is defined.</param>
+        /// <param name="instance">Instance of the object on which the property is defined.</param>
         /// <returns>One key-values pair.</returns>
-        public NameValueCollection Convert(object obj)
+        public NameValueCollection Convert(object instance)
         {
-            var values = new NameValueCollection();
-
-            if (obj != null)
-                TryAddValues(obj, values);
-
-            return values;
-        }
-
-        void TryAddValues(object obj, NameValueCollection values)
-        {
-            var collection = Property.GetValue(obj, null) as IEnumerable;
-            if (collection == null)
-                return;
-
-            foreach (var value in collection)
-                values.Add(Name, ConvertSimpleValue(value));
+            return _valueConverter.Convert(_property.GetValue(instance));
         }
 
         static bool CanConvert(PropertyInfo property)
         {
             var type = property.PropertyType;
 
-            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && property.GetIndexParameters().Length == 0;
+            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && !property.IsIndexer();
         }
     }
 }

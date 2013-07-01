@@ -22,7 +22,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_get_converter_of_separated_collection_converter_attribute_is_used
     {
         static SeparatedCollectionConverterAttribute attribute;
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Establish context = 
             () => attribute = new SeparatedCollectionConverterAttribute();
@@ -59,7 +59,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => exception.ShouldBeOfType<ArgumentException>();
 
         It should_report_property_argument =
-            () => ((ArgumentException) exception).ParamName.ShouldEqual("property");
+            () => ((ArgumentException) exception).ParamName.ShouldEqual("RequestProperty");
 
         class TestClass
         {
