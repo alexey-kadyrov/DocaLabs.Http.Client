@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Text;
@@ -60,8 +61,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// If the value of the property is null (or eventually empty string) then the return collection will be empty.
         /// </summary>
         /// <param name="instance">Instance of the object on which the property is defined.</param>
+        /// <param name="processed">Ignored.</param>
         /// <returns>One key-value pair with single string as value which contains all items separated by the provided separator.</returns>
-        public NameValueCollection Convert(object instance)
+        public NameValueCollection Convert(object instance, ISet<object> processed)
         {
             var values = new NameValueCollection();
 

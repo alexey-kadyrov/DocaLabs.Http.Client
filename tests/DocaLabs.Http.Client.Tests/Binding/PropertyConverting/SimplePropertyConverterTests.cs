@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
@@ -134,7 +135,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => exception.ShouldBeOfType<ArgumentNullException>();
 
         It should_report_property_argument =
-            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("RequestProperty");
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("property");
     }
 
     [Subject(typeof(SimplePropertyConverter))]
@@ -147,7 +148,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
 
         Because of =
-            () => result = converter.Convert(null);
+            () => result = converter.Convert(null, new HashSet<object>());
 
         private It should_return_empty_collection =
             () => result.ShouldBeEmpty();
@@ -173,7 +174,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         private It should_return_empty_collection =
             () => result.ShouldBeEmpty();
@@ -198,12 +199,40 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Value");
 
         It should_be_able_to_get_value_of_property =
+            () => result.GetValues("Value").ShouldContainOnly("42");
+
+        class TestClass
+        {
+            public int Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(SimplePropertyConverter))]
+    class when_simple_property_converter_is_used_with_null_processed_set
+    {
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            instance = new TestClass { Value = 42 };
+            converter = SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, null);
+
+        It should_still_be_able_to_get_the_key_as_property_name =
+            () => result.AllKeys.ShouldContainOnly("Value");
+
+        It should_still_be_able_to_get_value_of_property =
             () => result.GetValues("Value").ShouldContainOnly("42");
 
         class TestClass
@@ -226,7 +255,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Value");
@@ -255,7 +284,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Value");
@@ -284,7 +313,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_the_redefined_name =
             () => result.AllKeys.ShouldContainOnly("Hello World");
@@ -313,7 +342,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_the_redefined_name =
             () => result.AllKeys.ShouldContainOnly("Value");

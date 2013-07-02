@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
@@ -54,10 +55,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// e.g. key = Name + "." + itemKey
         /// </summary>
         /// <param name="instance">Instance of the object on which the property is defined.</param>
+        /// <param name="processed">Ignored.</param>
         /// <returns>Key-value pairs.</returns>
-        public NameValueCollection Convert(object instance)
+        public NameValueCollection Convert(object instance, ISet<object> processed)
         {
-            return _valueConverter.Convert(_property.GetValue(instance));
+            return instance == null
+                ? new NameValueCollection()
+                : _valueConverter.Convert(_property.GetValue(instance));
         }
 
         static bool CanConvert(PropertyInfo property)

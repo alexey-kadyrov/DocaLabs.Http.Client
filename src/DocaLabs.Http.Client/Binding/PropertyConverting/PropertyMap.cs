@@ -37,13 +37,20 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         public NameValueCollection Convert(object instance)
         {
+            return Convert(instance, new HashSet<object>());
+        }
+
+        internal NameValueCollection Convert(object instance, ISet<object> processed)
+        {
             var values = new NameValueCollection();
 
-            if (_converters == null)
+            if (instance == null || _converters == null || _converters.Count == 0)
                 return values;
 
+            processed.Add(instance);
+
             foreach (var converter in _converters)
-                values.Add(converter.Convert(instance));
+                values.Add(converter.Convert(instance, processed));
 
             return values;
         }
@@ -106,7 +113,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                     : null;
             }
 
-            public NameValueCollection Convert(object instance)
+            public NameValueCollection Convert(object instance, ISet<object> processed)
             {
                 if (instance != null)
                 {
@@ -117,7 +124,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         if (converter != null)
                             return converter.Convert(value);
 
-                        return ConvertObject(value);
+                        return ConvertObject(value, processed);
                     }
                 }
 
@@ -140,8 +147,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 return null;
             }
 
-            NameValueCollection ConvertObject(object value)
+            NameValueCollection ConvertObject(object value, ISet<object> processed)
             {
+                if(processed.Contains(value))
+                    return new NameValueCollection();
+
+                processed.Add(value);
+
                 var makeName = GetNameMaker();
 
                 var nestedValues = _maps.GetOrAdd(value).Convert(value);
