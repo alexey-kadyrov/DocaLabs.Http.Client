@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using DocaLabs.Http.Client.Utils;
 
@@ -19,6 +20,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <param name="format">If the format is non empty then string.Format is used for converting.</param>
         public SimpleCollectionValueConverter(string name, string format)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("name");
+
             _name = name;
             _format = format;
         }

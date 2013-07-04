@@ -43,14 +43,19 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 foreach (var key in collection.AllKeys)
                 {
                     var destKey = makeName(key);
-                    var vv = collection.GetValues(key);
-                    if (vv != null)
+                    if (!string.IsNullOrWhiteSpace(destKey))
                     {
-                        foreach (var v in vv)
-                            values.Add(destKey, v);
+                        var vv = collection.GetValues(key);
+                        if (vv != null)
+                        {
+                            foreach (var v in vv)
+                                values.Add(destKey, v ?? "");
+                        }
+                        else
+                        {
+                            values.Add(destKey, "");
+                        }
                     }
-                    else
-                        values.Add(destKey, "");
                 }
             }
 

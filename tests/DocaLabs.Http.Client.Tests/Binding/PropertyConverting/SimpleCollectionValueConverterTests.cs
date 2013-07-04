@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
@@ -80,41 +81,31 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SimpleCollectionValueConverter))]
     class when_simple_collection_value_converter_is_used_with_null_name
     {
-        // ReSharper disable AssignNullToNotNullAttribute
-        static IValueConverter converter;
-        static NameValueCollection result;
-
-        Establish context =
-            () => converter = new SimpleCollectionValueConverter(null, null);
+        static Exception exception;
 
         Because of =
-            () => result = converter.Convert(new[] { 27, 42 });
+            () => exception = Catch.Exception(() => new SimpleCollectionValueConverter(null, null));
 
-        It should_be_able_to_get_the_key_using_specified_name =
-            () => result.AllKeys.ShouldContainOnly(new string [] { null });
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
 
-        It should_be_able_to_convert_value =
-            () => result.GetValues(null).ShouldContainOnly("27", "42");
-        // ReSharper restore AssignNullToNotNullAttribute
+        It should_report_name_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("name");
     }
 
     [Subject(typeof(SimpleCollectionValueConverter))]
     class when_simple_collection_value_converter_is_used_with_empty_name
     {
-        static IValueConverter converter;
-        static NameValueCollection result;
-
-        Establish context =
-            () => converter = new SimpleCollectionValueConverter("", null);
+        static Exception exception;
 
         Because of =
-            () => result = converter.Convert(new[] { 27, 42 });
+            () => exception = Catch.Exception(() => new SimpleCollectionValueConverter("", null));
 
-        It should_be_able_to_get_the_key_using_specified_name =
-            () => result.AllKeys.ShouldContainOnly("");
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
 
-        It should_be_able_to_convert_value =
-            () => result.GetValues("").ShouldContainOnly("27", "42");
+        It should_report_name_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("name");
     }
 
     [Subject(typeof(SimpleCollectionValueConverter))]
