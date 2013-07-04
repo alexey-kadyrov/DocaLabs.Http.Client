@@ -134,7 +134,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             IValueConverter GetConverter(object value)
             {
                 if (value is NameValueCollection)
-                    return new NameValueCollectionValueConverter(_name, _format);
+                    return new NameValueCollectionValueConverter(_name);
 
                 var type = value.GetType();
 

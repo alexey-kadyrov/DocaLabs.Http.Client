@@ -4,24 +4,29 @@ using System.Collections.Specialized;
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
     /// <summary>
-    /// Converts NameValueCollection type properties.
+    /// Converts NameValueCollection type values.
     /// </summary>
     public class NameValueCollectionValueConverter : IValueConverter 
     {
         readonly string _name;
-        readonly string _format;
 
-        public NameValueCollectionValueConverter(string name, string format)
+        /// <summary>
+        /// Initializes an instance of the NameValueCollectionValueConverter class.
+        /// </summary>
+        /// <param name="name">
+        /// If the Name is not empty then it will be added to the key from the collection, e.g. key = Name + "." + itemKey. 
+        /// Otherwise the key from the collection is used.
+        /// </param>
+        public NameValueCollectionValueConverter(string name)
         {
             _name = name;
-            _format = format;
         }
 
         /// <summary>
-        /// Converts a value of NameValueCollection type.
-        /// If the value is null then the return collection will be empty.
-        /// If the Name was overridden (The IsOverridden is true) then it will be added to the key from the collection,
-        /// e.g. key = Name + "." + itemKey
+        /// Converts a value.
+        /// If the instance is null or the value of the property is null then the return collection will be empty.
+        /// If the Name is not empty then it will be added to the key from the collection, e.g. key = Name + "." + itemKey.
+        /// Otherwise the key from the collection is used.
         /// </summary>
         /// <param name="value">The NameValueCollection.</param>
         /// <returns>Key-value pairs.</returns>
@@ -36,7 +41,17 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 var makeName = GetNameMaker();
 
                 foreach (var key in collection.AllKeys)
-                    values.Add(makeName(key), collection[key]);
+                {
+                    var destKey = makeName(key);
+                    var vv = collection.GetValues(key);
+                    if (vv != null)
+                    {
+                        foreach (var v in vv)
+                            values.Add(destKey, v);
+                    }
+                    else
+                        values.Add(destKey, "");
+                }
             }
 
             return values;

@@ -5,7 +5,7 @@ using Machine.Specifications;
 namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 {
     [Subject(typeof(SimpleValueConverter))]
-    class when_simple_value_converter_is_used_on_null_instance
+    class when_simple_value_converter_is_used_on_null_value
     {
         static IValueConverter converter;
         static NameValueCollection result;

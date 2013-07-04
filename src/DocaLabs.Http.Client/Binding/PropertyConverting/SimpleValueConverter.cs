@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// Initializes an instance of the SimpleValueConverter class.
         /// </summary>
         /// <param name="name">Name which should be used as the key for the converted value.</param>
-        /// <param name="format">If the format is non empty then string.Format is used.</param>
+        /// <param name="format">If the format is non empty then string.Format is used for converting.</param>
         public SimpleValueConverter(string name, string format)
         {
             _name = name;

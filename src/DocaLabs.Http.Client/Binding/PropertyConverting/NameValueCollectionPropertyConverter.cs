@@ -18,19 +18,16 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         {
             _property = property;
 
-            string name = null, format = null;
+            string name = null;
 
             var requestUse = property.GetCustomAttribute<RequestUseAttribute>();
             if (requestUse != null)
-            {
                 name = requestUse.Name;
-                format = requestUse.Format;
-            }
 
             if (name == null)
                 name = _property.Name;
 
-            _valueConverter = new SimpleValueConverter(name, format);
+            _valueConverter = new NameValueCollectionValueConverter(name);
         }
 
         /// <summary>
@@ -51,8 +48,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <summary>
         /// Converts a property value.
         /// If the instance is null or the value of the property is null then the return collection will be empty.
-        /// If the Name was overridden (The IsOverridden is true) then it will be added to the key from the collection,
-        /// e.g. key = Name + "." + itemKey
+        /// If the Name is not empty then it will be added to the key from the collection, e.g. key = Name + "." + itemKey.
+        /// Otherwise the key from the collection is used.
         /// </summary>
         /// <param name="instance">Instance of the object on which the property is defined.</param>
         /// <param name="processed">Ignored.</param>
