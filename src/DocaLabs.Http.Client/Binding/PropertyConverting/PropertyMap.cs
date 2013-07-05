@@ -66,8 +66,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         {
             return TryGetCustomPropertyParser(property)
                 ?? NameValueCollectionPropertyConverter.TryCreate(property)
-                ?? SimplePropertyConverter.TryCreate(property)
+                ?? SimpleDictionaryPropertyConverter.TryCreate(property)
                 ?? SimpleCollectionPropertyConverter.TryCreate(property)
+                ?? SimplePropertyConverter.TryCreate(property)
                 ?? ObjectPropertyConverter.TryCreate(property, _maps);
         }
 

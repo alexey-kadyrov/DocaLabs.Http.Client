@@ -58,6 +58,8 @@
     <Compile Include="Binding\PropertyConverting\IValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleCollectionValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleDictionaryPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleDictionaryValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseTargets.cs" />

@@ -224,4 +224,73 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_be_able_to_convert_value_with_non_empty_key =
             () => result.GetValues("key42").ShouldContainOnly("42");
     }
+
+    [Subject(typeof(NameValueCollectionValueConverter))]
+    class when_namevalue_collection_value_converter_is_used_with_non_empty_name_and_collection_where_some_keys_are_empty
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new NameValueCollectionValueConverter("Values");
+
+        Because of = () => result = converter.Convert(new NameValueCollection
+        {
+           { "", "27" }, 
+           { "key42", "42" },
+           { "", "2-27" }
+        });
+
+        It should_be_able_to_get_only_non_empty_keys =
+            () => result.AllKeys.ShouldContainOnly("Values.key42");
+
+        It should_be_able_to_convert_value_with_non_empty_key =
+            () => result.GetValues("Values.key42").ShouldContainOnly("42");
+    }
+
+    [Subject(typeof(NameValueCollectionValueConverter))]
+    class when_namevalue_collection_value_converter_is_used_collection_where_some_keys_are_null
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new NameValueCollectionValueConverter(null);
+
+        Because of = () => result = converter.Convert(new NameValueCollection
+        {
+           { null, "27" }, 
+           { "key42", "42" },
+           { null, "2-27" }
+        });
+
+        It should_be_able_to_get_only_non_empty_keys =
+            () => result.AllKeys.ShouldContainOnly("key42");
+
+        It should_be_able_to_convert_value_with_non_empty_key =
+            () => result.GetValues("key42").ShouldContainOnly("42");
+    }
+
+    [Subject(typeof(NameValueCollectionValueConverter))]
+    class when_namevalue_collection_value_converter_is_used_with_non_empty_name_and_collection_where_some_keys_are_null
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new NameValueCollectionValueConverter("Values");
+
+        Because of = () => result = converter.Convert(new NameValueCollection
+        {
+           { null, "27" }, 
+           { "key42", "42" },
+           { null, "2-27" }
+        });
+
+        It should_be_able_to_get_only_non_empty_keys =
+            () => result.AllKeys.ShouldContainOnly("Values.key42");
+
+        It should_be_able_to_convert_value_with_non_empty_key =
+            () => result.GetValues("Values.key42").ShouldContainOnly("42");
+    }
 }
