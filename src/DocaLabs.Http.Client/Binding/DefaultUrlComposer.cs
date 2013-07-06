@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
@@ -106,7 +107,11 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessImplicitPathOrQuery(string existingPath, object model, NameValueCollection path, NameValueCollection query)
         {
-            var values = _implicitPathOrQueryMaps.GetOrAdd(model).Convert(model);
+            var instancConverter = TryGetModelValueConverter(model);
+
+            var values = instancConverter != null 
+                ? instancConverter.Convert(model) 
+                : _implicitPathOrQueryMaps.GetOrAdd(model).Convert(model);
 
             foreach (var key in values.AllKeys)
             {
@@ -125,6 +130,17 @@ namespace DocaLabs.Http.Client.Binding
         void ProcessExplicitPath(object model, NameValueCollection path)
         {
             path.Add(_explicitPathMaps.GetOrAdd(model).Convert(model));
+        }
+
+        static IValueConverter TryGetModelValueConverter(object instance)
+        {
+            if (instance is NameValueCollection)
+                return new NameValueCollectionValueConverter(null);
+
+            if (instance is IDictionary)
+                return new SimpleDictionaryValueConverter(null, null);
+
+            return null;
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)

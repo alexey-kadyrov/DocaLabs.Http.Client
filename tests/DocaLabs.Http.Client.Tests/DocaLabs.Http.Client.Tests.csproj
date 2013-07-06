@@ -77,6 +77,7 @@
     <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseAttributeTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleCollectionValueConverterTests.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleDictionaryPropertyConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleDictionaryValueConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleValueConverterTests.cs" />
     <Compile Include="Configuration\ClientHeaderElementTests.cs" />

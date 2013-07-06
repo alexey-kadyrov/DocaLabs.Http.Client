@@ -16,154 +16,154 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SimpleCollectionPropertyConverter))]
     class when_trying_to_create_simple_collection_property_converter
     {
-        private It should_not_create_it_for_bool =
+        It should_not_create_it_for_bool =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_char =
+        It should_not_create_it_for_char =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_byte =
+        It should_not_create_it_for_byte =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_short =
+        It should_not_create_it_for_short =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_ushort =
+        It should_not_create_it_for_ushort =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_int =
+        It should_not_create_it_for_int =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_uint =
+        It should_not_create_it_for_uint =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_long =
+        It should_not_create_it_for_long =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_ulong =
+        It should_not_create_it_for_ulong =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_float =
+        It should_not_create_it_for_float =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_double =
+        It should_not_create_it_for_double =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_decimal =
+        It should_not_create_it_for_decimal =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_enum =
+        It should_not_create_it_for_enum =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_guid =
+        It should_not_create_it_for_guid =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_datetime =
+        It should_not_create_it_for_datetime =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_datetimeoffset =
+        It should_not_create_it_for_datetimeoffset =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_timespan =
+        It should_not_create_it_for_timespan =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_string =
+        It should_not_create_it_for_string =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_byte_array =
+        It should_not_create_it_for_byte_array =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_object =
+        It should_not_create_it_for_object =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_class =
+        It should_not_create_it_for_class =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_struct =
+        It should_not_create_it_for_struct =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
 
-        private It should_create_it_for_enumerable_of_strings =
+        It should_create_it_for_enumerable_of_strings =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableStringProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_list_of_string =
+        It should_create_it_for_list_of_string =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListStringProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_ilist_of_string =
+        It should_create_it_for_ilist_of_string =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListStringProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_array_of_string =
+        It should_create_it_for_array_of_string =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayStringProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_byte_arrays =
+        It should_create_it_for_enumerable_of_byte_arrays =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteArrayProperty")).ShouldNotBeNull();
 
-        private It should_not_create_it_for_enumerable_of_object =
+        It should_not_create_it_for_enumerable_of_object =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldBeNull();
 
-        private It should_not_create_it_for_enumerable =
+        It should_not_create_it_for_enumerable =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldBeNull();
 
-        private It should_create_it_for_enumerable_of_bool =
+        It should_create_it_for_enumerable_of_bool =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableBoolProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_char =
+        It should_create_it_for_enumerable_of_char =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableCharProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_byte =
+        It should_create_it_for_enumerable_of_byte =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_short =
+        It should_create_it_for_enumerable_of_short =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableShortProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_ushort =
+        It should_create_it_for_enumerable_of_ushort =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUShortProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_int =
+        It should_create_it_for_enumerable_of_int =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableIntProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_list_of_int =
+        It should_create_it_for_list_of_int =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListIntProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_ilist_of_int =
+        It should_create_it_for_ilist_of_int =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListIntProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_array_of_int =
+        It should_create_it_for_array_of_int =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayIntProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_uint =
+        It should_create_it_for_enumerable_of_uint =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUIntProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_long =
+        It should_create_it_for_enumerable_of_long =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableLongProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_ulong =
+        It should_create_it_for_enumerable_of_ulong =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableULongProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_float =
+        It should_create_it_for_enumerable_of_float =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableFloatProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_double =
+        It should_create_it_for_enumerable_of_double =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDoubleProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_decimal =
+        It should_create_it_for_enumerable_of_decimal =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDecimalProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_enum =
+        It should_create_it_for_enumerable_of_enum =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableEnumProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_guid =
+        It should_create_it_for_enumerable_of_guid =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableGuidProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_datetime =
+        It should_create_it_for_enumerable_of_datetime =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_datetimeoffset =
+        It should_create_it_for_enumerable_of_datetimeoffset =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeOffsetProperty")).ShouldNotBeNull();
 
-        private It should_create_it_for_enumerable_of_timespan =
+        It should_create_it_for_enumerable_of_timespan =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableTimeSpanProperty")).ShouldNotBeNull();
 
-        private It should_not_create_it_for_indexer =
+        It should_not_create_it_for_indexer =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
 
         class TestClass
@@ -260,7 +260,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Because of =
             () => result = converter.Convert(null, new HashSet<object>());
 
-        private It should_return_empty_collection =
+        It should_return_empty_collection =
             () => result.ShouldBeEmpty();
 
         class TestClass
@@ -285,7 +285,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Because of =
             () => result = converter.Convert(instance, new HashSet<object>());
 
-        private It should_return_empty_collection =
+        It should_return_empty_collection =
             () => result.ShouldBeEmpty();
 
         class TestClass

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
@@ -39,7 +42,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         {
             var values = new NameValueCollection();
 
-            var collection = value as IDictionary;
+            var collection = GetWrapper(value);
 
             if (collection != null)
             {
@@ -90,8 +93,92 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         string MakeCompositeName(string name)
         {
             return string.IsNullOrWhiteSpace(_name)
-                       ? name
-                       : _name + "." + name;
+                ? name
+                : _name + "." + name;
+        }
+
+        static IDictionaryWrapper GetWrapper(object instance)
+        {
+            if (instance == null)
+                return null;
+
+            var dic = instance as IDictionary;
+            if(dic != null)
+                return new DictionaryWrapper(dic);
+
+            var dictionaryInterfaceDefinition = GetGenericDictionaryInterfaceDefinition(instance.GetType());
+            return dictionaryInterfaceDefinition != null
+                ? new GenericDictionaryWrapper(instance, dictionaryInterfaceDefinition) 
+                : null;
+        }
+
+        static Type GetGenericDictionaryInterfaceDefinition(Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IDictionary<,>))
+                return type;
+
+            return type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof (IDictionary<,>));
+        }
+
+        interface IDictionaryWrapper
+        {
+            IEnumerable Keys { get; }
+            object this[object key] { get; }
+        }
+
+        class DictionaryWrapper : IDictionaryWrapper
+        {
+            readonly IDictionary _dictionary;
+
+            public DictionaryWrapper(IDictionary dictionary)
+            {
+                _dictionary = dictionary;
+            }
+
+            public IEnumerable Keys { get { return _dictionary.Keys; } }
+
+            public object this[object key]
+            {
+                get { return _dictionary[key]; }
+            }
+        }
+
+        class GenericDictionaryWrapper : IDictionaryWrapper
+        {
+            readonly PropertyInfo _keysProperty;
+            readonly PropertyInfo _thisProperty;
+            readonly object _dictionary;
+
+            public GenericDictionaryWrapper(object dictionary, Type dictionaryInterfaceDefinition)
+            {
+                _dictionary = dictionary;
+
+                _keysProperty = dictionaryInterfaceDefinition.GetProperty("Keys");
+                _thisProperty = dictionaryInterfaceDefinition.GetProperty("Item");
+
+                //var keyType = dictionaryInterfaceDefinition.GetGenericArguments()[0];
+
+                //foreach (var property in dictionaryInterfaceDefinition.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.Name == "Item"))
+                //{
+                //    var indexParameters = property.GetIndexParameters();
+                    
+                //    if (indexParameters.Length == 1 && indexParameters[0].ParameterType == keyType)
+                //    {
+                //        _thisProperty = property;
+                //        break;
+                //    }
+                //}
+
+                //if(_thisProperty == null)
+                //    throw new ArgumentException("dictionary");
+            }
+
+            public IEnumerable Keys { get { return _keysProperty.GetValue(_dictionary) as IEnumerable; } }
+
+            public object this[object key]
+            {
+                get { return _thisProperty.GetValue(_dictionary, new [] { key }); }
+            }
         }
     }
 }

@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
     /// <summary>
-    /// Converts IDictionary{string, simple-type} type properties.
+    /// Converts IDictionary type properties.
     /// </summary>
     public class SimpleDictionaryPropertyConverter : IPropertyConverter 
     {
@@ -35,7 +37,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         /// <summary>
         /// Creates the converter if the specified property type:
-        ///     * Is derived from IDictionary{string, simple-type}
+        ///     * Is derived from IDictionary
         ///     * Is not an indexer
         /// </summary>
         public static IPropertyConverter TryCreate(PropertyInfo property)
@@ -60,28 +62,23 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         public NameValueCollection Convert(object instance, ISet<object> processed)
         {
             return instance == null
-                       ? new NameValueCollection()
-                       : _valueConverter.Convert(_property.GetValue(instance));
+                ? new NameValueCollection()
+                : _valueConverter.Convert(_property.GetValue(instance));
         }
 
         static bool CanConvert(PropertyInfo property)
         {
-            return !property.IsIndexer() && IsSimpleDictionary(property.PropertyType);
+            var type = property.PropertyType;
+
+            return !property.IsIndexer() && (typeof(IDictionary).IsAssignableFrom(type) || IsGenericDictionary(type));
         }
 
-        static bool IsSimpleDictionary(Type type)
+        static bool IsGenericDictionary(Type type)
         {
-            foreach (var @interface in type.GetInterfaces())
-            {
-                if (@interface.IsGenericType && @interface.GetGenericTypeDefinition() == typeof (IDictionary<,>))
-                {
-                    var genericArgs = @interface.GetGenericArguments();
-                    if (genericArgs.Length == 2 && genericArgs[0] == typeof (string) && genericArgs[1].IsSimpleType())
-                        return true;
-                }
-            }
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IDictionary<,>))
+                return true;
 
-            return false;
+            return type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof (IDictionary<,>)) != null;
         }
     }
 }
