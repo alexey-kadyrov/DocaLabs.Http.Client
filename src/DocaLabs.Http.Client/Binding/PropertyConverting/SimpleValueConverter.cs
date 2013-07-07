@@ -42,5 +42,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             return values;
         }
+
+        /// <summary>
+        /// Returns whenever the type can be converted by the SimpleValueConverter.
+        /// </summary>
+        /// <returns>True if the type is simple, e.g. int, double, string, byte[], DateTime.</returns>
+        public static bool CanConvert(Type type)
+        {
+            return type.IsSimpleType();
+        }
     }
 }

@@ -78,11 +78,28 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return values;
         }
 
+        /// <summary>
+        /// Returns whenever the type can be converted by the SimpleDictionaryValueConverter.
+        /// </summary>
+        /// <returns>True if the type is or implements IDictionary or IDictionary{,}.</returns>
+        public static bool CanConvert(Type type)
+        {
+            return typeof (IDictionary).IsAssignableFrom(type) || GetGenericDictionaryInterfaceDefinition(type) != null;
+        }
+
+        static Type GetGenericDictionaryInterfaceDefinition(Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+                return type;
+
+            return type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>));
+        }
+
         Func<string, string> GetNameMaker()
         {
             return string.IsNullOrWhiteSpace(_name)
-                       ? GetNameAsIs
-                       : (Func<string, string>)MakeCompositeName;
+                ? GetNameAsIs
+                : (Func<string, string>)MakeCompositeName;
         }
 
         static string GetNameAsIs(string name)
@@ -110,14 +127,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return dictionaryInterfaceDefinition != null
                 ? new GenericDictionaryWrapper(instance, dictionaryInterfaceDefinition) 
                 : null;
-        }
-
-        static Type GetGenericDictionaryInterfaceDefinition(Type type)
-        {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IDictionary<,>))
-                return type;
-
-            return type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof (IDictionary<,>));
         }
 
         interface IDictionaryWrapper
@@ -152,25 +161,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             public GenericDictionaryWrapper(object dictionary, Type dictionaryInterfaceDefinition)
             {
                 _dictionary = dictionary;
-
                 _keysProperty = dictionaryInterfaceDefinition.GetProperty("Keys");
                 _thisProperty = dictionaryInterfaceDefinition.GetProperty("Item");
-
-                //var keyType = dictionaryInterfaceDefinition.GetGenericArguments()[0];
-
-                //foreach (var property in dictionaryInterfaceDefinition.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(x => x.Name == "Item"))
-                //{
-                //    var indexParameters = property.GetIndexParameters();
-                    
-                //    if (indexParameters.Length == 1 && indexParameters[0].ParameterType == keyType)
-                //    {
-                //        _thisProperty = property;
-                //        break;
-                //    }
-                //}
-
-                //if(_thisProperty == null)
-                //    throw new ArgumentException("dictionary");
             }
 
             public IEnumerable Keys { get { return _keysProperty.GetValue(_dictionary) as IEnumerable; } }

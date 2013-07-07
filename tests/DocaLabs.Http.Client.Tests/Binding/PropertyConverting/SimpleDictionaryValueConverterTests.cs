@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
@@ -154,7 +155,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimpleDictionaryValueConverter))]
-    class when_simple_dictionary_value_converter_is_used_on_generic_fictionary_with_non_simple_keys
+    class when_simple_dictionary_value_converter_is_used_on_generic_dictionary_with_non_simple_keys
     {
         static IValueConverter converter;
         static NameValueCollection result;
@@ -224,6 +225,145 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         It should_be_able_to_convert_second_value =
             () => result.GetValues("Values.key42").ShouldContainOnly("42");
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_simple_dictionary_value_converter_is_used_on_generic_dictionary_which_does_not_implement_idictionary
+    {
+        static IValueConverter converter;
+        static IDictionary<string, string> source;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            converter = new SimpleDictionaryValueConverter("Values", null);
+            source = new Dictionary<string, string>
+            {
+                { "key27", "27" },
+                { "key42", "42" }
+            };
+        };
+
+        Because of = () => result = converter.Convert(new TestDictionary<string, string>(source));
+
+        It should_be_able_to_get_the_key_using_specified_name_and_the_source_key =
+            () => result.AllKeys.ShouldContainOnly("Values.key27", "Values.key42");
+
+        It should_be_able_to_convert_first_value =
+            () => result.GetValues("Values.key27").ShouldContainOnly("27");
+
+        It should_be_able_to_convert_second_value =
+            () => result.GetValues("Values.key42").ShouldContainOnly("42");
+
+        class TestDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+        {
+            readonly IDictionary<TKey, TValue> _wrappedDictionary;
+
+            [UsedImplicitly]
+            public TValue this[int index]
+            {
+                get
+                {
+                    var i = 0;
+                    foreach (var key in Keys)
+                    {
+                        if (i++ == index)
+                            return _wrappedDictionary[key];
+                    }
+
+                    throw new ArgumentOutOfRangeException("index");
+                }
+
+                set
+                {
+                    {
+                        var i = 0;
+                        foreach (var key in Keys)
+                        {
+                            if (i++ == index)
+                            {
+                                _wrappedDictionary[key] = value;
+                                return;
+                            }
+                        }
+
+                        throw new ArgumentOutOfRangeException("index");
+                    }
+                }
+            }
+
+            public TestDictionary(IDictionary<TKey, TValue> wrappedDictionary)
+            {
+                _wrappedDictionary = wrappedDictionary;
+            }
+
+            public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+            {
+                return _wrappedDictionary.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            public void Add(KeyValuePair<TKey, TValue> item)
+            {
+                _wrappedDictionary.Add(item);
+            }
+
+            public void Clear()
+            {
+                _wrappedDictionary.Clear();
+            }
+
+            public bool Contains(KeyValuePair<TKey, TValue> item)
+            {
+                return _wrappedDictionary.Contains(item);
+            }
+
+            public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+            {
+                _wrappedDictionary.CopyTo(array, arrayIndex);
+            }
+
+            public bool Remove(KeyValuePair<TKey, TValue> item)
+            {
+                return _wrappedDictionary.Remove(item);
+            }
+
+            public int Count { get { return _wrappedDictionary.Count; } }
+            public bool IsReadOnly { get { return _wrappedDictionary.IsReadOnly; } }
+
+            public bool ContainsKey(TKey key)
+            {
+                return _wrappedDictionary.ContainsKey(key);
+            }
+
+            public void Add(TKey key, TValue value)
+            {
+                _wrappedDictionary.Add(key, value);
+            }
+
+            public bool Remove(TKey key)
+            {
+                return _wrappedDictionary.Remove(key);
+            }
+
+            public bool TryGetValue(TKey key, out TValue value)
+            {
+                return _wrappedDictionary.TryGetValue(key, out value);
+            }
+
+            public TValue this[TKey key]
+            {
+                get { return _wrappedDictionary[key]; }
+                set { _wrappedDictionary[key] = value; }
+            }
+
+            public ICollection<TKey> Keys { get { return _wrappedDictionary.Keys; } }
+            public ICollection<TValue> Values { get { return _wrappedDictionary.Values; } }
+        }
     }
 
     [Subject(typeof(SimpleDictionaryValueConverter))]
@@ -380,5 +520,188 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         It should_be_able_to_convert_value_with_non_empty_key =
             () => result.GetValues("Values.key42").ShouldContainOnly("42");
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_checking_whenever_simple_dictionary_value_converter_can_convert_the_type
+    {
+        It should_return_false_for_bool =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(bool)).ShouldBeFalse();
+
+        It should_return_false_for_byte =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(byte)).ShouldBeFalse();
+
+        It should_return_false_for_char =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(char)).ShouldBeFalse();
+
+        It should_return_false_for_short =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(short)).ShouldBeFalse();
+
+        It should_return_false_for_ushort =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(ushort)).ShouldBeFalse();
+
+        It should_return_false_for_int =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(int)).ShouldBeFalse();
+
+        It should_return_false_for_uint =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(uint)).ShouldBeFalse();
+
+        It should_return_false_for_long =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(long)).ShouldBeFalse();
+
+        It should_return_false_for_ulong =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(ulong)).ShouldBeFalse();
+
+        It should_return_false_for_float =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(float)).ShouldBeFalse();
+
+        It should_return_false_for_double =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(double)).ShouldBeFalse();
+
+        It should_return_false_for_decimal =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(decimal)).ShouldBeFalse();
+
+        It should_return_false_for_guid =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(Guid)).ShouldBeFalse();
+
+        It should_return_false_for_date_time =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(DateTime)).ShouldBeFalse();
+
+        It should_return_false_for_date_time_offset =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(DateTimeOffset)).ShouldBeFalse();
+
+        It should_return_false_for_time_span =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TimeSpan)).ShouldBeFalse();
+
+        It should_return_false_for_enum =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TestEnum)).ShouldBeFalse();
+
+        It should_return_false_for_string =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(string)).ShouldBeFalse();
+
+        It should_return_false_for_byte_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(byte[])).ShouldBeFalse();
+
+        It should_return_false_for_bool_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(bool[])).ShouldBeFalse();
+
+        It should_return_false_for_char_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(char[])).ShouldBeFalse();
+
+        It should_return_false_for_short_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(short[])).ShouldBeFalse();
+
+        It should_return_false_for_ushort_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(ushort[])).ShouldBeFalse();
+
+        It should_return_false_for_int_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(int[])).ShouldBeFalse();
+
+        It should_return_false_for_uint_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(uint[])).ShouldBeFalse();
+
+        It should_return_false_for_long_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(long[])).ShouldBeFalse();
+
+        It should_return_false_for_ulong_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(ulong[])).ShouldBeFalse();
+
+        It should_return_false_for_float_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(float[])).ShouldBeFalse();
+
+        It should_return_false_for_double_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(double[])).ShouldBeFalse();
+
+        It should_return_false_for_decimal_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(decimal[])).ShouldBeFalse();
+
+        It should_return_false_for_guid_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(Guid[])).ShouldBeFalse();
+
+        It should_return_false_for_date_time_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(DateTime[])).ShouldBeFalse();
+
+        It should_return_false_for_date_time_offset_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(DateTimeOffset[])).ShouldBeFalse();
+
+        It should_return_false_for_time_span_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TimeSpan[])).ShouldBeFalse();
+
+        It should_return_false_for_enum_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TestEnum[])).ShouldBeFalse();
+
+        It should_return_false_for_string_array =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(string[])).ShouldBeFalse();
+
+        It should_return_false_for_struct =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TestStruct)).ShouldBeFalse();
+
+        It should_return_false_for_class =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TestClass)).ShouldBeFalse();
+
+        It should_return_false_for_object =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(object)).ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(NameValueCollection)).ShouldBeFalse();
+
+        It should_return_true_for_idictionary =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(IDictionary)).ShouldBeTrue();
+
+        It should_return_true_for_generic_idictionary =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(IDictionary<int, int>)).ShouldBeTrue();
+
+        It should_return_true_for_hastable =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(Hashtable)).ShouldBeTrue();
+
+        It should_return_true_for_sortedlist =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(SortedList)).ShouldBeTrue();
+
+        It should_return_true_for_dictionary_subclass =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TestDictionarySubsclass)).ShouldBeTrue();
+
+        It should_return_true_for_genric_dictionary_sub_interface_with_defined_generic_arguments =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(ITestGenericDictionarySubinterface)).ShouldBeTrue();
+
+        It should_return_true_for_genric_dictionary_sub_interface =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(ITestGenericDictionarySubinterface2<int, int>)).ShouldBeTrue();
+
+        It should_return_true_for_genric_dictionary_subclass_with_defined_generic_arguments =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TestGenericDictionarySubsclass)).ShouldBeTrue();
+
+        It should_return_true_for_genric_dictionary_subclass =
+            () => SimpleDictionaryValueConverter.CanConvert(typeof(TestGenericDictionarySubsclass2<int, int>)).ShouldBeTrue();
+
+        enum TestEnum
+        {
+        }
+
+        struct TestStruct
+        {
+        }
+
+        class TestClass
+        {
+        }
+
+        class TestDictionarySubsclass : Hashtable
+        {
+        }
+
+        interface ITestGenericDictionarySubinterface : IDictionary<int, int>
+        {
+        }
+
+        interface ITestGenericDictionarySubinterface2<TKey, TValue> : IDictionary<TKey, TValue>
+        {
+        }
+
+        class TestGenericDictionarySubsclass : Dictionary<int, int>
+        {
+        }
+
+        class TestGenericDictionarySubsclass2<TKey, TValue> : Dictionary<TKey, TValue>
+        {
+        }
     }
 }

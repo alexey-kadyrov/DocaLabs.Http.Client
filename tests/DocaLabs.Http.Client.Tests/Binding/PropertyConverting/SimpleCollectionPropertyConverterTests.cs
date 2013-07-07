@@ -97,11 +97,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_create_it_for_enumerable_of_byte_arrays =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteArrayProperty")).ShouldNotBeNull();
 
-        It should_not_create_it_for_enumerable_of_object =
-            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldBeNull();
+        It should_create_it_for_enumerable_of_object =
+            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldNotBeNull();
 
-        It should_not_create_it_for_enumerable =
-            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldBeNull();
+        It should_create_it_for_enumerable =
+            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldNotBeNull();
 
         It should_create_it_for_enumerable_of_bool =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableBoolProperty")).ShouldNotBeNull();

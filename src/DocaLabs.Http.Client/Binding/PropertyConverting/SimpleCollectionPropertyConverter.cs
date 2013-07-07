@@ -64,9 +64,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         static bool CanConvert(PropertyInfo property)
         {
-            var type = property.PropertyType;
-
-            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && !property.IsIndexer();
+            return !property.IsIndexer() && SimpleCollectionValueConverter.CanConvert(property.PropertyType);
         }
     }
 }

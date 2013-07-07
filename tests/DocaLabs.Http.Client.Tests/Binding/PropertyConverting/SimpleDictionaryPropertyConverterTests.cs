@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
@@ -161,14 +162,20 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_not_create_it_for_indexer =
             () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
 
+        It should_not_create_it_for_name_value_collection =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NameValueCollection")).ShouldBeNull();
+
         It should_create_it_for_dictionary_interface =
             () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DictionaryInterface")).ShouldNotBeNull();
 
         It should_create_it_for_generic_dictionary_interface =
             () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionaryInterface")).ShouldNotBeNull();
 
-        It should_create_it_for_generic_dictionary_sub_interface =
+        It should_create_it_for_generic_dictionary_sub_interface_wirh_defined_generic_arguments =
             () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface")).ShouldNotBeNull();
+
+        It should_create_it_for_generic_dictionary_sub_interface =
+            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface2")).ShouldNotBeNull();
 
         It should_create_it_for_hashtable =
             () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Hashtable")).ShouldNotBeNull();
@@ -239,17 +246,17 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public IEnumerable<TimeSpan> EnumerableTimeSpanProperty { get; set; }
             public IEnumerable<object> EnumerableObjectProperty { get; set; }
             public IEnumerable EnumerableProperty { get; set; }
-
+            public NameValueCollection NameValueCollection { get; set; }
             public IDictionary DictionaryInterface { get; set; }
             public IDictionary<int, int> GenericDictionaryInterface { get; set; }
-            public ITestGenericDictionarySubinterface<int, int> GenericDictionarySubinterface { get; set; }
+            public ITestGenericDictionarySubinterface GenericDictionarySubinterface { get; set; }
+            public ITestGenericDictionarySubinterface2<int, int> GenericDictionarySubinterface2 { get; set; }
             public Hashtable Hashtable { get; set; }
             public SortedList SortedList { get; set; }
             public Dictionary<int, int> GenericDictionary { get; set; }
             public TestDictionarySubsclass DictionarySubsclass { get; set; }
             public TestGenericDictionarySubsclass GenericDictionarySubsclass { get; set; }
             public TestGenericDictionarySubsclass2<int, int> GenericDictionarySubsclass2 { get; set; }
-
             public IDictionary this[int index]
             {
                 get { return null; }
@@ -265,7 +272,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
         }
 
-        interface ITestGenericDictionarySubinterface<TKey, TValue> : IDictionary<TKey, TValue>
+        interface ITestGenericDictionarySubinterface : IDictionary<int, int>
+        {
+        }
+
+        interface ITestGenericDictionarySubinterface2<TKey, TValue> : IDictionary<TKey, TValue>
         {
         }
 

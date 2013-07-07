@@ -41,10 +41,29 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             if (collection != null)
             {
                 foreach (var item in collection)
+                {
+                    if(item != null && !item.GetType().IsSimpleType())
+                        continue;
+
                     values.Add(_name, CustomConverter.ChangeToString(_format, item));
+                }
             }
 
             return values;
+        }
+
+        /// <summary>
+        /// Returns whenever the type can be converted by the SimpleCollectionValueConverter.
+        /// </summary>
+        /// <returns>True if the type is enumerable of simple types, like int, double, string, byte[], DateTime.</returns>
+        public static bool CanConvert(Type type)
+        {
+            if (!type.IsEnumerable())
+                return false;
+
+            var elementType = type.GetEnumerableElementType();
+
+            return elementType == typeof(object) || type.GetEnumerableElementType().IsSimpleType();
         }
     }
 }

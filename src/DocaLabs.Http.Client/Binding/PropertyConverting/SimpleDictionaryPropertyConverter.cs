@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
@@ -68,17 +66,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         static bool CanConvert(PropertyInfo property)
         {
-            var type = property.PropertyType;
-
-            return !property.IsIndexer() && (typeof(IDictionary).IsAssignableFrom(type) || IsGenericDictionary(type));
-        }
-
-        static bool IsGenericDictionary(Type type)
-        {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IDictionary<,>))
-                return true;
-
-            return type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof (IDictionary<,>)) != null;
+            return !property.IsIndexer() && SimpleDictionaryValueConverter.CanConvert(property.PropertyType);
         }
     }
 }

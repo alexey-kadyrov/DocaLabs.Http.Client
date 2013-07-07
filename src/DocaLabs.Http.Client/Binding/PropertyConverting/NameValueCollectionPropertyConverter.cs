@@ -63,7 +63,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         static bool CanConvert(PropertyInfo property)
         {
-            return typeof(NameValueCollection).IsAssignableFrom(property.PropertyType) && !property.IsIndexer();
+            return !property.IsIndexer() && NameValueCollectionValueConverter.CanConvert(property.PropertyType);
         }
     }
 }

@@ -65,6 +65,15 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return values;
         }
 
+        /// <summary>
+        /// Returns whenever the type can be converted by the NameValueCollectionValueConverter.
+        /// </summary>
+        /// <returns>True if the type is or derived from NameValueCollection.</returns>
+        public static bool CanConvert(Type type)
+        {
+            return typeof(NameValueCollection).IsAssignableFrom(type);
+        }
+
         Func<string, string> GetNameMaker()
         {
             return string.IsNullOrWhiteSpace(_name)
