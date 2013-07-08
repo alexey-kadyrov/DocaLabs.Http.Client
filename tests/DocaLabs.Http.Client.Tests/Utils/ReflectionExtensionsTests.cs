@@ -9,6 +9,23 @@ using Machine.Specifications;
 namespace DocaLabs.Http.Client.Tests.Utils
 {
     // ReSharper disable UnusedMember.Local
+    // ReSharper disable ValueParameterNotUsed
+
+    [Subject(typeof(ReflectionExtensions), "IsIndexer")]
+    class when_checking_for_indexer
+    {
+        It should_return_true_for_the_indexer =
+            () => typeof (TestClass).GetProperty("Item").IsIndexer().ShouldBeTrue();
+
+        It should_return_true_for_non_indexer_property =
+            () => typeof(TestClass).GetProperty("Value").IsIndexer().ShouldBeFalse();
+
+        class TestClass
+        {
+            public int this[int idx] { get { return idx; } set { } }
+            public int Value { get; set; }
+        }
+    }
 
     [Subject(typeof(ReflectionExtensions), "IsSimpleType")]
     class when_checking_for_simple_type
@@ -471,6 +488,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
         It should_report_type_argument =
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
     }
-        
+
+    // ReSharper restore ValueParameterNotUsed
     // ReSharper restore UnusedMember.Local
 }

@@ -143,7 +143,7 @@
 //    [Subject(typeof(ObjectPropertyConverter))]
 //    class when_convert_object_property_is_used_on_null_instance
 //    {
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context =
@@ -173,7 +173,7 @@
 //    class when_convert_object_property_is_used_on_null_property
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -209,7 +209,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -245,7 +245,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper_together_with_query_parameter_where_name_and_format_are_not_set
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -282,7 +282,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper_and_which_name_is_redefined_using_query_parameter_attribute
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -319,7 +319,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_does_not_implement_custom_query_mapper_and_custom_format_applied
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -356,7 +356,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -392,7 +392,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper_together_with_query_parameter_where_name_and_format_are_not_set
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -429,7 +429,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper_and_which_name_is_redefined_using_query_parameter_attribute
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>
@@ -466,7 +466,7 @@
 //    class when_convert_object_property_is_used_on_property_of_type_which_implements_custom_query_mapper_and_custom_format_applied
 //    {
 //        static TestClass instance;
-//        static IConverter converter;
+//        static IPropertyConverter converter;
 //        static NameValueCollection result;
 
 //        Establish context = () =>

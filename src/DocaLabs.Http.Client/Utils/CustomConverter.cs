@@ -7,10 +7,17 @@ namespace DocaLabs.Http.Client.Utils
     /// </summary>
     public class CustomConverter
     {
+        static volatile CustomConverter _current;
+
         /// <summary>
-        /// Current converter.
+        /// Gets or sets the current converter. The property never returns null, if the value is not set or is null 
+        /// then the CustomConverter is used in the default configuration.
         /// </summary>
-        public static CustomConverter Current { get { return DefaultLazyCustomConverter.LazyConverter; } }
+        public static CustomConverter Current
+        {
+            get { return _current ?? DefaultLazyCustomConverter.LazyConverter; }
+            set { _current = value; }
+        }
 
         /// <summary>
         /// Gets current custom converter factory.
@@ -18,7 +25,7 @@ namespace DocaLabs.Http.Client.Utils
         public ICustomConverterFactory Factory { get; private set; }
 
         /// <summary>
-        /// Initializes an instance of CustomConverter class with default converter factory
+        /// Initializes an instance of CustomConverter class with default converter factory.
         /// </summary>
         public CustomConverter()
             : this(new CustomConverterFactory())
@@ -26,7 +33,7 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
-        /// Initializes an instance of CustomConverter class with the specified converter factory
+        /// Initializes an instance of CustomConverter class with the specified converter factory.
         /// </summary>
         public CustomConverter(ICustomConverterFactory factory)
         {
@@ -34,6 +41,22 @@ namespace DocaLabs.Http.Client.Utils
                 throw new ArgumentNullException("factory");
 
             Factory = factory;
+        }
+
+
+        /// <summary>
+        /// Returns a string equivalent of the specified object.
+        /// If the value is null then empty string is returned. If the format is specified then string.Format is used.
+        /// Otherwise it uses the custom converter to convert into the string.
+        /// </summary>
+        public static string ChangeToString(string format, object value)
+        {
+            if (value == null)
+                return string.Empty;
+
+            return string.IsNullOrWhiteSpace(format)
+                ? Current.ChangeType<string>(value)
+                : string.Format(format, value);
         }
 
         /// <summary>

@@ -74,7 +74,13 @@
     </Compile>
     <Compile Include="Binding\DefaultHeaderMapperTests.cs" />
     <Compile Include="Binding\DefaultUrlComposerTests.cs" />
+    <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverterTests.cs" />
+    <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseAttributeTests.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleCollectionValueConverterTests.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleDictionaryPropertyConverterTests.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleDictionaryValueConverterTests.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleValueConverterTests.cs" />
     <Compile Include="Configuration\ClientHeaderElementTests.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
@@ -96,9 +102,9 @@
     <Compile Include="HttpClientFactoryTests.cs" />
     <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterAttributeTests.cs" />
-    <Compile Include="Binding\PropertyConverting\TypeMapTests.cs" />
+    <Compile Include="Binding\PropertyConverting\_TypeMapTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleCollectionPropertyConverterTests.cs" />
-    <Compile Include="Binding\PropertyConverting\ConvertObjectPropertyTests.cs" />
+    <Compile Include="Binding\PropertyConverting\_ConvertObjectPropertyTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimplePropertyConverterTests.cs" />
     <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\QueryStringBuilderTests.cs" />

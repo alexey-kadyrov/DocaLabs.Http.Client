@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Countries"));
@@ -51,7 +51,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_indexer
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperties()[0]);
@@ -72,7 +72,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_string
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -89,7 +89,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_byte_array
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -106,7 +106,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_non_collection_type
     {
-        static IConverter converter;
+        static IPropertyConverter converter;
 
         Because of =
             () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Value"));
@@ -125,7 +125,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -140,7 +140,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Values");
@@ -155,10 +155,44 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_with_null_processed_set
+    {
+        static PropertyInfo property_info;
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+            instance = new TestClass
+            {
+                Values = new[] { 27, 42 }
+            };
+
+            converter = SeparatedCollectionConverter.TryCreate(property_info, ',');
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, null);
+
+        It should_still_be_able_to_get_the_key_as_property_name =
+            () => result.AllKeys.ShouldContainOnly("Values");
+
+        It should_still_be_able_to_get_value_of_property =
+            () => result.GetValues("Values").ShouldContainOnly("27,42");
+
+        class TestClass
+        {
+            public IEnumerable<int> Values { get; set; }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_used_on_null_instance
     {
         static PropertyInfo property_info;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -168,7 +202,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(null);
+            () => result = converter.Convert(null, new HashSet<object>());
 
         private It should_return_empty_collection =
             () => result.ShouldBeEmpty();
@@ -184,7 +218,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -195,7 +229,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         private It should_return_empty_collection =
             () => result.ShouldBeEmpty();
@@ -211,7 +245,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -227,7 +261,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Values");
@@ -246,7 +280,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -261,7 +295,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_property_name =
             () => result.AllKeys.ShouldContainOnly("Values");
@@ -281,7 +315,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -296,7 +330,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_the_redefined_name =
             () => result.AllKeys.ShouldContainOnly("Hello World");
@@ -316,7 +350,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     {
         static PropertyInfo property_info;
         static TestClass instance;
-        static IConverter converter;
+        static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context = () =>
@@ -331,7 +365,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = converter.Convert(instance);
+            () => result = converter.Convert(instance, new HashSet<object>());
 
         It should_be_able_to_get_the_key_as_the_redefined_name =
             () => result.AllKeys.ShouldContainOnly("Values");

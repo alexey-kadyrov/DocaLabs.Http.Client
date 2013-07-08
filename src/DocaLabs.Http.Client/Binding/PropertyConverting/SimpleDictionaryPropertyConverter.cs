@@ -7,14 +7,14 @@ using DocaLabs.Http.Client.Utils;
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
     /// <summary>
-    /// Converts enumerable type properties.
+    /// Converts IDictionary type properties.
     /// </summary>
-    public class SimpleCollectionPropertyConverter : IPropertyConverter
+    public class SimpleDictionaryPropertyConverter : IPropertyConverter 
     {
         readonly PropertyInfo _property;
         readonly IValueConverter _valueConverter;
 
-        SimpleCollectionPropertyConverter(PropertyInfo property)
+        SimpleDictionaryPropertyConverter(PropertyInfo property)
         {
             _property = property;
 
@@ -27,16 +27,15 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 format = requestUse.Format;
             }
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (name == null)
                 name = _property.Name;
 
-            _valueConverter = new SimpleCollectionValueConverter(name, format);
+            _valueConverter = new SimpleDictionaryValueConverter(name, format);
         }
 
         /// <summary>
         /// Creates the converter if the specified property type:
-        ///     * Implements IEnumerable (but it should not be string or byte[] which are considered simple types)
-        ///     * The enumerable element type is simple
+        ///     * Is derived from IDictionary
         ///     * Is not an indexer
         /// </summary>
         public static IPropertyConverter TryCreate(PropertyInfo property)
@@ -45,16 +44,19 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 throw new ArgumentNullException("property");
 
             return CanConvert(property)
-                ? new SimpleCollectionPropertyConverter(property)
+                ? new SimpleDictionaryPropertyConverter(property) 
                 : null;
         }
 
         /// <summary>
-        /// Converts a property value. If the value of the property is null then the return collection will be empty.
+        /// Converts a property value.
+        /// If the instance is null or the value of the property is null then the return collection will be empty.
+        /// If the Name is not empty then it will be added to the key from the collection, e.g. key = Name + "." + itemKey.
+        /// Otherwise the key from the collection is used.
         /// </summary>
         /// <param name="instance">Instance of the object on which the property is defined.</param>
         /// <param name="processed">Ignored.</param>
-        /// <returns>One key-values pair.</returns>
+        /// <returns>Key-value pairs.</returns>
         public NameValueCollection Convert(object instance, ISet<object> processed)
         {
             return instance == null
@@ -64,7 +66,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         static bool CanConvert(PropertyInfo property)
         {
-            return !property.IsIndexer() && SimpleCollectionValueConverter.CanConvert(property.PropertyType);
+            return !property.IsIndexer() && SimpleDictionaryValueConverter.CanConvert(property.PropertyType);
         }
     }
 }

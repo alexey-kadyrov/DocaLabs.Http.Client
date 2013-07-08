@@ -8,6 +8,12 @@ namespace DocaLabs.Http.Client.Tests.Utils
     [TestFixture]
     public class CustomConverterTests
     {
+        [TearDown]
+        public void TearDown()
+        {
+            CustomConverter.Current = null;
+        }
+
         [Test]
         public void CurrentIsOfCustomConverterType()
         {
@@ -114,6 +120,124 @@ namespace DocaLabs.Http.Client.Tests.Utils
             Assert.IsNotNull(result);
             Assert.IsInstanceOf<int>(result);
             Assert.AreEqual(42, result);
+        }
+
+        [Test]
+        public void ChangeToStringCallsConverterForRegisteredTypeWhenFormatIsNull()
+        {
+            Func<object, object> converter = x => "Hello World!";
+
+            var mockFactory = new Mock<ICustomConverterFactory>();
+            mockFactory.Setup(x => x.GetConverter(typeof(string)))
+                .Returns(converter);
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString(null, "any value");
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Hello World!", result);
+        }
+
+        [Test]
+        public void ChangeToStringCallsConverterForRegisteredTypeWhenFormatIsEmptyString()
+        {
+            Func<object, object> converter = x => "Hello World!";
+
+            var mockFactory = new Mock<ICustomConverterFactory>();
+            mockFactory.Setup(x => x.GetConverter(typeof(string)))
+                .Returns(converter);
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString("", "any value");
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Hello World!", result);
+        }
+
+        [Test]
+        public void ChangeToStringUsesStringFormatWhenFormatIsNotEmptyString()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString("{0:X}", 32);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("20", result);
+
+            mockFactory.Verify(x => x.GetConverter(typeof(string)), Times.Never());
+        }
+
+        [Test]
+        public void ChangeToStringReturnEmptyStringWhenFormatIsNotEmptyStringAndTheValueIsNull()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString("{0:X}", null);
+
+            Assert.IsEmpty(result);
+
+            mockFactory.Verify(x => x.GetConverter(typeof(string)), Times.Never());
+        }
+
+        [Test]
+        public void ChangeToStringReturnEmptyStringWhenFormatIsNullAndTheValueIsNull()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString(null, null);
+
+            Assert.IsEmpty(result);
+
+            mockFactory.Verify(x => x.GetConverter(typeof(string)), Times.Never());
+        }
+
+        [Test]
+        public void ChangeToStringReturnEmptyStringWhenFormatIsEmptyAndTheValueIsNull()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString(null, null);
+
+            Assert.IsEmpty(result);
+
+            mockFactory.Verify(x => x.GetConverter(typeof(string)), Times.Never());
+        }
+
+        [Test]
+        public void SettingTheCurrentReturnsTheSetValue()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            var target = new CustomConverter(mockFactory.Object);
+
+            CustomConverter.Current = target;
+
+            Assert.AreSame(target, CustomConverter.Current);
+        }
+
+        [Test]
+        public void SettingTheCurrentNullStillReturnsNotNullValue()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            var target = new CustomConverter(mockFactory.Object);
+
+            CustomConverter.Current = target;
+
+            CustomConverter.Current = null;
+
+            Assert.IsNotNull(CustomConverter.Current);
+            Assert.AreNotSame(target, CustomConverter.Current);
         }
     }
 }
