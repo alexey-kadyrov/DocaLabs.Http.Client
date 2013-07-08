@@ -25,6 +25,60 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_simple_dictionary_value_converter_is_used_on_int
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleDictionaryValueConverter("Values", null);
+
+        Because of =
+            () => result = converter.Convert(42);
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_simple_dictionary_value_converter_is_used_on_list
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleDictionaryValueConverter("Values", null);
+
+        Because of = () => result = converter.Convert(new List<string>
+        {
+           "key27",
+           "key42"
+        });
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_simple_dictionary_value_converter_is_used_on_namevaluecollection
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleDictionaryValueConverter("Values", null);
+
+        Because of = () => result = converter.Convert(new NameValueCollection
+        {
+           { "key27", "27" }, 
+           { "key42", "42" }
+        });
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
     class when_simple_dictionary_value_converter_is_used
     {
         static IValueConverter converter;

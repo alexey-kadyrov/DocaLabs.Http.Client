@@ -24,6 +24,64 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimpleCollectionValueConverter))]
+    class when_simple_collection_value_converter_is_used_on_int
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleCollectionValueConverter("Values", null);
+
+        Because of =
+            () => result = converter.Convert(42);
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+    }
+
+    [Subject(typeof(SimpleCollectionValueConverter))]
+    class when_simple_collection_value_converter_is_used_on_dictionary
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleCollectionValueConverter("Values", null);
+
+        Because of = () => result = converter.Convert(new Dictionary<string, string>
+        {
+           { "key27", "27" }, 
+           { "key42", "42" }
+        });
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+    }
+
+    [Subject(typeof(SimpleCollectionValueConverter))]
+    class when_simple_collection_value_converter_is_used_on_namevaluecollection
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleCollectionValueConverter("Values", null);
+
+        Because of = () => result = converter.Convert(new NameValueCollection
+        {
+           { "key27", "27" }, 
+           { "key42", "42" }
+        });
+
+
+        It should_be_able_to_get_the_key_using_specified_name =
+            () => result.AllKeys.ShouldContainOnly("Values");
+
+        It should_be_able_to_get_all_source_keys_as_values =
+            () => result.GetValues("Values").ShouldContainOnly("key27", "key42");
+    }
+
+    [Subject(typeof(SimpleCollectionValueConverter))]
     class when_simple_collection_value_converter_is_used_with_null_format
     {
         static IValueConverter converter;

@@ -13,191 +13,194 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     // ReSharper disable UnusedParameter.Local
     // ReSharper disable ValueParameterNotUsed
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_trying_to_create_simple_dictionary_property_converter
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_trying_to_create_namevaluecollection_property_converter
     {
         It should_not_create_it_for_bool =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
 
         It should_not_create_it_for_char =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldBeNull();
 
         It should_not_create_it_for_byte =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldBeNull();
 
         It should_not_create_it_for_short =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldBeNull();
 
         It should_not_create_it_for_ushort =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldBeNull();
 
         It should_not_create_it_for_int =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldBeNull();
 
         It should_not_create_it_for_uint =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldBeNull();
 
         It should_not_create_it_for_long =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldBeNull();
 
         It should_not_create_it_for_ulong =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldBeNull();
 
         It should_not_create_it_for_float =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldBeNull();
 
         It should_not_create_it_for_double =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldBeNull();
 
         It should_not_create_it_for_decimal =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enum =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldBeNull();
 
         It should_not_create_it_for_guid =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldBeNull();
 
         It should_not_create_it_for_datetime =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldBeNull();
 
         It should_not_create_it_for_datetimeoffset =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldBeNull();
 
         It should_not_create_it_for_timespan =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldBeNull();
 
         It should_not_create_it_for_string =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldBeNull();
 
         It should_not_create_it_for_byte_array =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldBeNull();
 
         It should_not_create_it_for_object =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
 
         It should_not_create_it_for_class =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
 
         It should_not_create_it_for_struct =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_strings =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableStringProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableStringProperty")).ShouldBeNull();
 
         It should_not_create_it_for_list_of_string =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListStringProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListStringProperty")).ShouldBeNull();
 
         It should_not_create_it_for_ilist_of_string =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListStringProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListStringProperty")).ShouldBeNull();
 
         It should_not_create_it_for_array_of_string =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayStringProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayStringProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_byte_arrays =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteArrayProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteArrayProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_object =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_bool =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableBoolProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableBoolProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_char =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableCharProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableCharProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_byte =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_short =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableShortProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableShortProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_ushort =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUShortProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUShortProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_int =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableIntProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableIntProperty")).ShouldBeNull();
 
         It should_not_create_it_for_list_of_int =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListIntProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListIntProperty")).ShouldBeNull();
 
         It should_not_create_it_for_ilist_of_int =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListIntProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListIntProperty")).ShouldBeNull();
 
         It should_not_create_it_for_array_of_int =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayIntProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayIntProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_uint =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUIntProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUIntProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_long =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableLongProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableLongProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_ulong =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableULongProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableULongProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_float =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableFloatProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableFloatProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_double =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDoubleProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDoubleProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_decimal =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDecimalProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDecimalProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_enum =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableEnumProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableEnumProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_guid =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableGuidProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableGuidProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_datetime =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_datetimeoffset =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeOffsetProperty")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeOffsetProperty")).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_timespan =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableTimeSpanProperty")).ShouldBeNull();
-         
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableTimeSpanProperty")).ShouldBeNull();
+
         It should_not_create_it_for_indexer =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
 
-        It should_not_create_it_for_name_value_collection =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("NameValueCollection")).ShouldBeNull();
+        It should_create_it_for_name_value_collection =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("NameValueCollection")).ShouldNotBeNull();
 
-        It should_create_it_for_dictionary_interface =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DictionaryInterface")).ShouldNotBeNull();
+        It should_create_it_for_name_value_collection_subclass =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("NameValueCollectionSubclass")).ShouldNotBeNull();
 
-        It should_create_it_for_generic_dictionary_interface =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionaryInterface")).ShouldNotBeNull();
+        It should_not_create_it_for_dictionary_interface =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DictionaryInterface")).ShouldBeNull();
 
-        It should_create_it_for_generic_dictionary_sub_interface_wirh_defined_generic_arguments =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface")).ShouldNotBeNull();
+        It should_not_create_it_for_generic_dictionary_interface =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionaryInterface")).ShouldBeNull();
 
-        It should_create_it_for_generic_dictionary_sub_interface =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface2")).ShouldNotBeNull();
+        It should_not_create_it_for_generic_dictionary_sub_interface_wirh_defined_generic_arguments =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface")).ShouldBeNull();
 
-        It should_create_it_for_hashtable =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Hashtable")).ShouldNotBeNull();
+        It should_not_create_it_for_generic_dictionary_sub_interface =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface2")).ShouldBeNull();
 
-        It should_create_it_for_sorted_list =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("SortedList")).ShouldNotBeNull();
+        It should_not_create_it_for_hashtable =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Hashtable")).ShouldBeNull();
 
-        It should_create_it_for_generic_dictionary =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionary")).ShouldNotBeNull();
+        It should_not_create_it_for_sorted_list =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("SortedList")).ShouldBeNull();
 
-        It should_create_it_for_dictionary_subsclass =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DictionarySubsclass")).ShouldNotBeNull();
+        It should_not_create_it_for_generic_dictionary =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionary")).ShouldBeNull();
 
-        It should_create_it_for_generic_dictionary_subclass =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubsclass")).ShouldNotBeNull();
+        It should_not_create_it_for_dictionary_subsclass =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("DictionarySubsclass")).ShouldBeNull();
 
-        It should_create_it_for_generic_dictionary_subclass_with_defined_generic_arguments =
-            () => SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubsclass2")).ShouldNotBeNull();
+        It should_not_create_it_for_generic_dictionary_subclass =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubsclass")).ShouldBeNull();
+
+        It should_not_create_it_for_generic_dictionary_subclass_with_defined_generic_arguments =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubsclass2")).ShouldBeNull();
 
         class TestClass
         {
@@ -251,6 +254,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public IEnumerable<object> EnumerableObjectProperty { get; set; }
             public IEnumerable EnumerableProperty { get; set; }
             public NameValueCollection NameValueCollection { get; set; }
+            public NameValueCollectionSubclass NameValueCollectionSubclass { get; set; }
             public IDictionary DictionaryInterface { get; set; }
             public IDictionary<int, int> GenericDictionaryInterface { get; set; }
             public ITestGenericDictionarySubinterface GenericDictionarySubinterface { get; set; }
@@ -284,6 +288,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
         }
 
+        class NameValueCollectionSubclass : NameValueCollection
+        {
+        }
+
         class TestDictionarySubsclass : Hashtable
         {
         }
@@ -297,13 +305,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_trying_to_create_simple_dictionary_property_converter_for_null_property_info
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_trying_to_create_namevaluecollection_property_converter_for_null_property_info
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => SimpleDictionaryPropertyConverter.TryCreate(null));
+            () => exception = Catch.Exception(() => NameValueCollectionPropertyConverter.TryCreate(null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -312,14 +320,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("property");
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_on_null_instance
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_on_null_instance
     {
         static IPropertyConverter converter;
         static NameValueCollection result;
 
         Establish context =
-            () => converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            () => converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
 
         Because of =
             () => result = converter.Convert(null, new HashSet<object>());
@@ -329,12 +337,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            public IDictionary<string, int> Values { get; set; }
+            public NameValueCollection Values { get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_on_null_property
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_on_null_property
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -343,7 +351,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         Establish context = () =>
         {
             instance = new TestClass();
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -354,12 +362,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            public IDictionary<string, int> Values { get; set; }
+            public NameValueCollection Values { get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -369,14 +377,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, int>
+                Values = new NameValueCollection
                 {
-                    { "key27", 27 },
-                    { "key42", 42 }
+                    { "key27", "27" },
+                    { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -393,12 +401,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            public IDictionary<string, int> Values { [UsedImplicitly] get; set; }
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_with_null_processed_set
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_with_null_processed_set
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -408,14 +416,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, int>
+                Values = new NameValueCollection
                 {
-                    { "key27", 27 },
-                    { "key42", 42 }
+                    { "key27", "27" },
+                    { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -432,12 +440,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            public IDictionary<string, int> Values { [UsedImplicitly] get; set; }
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_on_collection_property_where_some_keys_are_empty
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_on_collection_property_where_some_keys_are_empty
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -447,14 +455,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, string>
+                Values = new NameValueCollection
                 {
                     { "", "27" },
                     { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -468,12 +476,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            public IDictionary<string, string> Values { [UsedImplicitly] get; set; }
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_on_collection_property_where_some_values_are_null
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_on_collection_property_where_some_values_are_null
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -483,14 +491,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, string>
+                Values = new NameValueCollection
                 {
                     { "key27", null },
                     { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -507,12 +515,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            public IDictionary<string, string> Values { [UsedImplicitly] get; set; }
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_not_set
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_not_set
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -522,14 +530,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, int>
+                Values = new NameValueCollection
                 {
-                    { "key27", 27 },
-                    { "key42", 42 }
+                    { "key27", "27" },
+                    { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -547,12 +555,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         class TestClass
         {
             [RequestUse]
-            public IDictionary<string, int> Values { [UsedImplicitly] get; set; }
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_empty_strings
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_empty_strings
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -562,14 +570,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, int>
+                Values = new NameValueCollection
                 {
-                    { "key27", 27 },
-                    { "key42", 42 }
+                    { "key27", "27" },
+                    { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -587,12 +595,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         class TestClass
         {
             [RequestUse(Name = "", Format = "")]
-            public IDictionary<string, int> Values { [UsedImplicitly] get; set; }
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_on_property_which_name_is_redefined
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_on_property_which_name_is_redefined
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -602,14 +610,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, int>
+                Values = new NameValueCollection
                 {
-                    { "key27", 27 },
-                    { "key42", 42 }
+                    { "key27", "27" },
+                    { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -627,12 +635,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         class TestClass
         {
             [RequestUse(Name = "Hello World")]
-            public IDictionary<string, int> Values { [UsedImplicitly] get; set; }
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(SimpleDictionaryPropertyConverter))]
-    class when_simple_dictionary_property_converter_is_used_on_property_with_custom_format_applied
+    [Subject(typeof(NameValueCollectionPropertyConverter))]
+    class when_namevaluecollection_property_converter_is_used_on_property_with_custom_format_applied
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -642,14 +650,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             instance = new TestClass
             {
-                Values = new Dictionary<string, int>
+                Values = new NameValueCollection
                 {
-                    { "key27", 27 },
-                    { "key42", 42 }
+                    { "key27", "27" },
+                    { "key42", "42" }
                 }
             };
 
-            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+            converter = NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
         };
 
         Because of =
@@ -658,16 +666,16 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_be_able_to_get_the_source_keys =
             () => result.AllKeys.ShouldContainOnly("Values.key27", "Values.key42");
 
-        It should_be_able_to_get_values_for_the_first_key_using_specified_format =
-            () => result.GetValues("Values.key27").ShouldContainOnly("1B");
+        It should_be_able_to_get_values_for_the_first_key_ignoring_specified_format =
+            () => result.GetValues("Values.key27").ShouldContainOnly("27");
 
-        It should_be_able_to_get_values_for_the_second_key_using_specified_format =
-            () => result.GetValues("Values.key42").ShouldContainOnly("2A");
+        It should_be_able_to_get_values_for_the_second_key_ignoring_specified_format =
+            () => result.GetValues("Values.key42").ShouldContainOnly("42");
 
         class TestClass
         {
-            [RequestUse(Format = "{0:X}")]
-            public IDictionary<string, int> Values { [UsedImplicitly] get; set; }
+            [RequestUse(Format = "--{0}--")]
+            public NameValueCollection Values { [UsedImplicitly] get; set; }
         }
     }
 

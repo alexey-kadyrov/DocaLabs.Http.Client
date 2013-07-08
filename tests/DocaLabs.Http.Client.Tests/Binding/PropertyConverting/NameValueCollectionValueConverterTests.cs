@@ -1,4 +1,7 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
@@ -43,6 +46,60 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         It should_be_able_to_convert_second_value =
             () => result.GetValues("Values.key42").ShouldContainOnly("42");
+    }
+
+    [Subject(typeof(NameValueCollectionValueConverter))]
+    class when_namevalue_collection_value_converter_is_used_on_dictionary
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new NameValueCollectionValueConverter("Values");
+
+        Because of = () => result = converter.Convert(new Dictionary<string, string>
+        {
+           { "key27", "27" }, 
+           { "key42", "42" }
+        });
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+    }
+
+    [Subject(typeof(NameValueCollectionValueConverter))]
+    class when_namevalue_collection_value_converter_is_used_on_list
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new NameValueCollectionValueConverter("Values");
+
+        Because of = () => result = converter.Convert(new List<string>
+        {
+           "key27",
+           "key42"
+        });
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
+    }
+
+    [Subject(typeof(NameValueCollectionValueConverter))]
+    class when_namevalue_collection_value_converter_is_used_on_int
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new NameValueCollectionValueConverter("Values");
+
+        Because of = 
+            () => result = converter.Convert(42);
+
+        private It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
     }
 
     [Subject(typeof(NameValueCollectionValueConverter))]
@@ -292,5 +349,195 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         It should_be_able_to_convert_value_with_non_empty_key =
             () => result.GetValues("Values.key42").ShouldContainOnly("42");
+    }
+
+    [Subject(typeof(NameValueCollectionValueConverter))]
+    class when_checking_whenever_namevalue_collection_value_converter_can_convert_the_type
+    {
+        It should_return_false_for_bool =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(bool)).ShouldBeFalse();
+
+        It should_return_false_for_byte =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(byte)).ShouldBeFalse();
+
+        It should_return_false_for_char =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(char)).ShouldBeFalse();
+
+        It should_return_false_for_short =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(short)).ShouldBeFalse();
+
+        It should_return_false_for_ushort =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(ushort)).ShouldBeFalse();
+
+        It should_return_false_for_int =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(int)).ShouldBeFalse();
+
+        It should_return_false_for_uint =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(uint)).ShouldBeFalse();
+
+        It should_return_false_for_long =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(long)).ShouldBeFalse();
+
+        It should_return_false_for_ulong =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(ulong)).ShouldBeFalse();
+
+        It should_return_false_for_float =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(float)).ShouldBeFalse();
+
+        It should_return_false_for_double =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(double)).ShouldBeFalse();
+
+        It should_return_false_for_decimal =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(decimal)).ShouldBeFalse();
+
+        It should_return_false_for_guid =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(Guid)).ShouldBeFalse();
+
+        It should_return_false_for_date_time =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(DateTime)).ShouldBeFalse();
+
+        It should_return_false_for_date_time_offset =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(DateTimeOffset)).ShouldBeFalse();
+
+        It should_return_false_for_time_span =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TimeSpan)).ShouldBeFalse();
+
+        It should_return_false_for_enum =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TestEnum)).ShouldBeFalse();
+
+        It should_return_false_for_string =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(string)).ShouldBeFalse();
+
+        It should_return_false_for_byte_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(byte[])).ShouldBeFalse();
+
+        It should_return_false_for_bool_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(bool[])).ShouldBeFalse();
+
+        It should_return_false_for_char_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(char[])).ShouldBeFalse();
+
+        It should_return_false_for_short_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(short[])).ShouldBeFalse();
+
+        It should_return_false_for_ushort_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(ushort[])).ShouldBeFalse();
+
+        It should_return_false_for_int_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(int[])).ShouldBeFalse();
+
+        It should_return_false_for_uint_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(uint[])).ShouldBeFalse();
+
+        It should_return_false_for_long_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(long[])).ShouldBeFalse();
+
+        It should_return_false_for_ulong_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(ulong[])).ShouldBeFalse();
+
+        It should_return_false_for_float_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(float[])).ShouldBeFalse();
+
+        It should_return_false_for_double_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(double[])).ShouldBeFalse();
+
+        It should_return_false_for_decimal_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(decimal[])).ShouldBeFalse();
+
+        It should_return_false_for_guid_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(Guid[])).ShouldBeFalse();
+
+        It should_return_false_for_date_time_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(DateTime[])).ShouldBeFalse();
+
+        It should_return_false_for_date_time_offset_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(DateTimeOffset[])).ShouldBeFalse();
+
+        It should_return_false_for_time_span_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TimeSpan[])).ShouldBeFalse();
+
+        It should_return_false_for_enum_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TestEnum[])).ShouldBeFalse();
+
+        It should_return_false_for_string_array =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(string[])).ShouldBeFalse();
+
+        It should_return_false_for_struct =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TestStruct)).ShouldBeFalse();
+
+        It should_return_false_for_class =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TestClass)).ShouldBeFalse();
+
+        It should_return_false_for_object =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(object)).ShouldBeFalse();
+
+        It should_return_true_for_namevaluecollection =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(NameValueCollection)).ShouldBeTrue();
+
+        It should_return_true_for_namevaluecollection_subclass =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(NameValueCollectionSubclass)).ShouldBeTrue();
+
+        It should_return_false_for_idictionary =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(IDictionary)).ShouldBeFalse();
+
+        It should_return_false_for_generic_idictionary =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(IDictionary<int, int>)).ShouldBeFalse();
+
+        It should_return_false_for_hastable =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(Hashtable)).ShouldBeFalse();
+
+        It should_return_false_for_sortedlist =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(SortedList)).ShouldBeFalse();
+
+        It should_return_false_for_dictionary_subclass =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TestDictionarySubsclass)).ShouldBeFalse();
+
+        It should_return_false_for_genric_dictionary_sub_interface_with_defined_generic_arguments =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(ITestGenericDictionarySubinterface)).ShouldBeFalse();
+
+        It should_return_false_for_genric_dictionary_sub_interface =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(ITestGenericDictionarySubinterface2<int, int>)).ShouldBeFalse();
+
+        It should_return_false_for_genric_dictionary_subclass_with_defined_generic_arguments =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TestGenericDictionarySubsclass)).ShouldBeFalse();
+
+        It should_return_false_for_genric_dictionary_subclass =
+            () => NameValueCollectionValueConverter.CanConvert(typeof(TestGenericDictionarySubsclass2<int, int>)).ShouldBeFalse();
+
+        enum TestEnum
+        {
+        }
+
+        struct TestStruct
+        {
+        }
+
+        class TestClass
+        {
+        }
+
+        class NameValueCollectionSubclass : NameValueCollection
+        {
+        }
+
+        class TestDictionarySubsclass : Hashtable
+        {
+        }
+
+        interface ITestGenericDictionarySubinterface : IDictionary<int, int>
+        {
+        }
+
+        interface ITestGenericDictionarySubinterface2<TKey, TValue> : IDictionary<TKey, TValue>
+        {
+        }
+
+        class TestGenericDictionarySubsclass : Dictionary<int, int>
+        {
+        }
+
+        class TestGenericDictionarySubsclass2<TKey, TValue> : Dictionary<TKey, TValue>
+        {
+        }
     }
 }
