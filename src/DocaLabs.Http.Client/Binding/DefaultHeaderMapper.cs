@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding
         {
             return Ignore(model) 
                 ? new WebHeaderCollection()
-                : GetHeaders(_maps.GetOrAdd(model).Convert(model));
+                : GetHeaders(_maps.Parse(model).Convert(model));
         }
 
         static bool Ignore(object model)

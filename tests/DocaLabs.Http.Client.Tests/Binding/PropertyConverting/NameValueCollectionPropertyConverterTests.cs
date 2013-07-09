@@ -16,6 +16,18 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(NameValueCollectionPropertyConverter))]
     class when_trying_to_create_namevaluecollection_property_converter
     {
+        It should_not_create_it_for_property_without_public_getter =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoPublicGetter")).ShouldBeNull();
+
+        It should_not_create_it_for_property_without_getter =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoGetter")).ShouldBeNull();
+
+        It should_create_it_for_property_without_public_setter =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoPublicSetter")).ShouldNotBeNull();
+
+        It should_create_it_for_property_without_setter =
+            () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoSetter")).ShouldNotBeNull();
+
         It should_not_create_it_for_bool =
             () => NameValueCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
 
@@ -204,6 +216,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
+            public NameValueCollection PropertyNoPublicGetter { private get; set; }
+            public NameValueCollection PropertyNoGetter { set { } }
+            public NameValueCollection PropertyNoPublicSetter { get; private set; }
+            public NameValueCollection PropertyNoSetter { get { return null; } }
             public bool BoolProperty { get; set; }
             public char CharProperty { get; set; }
             public byte ByteProperty { get; set; }

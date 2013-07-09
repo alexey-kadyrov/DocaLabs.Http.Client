@@ -74,7 +74,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if (model == null)
                 return "";
 
-            var values = Maps.GetOrAdd(model).Convert(model);
+            var values = Maps.Parse(model).Convert(model);
 
             return new QueryStringBuilder().Add(values).ToString();
         }

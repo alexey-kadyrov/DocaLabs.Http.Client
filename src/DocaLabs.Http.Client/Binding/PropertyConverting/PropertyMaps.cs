@@ -15,7 +15,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             AcceptPropertyCheck = acceptPropertyCheck;
         }
 
-        public PropertyMap GetOrAdd(object instance)
+        public PropertyMap Parse(object instance)
         {
             if(instance == null)
                 return new PropertyMap(this);

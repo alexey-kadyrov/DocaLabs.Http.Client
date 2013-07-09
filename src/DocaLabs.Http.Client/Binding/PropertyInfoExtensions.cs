@@ -106,7 +106,7 @@ namespace DocaLabs.Http.Client.Binding
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
-            if (info.GetIndexParameters().Length > 0 || info.GetGetMethod() == null)
+            if (info.IsIndexer() || info.GetGetMethod() == null)
                 return false;
 
             var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);

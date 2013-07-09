@@ -70,6 +70,84 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_created_for_property_without_public_getter
+    {
+        static IPropertyConverter converter;
+
+        Because of =
+            () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+
+        It should_return_null =
+            () => converter.ShouldBeNull();
+
+        class TestClass
+        {
+            [SeparatedCollectionConverter(Separator = ';')]
+            public IEnumerable<string> Values { private get; set; }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_created_for_property_without_getter
+    {
+        static IPropertyConverter converter;
+
+        Because of =
+            () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+
+        It should_return_null =
+            () => converter.ShouldBeNull();
+
+        class TestClass
+        {
+            [SeparatedCollectionConverter(Separator = ';')]
+            public IEnumerable<string> Values { set { } }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_created_for_property_without_public_setter
+    {
+        static IPropertyConverter converter;
+
+        Because of =
+            () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Countries"));
+
+        It should_be_of_separated_collection_converter_type =
+            () => converter.ShouldBeOfType<SeparatedCollectionConverter>();
+
+        It should_return_pipe_as_item_separator =
+            () => ((SeparatedCollectionConverter)converter).Separator.ShouldEqual('|');
+
+        class TestClass
+        {
+            [SeparatedCollectionConverter(Separator = ';')]
+            public IEnumerable<string> Countries { get; private set; }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_created_for_property_without_setter
+    {
+        static IPropertyConverter converter;
+
+        Because of =
+            () => converter = SeparatedCollectionConverter.TryCreate(typeof(TestClass).GetProperty("Countries"));
+
+        It should_be_of_separated_collection_converter_type =
+            () => converter.ShouldBeOfType<SeparatedCollectionConverter>();
+
+        It should_return_pipe_as_item_separator =
+            () => ((SeparatedCollectionConverter)converter).Separator.ShouldEqual('|');
+
+        class TestClass
+        {
+            [SeparatedCollectionConverter(Separator = ';')]
+            public IEnumerable<string> Countries { get { return null; } }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
     class when_separated_collection_converter_is_created_for_string
     {
         static IPropertyConverter converter;

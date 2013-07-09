@@ -7,6 +7,9 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
+    /// <summary>
+    /// Parses a type and maps its properties to name value pairs.
+    /// </summary>
     public class PropertyMap
     {
         readonly PropertyMaps _maps;
@@ -35,9 +38,24 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         .ToList();
         }
 
+        /// <summary>
+        /// Maps the instance to name value pairs using default rules or provided hints.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         public NameValueCollection Convert(object instance)
         {
-            return Convert(instance, new HashSet<object>());
+            if(instance == null)
+                return new NameValueCollection();
+
+            var type = instance.GetType();
+
+            if (NameValueCollectionValueConverter.CanConvert(type))
+                return new NameValueCollectionValueConverter(null).Convert(instance);
+
+            return SimpleDictionaryValueConverter.CanConvert(type)
+                ? new SimpleDictionaryValueConverter(null, null).Convert(instance)
+                : Convert(instance, new HashSet<object>());
         }
 
         internal NameValueCollection Convert(object instance, ISet<object> processed)
@@ -157,7 +175,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                 var makeName = GetNameMaker();
 
-                var nestedValues = _maps.GetOrAdd(value).Convert(value);
+                var nestedValues = _maps.Parse(value).Convert(value);
 
                 var values = new NameValueCollection();
 
@@ -178,7 +196,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             static bool CanConvert(PropertyInfo property)
             {
-                return !property.IsIndexer();
+                return !property.IsIndexer() && property.GetGetMethod() != null;
             }
 
             Func<string, string> GetNameMaker()

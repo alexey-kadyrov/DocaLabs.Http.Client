@@ -16,6 +16,18 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     [Subject(typeof(SimpleCollectionPropertyConverter))]
     class when_trying_to_create_simple_collection_property_converter
     {
+        It should_not_create_it_for_property_without_public_getter =
+            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoPublicGetter")).ShouldBeNull();
+
+        It should_not_create_it_for_property_without_getter =
+            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoGetter")).ShouldBeNull();
+
+        It should_create_it_for_property_without_public_setter =
+            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoPublicSetter")).ShouldNotBeNull();
+
+        It should_create_it_for_property_without_setter =
+            () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoSetter")).ShouldNotBeNull();
+
         It should_not_create_it_for_bool =
             () => SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldBeNull();
 
@@ -168,6 +180,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
+            public IEnumerable<string> PropertyNoPublicGetter { private get; set; }
+            public IEnumerable<string> PropertyNoGetter { set { } }
+            public IEnumerable<string> PropertyNoPublicSetter { get; private set; }
+            public IEnumerable<string> PropertyNoSetter { get { return null; } }
             public bool BoolProperty { get; set; }
             public char CharProperty { get; set; }
             public byte ByteProperty { get; set; }
