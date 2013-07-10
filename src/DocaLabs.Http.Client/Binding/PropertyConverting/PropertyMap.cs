@@ -139,7 +139,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                     var value = _property.GetValue(instance);
                     if (value != null)
                     {
-                        var converter = GetConverter(value);
+                        var converter = TryGetNonObjectConverter(value);
                         if (converter != null)
                             return converter.Convert(value);
 
@@ -150,7 +150,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 return new NameValueCollection();
             }
 
-            IValueConverter GetConverter(object value)
+            IValueConverter TryGetNonObjectConverter(object value)
             {
                 if (value is NameValueCollection)
                     return new NameValueCollectionValueConverter(_name);
@@ -175,7 +175,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                 var makeName = GetNameMaker();
 
-                var nestedValues = _maps.Parse(value).Convert(value);
+                var nestedValues = _maps.Parse(value).Convert(value, processed);
 
                 var values = new NameValueCollection();
 

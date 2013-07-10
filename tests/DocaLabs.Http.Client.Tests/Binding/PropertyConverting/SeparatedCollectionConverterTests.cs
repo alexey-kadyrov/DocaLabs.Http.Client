@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
@@ -229,6 +230,142 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         class TestClass
         {
             public IEnumerable<int> Values { get; set; }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_on_plain_enumerable_property
+    {
+        static PropertyInfo property_info;
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+            instance = new TestClass
+            {
+                Values = new object[] { 27, "42" }
+            };
+
+            converter = SeparatedCollectionConverter.TryCreate(property_info, ',');
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, new HashSet<object>());
+
+        It should_be_able_to_get_the_key_as_property_name =
+            () => result.AllKeys.ShouldContainOnly("Values");
+
+        It should_be_able_to_get_value_of_property =
+            () => result.GetValues("Values").ShouldContainOnly("27,42");
+
+        class TestClass
+        {
+            public IEnumerable Values { get; set; }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_on_plain_enumerable_property_where_some_values_are_not_simple_type
+    {
+        static PropertyInfo property_info;
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+            instance = new TestClass
+            {
+                Values = new [] { 27, new object(), "42" }
+            };
+
+            converter = SeparatedCollectionConverter.TryCreate(property_info, ',');
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, new HashSet<object>());
+
+        It should_be_able_to_get_the_key_as_property_name =
+            () => result.AllKeys.ShouldContainOnly("Values");
+
+        It should_be_able_to_get_only_siple_values_of_property =
+            () => result.GetValues("Values").ShouldContainOnly("27,42");
+
+        class TestClass
+        {
+            public IEnumerable Values { get; set; }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_on_generic_enumerable_of_objects_property
+    {
+        static PropertyInfo property_info;
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+            instance = new TestClass
+            {
+                Values = new object[] { 27, "42" }
+            };
+
+            converter = SeparatedCollectionConverter.TryCreate(property_info, ',');
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, new HashSet<object>());
+
+        It should_be_able_to_get_the_key_as_property_name =
+            () => result.AllKeys.ShouldContainOnly("Values");
+
+        It should_be_able_to_get_value_of_property =
+            () => result.GetValues("Values").ShouldContainOnly("27,42");
+
+        class TestClass
+        {
+            public IEnumerable<object> Values { get; set; }
+        }
+    }
+
+    [Subject(typeof(SeparatedCollectionConverter))]
+    class when_separated_collection_converter_is_used_on_generic_enumerable_of_objects_property_where_some_values_are_not_simple_type
+    {
+        static PropertyInfo property_info;
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            property_info = typeof(TestClass).GetProperty("Values");
+            instance = new TestClass
+            {
+                Values = new [] { 27, new object(), "42" }
+            };
+
+            converter = SeparatedCollectionConverter.TryCreate(property_info, ',');
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, new HashSet<object>());
+
+        It should_be_able_to_get_the_key_as_property_name =
+            () => result.AllKeys.ShouldContainOnly("Values");
+
+        It should_be_able_to_get_only_siple_values_of_property =
+            () => result.GetValues("Values").ShouldContainOnly("27,42");
+
+        class TestClass
+        {
+            public IEnumerable<object> Values { get; set; }
         }
     }
 

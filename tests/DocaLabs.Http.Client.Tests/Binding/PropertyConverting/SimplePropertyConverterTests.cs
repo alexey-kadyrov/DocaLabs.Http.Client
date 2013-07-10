@@ -85,6 +85,57 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_create_it_for_byte_array =
             () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
 
+        It should_create_it_for_nullable_bool =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableBoolProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_char =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableCharProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_byte =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableByteProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_short =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableShortProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_ushort =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableUShortProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_int =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableIntProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_uint =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableUIntProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_long =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableLongProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_ulong =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableULongProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_float =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableFloatProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_double =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDoubleProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_decimal =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDecimalProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_enum =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableEnumProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_guid =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableGuidProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_datetime =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDateTimeProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_datetimeoffset =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDateTimeOffsetProperty")).ShouldNotBeNull();
+
+        It should_create_it_for_nullable_timespan =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableTimeSpanProperty")).ShouldNotBeNull();
+
         It should_not_create_it_for_object =
             () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
 
@@ -93,6 +144,9 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         It should_not_create_it_for_struct =
             () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
+
+        It should_not_create_it_for_nullable_struct =
+            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableStructProperty")).ShouldBeNull();
 
         It should_not_create_it_for_indexer =
             () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
@@ -236,9 +290,27 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public TimeSpan TimeSpanProperty { get; set; }
             public string StringProperty { get; set; }
             public byte[] ByteArrayProperty { get; set; }
+            public bool? NullableBoolProperty { get; set; }
+            public char? NullableCharProperty { get; set; }
+            public byte? NullableByteProperty { get; set; }
+            public short? NullableShortProperty { get; set; }
+            public ushort? NullableUShortProperty { get; set; }
+            public int? NullableIntProperty { get; set; }
+            public uint? NullableUIntProperty { get; set; }
+            public long? NullableLongProperty { get; set; }
+            public ulong? NullableULongProperty { get; set; }
+            public float? NullableFloatProperty { get; set; }
+            public double? NullableDoubleProperty { get; set; }
+            public decimal? NullableDecimalProperty { get; set; }
+            public TestEnum? NullableEnumProperty { get; set; }
+            public Guid? NullableGuidProperty { get; set; }
+            public DateTime? NullableDateTimeProperty { get; set; }
+            public DateTimeOffset? NullableDateTimeOffsetProperty { get; set; }
+            public TimeSpan? NullableTimeSpanProperty { get; set; }
             public object ObjectProperty { get; set; }
             public TestClass ClassProperty { get; set; }
             public TestStruct StructProperty { get; set; }
+            public TestStruct? NullableStructProperty { get; set; }
             public IEnumerable<string> EnumerableStringProperty { get; set; }
             public List<string> ListStringProperty { get; set; }
             public IList<string> IListStringProperty { get; set; }

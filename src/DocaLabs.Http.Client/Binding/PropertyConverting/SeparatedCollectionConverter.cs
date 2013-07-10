@@ -85,6 +85,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             foreach (var item in collection)
             {
+                if(item != null && !item.GetType().IsSimpleType())
+                    continue;
+
                 if (!first)
                     stringBuilder.Append(Separator);
 
@@ -99,7 +102,15 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         static bool CanConvert(PropertyInfo property, Type type)
         {
-            return type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType() && !property.IsIndexer() && property.GetGetMethod() != null;
+            if (property.IsIndexer() || property.GetGetMethod() == null)
+                return false;
+
+            if (!type.IsEnumerable())
+                return false;
+
+            var elementType = type.GetEnumerableElementType();
+
+            return elementType == typeof(object) || type.GetEnumerableElementType().IsSimpleType();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace DocaLabs.Http.Client.Utils
             if(type == null)
                 throw new ArgumentNullException("type");
 
-            return (type.IsPrimitive ||
+            var isSimple = (type.IsPrimitive ||
                     type.IsEnum ||
                     type == typeof(string) ||
                     type == typeof(decimal) ||
@@ -39,6 +39,9 @@ namespace DocaLabs.Http.Client.Utils
                     type == typeof(TimeSpan) ||
                     type == typeof(DateTimeOffset) ||
                     type == typeof(byte[]));
+
+            return isSimple ||
+                   (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (Nullable<>) && Nullable.GetUnderlyingType(type).IsSimpleType());
         }
 
         /// <summary>

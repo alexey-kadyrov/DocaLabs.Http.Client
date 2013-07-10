@@ -43,6 +43,29 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimpleValueConverter))]
+    class when_simple_value_converter_is_used_on_nullable_variable
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+        static int? value;
+
+        Establish context = () =>
+        {
+            converter = new SimpleValueConverter("Value", null);
+            value = 42;
+        };
+
+        Because of =
+            () => result = converter.Convert(value);
+
+        It should_be_able_to_get_the_key_using_specified_name =
+            () => result.AllKeys.ShouldContainOnly("Value");
+
+        It should_be_able_to_convert_value =
+            () => result.GetValues("Value").ShouldContainOnly("42");
+    }
+
+    [Subject(typeof(SimpleValueConverter))]
     class when_simple_value_converter_is_used_with_empty_format
     {
         static IValueConverter converter;
@@ -170,6 +193,57 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_return_true_for_byte_array =
             () => SimpleValueConverter.CanConvert(typeof(byte[])).ShouldBeTrue();
 
+        It should_return_true_for_nullable_bool =
+            () => SimpleValueConverter.CanConvert(typeof(bool?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_byte =
+            () => SimpleValueConverter.CanConvert(typeof(byte?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_char =
+            () => SimpleValueConverter.CanConvert(typeof(char?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_short =
+            () => SimpleValueConverter.CanConvert(typeof(short?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_ushort =
+            () => SimpleValueConverter.CanConvert(typeof(ushort?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_int =
+            () => SimpleValueConverter.CanConvert(typeof(int?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_uint =
+            () => SimpleValueConverter.CanConvert(typeof(uint?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_long =
+            () => SimpleValueConverter.CanConvert(typeof(long?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_ulong =
+            () => SimpleValueConverter.CanConvert(typeof(ulong?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_float =
+            () => SimpleValueConverter.CanConvert(typeof(float?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_double =
+            () => SimpleValueConverter.CanConvert(typeof(double?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_decimal =
+            () => SimpleValueConverter.CanConvert(typeof(decimal?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_guid =
+            () => SimpleValueConverter.CanConvert(typeof(Guid?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_date_time =
+            () => SimpleValueConverter.CanConvert(typeof(DateTime?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_date_time_offset =
+            () => SimpleValueConverter.CanConvert(typeof(DateTimeOffset?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_time_span =
+            () => SimpleValueConverter.CanConvert(typeof(TimeSpan?)).ShouldBeTrue();
+
+        It should_return_true_for_nullable_enum =
+            () => SimpleValueConverter.CanConvert(typeof(TestEnum?)).ShouldBeTrue();
+
         It should_return_false_for_bool_array =
             () => SimpleValueConverter.CanConvert(typeof(bool[])).ShouldBeFalse();
 
@@ -223,6 +297,9 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         It should_return_false_for_struct =
             () => SimpleValueConverter.CanConvert(typeof(TestStruct)).ShouldBeFalse();
+
+        It should_return_false_for_nullable_struct =
+            () => SimpleValueConverter.CanConvert(typeof(TestStruct?)).ShouldBeFalse();
 
         It should_return_false_for_class =
             () => SimpleValueConverter.CanConvert(typeof(TestClass)).ShouldBeFalse();
