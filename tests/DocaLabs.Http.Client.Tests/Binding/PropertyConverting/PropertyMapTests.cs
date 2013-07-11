@@ -50,6 +50,30 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 ArrayIntProperty = new[] { 11, 22 },
                 EnumerableObjectProperty = new object[] { 77, "string-77", 45, 67M },
                 EnumerableProperty = new object[] { "s42", "s43", 45 },
+                NameValueCollection = new NameValueCollection
+                {
+                    {"k1", "v1"}
+                },
+                NameValueCollectionWithOverridenName = new NameValueCollection
+                {
+                    {"k11", "v11"}
+                },
+                NameValueCollectionWithEmptyOverridenName = new NameValueCollection
+                {
+                    {"k21", "v21"}
+                },
+                Dictionary = new Dictionary<string, string>
+                {
+                    {"k31", "v31"}
+                },
+                DictionaryWithOverridenName = new Dictionary<string, string>
+                {
+                    {"k41", "v41"}
+                },
+                DictionaryWithEmptyOverridenName = new Dictionary<string, string>
+                {
+                    {"k51", "v51"}
+                },
                 NoGetter = "no-getter",
             };
 
@@ -64,7 +88,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result = maps.Parse(instance).Convert(instance);
 
         It should_convert_all_eligible_properties =
-            () => result.Count.ShouldEqual(20);
+            () => result.Count.ShouldEqual(26);
 
         It should_not_convert_nullable_int_property_set_to_null =
             () => result["NullableNullIntProperty"].ShouldBeNull();
@@ -165,6 +189,24 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_convert_enumerable_of_objects_property_honoring_separated_collection_converter_attribute =
             () => result.GetValues("EnumerableProperty").ShouldContainOnly("s42,s43,45");
 
+        It should_convert_namevaluecollection_property =
+            () => result.GetValues("NameValueCollection.k1").ShouldContainOnly("v1");
+
+        It should_convert_namevaluecollection_with_overriden_name_property =
+            () => result.GetValues("N1.k11").ShouldContainOnly("v11");
+
+        It should_convert_namevaluecollection_with_empty_overriden_name_property =
+            () => result.GetValues("k21").ShouldContainOnly("v21");
+
+        It should_convert_dictionary_property =
+            () => result.GetValues("Dictionary.k31").ShouldContainOnly("v31");
+
+        It should_convert_dictionary_with_overriden_name_property =
+            () => result.GetValues("N2.k41").ShouldContainOnly("v41");
+
+        It should_convert_ditionary_with_empty_overriden_name_property =
+            () => result.GetValues("k51").ShouldContainOnly("v51");
+
         class TestClass
         {
             public int IntProperty { get; set; }
@@ -197,6 +239,16 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public IEnumerable<object> EnumerableObjectProperty { get; set; }
             [SeparatedCollectionConverter(Separator = ',')]
             public IEnumerable EnumerableProperty { get; set; }
+            public NameValueCollection NameValueCollection { get; set; }
+            [RequestUse(Name = "N1")]
+            public NameValueCollection NameValueCollectionWithOverridenName { get; set; }
+            [RequestUse(Name = "")]
+            public NameValueCollection NameValueCollectionWithEmptyOverridenName { get; set; }
+            public Dictionary<string, string> Dictionary { get; set; }
+            [RequestUse(Name = "N2")]
+            public Dictionary<string, string> DictionaryWithOverridenName { get; set; }
+            [RequestUse(Name = "")]
+            public Dictionary<string, string> DictionaryWithEmptyOverridenName { get; set; }
             public string NoGetter { set { } }
             public IEnumerable<int> this[int index]
             {
@@ -241,6 +293,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public string Country { get; set; }
             public decimal Price { get; set; }
         }
+    }
+
+    [Subject(typeof(PropertyMap))]
+    class when_converting_namevaluecollection
+    {
+        static NameValueCollection source;
+        static PropertyMaps maps;
+
     }
 
     // ReSharper restore MemberCanBePrivate.Local
