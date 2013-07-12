@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Reflection;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
@@ -15,17 +17,22 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             AcceptPropertyCheck = acceptPropertyCheck;
         }
 
-        public PropertyMap Parse(object instance)
+        public NameValueCollection Convert(object instance)
         {
-            if(instance == null)
-                return new PropertyMap(this);
+            return Convert(instance, new HashSet<object>());
+        }
+
+        internal NameValueCollection Convert(object instance, ISet<object> processed)
+        {
+            if (instance == null)
+                return new NameValueCollection();
 
             var type = instance.GetType();
 
             PropertyMap map;
 
             if (_maps.TryGetValue(type, out map))
-                return map;
+                return map.Convert(instance, processed);
 
             map = new PropertyMap(this);
 
@@ -33,7 +40,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             map.Parse(instance);
 
-            return map;
+            return map.Convert(instance, processed);
         }
     }
 }

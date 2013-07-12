@@ -7,30 +7,21 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
-    /// <summary>
-    /// Parses a type and maps its properties to name value pairs.
-    /// </summary>
-    public class PropertyMap
+    class PropertyMap
     {
         readonly PropertyMaps _maps;
         List<IPropertyConverter> _converters;
 
         internal PropertyMap(PropertyMaps maps)
         {
-            if(maps == null)
-                throw new ArgumentNullException("maps");
-
             _maps = maps;
         }
 
         internal void Parse(object instance)
         {
-            if(instance == null)
-                throw new ArgumentNullException("instance");
-
             var type = instance.GetType();
 
-            _converters = type.IsSimpleType()
+            _converters = SkipParsing(type)
                 ? new List<IPropertyConverter>() 
                 : type.GetAllPublicInstanceProperties()
                         .Select(ParseProperty)
@@ -38,31 +29,19 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         .ToList();
         }
 
-        /// <summary>
-        /// Maps the instance to name value pairs using default rules or provided hints.
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <returns></returns>
-        public NameValueCollection Convert(object instance)
+        internal NameValueCollection Convert(object instance, ISet<object> processed)
         {
-            if(instance == null)
-                return new NameValueCollection();
-
             var type = instance.GetType();
 
             if (NameValueCollectionValueConverter.CanConvert(type))
                 return new NameValueCollectionValueConverter(null).Convert(instance);
 
-            return SimpleDictionaryValueConverter.CanConvert(type)
-                ? new SimpleDictionaryValueConverter(null, null).Convert(instance)
-                : Convert(instance, new HashSet<object>());
-        }
+            if(SimpleDictionaryValueConverter.CanConvert(type))
+                return new SimpleDictionaryValueConverter(null, null).Convert(instance);
 
-        internal NameValueCollection Convert(object instance, ISet<object> processed)
-        {
             var values = new NameValueCollection();
 
-            if (instance == null || _converters == null || _converters.Count == 0)
+            if (_converters == null || _converters.Count == 0)
                 return values;
 
             processed.Add(instance);
@@ -99,6 +78,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 : null;
         }
 
+        static bool SkipParsing(Type type)
+        {
+            return type == typeof(object) ||
+                type.IsSimpleType() ||
+                NameValueCollectionValueConverter.CanConvert(type) ||
+                SimpleDictionaryValueConverter.CanConvert(type);
+        }
+
         class ObjectPropertyConverter : IPropertyConverter
         {
             readonly PropertyMaps _maps;
@@ -124,9 +111,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             public static IPropertyConverter TryCreate(PropertyInfo property, PropertyMaps maps)
             {
-                if (property == null)
-                    throw new ArgumentNullException("property");
-
                 return CanConvert(property) 
                     ? new ObjectPropertyConverter(property, maps) 
                     : null;
@@ -175,7 +159,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                 var makeName = GetNameMaker();
 
-                var nestedValues = _maps.Parse(value).Convert(value, processed);
+                var nestedValues = _maps.Convert(value, processed);
 
                 var values = new NameValueCollection();
 

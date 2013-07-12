@@ -102,9 +102,8 @@
     <Compile Include="HttpClientFactoryTests.cs" />
     <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterAttributeTests.cs" />
-    <Compile Include="Binding\PropertyConverting\PropertyMapTests.cs" />
+    <Compile Include="Binding\PropertyConverting\PropertyMapsTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleCollectionPropertyConverterTests.cs" />
-    <Compile Include="Binding\PropertyConverting\_ConvertObjectPropertyTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimplePropertyConverterTests.cs" />
     <Compile Include="Utils\CollectionExtensionsTests.cs" />
     <Compile Include="Utils\QueryStringBuilderTests.cs" />

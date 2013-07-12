@@ -111,7 +111,7 @@ namespace DocaLabs.Http.Client.Binding
 
             var values = instancConverter != null 
                 ? instancConverter.Convert(model) 
-                : _implicitPathOrQueryMaps.Parse(model).Convert(model);
+                : _implicitPathOrQueryMaps.Convert(model);
 
             foreach (var key in values.AllKeys)
             {
@@ -124,12 +124,12 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessExplicitQuery(object model, NameValueCollection query)
         {
-            query.Add(_explicitQueryMaps.Parse(model).Convert(model));
+            query.Add(_explicitQueryMaps.Convert(model));
         }
 
         void ProcessExplicitPath(object model, NameValueCollection path)
         {
-            path.Add(_explicitPathMaps.Parse(model).Convert(model));
+            path.Add(_explicitPathMaps.Convert(model));
         }
 
         static IValueConverter TryGetModelValueConverter(object instance)

@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     // ReSharper disable UnusedAutoPropertyAccessor.Local
     // ReSharper disable MemberCanBePrivate.Local
 
-    [Subject(typeof(PropertyMap))]
+    [Subject(typeof(PropertyMaps))]
     class when_converting_class
     {
         static PropertyMaps maps;
@@ -85,7 +85,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         };
 
         Because of =
-            () => result = maps.Parse(instance).Convert(instance);
+            () => result = maps.Convert(instance);
 
         It should_convert_all_eligible_properties =
             () => result.Count.ShouldEqual(26);
@@ -295,12 +295,148 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         }
     }
 
-    [Subject(typeof(PropertyMap))]
+    [Subject(typeof(PropertyMaps))]
     class when_converting_namevaluecollection
     {
         static NameValueCollection source;
+        static NameValueCollection result;
         static PropertyMaps maps;
 
+        Establish context = () =>
+        {
+            source = new NameValueCollection
+            {
+                { "k1", "v1" },
+                { "k2", "v2" }
+            };
+            maps = new PropertyMaps(x => true);
+        };
+
+        Because of =
+            () => result = maps.Convert(source);
+
+        It should_return_all_source_keys =
+            () => result.AllKeys.ShouldContainOnly("k1", "k2");
+
+        It should_return_first_value =
+            () => result.GetValues("k1").ShouldContainOnly("v1");
+
+        It should_return_second_value =
+            () => result.GetValues("k2").ShouldContainOnly("v2");
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_converting_namevaluecollection_subclass
+    {
+        static NameValueCollectionSubclass source;
+        static NameValueCollection result;
+        static PropertyMaps maps;
+
+        Establish context = () =>
+        {
+            source = new NameValueCollectionSubclass
+            {
+                { "k1", "v1" },
+                { "k2", "v2" }
+            };
+            maps = new PropertyMaps(x => true);
+        };
+
+        Because of =
+            () => result = maps.Convert(source);
+
+        It should_return_all_source_keys =
+            () => result.AllKeys.ShouldContainOnly("k1", "k2");
+
+        It should_return_first_value =
+            () => result.GetValues("k1").ShouldContainOnly("v1");
+
+        It should_return_second_value =
+            () => result.GetValues("k2").ShouldContainOnly("v2");
+
+        class NameValueCollectionSubclass : NameValueCollection
+        {
+        }
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_converting_generic_dictionary
+    {
+        static Dictionary<string, int> source;
+        static NameValueCollection result;
+        static PropertyMaps maps;
+
+        Establish context = () =>
+        {
+            source = new Dictionary<string, int>
+            {
+                { "k1", 1 },
+                { "k2", 2 }
+            };
+            maps = new PropertyMaps(x => true);
+        };
+
+        Because of =
+            () => result = maps.Convert(source);
+
+        It should_return_all_source_keys =
+            () => result.AllKeys.ShouldContainOnly("k1", "k2");
+
+        It should_return_first_value =
+            () => result.GetValues("k1").ShouldContainOnly("1");
+
+        It should_return_second_value =
+            () => result.GetValues("k2").ShouldContainOnly("2");
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_converting_generic_dictionary_subclass
+    {
+        static Dictionary<string, int> source;
+        static NameValueCollection result;
+        static PropertyMaps maps;
+
+        Establish context = () =>
+        {
+            source = new Dictionary<string, int>
+            {
+                { "k1", 1 },
+                { "k2", 2 }
+            };
+            maps = new PropertyMaps(x => true);
+        };
+
+        Because of =
+            () => result = maps.Convert(source);
+
+        It should_return_all_source_keys =
+            () => result.AllKeys.ShouldContainOnly("k1", "k2");
+
+        It should_return_first_value =
+            () => result.GetValues("k1").ShouldContainOnly("1");
+
+        It should_return_second_value =
+            () => result.GetValues("k2").ShouldContainOnly("2");
+
+        class NameValueCollectionSubclass : NameValueCollection
+        {
+        }
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_converting_null_instance
+    {
+        static NameValueCollection result;
+        static PropertyMaps maps;
+
+        Establish context =
+            () => maps = new PropertyMaps(x => true);
+
+        Because of =
+            () => result = maps.Convert(null);
+
+        It should_return_empty_collection =
+            () => result.ShouldBeEmpty();
     }
 
     // ReSharper restore MemberCanBePrivate.Local
