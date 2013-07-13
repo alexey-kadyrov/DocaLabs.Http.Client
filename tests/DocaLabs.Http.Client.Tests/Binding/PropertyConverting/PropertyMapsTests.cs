@@ -501,6 +501,39 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result.ShouldBeEmpty();
     }
 
+    [Subject(typeof(PropertyMaps))]
+    class when_converting_class_using_specified_property_checker
+    {
+        static PropertyMaps maps;
+        static TestClass instance;
+        static NameValueCollection result;
+
+        Establish context = () =>
+        {
+            instance = new TestClass
+            {
+                Property1 = 1,
+                Property2 = 2
+            };
+            maps = new PropertyMaps(x => x.Name == "Property1");
+        };
+
+        Because of =
+            () => result = maps.Convert(instance);
+
+        It should_convert_only_accepted_properties =
+            () => result.AllKeys.ShouldContainOnly("Property1");
+
+        It should_convert_values_of_accepted_properties =
+            () => result.GetValues("Property1").ShouldContainOnly("1");
+
+        class TestClass
+        {
+            public int Property1 { get; set; }
+            public int Property2 { get; set; }
+        }
+    }
+
     // ReSharper restore MemberCanBePrivate.Local
     // ReSharper restore UnusedAutoPropertyAccessor.Local
     // ReSharper restore InconsistentNaming

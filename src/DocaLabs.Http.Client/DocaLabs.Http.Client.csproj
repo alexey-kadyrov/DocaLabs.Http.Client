@@ -74,7 +74,6 @@
     <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
     <Compile Include="Binding\DefaultRequestWriter.cs" />
-    <Compile Include="Binding\PropertyConverting\PropertyMap.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
