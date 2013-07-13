@@ -270,7 +270,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public byte[] ByteArrayProperty { get; set; }
             public object NullObjectProperty { get; set; }
             public object ObjectProperty { get; set; }
-            [RequestUse(Name = "object--property--2")]
+            [PropertyOverrides(Name = "object--property--2")]
             public object ObjectProperty2 { get; set; }
             public object SelfObjectProperty { get; set; }
             public TestClass SelfClassProperty { get; set; }
@@ -290,14 +290,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             [SeparatedCollectionConverter(Separator = ',')]
             public IEnumerable EnumerableProperty { get; set; }
             public NameValueCollection NameValueCollection { get; set; }
-            [RequestUse(Name = "N1")]
+            [PropertyOverrides(Name = "N1")]
             public NameValueCollection NameValueCollectionWithOverridenName { get; set; }
-            [RequestUse(Name = "")]
+            [PropertyOverrides(Name = "")]
             public NameValueCollection NameValueCollectionWithEmptyOverridenName { get; set; }
             public Dictionary<string, string> Dictionary { get; set; }
-            [RequestUse(Name = "N2")]
+            [PropertyOverrides(Name = "N2")]
             public Dictionary<string, string> DictionaryWithOverridenName { get; set; }
-            [RequestUse(Name = "")]
+            [PropertyOverrides(Name = "")]
             public Dictionary<string, string> DictionaryWithEmptyOverridenName { get; set; }
             public string NoGetter { set { } }
             public IEnumerable<int> this[int index]
@@ -324,16 +324,16 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             public int SomeSimpleValue { get; set; }
             public object ObjectWhichBecomesNameValueCollection { get; set; }
-            [RequestUse(Name = "")]
+            [PropertyOverrides(Name = "")]
             public object ObjectWhichBecomesNameValueCollectionWithEmptyBaseName { get; set; }
             public object ObjectWhichBecomesDictionary { get; set; }
-            [RequestUse(Name = "")]
+            [PropertyOverrides(Name = "")]
             public object ObjectWhichBecomesDictionaryWithEmptyBaseName { get; set; }
             public object ObjectWhichBecomesSimpleCollection { get; set; }
-            [RequestUse(Name = "")]
+            [PropertyOverrides(Name = "")]
             public object ObjectWhichBecomesSimpleCollectionWithEmptyBaseName { get; set; }
             public object ObjectWhichBecomesSimpleValue { get; set; }
-            [RequestUse(Name = "")]
+            [PropertyOverrides(Name = "")]
             public object ObjectWhichBecomesSimpleValueWithEmptyBaseName { get; set; }
             public TestClass2 Class2 { get; set; }
         }

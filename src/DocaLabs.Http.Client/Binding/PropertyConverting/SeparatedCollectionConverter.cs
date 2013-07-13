@@ -27,7 +27,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             _property = property;
             Separator = separator;
 
-            var requestUse = property.GetCustomAttribute<RequestUseAttribute>();
+            var requestUse = property.GetCustomAttribute<PropertyOverridesAttribute>();
             if (requestUse != null)
             {
                 _name = requestUse.Name;

@@ -504,7 +504,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimplePropertyConverter))]
-    class when_simple_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_not_set
+    class when_simple_property_converter_is_used_together_with_propert_overrides_attribute_where_name_and_format_are_not_set
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -527,13 +527,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            [RequestUse(RequestUseTargets.UrlQuery)]
+            [PropertyOverrides]
             public int Value { get; set; }
         }
     }
 
     [Subject(typeof(SimplePropertyConverter))]
-    class when_simple_property_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_empty_strings
+    class when_simple_property_converter_is_used_together_with_propert_overrides_attribute_where_name_and_format_are_empty_strings
     {
         static TestClass instance;
         static IPropertyConverter converter;
@@ -556,7 +556,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            [RequestUse(Name = "", Format = "")]
+            [PropertyOverrides(Name = "", Format = "")]
             public int Value { get; set; }
         }
     }
@@ -585,7 +585,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            [RequestUse(Name = "Hello World")]
+            [PropertyOverrides(Name = "Hello World")]
             public int Value { get; set; }
         }
     }
@@ -614,7 +614,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            [RequestUse(Format = "{0:X}")]
+            [PropertyOverrides(Format = "{0:X}")]
             public int Value { get; set; }
         }
     }

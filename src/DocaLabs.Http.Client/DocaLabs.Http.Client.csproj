@@ -57,6 +57,7 @@
     <Compile Include="Binding\IResponseBinder.cs" />
     <Compile Include="Binding\PropertyConverting\IValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\PropertyOverridesAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleCollectionValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleDictionaryPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleDictionaryValueConverter.cs" />

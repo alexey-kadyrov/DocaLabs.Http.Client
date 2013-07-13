@@ -491,7 +491,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
-    class when_separated_collection_converter_is_used_together_with_request_use_attribute_where_name_and_format_are_not_set
+    class when_separated_collection_converter_is_used_together_with_propert_overrides_attribute_where_name_and_format_are_not_set
     {
         static PropertyInfo property_info;
         static TestClass instance;
@@ -520,13 +520,13 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            [RequestUse]
+            [PropertyOverrides]
             public IEnumerable<int> Values { get; set; }
         }
     }
 
     [Subject(typeof(SeparatedCollectionConverter))]
-    class when_separated_collection_converter_is_used_on_property_which_name_is_redefined_using_request_use_attribute
+    class when_separated_collection_converter_is_used_on_property_which_name_is_redefined_using_propert_overrides_attribute
     {
         static PropertyInfo property_info;
         static TestClass instance;
@@ -555,7 +555,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            [RequestUse(Name = "Hello World")]
+            [PropertyOverrides(Name = "Hello World")]
             public IEnumerable<int> Values { get; set; }
         }
     }
@@ -590,7 +590,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class TestClass
         {
-            [RequestUse(Format = "{0:X}")]
+            [PropertyOverrides(Format = "{0:X}")]
             public IEnumerable<int> Values { get; set; }
         }
     }
