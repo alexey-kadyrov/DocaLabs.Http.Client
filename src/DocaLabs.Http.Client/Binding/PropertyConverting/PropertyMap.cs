@@ -105,7 +105,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                     _format = requestUse.Format;
                 }
 
-                if (string.IsNullOrWhiteSpace(_name))
+                if (_name == null)
                     _name = _property.Name;
             }
 
@@ -136,18 +136,25 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             IValueConverter TryGetNonObjectConverter(object value)
             {
-                if (value is NameValueCollection)
-                    return new NameValueCollectionValueConverter(_name);
-
                 var type = value.GetType();
 
-                if (type.IsSimpleType())
-                    return new SimpleValueConverter(_name, _format);
+                if (NameValueCollectionValueConverter.CanConvert(type))
+                    return new NameValueCollectionValueConverter(_name);
 
-                if (type.IsEnumerable() && type.GetEnumerableElementType().IsSimpleType())
-                    return new SimpleCollectionValueConverter(_name, _format);
+                if (SimpleDictionaryValueConverter.CanConvert(type))
+                    return new SimpleDictionaryValueConverter(_name, _format);
 
-                return null;
+                if (SimpleCollectionValueConverter.CanConvert(type))
+                    return new SimpleCollectionValueConverter(GetNonEmptyPropertyName(), _format);
+
+                return SimpleValueConverter.CanConvert(type)
+                    ? new SimpleValueConverter(GetNonEmptyPropertyName(), _format)
+                    : null;
+            }
+
+            string GetNonEmptyPropertyName()
+            {
+                return string.IsNullOrWhiteSpace(_name) ? _property.Name : _name;
             }
 
             NameValueCollection ConvertObject(object value, ISet<object> processed)
@@ -157,11 +164,11 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                 processed.Add(value);
 
-                var makeName = GetNameMaker();
-
                 var nestedValues = _maps.Convert(value, processed);
 
                 var values = new NameValueCollection();
+
+                var baseName = GetNonEmptyPropertyName();
 
                 foreach (var key in nestedValues.AllKeys)
                 {
@@ -170,7 +177,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                     {
                         foreach (var vv in vvs)
                         {
-                            values.Add(makeName(key), vv);
+                            values.Add(baseName + "." + key, vv);
                         }
                     }
                 }
@@ -181,25 +188,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             static bool CanConvert(PropertyInfo property)
             {
                 return !property.IsIndexer() && property.GetGetMethod() != null;
-            }
-
-            Func<string, string> GetNameMaker()
-            {
-                return string.IsNullOrWhiteSpace(_name)
-                    ? GetNameAsIs
-                    : (Func<string, string>)MakeCompositeName;
-            }
-
-            static string GetNameAsIs(string name)
-            {
-                return name;
-            }
-
-            string MakeCompositeName(string name)
-            {
-                return string.IsNullOrWhiteSpace(_name)
-                    ? name
-                    : _name + "." + name;
             }
         }
     }

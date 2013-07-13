@@ -36,6 +36,32 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 TestClassWithOtherNested = new TestClassWithOtherNested
                 {
                     SomeSimpleValue = 44,
+                    ObjectWhichBecomesNameValueCollection = new NameValueCollection
+                    {
+                        { "ok1", "ov1" }  
+                    },
+                    ObjectWhichBecomesNameValueCollectionWithEmptyBaseName = new NameValueCollection
+                    {
+                        { "ok1", "ov1" }  
+                    },
+                    ObjectWhichBecomesDictionary = new Dictionary<string, string>
+                    {
+                        { "ok2", "ov2" }  
+                    },
+                    ObjectWhichBecomesDictionaryWithEmptyBaseName = new Dictionary<string, string>
+                    {
+                        { "ok2", "ov2" }  
+                    },
+                    ObjectWhichBecomesSimpleCollection = new List<string>
+                    {
+                        "ov3", "ov4"  
+                    },
+                    ObjectWhichBecomesSimpleCollectionWithEmptyBaseName = new List<string>
+                    {
+                        "ov33", "ov44"  
+                    },
+                    ObjectWhichBecomesSimpleValue = 87.65,
+                    ObjectWhichBecomesSimpleValueWithEmptyBaseName = 87.654,
                     Class2 = new TestClass2 { StringValue = "Some String" }
                 },
                 TestClassWithOtherMakingCircularReference = new TestClassWithOtherMakingCircularReference
@@ -88,7 +114,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result = maps.Convert(instance);
 
         It should_convert_all_eligible_properties =
-            () => result.Count.ShouldEqual(26);
+            () => result.Count.ShouldEqual(34);
 
         It should_not_convert_nullable_int_property_set_to_null =
             () => result["NullableNullIntProperty"].ShouldBeNull();
@@ -155,6 +181,30 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         It should_convert_int_property_of_object_property_set_to_class =
             () => result["TestClassWithOtherNested.SomeSimpleValue"].ShouldEqual("44");
+
+        It should_convert_object_on_nested_class_property_set_to_name_value_collection =
+            () => result["TestClassWithOtherNested.ObjectWhichBecomesNameValueCollection.ok1"].ShouldEqual("ov1");
+
+        It should_convert_object_on_nested_class_property_set_to_name_value_collection_with_empty_base_name =
+            () => result["TestClassWithOtherNested.ok1"].ShouldEqual("ov1");
+
+        It should_convert_object_on_nested_class_property_set_to_dictionary =
+            () => result["TestClassWithOtherNested.ObjectWhichBecomesDictionary.ok2"].ShouldEqual("ov2");
+
+        It should_convert_object_on_nested_class_property_set_to_dictionary_with_empty_base_name =
+            () => result["TestClassWithOtherNested.ok2"].ShouldEqual("ov2");
+
+        It should_convert_object_on_nested_class_property_set_to_simple_collection =
+            () => result.GetValues("TestClassWithOtherNested.ObjectWhichBecomesSimpleCollection").ShouldContainOnly("ov3", "ov4");
+
+        It should_convert_object_on_nested_class_property_set_to_simple_collection_with_empty_base_name =
+            () => result.GetValues("TestClassWithOtherNested.ObjectWhichBecomesSimpleCollectionWithEmptyBaseName").ShouldContainOnly("ov33", "ov44");
+
+        It should_convert_object_on_nested_class_property_set_to_simple_value =
+            () => result["TestClassWithOtherNested.ObjectWhichBecomesSimpleValue"].ShouldEqual("87.65");
+
+        It should_convert_object_on_nested_class_property_set_to_simple_value_with_empty_base_name =
+            () => result["TestClassWithOtherNested.ObjectWhichBecomesSimpleValueWithEmptyBaseName"].ShouldEqual("87.654");
 
         It should_convert_string_property_of_nested_object_of_object_property_set_to_class =
             () => result["TestClassWithOtherNested.Class2.StringValue"].ShouldEqual("Some String");
@@ -273,6 +323,18 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         class TestClassWithOtherNested
         {
             public int SomeSimpleValue { get; set; }
+            public object ObjectWhichBecomesNameValueCollection { get; set; }
+            [RequestUse(Name = "")]
+            public object ObjectWhichBecomesNameValueCollectionWithEmptyBaseName { get; set; }
+            public object ObjectWhichBecomesDictionary { get; set; }
+            [RequestUse(Name = "")]
+            public object ObjectWhichBecomesDictionaryWithEmptyBaseName { get; set; }
+            public object ObjectWhichBecomesSimpleCollection { get; set; }
+            [RequestUse(Name = "")]
+            public object ObjectWhichBecomesSimpleCollectionWithEmptyBaseName { get; set; }
+            public object ObjectWhichBecomesSimpleValue { get; set; }
+            [RequestUse(Name = "")]
+            public object ObjectWhichBecomesSimpleValueWithEmptyBaseName { get; set; }
             public TestClass2 Class2 { get; set; }
         }
 
