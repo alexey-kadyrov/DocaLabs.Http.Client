@@ -183,7 +183,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                             if (converter != null)
                                 return converter.Convert(value);
 
-                            return ConvertObject(value, processed);
+                            if(string.IsNullOrWhiteSpace(_format))
+                                return ConvertObject(value, processed);
+
+                            return new NameValueCollection
+                            {
+                                { GetNonEmptyPropertyName(), string.Format(_format, value) }
+                            };
                         }
                     }
 

@@ -100,6 +100,16 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 {
                     {"k51", "v51"}
                 },
+                TestClassWithToStringOverridden = new TestClassWithToStringOverridden
+                {
+                    Width = 512,
+                    Height = 1024
+                },
+                ObjectWhichIsSetToTestClassWithToStringOverridden = new TestClassWithToStringOverridden
+                {
+                    Width = 640,
+                    Height = 480
+                },
                 NoGetter = "no-getter",
             };
 
@@ -114,7 +124,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result = maps.Convert(instance);
 
         It should_convert_all_eligible_properties =
-            () => result.Count.ShouldEqual(34);
+            () => result.Count.ShouldEqual(36);
 
         It should_not_convert_nullable_int_property_set_to_null =
             () => result["NullableNullIntProperty"].ShouldBeNull();
@@ -254,8 +264,14 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_convert_dictionary_with_overriden_name_property =
             () => result.GetValues("N2.k41").ShouldContainOnly("v41");
 
-        It should_convert_ditionary_with_empty_overriden_name_property =
+        It should_convert_dictionary_with_empty_overriden_name_property =
             () => result.GetValues("k51").ShouldContainOnly("v51");
+
+        It should_convert_class_using_specified_format =
+            () => result.GetValues("TestClassWithToStringOverridden").ShouldContainOnly("512x1024");
+
+        It should_convert_object_using_specified_format =
+            () => result.GetValues("ObjectWhichIsSetToTestClassWithToStringOverridden").ShouldContainOnly("640x480");
 
         class TestClass
         {
@@ -299,6 +315,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public Dictionary<string, string> DictionaryWithOverridenName { get; set; }
             [PropertyOverrides(Name = "")]
             public Dictionary<string, string> DictionaryWithEmptyOverridenName { get; set; }
+            [PropertyOverrides(Format = "{0}")]
+            public TestClassWithToStringOverridden TestClassWithToStringOverridden { get; set; }
+            [PropertyOverrides(Format = "{0}")]
+            public object ObjectWhichIsSetToTestClassWithToStringOverridden { get; set; }
             public string NoGetter { set { } }
             public IEnumerable<int> this[int index]
             {
@@ -342,6 +362,17 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             public int SomeSimpleValue { get; set; }
             public TestClass Class { get; set; }
+        }
+
+        class TestClassWithToStringOverridden
+        {
+            public int Width { get; set; }
+            public int Height { get; set; }
+
+            public override string ToString()
+            {
+                return string.Format("{0}x{1}", Width, Height);
+            }
         }
 
         enum TestEnum
