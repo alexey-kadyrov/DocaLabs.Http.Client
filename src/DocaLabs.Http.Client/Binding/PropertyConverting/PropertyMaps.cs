@@ -42,6 +42,24 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return Convert(instance, new HashSet<object>());
         }
 
+        /// <summary>
+        /// Return IValueConverter if the model can be converted by NameValueCollectionValueConverter or SimpleDictionaryValueConverter.
+        /// </summary>
+        public static IValueConverter TryGetModelValueConverter(object model)
+        {
+            if (model == null)
+                return null;
+
+            var type = model.GetType();
+
+            if (NameValueCollectionValueConverter.CanConvert(type))
+                return new NameValueCollectionValueConverter(null);
+
+            return SimpleDictionaryValueConverter.CanConvert(type)
+                ? new SimpleDictionaryValueConverter(null, null)
+                : null;
+        }
+
         internal NameValueCollection Convert(object instance, ISet<object> processed)
         {
             if (instance == null)
@@ -87,13 +105,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             internal NameValueCollection Convert(object instance, ISet<object> processed)
             {
-                var type = instance.GetType();
-
-                if (NameValueCollectionValueConverter.CanConvert(type))
-                    return new NameValueCollectionValueConverter(null).Convert(instance);
-
-                if (SimpleDictionaryValueConverter.CanConvert(type))
-                    return new SimpleDictionaryValueConverter(null, null).Convert(instance);
+                var modelConverter = TryGetModelValueConverter(instance);
+                if (modelConverter != null)
+                    return modelConverter.Convert(instance);
 
                 var values = new NameValueCollection();
 
@@ -183,12 +197,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                             if (converter != null)
                                 return converter.Convert(value);
 
-                            if(string.IsNullOrWhiteSpace(_format))
+                            if(String.IsNullOrWhiteSpace(_format))
                                 return ConvertObject(value, processed);
 
                             return new NameValueCollection
                             {
-                                { GetNonEmptyPropertyName(), string.Format(_format, value) }
+                                { GetNonEmptyPropertyName(), String.Format(_format, value) }
                             };
                         }
                     }
@@ -216,7 +230,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                 string GetNonEmptyPropertyName()
                 {
-                    return string.IsNullOrWhiteSpace(_name) ? _property.Name : _name;
+                    return String.IsNullOrWhiteSpace(_name) ? _property.Name : _name;
                 }
 
                 NameValueCollection ConvertObject(object value, ISet<object> processed)

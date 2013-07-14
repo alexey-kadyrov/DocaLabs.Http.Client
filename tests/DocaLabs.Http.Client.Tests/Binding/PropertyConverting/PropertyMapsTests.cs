@@ -565,6 +565,67 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         }
     }
 
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_get_model_converter_for_null
+    {
+        It should_return_null =
+            () => PropertyMaps.TryGetModelValueConverter(null).ShouldBeNull();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_get_model_converter_for_namevaluecollection
+    {
+        It should_return_converter =
+            () => PropertyMaps.TryGetModelValueConverter(new NameValueCollection()).ShouldNotBeNull();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_get_model_converter_for_namevaluecollection_subclass
+    {
+        It should_return_converter =
+            () => PropertyMaps.TryGetModelValueConverter(new NameValueCollectionSubclass()).ShouldNotBeNull();
+
+        class NameValueCollectionSubclass : NameValueCollection
+        {
+        }
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_get_model_converter_for_hashtable
+    {
+        It should_return_converter =
+            () => PropertyMaps.TryGetModelValueConverter(new Hashtable()).ShouldNotBeNull();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_get_model_converter_for_generic_dictionary
+    {
+        It should_return_converter =
+            () => PropertyMaps.TryGetModelValueConverter(new Dictionary<string, string>()).ShouldNotBeNull();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_get_model_converter_for_generic_dictionary_subclass
+    {
+        It should_return_converter =
+            () => PropertyMaps.TryGetModelValueConverter(new DictionarySubclass<string, string>()).ShouldNotBeNull();
+
+        class DictionarySubclass<TKey, TValue> : Dictionary<TKey, TValue>
+        {
+        }
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_get_model_converter_for_generic_dictionary_subclass_with_defined_generic_arguments
+    {
+        It should_return_converter =
+            () => PropertyMaps.TryGetModelValueConverter(new DictionarySubclass()).ShouldNotBeNull();
+
+        class DictionarySubclass : Dictionary<int, int>
+        {
+        }
+    }
+
     // ReSharper restore MemberCanBePrivate.Local
     // ReSharper restore UnusedAutoPropertyAccessor.Local
     // ReSharper restore InconsistentNaming

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +28,7 @@ namespace DocaLabs.Http.Client.Binding
             try
             {
                 return Ignore(model)
-                    ? baseUrl.AbsoluteUri
+                    ? baseUrl.OriginalString
                     : CreateUrlFrom(model, baseUrl).AbsoluteUri;
             }
             catch (HttpClientException)
@@ -45,7 +44,7 @@ namespace DocaLabs.Http.Client.Binding
         static bool Ignore(object model)
         {
             if (model == null)
-                return false;
+                return true;
 
             var useAttribute = model.GetType().GetCustomAttribute<RequestUseAttribute>(true);
 
@@ -60,9 +59,17 @@ namespace DocaLabs.Http.Client.Binding
             var existingPath = GetExistingPath(baseUrl);
             var exstingQuery = GetExistingQuery(baseUrl);
 
-            ProcessImplicitPathOrQuery(existingPath, model, path, query);
-            ProcessExplicitPath(model, path);
-            ProcessExplicitQuery(model, query);
+            var instancConverter = PropertyMaps.TryGetModelValueConverter(model);
+            if (instancConverter != null)
+            {
+                ProcessImplicitPathOrQuery(existingPath, instancConverter.Convert(model), path, query);
+            }
+            else
+            {
+                ProcessImplicitPathOrQuery(existingPath, _implicitPathOrQueryMaps.Convert(model), path, query);
+                ProcessExplicitPath(model, path);
+                ProcessExplicitQuery(model, query);
+            }
 
             return new UriBuilder(GetBaseUrl(baseUrl))
             {
@@ -95,9 +102,6 @@ namespace DocaLabs.Http.Client.Binding
 
         static string GetFragmentWithoutSharpMark(Uri baseUrl)
         {
-            if (baseUrl == null)
-                return "";
-
             var fragment = baseUrl.Fragment;
 
             return fragment.StartsWith("#")
@@ -105,20 +109,14 @@ namespace DocaLabs.Http.Client.Binding
                 : fragment;
         }
 
-        void ProcessImplicitPathOrQuery(string existingPath, object model, NameValueCollection path, NameValueCollection query)
+        static void ProcessImplicitPathOrQuery(string existingPath, NameValueCollection implicitValues, NameValueCollection path, NameValueCollection query)
         {
-            var instancConverter = TryGetModelValueConverter(model);
-
-            var values = instancConverter != null 
-                ? instancConverter.Convert(model) 
-                : _implicitPathOrQueryMaps.Convert(model);
-
-            foreach (var key in values.AllKeys)
+            foreach (var key in implicitValues.AllKeys)
             {
                 if (existingPath.IndexOf(key, StringComparison.OrdinalIgnoreCase) >= 0)
-                    path.Add(key, values.GetValues(key));
+                    path.Add(key, implicitValues.GetValues(key));
                 else
-                    query.Add(key, values.GetValues(key));
+                    query.Add(key, implicitValues.GetValues(key));
             }
         }
 
@@ -130,17 +128,6 @@ namespace DocaLabs.Http.Client.Binding
         void ProcessExplicitPath(object model, NameValueCollection path)
         {
             path.Add(_explicitPathMaps.Convert(model));
-        }
-
-        static IValueConverter TryGetModelValueConverter(object instance)
-        {
-            if (instance is NameValueCollection)
-                return new NameValueCollectionValueConverter(null);
-
-            if (instance is IDictionary)
-                return new SimpleDictionaryValueConverter(null, null);
-
-            return null;
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)

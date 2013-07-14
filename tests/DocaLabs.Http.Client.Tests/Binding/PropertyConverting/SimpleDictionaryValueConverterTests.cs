@@ -233,7 +233,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimpleDictionaryValueConverter))]
-    class when_simple_dictionary_value_converter_is_used_on_generic_fictionary_with_non_simple_values
+    class when_simple_dictionary_value_converter_is_used_on_generic_dictionary_with_non_simple_values
     {
         static IValueConverter converter;
         static NameValueCollection result;
