@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
-using DocaLabs.Testing.Common;
 
 namespace DocaLabs.Http.Client.Tests.Binding
 {
@@ -12,7 +12,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     // ReSharper disable UnusedMember.Local
 
     [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_has_one_property_marked_by_request_header_attribute
+    class when_default_header_mapper_used_for_model_that_has_one_property_marked_by_as_request_header
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -27,7 +27,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => headers = new DefaultHeaderMapper().Map(model);
 
         It should_map_properties_marked_as_header =
-            () => headers.ShouldContainOnly(new NameValueCollection { { "MyHeader", "Hello World!" } });
+            () => headers.AllKeys.ShouldContainOnly("MyHeader");
+
+        It should_convert_values_for_header =
+            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
 
         class TestModel
         {
@@ -39,7 +42,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_has_several_properties_marked_by_request_header_attribute
+    class when_default_header_mapper_used_for_model_that_has_several_properties_marked_as_request_header
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -54,11 +57,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(model);
 
-        It should_map_properties_marked_as_header = () => headers.ShouldContainOnly(new NameValueCollection
-        {
-            { "MyHeader", "Hello World!" },
-            { "AnotherMyHeader", "header-x" }
-        });
+        It should_map_properties_marked_as_header =
+            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
 
         class TestModel
         {
@@ -70,6 +76,81 @@ namespace DocaLabs.Http.Client.Tests.Binding
             [RequestUse(RequestUseTargets.RequestHeader)]
             public string AnotherMyHeader { get; set; }
         }
+    }
+
+    [Subject(typeof(DefaultHeaderMapper))]
+    class when_default_header_mapper_used_for_namevaluecollection
+    {
+        static NameValueCollection model;
+        static WebHeaderCollection headers;
+
+        Establish context = () => model = new NameValueCollection
+        {
+            { "MyHeader", "Hello World!" },
+            { "AnotherMyHeader", "header-x" }
+        };
+
+        Because of =
+            () => headers = new DefaultHeaderMapper().Map(model);
+
+        It should_map_properties_marked_as_header =
+            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
+    }
+
+    [Subject(typeof(DefaultHeaderMapper))]
+    class when_default_header_mapper_used_for_hashtable
+    {
+        static Hashtable model;
+        static WebHeaderCollection headers;
+
+        Establish context = () => model = new Hashtable
+        {
+            { "MyHeader", "Hello World!" },
+            { "AnotherMyHeader", "header-x" }
+        };
+
+        Because of =
+            () => headers = new DefaultHeaderMapper().Map(model);
+
+        It should_map_properties_marked_as_header =
+            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
+    }
+
+    [Subject(typeof(DefaultHeaderMapper))]
+    class when_default_header_mapper_used_for_generic_dictionary
+    {
+        static Dictionary<string, string> model;
+        static WebHeaderCollection headers;
+
+        Establish context = () => model = new Dictionary<string, string>
+        {
+            { "MyHeader", "Hello World!" },
+            { "AnotherMyHeader", "header-x" }
+        };
+
+        Because of =
+            () => headers = new DefaultHeaderMapper().Map(model);
+
+        It should_map_properties_marked_as_header =
+            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
     }
 
     [Subject(typeof(DefaultHeaderMapper))]
@@ -91,22 +172,60 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(model);
 
-        It should_map_properties_marked_as_header = () => headers.ShouldContainOnly(new NameValueCollection
-        {
-            { "MyHeader", "Hello World!" },
-            { "AnotherMyHeader", "header-x" }
-        });
+        It should_map_all_keys_of_that_property =
+            () => headers.AllKeys.ShouldContainOnly("MyHeaders.MyHeader", "MyHeaders.AnotherMyHeader");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeaders.MyHeader").ShouldContainOnly("Hello World!");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("MyHeaders.AnotherMyHeader").ShouldContainOnly("header-x");
 
         class TestModel
         {
             public WebHeaderCollection MyHeaders { get; set; }
-
             public string JustValue { get; set; }
         }
     }
 
     [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_has_properties_marked_by_request_header_attribute_plus_some_properties_of_web_header_collection
+    class when_default_header_mapper_used_for_model_that_has_one_property_of_web_header_collection_type_with_empty_overridden_name
+    {
+        static TestModel model;
+        static WebHeaderCollection headers;
+
+        Establish context = () => model = new TestModel
+        {
+            MyHeaders = new WebHeaderCollection
+            {
+                { "MyHeader", "Hello World!" },
+                { "AnotherMyHeader", "header-x" }
+            },
+            JustValue = "Nothing"
+        };
+
+        Because of =
+            () => headers = new DefaultHeaderMapper().Map(model);
+
+        It should_map_all_keys_of_that_property =
+            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
+
+        class TestModel
+        {
+            [PropertyOverrides(Name = "")]
+            public WebHeaderCollection MyHeaders { get; set; }
+            public string JustValue { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultHeaderMapper))]
+    class when_default_header_mapper_used_for_model_that_has_properties_marked_as_request_header_some_properties_of_web_header_collection
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -125,11 +244,15 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(model);
 
-        It should_map_properties_marked_as_header = () => headers.ShouldContainOnly(new NameValueCollection
-        {
-            { "MyHeader", "Hello World!,Wow" },
-            { "AnotherMyHeader", "header-x" }
-        });
+
+        It should_map_all_keys_of_that_property =
+            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!", "Wow");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
 
         class TestModel
         {
@@ -138,12 +261,13 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
             public string JustValue { get; set; }
 
+            [PropertyOverrides(Name = "")]
             public WebHeaderCollection AnotherMyHeaders { get; set; }
         }
     }
 
     [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_has_a_property_marked_by_request_header_attribute_which_defines_header_name_expcitly
+    class when_default_header_mapper_used_for_model_that_has_a_property_marked_as_request_header_which_defines_header_name_expcitly
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -158,7 +282,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => headers = new DefaultHeaderMapper().Map(model);
 
         It should_map_properties_marked_as_header_using_explicit_header_name =
-            () => headers.ShouldContainOnly(new NameValueCollection { { "xx-header-xx", "Hello World!" } });
+            () => headers.AllKeys.ShouldContainOnly("xx-header-xx");
+
+        It should_convert_values_for_header =
+            () => headers.GetValues("xx-header-xx").ShouldContainOnly("Hello World!");
 
         class TestModel
         {
@@ -170,7 +297,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_has_a_property_marked_by_request_header_attribute_which_defines_header_name_and_format_expcitly
+    class when_default_header_mapper_used_for_model_that_has_a_property_marked_as_request_header_which_defines_header_name_and_format_expcitly
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -184,52 +311,22 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(model);
 
-        It should_map_properties_marked_as_header_using_explicit_header_name_and_format =
-            () => headers.ShouldContainOnly(new NameValueCollection { { "xx-header-xx", "0002" } });
+        It should_map_properties_marked_as_header_using_explicit_header_name =
+            () => headers.AllKeys.ShouldContainOnly("xx-header-xx");
+
+        It should_convert_values_for_header_using_specified_format =
+            () => headers.GetValues("xx-header-xx").ShouldContainOnly("0002");
 
         class TestModel
         {
-            [RequestUse(RequestUseTargets.RequestHeader, Name = "xx-header-xx", Format = "0000")]
+            [RequestUse(RequestUseTargets.RequestHeader, Name = "xx-header-xx", Format = "{0:0000}")]
             public int MyHeader { get; set; }
-
             public string JustValue { get; set; }
         }
     }
 
     [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_has_a_non_simple_property_marked_by_request_header_attribute
-    {
-        static TestModel model;
-        static Exception exception;
-
-        Establish context = () => model = new TestModel
-        {
-            MyHeader = new InnerTestClass { Value = "Hello World!" },
-            JustValue = "Nothing"
-        };
-
-        Because of =
-            () => exception = Catch.Exception(() => new DefaultHeaderMapper().Map(model));
-
-        It should_thow_http_client_exception =
-            () => exception.ShouldBeOfType<HttpClientException>();
-
-        class TestModel
-        {
-            [RequestUse(RequestUseTargets.RequestHeader)]
-            public InnerTestClass MyHeader { get; set; }
-
-            public string JustValue { get; set; }
-        }
-
-        class InnerTestClass
-        {
-            public string Value { get; set; }
-        }
-    }
-
-    [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_does_not_have_any_property_marked_by_request_header_attribute_or_of_type_web_header_request
+    class when_default_header_mapper_used_for_model_that_does_not_have_any_property_marked_as_request_header_or_of_type_web_header_request
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -249,7 +346,6 @@ namespace DocaLabs.Http.Client.Tests.Binding
         class TestModel
         {
             public string Value1 { get; set; }
-
             public string Value2 { get; set; }
         }
     }
@@ -279,7 +375,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultHeaderMapper))]
-    class when_default_header_mapper_used_for_model_that_has_some_sitable_properties_as_null
+    class when_default_header_mapper_used_for_model_that_has_some_suitable_properties_as_null
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -297,11 +393,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(model);
 
-        It should_map_properties_marked_as_header = () => headers.ShouldContainOnly(new NameValueCollection
-        {
-            { "MyHeader2", "Hello World!" },
-            { "xx-xx", "header-x" }
-        });
+        It should_map_properties_marked_as_header =
+            () => headers.AllKeys.ShouldContainOnly("MyHeader2", "AnotherMyHeaders2.xx-xx");
+
+        It should_convert_values_for_first_header =
+            () => headers.GetValues("MyHeader2").ShouldContainOnly("Hello World!");
+
+        It should_convert_values_for_second_header =
+            () => headers.GetValues("AnotherMyHeaders2.xx-xx").ShouldContainOnly("header-x");
 
         class TestModel
         {

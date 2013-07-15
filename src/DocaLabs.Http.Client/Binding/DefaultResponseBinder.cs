@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultResponseBinder : IResponseBinder
     {
-        readonly object Locker;
+        readonly object _locker;
         IList<IResponseDeserializationProvider> _providers;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace DocaLabs.Http.Client.Binding
             {
                 IList<IResponseDeserializationProvider> providers;
 
-                lock (Locker)
+                lock (_locker)
                 {
                     providers = _providers;
                 }
@@ -40,7 +40,7 @@ namespace DocaLabs.Http.Client.Binding
 
                 var providers = value.ToList();
 
-                lock (Locker)
+                lock (_locker)
                 {
                     _providers = providers;
                 }
@@ -49,7 +49,7 @@ namespace DocaLabs.Http.Client.Binding
 
         public DefaultResponseBinder()
         {
-            Locker = new object();
+            _locker = new object();
 
             _providers = new List<IResponseDeserializationProvider>
             {
@@ -109,7 +109,7 @@ namespace DocaLabs.Http.Client.Binding
         {
             IList<IResponseDeserializationProvider> providers;
 
-            lock (Locker)
+            lock (_locker)
             {
                 providers = _providers;
             }
