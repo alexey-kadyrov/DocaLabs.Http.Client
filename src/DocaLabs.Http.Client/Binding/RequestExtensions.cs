@@ -111,9 +111,6 @@ namespace DocaLabs.Http.Client.Binding
 
         static void MapHeadersFromModel(IRequestBinder binder, BindingContext context, WebRequest request)
         {
-            if (context.Model == null)
-                return;
-
             var headers = binder.GetHeaders(context);
             if (headers != null)
                 request.Headers.Add(headers);
