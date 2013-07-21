@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="CollectionSpecificationExtensions.cs" />
     <Compile Include="ExceptionStandardBehaviours.cs" />
+    <Compile Include="ReflectionTools.cs" />
     <Compile Include="SimilarExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

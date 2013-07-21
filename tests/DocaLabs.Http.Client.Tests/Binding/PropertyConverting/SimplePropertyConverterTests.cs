@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
+using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
@@ -17,255 +18,255 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_trying_to_create_simple_property_converter
     {
         It should_not_create_it_for_property_without_public_getter =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoPublicGetter")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(TestModel).GetProperty("PropertyNoPublicGetter")).ShouldBeNull();
 
         It should_not_create_it_for_property_without_getter =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoGetter")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(typeof(TestModel).GetProperty("PropertyNoGetter")).ShouldBeNull();
 
         It should_create_it_for_property_without_public_setter =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoPublicSetter")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.PropertyNoPublicSetter)).ShouldNotBeNull();
 
         It should_create_it_for_property_without_setter =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("PropertyNoSetter")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.PropertyNoSetter)).ShouldNotBeNull();
 
         It should_create_it_for_bool =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("BoolProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.BoolProperty)).ShouldNotBeNull();
 
         It should_create_it_for_char =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("CharProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.CharProperty)).ShouldNotBeNull();
 
         It should_create_it_for_byte =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ByteProperty)).ShouldNotBeNull();
 
         It should_create_it_for_short =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ShortProperty)).ShouldNotBeNull();
 
         It should_create_it_for_ushort =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("UShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.UShortProperty)).ShouldNotBeNull();
 
         It should_create_it_for_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("IntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.IntProperty)).ShouldNotBeNull();
 
         It should_create_it_for_uint =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("UIntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.UIntProperty)).ShouldNotBeNull();
 
         It should_create_it_for_long =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("LongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.LongProperty)).ShouldNotBeNull();
 
         It should_create_it_for_ulong =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ULongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ULongProperty)).ShouldNotBeNull();
 
         It should_create_it_for_float =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("FloatProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.FloatProperty)).ShouldNotBeNull();
 
         It should_create_it_for_double =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DoubleProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.DoubleProperty)).ShouldNotBeNull();
 
         It should_create_it_for_decimal =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DecimalProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.DecimalProperty)).ShouldNotBeNull();
 
         It should_create_it_for_enum =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumProperty)).ShouldNotBeNull();
 
         It should_create_it_for_guid =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GuidProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.GuidProperty)).ShouldNotBeNull();
 
         It should_create_it_for_datetime =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.DateTimeProperty)).ShouldNotBeNull();
 
         It should_create_it_for_datetimeoffset =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DateTimeOffsetProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.DateTimeOffsetProperty)).ShouldNotBeNull();
 
         It should_create_it_for_timespan =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("TimeSpanProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.TimeSpanProperty)).ShouldNotBeNull();
 
         It should_create_it_for_string =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("StringProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.StringProperty)).ShouldNotBeNull();
 
         It should_create_it_for_byte_array =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ByteArrayProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ByteArrayProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_bool =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableBoolProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableBoolProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_char =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableCharProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableCharProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_byte =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableByteProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableByteProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_short =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableShortProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_ushort =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableUShortProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableUShortProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableIntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableIntProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_uint =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableUIntProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableUIntProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_long =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableLongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableLongProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_ulong =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableULongProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableULongProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_float =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableFloatProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableFloatProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_double =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDoubleProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableDoubleProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_decimal =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDecimalProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableDecimalProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_enum =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableEnumProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableEnumProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_guid =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableGuidProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableGuidProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_datetime =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDateTimeProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableDateTimeProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_datetimeoffset =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableDateTimeOffsetProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableDateTimeOffsetProperty)).ShouldNotBeNull();
 
         It should_create_it_for_nullable_timespan =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableTimeSpanProperty")).ShouldNotBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableTimeSpanProperty)).ShouldNotBeNull();
 
         It should_not_create_it_for_object =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ObjectProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ObjectProperty)).ShouldBeNull();
 
         It should_not_create_it_for_class =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ClassProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ClassProperty)).ShouldBeNull();
 
         It should_not_create_it_for_struct =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("StructProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.StructProperty)).ShouldBeNull();
 
         It should_not_create_it_for_nullable_struct =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NullableStructProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NullableStructProperty)).ShouldBeNull();
 
         It should_not_create_it_for_indexer =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Item")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetIndexerInfo<int>()).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_strings =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableStringProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableStringProperty)).ShouldBeNull();
 
         It should_not_create_it_for_list_of_string =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListStringProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ListStringProperty)).ShouldBeNull();
 
         It should_not_create_it_for_ilist_of_string =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListStringProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.IListStringProperty)).ShouldBeNull();
 
         It should_not_create_it_for_array_of_string =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayStringProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ArrayStringProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_byte_arrays =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteArrayProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableByteArrayProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_object =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableObjectProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableObjectProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_bool =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableBoolProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableBoolProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_char =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableCharProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableCharProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_byte =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableByteProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableByteProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_short =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableShortProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableShortProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_ushort =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUShortProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableUShortProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableIntProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableIntProperty)).ShouldBeNull();
 
         It should_not_create_it_for_list_of_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ListIntProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ListIntProperty)).ShouldBeNull();
 
         It should_not_create_it_for_ilist_of_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("IListIntProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.IListIntProperty)).ShouldBeNull();
 
         It should_not_create_it_for_array_of_int =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("ArrayIntProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.ArrayIntProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_uint =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableUIntProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableUIntProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_long =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableLongProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableLongProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_ulong =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableULongProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableULongProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_float =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableFloatProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableFloatProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_double =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDoubleProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableDoubleProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_decimal =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDecimalProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableDecimalProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_enum =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableEnumProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableEnumProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_guid =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableGuidProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableGuidProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_datetime =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableDateTimeProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_datetimeoffset =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableDateTimeOffsetProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableDateTimeOffsetProperty)).ShouldBeNull();
 
         It should_not_create_it_for_enumerable_of_timespan =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("EnumerableTimeSpanProperty")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.EnumerableTimeSpanProperty)).ShouldBeNull();
 
         It should_not_create_it_for_name_value_collection =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("NameValueCollection")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.NameValueCollection)).ShouldBeNull();
 
         It should_not_create_it_for_dictionary_interface =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DictionaryInterface")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.DictionaryInterface)).ShouldBeNull();
 
         It should_not_create_it_for_generic_dictionary_interface =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionaryInterface")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.GenericDictionaryInterface)).ShouldBeNull();
 
         It should_not_create_it_for_generic_dictionary_sub_interface_wirh_defined_generic_arguments =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.GenericDictionarySubinterface)).ShouldBeNull();
 
         It should_not_create_it_for_generic_dictionary_sub_interface =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubinterface2")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.GenericDictionarySubinterface2)).ShouldBeNull();
 
         It should_not_create_it_for_hashtable =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("Hashtable")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.Hashtable)).ShouldBeNull();
 
         It should_not_create_it_for_sorted_list =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("SortedList")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.SortedList)).ShouldBeNull();
 
         It should_not_create_it_for_generic_dictionary =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionary")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.GenericDictionary)).ShouldBeNull();
 
         It should_not_create_it_for_dictionary_subsclass =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("DictionarySubsclass")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.DictionarySubsclass)).ShouldBeNull();
 
         It should_not_create_it_for_generic_dictionary_subclass =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubsclass")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.GenericDictionarySubsclass)).ShouldBeNull();
 
         It should_not_create_it_for_generic_dictionary_subclass_with_defined_generic_arguments =
-            () => SimplePropertyConverter.TryCreate(typeof(TestClass).GetProperty("GenericDictionarySubsclass2")).ShouldBeNull();
+            () => SimplePropertyConverter.TryCreate(Reflect<TestModel>.GetPropertyInfo(m => m.GenericDictionarySubsclass2)).ShouldBeNull();
 
-        class TestClass
+        class TestModel
         {
             public int PropertyNoPublicGetter { private get; set; }
             public int PropertyNoGetter { set {} }
@@ -308,7 +309,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public DateTimeOffset? NullableDateTimeOffsetProperty { get; set; }
             public TimeSpan? NullableTimeSpanProperty { get; set; }
             public object ObjectProperty { get; set; }
-            public TestClass ClassProperty { get; set; }
+            public TestModel ClassProperty { get; set; }
             public TestStruct StructProperty { get; set; }
             public TestStruct? NullableStructProperty { get; set; }
             public IEnumerable<string> EnumerableStringProperty { get; set; }
