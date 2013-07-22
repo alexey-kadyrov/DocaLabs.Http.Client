@@ -18,7 +18,6 @@ namespace DocaLabs.Http.Client.Binding
         {
             return CanPropertyBeUsedInRequest(info) &&
                 info.GetCustomAttribute<RequestSerializationAttribute>(true) == null &&
-                info.PropertyType.IsSimpleType() &&
                 !info.IsExplicitUrlPath() &&
                 !info.IsExplicitUrlQuery() &&
                 !info.IsHeader() &&
@@ -75,7 +74,9 @@ namespace DocaLabs.Http.Client.Binding
         public static bool IsCredentials(this PropertyInfo info)
         {
             return CanPropertyBeUsedInRequest(info) &&
-                (typeof(ICredentials).IsAssignableFrom(info.PropertyType) && info.GetCustomAttribute<RequestSerializationAttribute>(true) == null);
+                (typeof(ICredentials).IsAssignableFrom(info.PropertyType) && 
+                info.GetCustomAttribute<RequestUseAttribute>(true) == null &&
+                info.GetCustomAttribute<RequestSerializationAttribute>(true) == null);
         }
 
         /// <summary>
