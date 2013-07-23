@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
@@ -13,7 +14,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
-        readonly static PropertyMaps Maps = new PropertyMaps(PropertyInfoExtensions.IsFormProperty);
+        readonly static PropertyMaps Maps = new PropertyMaps(IsFormProperty);
         string _charSet;
 
         /// <summary>
@@ -67,6 +68,17 @@ namespace DocaLabs.Http.Client.Binding.Serialization
                 Write(data, request);
             else
                 CompressAndWrite(data, request);
+        }
+
+        /// <summary>
+        /// Returns true if the property can be used in form serialization.
+        /// </summary>
+        public static bool IsFormProperty(PropertyInfo info)
+        {
+            // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
+            return info.GetIndexParameters().Length == 0 &&
+                info.GetGetMethod() != null &&
+                info.PropertyType.IsSimpleType();
         }
 
         static string ToForm(object model)

@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultHeaderMapper
     {
-        readonly PropertyMaps _maps = new PropertyMaps(PropertyInfoExtensions.IsHeader);
+        readonly PropertyMaps _maps = new PropertyMaps(RequestUsageExtensions.IsHeader);
 
         /// <summary>
         /// Maps a model to the collection of key, values. The property must have the RequesUseAttribute with the header target bit set.

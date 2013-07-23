@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Property binding extensions to determine how a property should be serialized.
     /// </summary>
-    public static class PropertyInfoExtensions
+    public static class RequestUsageExtensions
     {
         /// <summary>
         /// Returns true if the property is can pass its data to the either query or path part of URL.
@@ -84,24 +84,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsRequestStream(this PropertyInfo info)
         {
-            return CanPropertyBeUsedInRequest(info) &&
-                (info.GetCustomAttribute<RequestSerializationAttribute>(true) != null || 
-                    ((  !info.PropertyType.IsSimpleType()) &&
-                        !info.IsExplicitUrlPath() &&
-                        !info.IsExplicitUrlQuery() &&
-                        !info.IsHeader() &&
-                        !info.IsCredentials()));
-        }
-
-        /// <summary>
-        /// Returns true if the property can be used in form serialization.
-        /// </summary>
-        public static bool IsFormProperty(this PropertyInfo info)
-        {
-            // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
-            return  info.GetIndexParameters().Length == 0 && 
-                info.GetGetMethod() != null && 
-                info.PropertyType.IsSimpleType();
+            return CanPropertyBeUsedInRequest(info) && info.GetCustomAttribute<RequestSerializationAttribute>(true) != null;
         }
 
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)

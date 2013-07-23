@@ -65,7 +65,7 @@
     <Compile Include="Binding\PropertyConverting\PropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseTargets.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseAttribute.cs" />
-    <Compile Include="Binding\PropertyInfoExtensions.cs" />
+    <Compile Include="Binding\RequestUsageExtensions.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultRequestBinder.cs" />

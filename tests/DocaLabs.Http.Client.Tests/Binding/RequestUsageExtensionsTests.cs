@@ -10,8 +10,8 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Binding
 {
-    [Subject(typeof(PropertyInfoExtensions))]
-    class when_checking_whenever_property_is_considered_it_to_be_implicit_path_or_query
+    [Subject(typeof(RequestUsageExtensions))]
+    class when_checking_whenever_property_is_considered_to_be_implicit_path_or_query
     {
         // implicit
         It should_return_false_for_indexer_without_hint =
@@ -200,8 +200,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestSerializationHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
     }
 
-    [Subject(typeof(PropertyInfoExtensions))]
-    class when_checking_whenever_property_is_considered_it_to_be_explicit_query
+    [Subject(typeof(RequestUsageExtensions))]
+    class when_checking_whenever_property_is_considered_to_be_explicit_query
     {
         // implicit
         It should_return_false_for_indexer_without_hint =
@@ -390,8 +390,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestSerializationHint).IsExplicitUrlQuery().ShouldBeFalse();
     }
 
-    [Subject(typeof(PropertyInfoExtensions))]
-    class when_checking_whenever_property_is_considered_it_to_be_explicit_path
+    [Subject(typeof(RequestUsageExtensions))]
+    class when_checking_whenever_property_is_considered_to_be_explicit_path
     {
         // implicit
         It should_return_false_for_indexer_without_hint =
@@ -580,8 +580,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestSerializationHint).IsExplicitUrlPath().ShouldBeFalse();
     }
 
-    [Subject(typeof(PropertyInfoExtensions))]
-    class when_checking_whenever_property_is_considered_it_to_be_header
+    [Subject(typeof(RequestUsageExtensions))]
+    class when_checking_whenever_property_is_considered_to_be_header
     {
         // implicit
         It should_return_false_for_indexer_without_hint =
@@ -770,8 +770,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestSerializationHint).IsHeader().ShouldBeFalse();
     }
 
-    [Subject(typeof(PropertyInfoExtensions))]
-    class when_checking_whenever_property_is_considered_it_to_be_creadetials
+    [Subject(typeof(RequestUsageExtensions))]
+    class when_checking_whenever_property_is_considered_to_be_creadetials
     {
         // implicit
         It should_return_false_for_indexer_without_hint =
@@ -958,6 +958,196 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_return_false_for_icredentials_property_with_request_serialization_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestSerializationHint).IsCredentials().ShouldBeFalse();
+    }
+
+    [Subject(typeof(RequestUsageExtensions))]
+    class when_checking_whenever_property_is_considered_to_be_serializable_to_request_stream
+    {
+        // implicit
+        It should_return_false_for_indexer_without_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(int)).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_without_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithoutHint).IsRequestStream().ShouldBeFalse();
+
+        // query
+        It should_return_false_for_indexer_with_query_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(string)).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_query_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithQueryHint).IsRequestStream().ShouldBeFalse();
+
+        // path
+        It should_return_false_for_indexer_with_path_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(long)).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_path_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithPathHint).IsRequestStream().ShouldBeFalse();
+
+        // header
+        It should_return_false_for_indexer_with_header_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(decimal)).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_header_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithHeaderHint).IsRequestStream().ShouldBeFalse();
+
+        // ignore
+        It should_return_false_for_indexer_with_ignore_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(double)).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_ignore_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsRequestStream().ShouldBeFalse();
+
+        // request serialization
+        It should_return_false_for_indexer_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(short)).IsRequestStream().ShouldBeFalse();
+
+        It should_return_true_for_simple_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_object_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_dictionary_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_generic_dictionary_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_namevaluecollection_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_simple_array_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_object_array_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_webheadercollection_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_icredentials_property_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();
     }
 
     // ReSharper disable ValueParameterNotUsed

@@ -13,9 +13,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer
     {
-        readonly PropertyMaps _implicitPathOrQueryMaps = new PropertyMaps(PropertyInfoExtensions.IsImplicitUrlPathOrQuery);
-        readonly PropertyMaps _explicitQueryMaps = new PropertyMaps(PropertyInfoExtensions.IsExplicitUrlQuery);
-        readonly PropertyMaps _explicitPathMaps = new PropertyMaps(PropertyInfoExtensions.IsExplicitUrlPath);
+        readonly PropertyMaps _implicitPathOrQueryMaps = new PropertyMaps(RequestUsageExtensions.IsImplicitUrlPathOrQuery);
+        readonly PropertyMaps _explicitQueryMaps = new PropertyMaps(RequestUsageExtensions.IsExplicitUrlQuery);
+        readonly PropertyMaps _explicitPathMaps = new PropertyMaps(RequestUsageExtensions.IsExplicitUrlPath);
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
