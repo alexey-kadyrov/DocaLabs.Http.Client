@@ -27,6 +27,21 @@ namespace DocaLabs.Http.Client.Tests.Utils
         }
     }
 
+    [Subject(typeof(ReflectionExtensions), "IsIndexer")]
+    class when_checking_for_indexer_for_null_property_info
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => ((PropertyInfo) null).IsIndexer());
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_property_argument =
+            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("property");
+    }
+
     [Subject(typeof(ReflectionExtensions), "IsSimpleType")]
     class when_checking_for_simple_type
     {
@@ -487,6 +502,101 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
         It should_report_type_argument =
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
+    }
+
+    [Subject(typeof(ReflectionExtensions), "GetWrappedResponseModelType")]
+    class when_getting_wrapped_response_model_type_for_declared_response_generics
+    {
+        It should_return_the_wrapped_model_type =
+            () => typeof (Response<decimal>).TryGetWrappedResponseModelType().ShouldEqual(typeof (decimal));
+    }
+
+    [Subject(typeof(ReflectionExtensions), "GetWrappedResponseModelType")]
+    class when_getting_wrapped_response_model_type_for_subclass_of_response_generics
+    {
+        It should_return_the_wrapped_model_type =
+            () => typeof(TestModel).TryGetWrappedResponseModelType().ShouldEqual(typeof(string));
+
+        class TestModel : Response<string>
+        {
+            public TestModel(int statusCode, string statusDescription, object value) 
+                : base(statusCode, statusDescription, value)
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(ReflectionExtensions), "GetWrappedResponseModelType")]
+    class when_getting_wrapped_response_model_type_for_subclass_of_subclass_of_response_generics
+    {
+        It should_return_the_wrapped_model_type =
+            () => typeof(TestModel).TryGetWrappedResponseModelType().ShouldEqual(typeof(string));
+
+        class TestModel1 : Response<string>
+        {
+            public TestModel1(int statusCode, string statusDescription, object value) 
+                : base(statusCode, statusDescription, value)
+            {
+            }
+        }
+
+        class TestModel : TestModel1
+        {
+            public TestModel(int statusCode, string statusDescription, object value) 
+                : base(statusCode, statusDescription, value)
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(ReflectionExtensions), "GetWrappedResponseModelType")]
+    class when_getting_wrapped_response_model_type_for_class_which_does_not_use_response_generic
+    {
+        It should_return_null =
+            () => typeof (TestModel).TryGetWrappedResponseModelType().ShouldBeNull();
+
+        class TestModel
+        {
+        }
+    }
+
+    [Subject(typeof(ReflectionExtensions), "GetWrappedResponseModelType")]
+    class when_getting_wrapped_response_model_type_for_class_which_uses_anothe_generic_type
+    {
+        It should_return_null =
+            () => typeof(TestModel).TryGetWrappedResponseModelType().ShouldBeNull();
+
+        class TestModel : Dictionary<string, string>
+        {
+        }
+    }
+
+    [Subject(typeof(ReflectionExtensions), "TryGetWrappedResponseModelType")]
+    class when_getting_wrapped_response_model_type_for_subclass_which_does_not_use_response_generic
+    {
+        It should_return_null =
+            () => typeof(TestModel).TryGetWrappedResponseModelType().ShouldBeNull();
+
+        class TestModel1
+        {
+        }
+
+        class TestModel : TestModel1
+        {
+        }
+    }
+
+    [Subject(typeof(ReflectionExtensions), "TryGetWrappedResponseModelType")]
+    class when_getting_wrapped_response_model_type_for_simple_types_which_does_not_use_response_generic
+    {
+        It should_return_for_int =
+            () => typeof(int).TryGetWrappedResponseModelType().ShouldBeNull();
+
+        It should_return_for_string =
+            () => typeof(string).TryGetWrappedResponseModelType().ShouldBeNull();
+
+        It should_return_for_byte_array =
+            () => typeof(byte[]).TryGetWrappedResponseModelType().ShouldBeNull();
     }
 
     // ReSharper restore ValueParameterNotUsed

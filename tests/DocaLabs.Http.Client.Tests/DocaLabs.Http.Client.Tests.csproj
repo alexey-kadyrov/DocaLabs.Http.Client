@@ -94,6 +94,7 @@
     <Compile Include="Configuration\EndpointConfigurationTests.cs" />
     <Compile Include="Binding\RequestExtensionsTests.cs" />
     <Compile Include="DefaultExecuteStrategyTests.cs" />
+    <Compile Include="ResponseTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="Utils\ContentEncoding\GZipContentDecoderTests.cs" />

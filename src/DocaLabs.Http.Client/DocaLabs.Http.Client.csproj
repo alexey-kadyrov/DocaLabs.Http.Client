@@ -78,6 +78,7 @@
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
     <Compile Include="IExecuteStrategy.cs" />
+    <Compile Include="Response.cs" />
     <Compile Include="Utils\CharSets.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />

@@ -117,6 +117,15 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
+        /// Gets the response status information.
+        /// </summary>
+        /// <returns></returns>
+        public ResponseStatus GetResponseStatus()
+        {
+            return new ResponseStatus(Response);
+        }
+
+        /// <summary>
         /// Releases the response and the streams.
         /// </summary>
         protected override void Dispose(bool disposing)
@@ -244,5 +253,43 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         #endregion Stream
+
+        /// <summary>
+        /// Defines the response status.
+        /// </summary>
+        public class ResponseStatus
+        {
+            /// <summary>
+            /// Gets the status of the response.
+            /// </summary>
+            public int StatusCode { get; private set; }
+
+            /// <summary>
+            /// Gets the status description returned with the response.
+            /// </summary>
+            public string StatusDescription { get; private set; }
+
+            /// <summary>
+            /// Initializes an instance of the ResponseStatus class from the instance of the WebResponse class.
+            /// </summary>
+            /// <param name="response"></param>
+            public ResponseStatus(WebResponse response)
+            {
+                var httpResponse = response as HttpWebResponse;
+                if (httpResponse != null)
+                {
+                    StatusCode = (int)httpResponse.StatusCode;
+                    StatusDescription = httpResponse.StatusDescription;
+                    return;
+                }
+
+                var ftpResponse = response as FtpWebResponse;
+                if (ftpResponse == null)
+                    return;
+
+                StatusCode = (int)ftpResponse.StatusCode;
+                StatusDescription = ftpResponse.StatusDescription;
+            }
+        }
     }
 }
