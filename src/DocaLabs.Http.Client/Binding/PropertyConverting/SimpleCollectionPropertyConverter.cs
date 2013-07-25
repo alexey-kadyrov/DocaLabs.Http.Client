@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 
@@ -19,18 +20,20 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             _property = property;
 
             string name = null, format = null;
+            CultureInfo culture = null;
 
             var requestUse = property.GetCustomAttribute<PropertyOverridesAttribute>();
             if (requestUse != null)
             {
                 name = requestUse.Name;
                 format = requestUse.Format;
+                culture = requestUse.GetFormatCultureInfo();
             }
 
             if (string.IsNullOrWhiteSpace(name))
                 name = _property.Name;
 
-            _valueConverter = new SimpleCollectionValueConverter(name, format);
+            _valueConverter = new SimpleCollectionValueConverter(name, format, culture);
         }
 
         /// <summary>

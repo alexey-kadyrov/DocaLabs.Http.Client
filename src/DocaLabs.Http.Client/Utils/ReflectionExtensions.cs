@@ -127,7 +127,7 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public static Type TryGetWrappedResponseModelType(this Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Response<>))
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(RichResponse<>))
                 return type.GetGenericArguments()[0];
 
             if (type.BaseType == null || type.BaseType == typeof(object))

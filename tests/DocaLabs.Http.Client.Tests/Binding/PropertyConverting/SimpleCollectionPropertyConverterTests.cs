@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.Threading;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
@@ -535,6 +537,44 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             [PropertyOverrides(Format = "{0:X}")]
             public IEnumerable<int> Values { get; set; }
+        }
+    }
+
+    [Subject(typeof(SimpleCollectionPropertyConverter))]
+    class when_simple_collection_property_converter_is_used_on_property_with_custom_format_applied_and_current_ui_culture
+    {
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Cleanup after =
+            () => Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
+        Establish context = () =>
+        {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+
+            instance = new TestClass
+            {
+                Values = new[] { new DateTime(2013, 2, 7),  }
+            };
+
+            converter = SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, new HashSet<object>());
+
+        It should_be_able_to_get_the_key_as_the_redefined_name =
+            () => result.AllKeys.ShouldContainOnly("Values");
+
+        It should_be_able_to_get_value_of_property =
+            () => result.GetValues("Values").ShouldContainOnly("фев");
+
+        class TestClass
+        {
+            [PropertyOverrides(Format = "{0:MMM}", FormatCulture = FormatCulture.UseCurrentUI)]
+            public IEnumerable<DateTime> Values { get; set; }
         }
     }
 

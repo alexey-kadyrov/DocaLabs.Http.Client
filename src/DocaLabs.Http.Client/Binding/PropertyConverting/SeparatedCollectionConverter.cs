@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 using DocaLabs.Http.Client.Utils;
@@ -16,6 +17,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         readonly PropertyInfo _property;
         readonly string _name;
         readonly string _format;
+        readonly CultureInfo _culture;
 
         /// <summary>
         /// String's delimiter.
@@ -32,6 +34,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             {
                 _name = requestUse.Name;
                 _format = requestUse.Format;
+                _culture = requestUse.GetFormatCultureInfo();
             }
 
             if (string.IsNullOrWhiteSpace(_name))
@@ -91,7 +94,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 if (!first)
                     stringBuilder.Append(Separator);
 
-                stringBuilder.Append(CustomConverter.ChangeToString(_format, item));
+                stringBuilder.Append(CustomConverter.ChangeToString(_format, _culture, item));
 
                 first = false;
             }

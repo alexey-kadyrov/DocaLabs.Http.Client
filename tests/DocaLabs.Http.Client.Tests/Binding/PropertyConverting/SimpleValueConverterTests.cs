@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
@@ -14,7 +15,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleValueConverter("Value", null);
+            () => converter = new SimpleValueConverter("Value", null, CultureInfo.InvariantCulture);
 
         Because of =
             () => result = converter.Convert(null);
@@ -29,8 +30,8 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static IValueConverter converter;
         static NameValueCollection result;
 
-        Establish context = 
-            () => converter = new SimpleValueConverter("Value", null);
+        Establish context =
+            () => converter = new SimpleValueConverter("Value", null, CultureInfo.InvariantCulture);
 
         Because of =
             () => result = converter.Convert(42);
@@ -51,7 +52,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         Establish context = () =>
         {
-            converter = new SimpleValueConverter("Value", null);
+            converter = new SimpleValueConverter("Value", null, CultureInfo.InvariantCulture);
             value = 42;
         };
 
@@ -72,7 +73,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleValueConverter("Value", "");
+            () => converter = new SimpleValueConverter("Value", "", CultureInfo.InvariantCulture);
 
         Because of =
             () => result = converter.Convert(42);
@@ -91,7 +92,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleValueConverter("Value", "{0:X}");
+            () => converter = new SimpleValueConverter("Value", "{0:X}", CultureInfo.InvariantCulture);
 
         Because of =
             () => result = converter.Convert(42);
@@ -104,12 +105,50 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimpleValueConverter))]
+    class when_simple_value_converter_is_used_with_specified_format_and_null_culture
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleValueConverter("Value", "{0:X}", null);
+
+        Because of =
+            () => result = converter.Convert(42);
+
+        It should_be_able_to_get_the_key_using_specified_name =
+            () => result.AllKeys.ShouldContainOnly("Value");
+
+        It should_be_able_to_convert_value =
+            () => result.GetValues("Value").ShouldContainOnly("2A");
+    }
+
+    [Subject(typeof(SimpleValueConverter))]
+    class when_simple_value_converter_is_used_with_specified_format_and_non_english_culture
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleValueConverter("Value", "{0:MMM}", new CultureInfo("ru-RU"));
+
+        Because of =
+            () => result = converter.Convert(new DateTime(2013, 2, 17));
+
+        It should_be_able_to_get_the_key_using_specified_name =
+            () => result.AllKeys.ShouldContainOnly("Value");
+
+        It should_be_able_to_convert_value =
+            () => result.GetValues("Value").ShouldContainOnly("фев");
+    }
+
+    [Subject(typeof(SimpleValueConverter))]
     class when_simple_value_converter_is_used_with_null_name
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => new SimpleValueConverter(null, null));
+            () => exception = Catch.Exception(() => new SimpleValueConverter(null, null, CultureInfo.InvariantCulture));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -124,7 +163,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => new SimpleValueConverter("", null));
+            () => exception = Catch.Exception(() => new SimpleValueConverter("", null, CultureInfo.InvariantCulture));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();

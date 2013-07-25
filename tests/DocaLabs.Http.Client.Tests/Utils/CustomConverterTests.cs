@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Globalization;
 using DocaLabs.Http.Client.Utils;
 using Moq;
 using NUnit.Framework;
@@ -133,7 +134,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
             CustomConverter.Current = new CustomConverter(mockFactory.Object);
 
-            var result = CustomConverter.ChangeToString(null, "any value");
+            var result = CustomConverter.ChangeToString(null, CultureInfo.InvariantCulture, "any value");
 
             Assert.IsNotNull(result);
             Assert.AreEqual("Hello World!", result);
@@ -150,7 +151,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
             CustomConverter.Current = new CustomConverter(mockFactory.Object);
 
-            var result = CustomConverter.ChangeToString("", "any value");
+            var result = CustomConverter.ChangeToString("", CultureInfo.InvariantCulture, "any value");
 
             Assert.IsNotNull(result);
             Assert.AreEqual("Hello World!", result);
@@ -163,10 +164,40 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
             CustomConverter.Current = new CustomConverter(mockFactory.Object);
 
-            var result = CustomConverter.ChangeToString("{0:X}", 32);
+            var result = CustomConverter.ChangeToString("{0:X}", CultureInfo.InvariantCulture, 32);
 
             Assert.IsNotNull(result);
             Assert.AreEqual("20", result);
+
+            mockFactory.Verify(x => x.GetConverter(typeof(string)), Times.Never());
+        }
+
+        [Test]
+        public void ChangeToStringUsesStringFormatWhenFormatIsNotEmptyStringButTheCultureIsNull()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString("{0:X}", null, 32);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("20", result);
+
+            mockFactory.Verify(x => x.GetConverter(typeof(string)), Times.Never());
+        }
+
+        [Test]
+        public void ChangeToStringUsesStringFormatWhenFormatIsNotEmptyStringAndNonEnglishCulture()
+        {
+            var mockFactory = new Mock<ICustomConverterFactory>();
+
+            CustomConverter.Current = new CustomConverter(mockFactory.Object);
+
+            var result = CustomConverter.ChangeToString("{0:MMM}", new CultureInfo("ru-RU"), new DateTime(2013, 2, 12));
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("фев", result);
 
             mockFactory.Verify(x => x.GetConverter(typeof(string)), Times.Never());
         }
@@ -178,7 +209,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
             CustomConverter.Current = new CustomConverter(mockFactory.Object);
 
-            var result = CustomConverter.ChangeToString("{0:X}", null);
+            var result = CustomConverter.ChangeToString("{0:X}", CultureInfo.InvariantCulture, null);
 
             Assert.IsEmpty(result);
 
@@ -192,7 +223,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
             CustomConverter.Current = new CustomConverter(mockFactory.Object);
 
-            var result = CustomConverter.ChangeToString(null, null);
+            var result = CustomConverter.ChangeToString(null, CultureInfo.InvariantCulture, null);
 
             Assert.IsEmpty(result);
 
@@ -206,7 +237,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
             CustomConverter.Current = new CustomConverter(mockFactory.Object);
 
-            var result = CustomConverter.ChangeToString(null, null);
+            var result = CustomConverter.ChangeToString(null, CultureInfo.InvariantCulture, null);
 
             Assert.IsEmpty(result);
 

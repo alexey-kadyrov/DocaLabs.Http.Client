@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
+    <Compile Include="Binding\PropertyConverting\FormatCulture.cs" />
     <Compile Include="Binding\PropertyConverting\IValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyOverridesAttribute.cs" />
@@ -78,7 +79,8 @@
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
     <Compile Include="IExecuteStrategy.cs" />
-    <Compile Include="Response.cs" />
+    <Compile Include="RichRequest.cs" />
+    <Compile Include="RichResponse.cs" />
     <Compile Include="Utils\CharSets.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />

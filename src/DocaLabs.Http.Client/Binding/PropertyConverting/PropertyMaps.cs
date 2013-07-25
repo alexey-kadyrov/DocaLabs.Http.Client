@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
@@ -56,7 +57,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 return new NameValueCollectionValueConverter(null);
 
             return SimpleDictionaryValueConverter.CanConvert(type)
-                ? new SimpleDictionaryValueConverter(null, null)
+                ? new SimpleDictionaryValueConverter(null, null, null)
                 : null;
         }
 
@@ -162,6 +163,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 readonly PropertyInfo _property;
                 readonly string _name;
                 readonly string _format;
+                readonly CultureInfo _culture;
 
                 ObjectPropertyConverter(PropertyInfo property, PropertyMaps maps)
                 {
@@ -173,6 +175,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                     {
                         _name = requestUse.Name;
                         _format = requestUse.Format;
+                        _culture = requestUse.GetFormatCultureInfo();
                     }
 
                     if (_name == null)
@@ -218,13 +221,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         return new NameValueCollectionValueConverter(_name);
 
                     if (SimpleDictionaryValueConverter.CanConvert(type))
-                        return new SimpleDictionaryValueConverter(_name, _format);
+                        return new SimpleDictionaryValueConverter(_name, _format, _culture);
 
                     if (SimpleCollectionValueConverter.CanConvert(type))
-                        return new SimpleCollectionValueConverter(GetNonEmptyPropertyName(), _format);
+                        return new SimpleCollectionValueConverter(GetNonEmptyPropertyName(), _format, _culture);
 
                     return SimpleValueConverter.CanConvert(type)
-                        ? new SimpleValueConverter(GetNonEmptyPropertyName(), _format)
+                        ? new SimpleValueConverter(GetNonEmptyPropertyName(), _format, _culture)
                         : null;
                 }
 

@@ -508,7 +508,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
     class when_getting_wrapped_response_model_type_for_declared_response_generics
     {
         It should_return_the_wrapped_model_type =
-            () => typeof (Response<decimal>).TryGetWrappedResponseModelType().ShouldEqual(typeof (decimal));
+            () => typeof (RichResponse<decimal>).TryGetWrappedResponseModelType().ShouldEqual(typeof (decimal));
     }
 
     [Subject(typeof(ReflectionExtensions), "GetWrappedResponseModelType")]
@@ -517,7 +517,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
         It should_return_the_wrapped_model_type =
             () => typeof(TestModel).TryGetWrappedResponseModelType().ShouldEqual(typeof(string));
 
-        class TestModel : Response<string>
+        class TestModel : RichResponse<string>
         {
             public TestModel(int statusCode, string statusDescription, object value) 
                 : base(statusCode, statusDescription, value)
@@ -532,7 +532,7 @@ namespace DocaLabs.Http.Client.Tests.Utils
         It should_return_the_wrapped_model_type =
             () => typeof(TestModel).TryGetWrappedResponseModelType().ShouldEqual(typeof(string));
 
-        class TestModel1 : Response<string>
+        class TestModel1 : RichResponse<string>
         {
             public TestModel1(int statusCode, string statusDescription, object value) 
                 : base(statusCode, statusDescription, value)

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace DocaLabs.Http.Client.Utils
 {
@@ -47,16 +48,17 @@ namespace DocaLabs.Http.Client.Utils
         /// <summary>
         /// Returns a string equivalent of the specified object.
         /// If the value is null then empty string is returned. If the format is specified then string.Format is used.
+        /// If culture is null then CultureInfo.InvariantCulture is used for string.Format.
         /// Otherwise it uses the custom converter to convert into the string.
         /// </summary>
-        public static string ChangeToString(string format, object value)
+        public static string ChangeToString(string format, CultureInfo culture, object value)
         {
             if (value == null)
                 return string.Empty;
 
             return string.IsNullOrWhiteSpace(format)
                 ? Current.ChangeType<string>(value)
-                : string.Format(format, value);
+                : string.Format(culture ?? CultureInfo.InvariantCulture, format, value);
         }
 
         /// <summary>

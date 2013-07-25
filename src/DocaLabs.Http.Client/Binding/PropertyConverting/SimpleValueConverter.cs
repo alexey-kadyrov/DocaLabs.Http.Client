@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Globalization;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
@@ -11,19 +12,22 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     {
         readonly string _name;
         readonly string _format;
+        readonly CultureInfo _culture;
 
         /// <summary>
         /// Initializes an instance of the SimpleValueConverter class.
         /// </summary>
         /// <param name="name">Name which should be used as the key for the converted value.</param>
         /// <param name="format">If the format is non empty then string.Format is used for converting.</param>
-        public SimpleValueConverter(string name, string format)
+        /// <param name="culture">Culture to be used if the format is non empty string.</param>
+        public SimpleValueConverter(string name, string format, CultureInfo culture)
         {
             if(string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
             _name = name;
             _format = format;
+            _culture = culture;
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             var values = new NameValueCollection();
 
             if (value != null)
-                values.Add(_name, CustomConverter.ChangeToString(_format, value));
+                values.Add(_name, CustomConverter.ChangeToString(_format, _culture, value));
 
             return values;
         }

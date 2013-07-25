@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
@@ -15,6 +16,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     {
         readonly string _name;
         readonly string _format;
+        readonly CultureInfo _culture;
 
         /// <summary>
         /// Initializes an instance of the SimpleDictionaryValueConverter class.
@@ -24,10 +26,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// Otherwise the key from the collection is used.
         /// </param>
         /// <param name="format">If the format is non empty then string.Format is used for converting values of the dictionary.</param>
-        public SimpleDictionaryValueConverter(string name, string format)
+        /// <param name="culture">Culture to be used if the format is non empty string.</param>
+        public SimpleDictionaryValueConverter(string name, string format, CultureInfo culture)
         {
             _name = name;
             _format = format;
+            _culture = culture;
         }
 
         /// <summary>
@@ -69,7 +73,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         continue;
 
                     if (v != null)
-                        values.Add(destKey, CustomConverter.ChangeToString(_format, v) ?? "");
+                        values.Add(destKey, CustomConverter.ChangeToString(_format, _culture, v) ?? "");
                     else
                         values.Add(destKey, "");
                 }

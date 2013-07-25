@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.Threading;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 using Machine.Specifications.Annotations;
@@ -684,6 +686,47 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             [PropertyOverrides(Format = "{0:X}")]
             public IDictionary<string, int> Values { [UsedImplicitly] get; set; }
+        }
+    }
+
+    [Subject(typeof(SimpleDictionaryPropertyConverter))]
+    class when_simple_dictionary_property_converter_is_used_on_property_with_custom_format_applied_and_current_ui_culture
+    {
+        static TestClass instance;
+        static IPropertyConverter converter;
+        static NameValueCollection result;
+
+        Cleanup after =
+            () => Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
+        Establish context = () =>
+        {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+
+            instance = new TestClass
+            {
+                Values = new Dictionary<string, DateTime>
+                {
+                    { "key27", new DateTime(2013, 2, 28) }
+                }
+            };
+
+            converter = SimpleDictionaryPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));
+        };
+
+        Because of =
+            () => result = converter.Convert(instance, new HashSet<object>());
+
+        It should_be_able_to_get_the_source_keys =
+            () => result.AllKeys.ShouldContainOnly("Values.key27");
+
+        It should_be_able_to_get_values_for_the_first_key_using_specified_format =
+            () => result.GetValues("Values.key27").ShouldContainOnly("фев");
+
+        class TestClass
+        {
+            [PropertyOverrides(Format = "{0:MMM}", FormatCulture = FormatCulture.UseCurrentUI)]
+            public IDictionary<string, DateTime> Values { [UsedImplicitly] get; set; }
         }
     }
 

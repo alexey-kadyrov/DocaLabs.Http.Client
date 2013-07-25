@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 using Machine.Specifications.Annotations;
@@ -15,7 +16,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of =
             () => result = converter.Convert(null);
@@ -31,7 +32,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of =
             () => result = converter.Convert(42);
@@ -47,7 +48,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new List<string>
         {
@@ -66,7 +67,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new NameValueCollection
         {
@@ -85,7 +86,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
@@ -110,7 +111,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
@@ -146,7 +147,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
@@ -179,7 +180,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Dictionary<object, object>
         {
@@ -215,7 +216,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Dictionary<TestClass, int>
         {
@@ -239,7 +240,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Dictionary<int, TestClass>
         {
@@ -263,7 +264,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Dictionary<string, string>
         {
@@ -290,7 +291,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         Establish context = () =>
         {
-            converter = new SimpleDictionaryValueConverter("Values", null);
+            converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
             source = new Dictionary<string, string>
             {
                 { "key27", "27" },
@@ -427,7 +428,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Dictionary<int, int>
         {
@@ -454,13 +455,84 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_simple_dictionary_value_converter_is_used_with_specified_format
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleDictionaryValueConverter("Values", "{0:X}", CultureInfo.InvariantCulture);
+
+        Because of = () => result = converter.Convert(new Dictionary<int, int>
+        {
+           { 1, 32 }, 
+           { 2, 33 }
+        });
+
+        It should_be_able_to_get_the_key_using_specified_name_and_the_source_key =
+            () => result.AllKeys.ShouldContainOnly("Values.1", "Values.2");
+
+        It should_be_able_to_convert_first_value =
+            () => result.GetValues("Values.1").ShouldContainOnly("20");
+
+        It should_be_able_to_convert_second_value =
+            () => result.GetValues("Values.2").ShouldContainOnly("21");
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_simple_dictionary_value_converter_is_used_with_specified_format_and_null_culture
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleDictionaryValueConverter("Values", "{0:X}", null);
+
+        Because of = () => result = converter.Convert(new Dictionary<int, int>
+        {
+           { 1, 32 }, 
+           { 2, 33 }
+        });
+
+        It should_be_able_to_get_the_key_using_specified_name_and_the_source_key =
+            () => result.AllKeys.ShouldContainOnly("Values.1", "Values.2");
+
+        It should_be_able_to_convert_first_value =
+            () => result.GetValues("Values.1").ShouldContainOnly("20");
+
+        It should_be_able_to_convert_second_value =
+            () => result.GetValues("Values.2").ShouldContainOnly("21");
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
+    class when_simple_dictionary_value_converter_is_used_with_specified_format_and_non_english_culture
+    {
+        static IValueConverter converter;
+        static NameValueCollection result;
+
+        Establish context =
+            () => converter = new SimpleDictionaryValueConverter("Values", "{0:MMM}", new CultureInfo("ru-RU"));
+
+        Because of = () => result = converter.Convert(new Dictionary<int, DateTime>
+        {
+           { 1, new DateTime(2013, 2, 10) }
+        });
+
+        It should_be_able_to_get_the_key_using_specified_name_and_the_source_key =
+            () => result.AllKeys.ShouldContainOnly("Values.1");
+
+        It should_be_able_to_convert_value =
+            () => result.GetValues("Values.1").ShouldContainOnly("фев");
+    }
+
+    [Subject(typeof(SimpleDictionaryValueConverter))]
     class when_simple_dictionary_value_converter_is_used_with_null_name
     {
         static IValueConverter converter;
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter(null, null);
+            () => converter = new SimpleDictionaryValueConverter(null, null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
@@ -485,7 +557,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("", null);
+            () => converter = new SimpleDictionaryValueConverter("", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
@@ -510,7 +582,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter(null, null);
+            () => converter = new SimpleDictionaryValueConverter(null, null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
@@ -539,7 +611,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter(null, null);
+            () => converter = new SimpleDictionaryValueConverter(null, null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
@@ -561,7 +633,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static NameValueCollection result;
 
         Establish context =
-            () => converter = new SimpleDictionaryValueConverter("Values", null);
+            () => converter = new SimpleDictionaryValueConverter("Values", null, CultureInfo.InvariantCulture);
 
         Because of = () => result = converter.Convert(new Hashtable
         {
