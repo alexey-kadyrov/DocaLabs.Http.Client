@@ -69,26 +69,26 @@ namespace DocaLabs.Http.Client.Binding
 
             var responseType = _responseTypes.GetOrAdd(resultType, t => t.TryGetWrappedResponseModelType() ?? t);
 
-            var responseStream = new HttpResponseStream(request);
+            var stream = new HttpResponseStream(request);
 
             try
             {
-                var value = ReadStream(context, responseStream, responseType);
+                var value = ReadStream(context, stream, responseType);
 
-                object responseWrapper = null;
+                object richResponse = null;
 
                 if (responseType != resultType)
-                    responseWrapper = InitializeResponseWrapper(responseType, responseStream, value);
+                    richResponse = Activator.CreateInstance(responseType, stream.Response, value);
 
-                if (value.Equals(responseStream))
-                    responseStream = null;
+                if (value.Equals(stream))
+                    stream = null;
 
-                return responseWrapper ?? value;
+                return richResponse ?? value;
             }
             finally
             {
-                if (responseStream != null)
-                    responseStream.Dispose();
+                if (stream != null)
+                    stream.Dispose();
             }
         }
 
@@ -131,12 +131,6 @@ namespace DocaLabs.Http.Client.Binding
             }
 
             return providers.FirstOrDefault(x => x.CanDeserialize(responseStream, resultType));
-        }
-
-        static object InitializeResponseWrapper(Type responseType, HttpResponseStream stream, object value)
-        {
-            var status = stream.GetResponseStatus();
-            return Activator.CreateInstance(responseType, status.StatusCode, status.StatusDescription, value);
         }
     }
 }

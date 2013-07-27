@@ -1,0 +1,350 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>System.4.0.0.0.Fakes</name>
+    </assembly>
+    <members>
+        <member name="T:System.Net.Fakes.ShimFtpWebResponse">
+            <summary>Shim type of System.Net.FtpWebResponse</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimFtpWebResponse.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimFtpWebResponse.#ctor(System.Net.FtpWebResponse)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimFtpWebResponse.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimFtpWebResponse.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimFtpWebResponse.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimFtpWebResponse.Bind(System.Runtime.Serialization.ISerializable)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.BannerMessageGet">
+            <summary>Sets the shim of FtpWebResponse.get_BannerMessage()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.Close">
+            <summary>Sets the shim of FtpWebResponse.Close()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.ConstructorHttpWebResponse">
+            <summary>Sets the shim of FtpWebResponse.FtpWebResponse(HttpWebResponse httpWebResponse)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.ConstructorStreamInt64UriFtpStatusCodeStringDateTimeStringStringString">
+            <summary>Sets the shim of FtpWebResponse.FtpWebResponse(Stream responseStream, Int64 contentLength, Uri responseUri, FtpStatusCode statusCode, String statusLine, DateTime lastModified, String bannerMessage, String welcomeMessage, String exitMessage)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.ContentLengthGet">
+            <summary>Sets the shim of FtpWebResponse.get_ContentLength()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.ExitMessageGet">
+            <summary>Sets the shim of FtpWebResponse.get_ExitMessage()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.GetResponseStream">
+            <summary>Sets the shim of FtpWebResponse.GetResponseStream()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.HeadersGet">
+            <summary>Sets the shim of FtpWebResponse.get_Headers()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.LastModifiedGet">
+            <summary>Sets the shim of FtpWebResponse.get_LastModified()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.ResponseUriGet">
+            <summary>Sets the shim of FtpWebResponse.get_ResponseUri()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.SetContentLengthInt64">
+            <summary>Sets the shim of FtpWebResponse.SetContentLength(Int64 value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.SetResponseStreamStream">
+            <summary>Sets the shim of FtpWebResponse.SetResponseStream(Stream stream)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.StatusCodeGet">
+            <summary>Sets the shim of FtpWebResponse.get_StatusCode()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.StatusDescriptionGet">
+            <summary>Sets the shim of FtpWebResponse.get_StatusDescription()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.SupportsHeadersGet">
+            <summary>Sets the shim of FtpWebResponse.get_SupportsHeaders()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.UpdateStatusFtpStatusCodeStringString">
+            <summary>Sets the shim of FtpWebResponse.UpdateStatus(FtpStatusCode statusCode, String statusLine, String exitMessage)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.WelcomeMessageGet">
+            <summary>Sets the shim of FtpWebResponse.get_WelcomeMessage()</summary>
+        </member>
+        <member name="T:System.Net.Fakes.ShimFtpWebResponse.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.BannerMessageGet">
+            <summary>Sets the shim of FtpWebResponse.get_BannerMessage()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.Close">
+            <summary>Sets the shim of FtpWebResponse.Close()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.ContentLengthGet">
+            <summary>Sets the shim of FtpWebResponse.get_ContentLength()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.ExitMessageGet">
+            <summary>Sets the shim of FtpWebResponse.get_ExitMessage()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.GetResponseStream">
+            <summary>Sets the shim of FtpWebResponse.GetResponseStream()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.HeadersGet">
+            <summary>Sets the shim of FtpWebResponse.get_Headers()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.LastModifiedGet">
+            <summary>Sets the shim of FtpWebResponse.get_LastModified()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.ResponseUriGet">
+            <summary>Sets the shim of FtpWebResponse.get_ResponseUri()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.SetContentLengthInt64">
+            <summary>Sets the shim of FtpWebResponse.SetContentLength(Int64 value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.SetResponseStreamStream">
+            <summary>Sets the shim of FtpWebResponse.SetResponseStream(Stream stream)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.StatusCodeGet">
+            <summary>Sets the shim of FtpWebResponse.get_StatusCode()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.StatusDescriptionGet">
+            <summary>Sets the shim of FtpWebResponse.get_StatusDescription()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.SupportsHeadersGet">
+            <summary>Sets the shim of FtpWebResponse.get_SupportsHeaders()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.UpdateStatusFtpStatusCodeStringString">
+            <summary>Sets the shim of FtpWebResponse.UpdateStatus(FtpStatusCode statusCode, String statusLine, String exitMessage)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimFtpWebResponse.AllInstances.WelcomeMessageGet">
+            <summary>Sets the shim of FtpWebResponse.get_WelcomeMessage()</summary>
+        </member>
+        <member name="T:System.Net.Fakes.ShimHttpWebResponse">
+            <summary>Shim type of System.Net.HttpWebResponse</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimHttpWebResponse.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimHttpWebResponse.#ctor(System.Net.HttpWebResponse)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimHttpWebResponse.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimHttpWebResponse.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimHttpWebResponse.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="M:System.Net.Fakes.ShimHttpWebResponse.Bind(System.Runtime.Serialization.ISerializable)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.Abort">
+            <summary>Sets the shim of HttpWebResponse.Abort()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.CharacterSetGet">
+            <summary>Sets the shim of HttpWebResponse.get_CharacterSet()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.Close">
+            <summary>Sets the shim of HttpWebResponse.Close()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ConnectionGroupNameGet">
+            <summary>Sets the shim of HttpWebResponse.get_ConnectionGroupName()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ConnectionGroupNameSetString">
+            <summary>Sets the shim of HttpWebResponse.set_ConnectionGroupName(String value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.Constructor">
+            <summary>Sets the shim of HttpWebResponse.HttpWebResponse()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ConstructorSerializationInfoStreamingContext">
+            <summary>Sets the shim of HttpWebResponse.HttpWebResponse(SerializationInfo serializationInfo, StreamingContext streamingContext)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ContentEncodingGet">
+            <summary>Sets the shim of HttpWebResponse.get_ContentEncoding()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ContentLengthGet">
+            <summary>Sets the shim of HttpWebResponse.get_ContentLength()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ContentTypeGet">
+            <summary>Sets the shim of HttpWebResponse.get_ContentType()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.CookiesGet">
+            <summary>Sets the shim of HttpWebResponse.get_Cookies()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.CookiesSetCookieCollection">
+            <summary>Sets the shim of HttpWebResponse.set_Cookies(CookieCollection value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.DisposeBoolean">
+            <summary>Sets the shim of HttpWebResponse.Dispose(Boolean disposing)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.GetObjectDataSerializationInfoStreamingContext">
+            <summary>Sets the shim of HttpWebResponse.GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.GetResponseHeaderString">
+            <summary>Sets the shim of HttpWebResponse.GetResponseHeader(String headerName)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.GetResponseStream">
+            <summary>Sets the shim of HttpWebResponse.GetResponseStream()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.HeadersGet">
+            <summary>Sets the shim of HttpWebResponse.get_Headers()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.InternalSetIsMutuallyAuthenticatedSetBoolean">
+            <summary>Sets the shim of HttpWebResponse.set_InternalSetIsMutuallyAuthenticated(Boolean value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.IsMutuallyAuthenticatedGet">
+            <summary>Sets the shim of HttpWebResponse.get_IsMutuallyAuthenticated()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.IsWebSocketResponseGet">
+            <summary>Sets the shim of HttpWebResponse.get_IsWebSocketResponse()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.IsWebSocketResponseSetBoolean">
+            <summary>Sets the shim of HttpWebResponse.set_IsWebSocketResponse(Boolean value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.KeepAliveGet">
+            <summary>Sets the shim of HttpWebResponse.get_KeepAlive()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.LastModifiedGet">
+            <summary>Sets the shim of HttpWebResponse.get_LastModified()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.MethodGet">
+            <summary>Sets the shim of HttpWebResponse.get_Method()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ProtocolVersionGet">
+            <summary>Sets the shim of HttpWebResponse.get_ProtocolVersion()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ResponseStreamGet">
+            <summary>Sets the shim of HttpWebResponse.get_ResponseStream()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ResponseStreamSetStream">
+            <summary>Sets the shim of HttpWebResponse.set_ResponseStream(Stream value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ResponseUriGet">
+            <summary>Sets the shim of HttpWebResponse.get_ResponseUri()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.ServerGet">
+            <summary>Sets the shim of HttpWebResponse.get_Server()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.StatusCodeGet">
+            <summary>Sets the shim of HttpWebResponse.get_StatusCode()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.StatusDescriptionGet">
+            <summary>Sets the shim of HttpWebResponse.get_StatusDescription()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.SupportsHeadersGet">
+            <summary>Sets the shim of HttpWebResponse.get_SupportsHeaders()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.SystemRuntimeSerializationISerializableGetObjectDataSerializationInfoStreamingContext">
+            <summary>Sets the shim of HttpWebResponse.System.Runtime.Serialization.ISerializable.GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)</summary>
+        </member>
+        <member name="T:System.Net.Fakes.ShimHttpWebResponse.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.Abort">
+            <summary>Sets the shim of HttpWebResponse.Abort()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.CharacterSetGet">
+            <summary>Sets the shim of HttpWebResponse.get_CharacterSet()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.Close">
+            <summary>Sets the shim of HttpWebResponse.Close()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ConnectionGroupNameGet">
+            <summary>Sets the shim of HttpWebResponse.get_ConnectionGroupName()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ConnectionGroupNameSetString">
+            <summary>Sets the shim of HttpWebResponse.set_ConnectionGroupName(String value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ContentEncodingGet">
+            <summary>Sets the shim of HttpWebResponse.get_ContentEncoding()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ContentLengthGet">
+            <summary>Sets the shim of HttpWebResponse.get_ContentLength()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ContentTypeGet">
+            <summary>Sets the shim of HttpWebResponse.get_ContentType()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.CookiesGet">
+            <summary>Sets the shim of HttpWebResponse.get_Cookies()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.CookiesSetCookieCollection">
+            <summary>Sets the shim of HttpWebResponse.set_Cookies(CookieCollection value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.DisposeBoolean">
+            <summary>Sets the shim of HttpWebResponse.Dispose(Boolean disposing)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.GetObjectDataSerializationInfoStreamingContext">
+            <summary>Sets the shim of HttpWebResponse.GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.GetResponseHeaderString">
+            <summary>Sets the shim of HttpWebResponse.GetResponseHeader(String headerName)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.GetResponseStream">
+            <summary>Sets the shim of HttpWebResponse.GetResponseStream()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.HeadersGet">
+            <summary>Sets the shim of HttpWebResponse.get_Headers()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.InternalSetIsMutuallyAuthenticatedSetBoolean">
+            <summary>Sets the shim of HttpWebResponse.set_InternalSetIsMutuallyAuthenticated(Boolean value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.IsMutuallyAuthenticatedGet">
+            <summary>Sets the shim of HttpWebResponse.get_IsMutuallyAuthenticated()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.IsWebSocketResponseGet">
+            <summary>Sets the shim of HttpWebResponse.get_IsWebSocketResponse()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.IsWebSocketResponseSetBoolean">
+            <summary>Sets the shim of HttpWebResponse.set_IsWebSocketResponse(Boolean value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.KeepAliveGet">
+            <summary>Sets the shim of HttpWebResponse.get_KeepAlive()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.LastModifiedGet">
+            <summary>Sets the shim of HttpWebResponse.get_LastModified()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.MethodGet">
+            <summary>Sets the shim of HttpWebResponse.get_Method()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ProtocolVersionGet">
+            <summary>Sets the shim of HttpWebResponse.get_ProtocolVersion()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ResponseStreamGet">
+            <summary>Sets the shim of HttpWebResponse.get_ResponseStream()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ResponseStreamSetStream">
+            <summary>Sets the shim of HttpWebResponse.set_ResponseStream(Stream value)</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ResponseUriGet">
+            <summary>Sets the shim of HttpWebResponse.get_ResponseUri()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.ServerGet">
+            <summary>Sets the shim of HttpWebResponse.get_Server()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.StatusCodeGet">
+            <summary>Sets the shim of HttpWebResponse.get_StatusCode()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.StatusDescriptionGet">
+            <summary>Sets the shim of HttpWebResponse.get_StatusDescription()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.SupportsHeadersGet">
+            <summary>Sets the shim of HttpWebResponse.get_SupportsHeaders()</summary>
+        </member>
+        <member name="P:System.Net.Fakes.ShimHttpWebResponse.AllInstances.SystemRuntimeSerializationISerializableGetObjectDataSerializationInfoStreamingContext">
+            <summary>Sets the shim of HttpWebResponse.System.Runtime.Serialization.ISerializable.GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)</summary>
+        </member>
+    </members>
+</doc>

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Utils;
 using Machine.Specifications;
@@ -519,8 +520,8 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
         class TestModel : RichResponse<string>
         {
-            public TestModel(int statusCode, string statusDescription, object value) 
-                : base(statusCode, statusDescription, value)
+            public TestModel(WebResponse response, object value)
+                : base(response, value)
             {
             }
         }
@@ -534,16 +535,16 @@ namespace DocaLabs.Http.Client.Tests.Utils
 
         class TestModel1 : RichResponse<string>
         {
-            public TestModel1(int statusCode, string statusDescription, object value) 
-                : base(statusCode, statusDescription, value)
+            public TestModel1(WebResponse response, object value) 
+                : base(response, value)
             {
             }
         }
 
         class TestModel : TestModel1
         {
-            public TestModel(int statusCode, string statusDescription, object value) 
-                : base(statusCode, statusDescription, value)
+            public TestModel(WebResponse response, object value) 
+                : base(response, value)
             {
             }
         }
