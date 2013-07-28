@@ -38,3 +38,4 @@ PartCover/
 *sln.DotSettings
 *.svclog
 packages/
+tests/DocaLabs.Http.Client.Tests.MSTest/FakesAssemblies/*
