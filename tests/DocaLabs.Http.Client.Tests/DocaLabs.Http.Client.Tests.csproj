@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="Binding\DefaultHeaderMapperTests.cs" />
     <Compile Include="Binding\DefaultUrlComposerTests.cs" />
+    <Compile Include="Binding\ModelBindersTests.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyOverridesAttributeTests.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverterTests.cs" />

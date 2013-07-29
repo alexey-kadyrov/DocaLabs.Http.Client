@@ -50,6 +50,9 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
+        /// <summary>
+        /// Creates a new instance of the DefaultResponseBinder class with Json,Xml, and plain text deserializers.
+        /// </summary>
         public DefaultResponseBinder()
         {
             _locker = new object();
@@ -62,6 +65,20 @@ namespace DocaLabs.Http.Client.Binding
             };
         }
 
+        /// <summary>
+        /// Reads the response stream and returns an object if there is anything there.
+        /// For deserialization it:
+        ///     * Checks for ResponseDeserializationAttribute on the output model type
+        ///     * Checks for ResponseDeserializationAttribute on the http client type
+        ///     * Checks whenever it can use the registered deserializers
+        ///     * If the output model is string return it as the string
+        ///     * If the output model is byte array return it as byte array
+        ///     * If the output model is Stream or HttpResponseStream returns directly the stream - it'll be the caller responsibility to dispose it.
+        /// </summary>
+        /// <param name="context">The binding context.</param>
+        /// <param name="request">The WebRequest object.</param>
+        /// <param name="resultType">Expected type for the return value.</param>
+        /// <returns>Return value from the stream or null.</returns>
         public virtual object Read(BindingContext context, WebRequest request, Type resultType)
         {
             if(resultType == null)
@@ -112,7 +129,7 @@ namespace DocaLabs.Http.Client.Binding
             if (resultType == typeof(byte[]))
                 return responseStream.AsByteArray();
 
-            if (resultType == typeof(Stream))
+            if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
                 return responseStream;
 
             if (resultType == typeof(VoidType))

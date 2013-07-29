@@ -56,20 +56,5 @@ namespace DocaLabs.Http.Client
         /// </summary>
         [PropertyOverrides(Name = "")]
         public T Value { get; set; }
-
-        /// <summary>
-        /// Initializes an instance of the RichRequest class with the default value.
-        /// </summary>
-        public RichRequest()
-        {
-        }
-
-        /// <summary>
-        /// Initializes an instance of the RichRequest class with the specified value.
-        /// </summary>
-        public RichRequest(T value)
-        {
-            Value = value;
-        }
     }
 }
