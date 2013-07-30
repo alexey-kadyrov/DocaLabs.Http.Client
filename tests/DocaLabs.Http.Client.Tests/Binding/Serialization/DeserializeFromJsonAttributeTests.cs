@@ -174,7 +174,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
     }
 
     [Subject(typeof(DeserializeFromJsonAttribute), "deserialization")]
-    public class when_json_deserializer_is_used_with_null_response : response_deserialization_test_context
+    class when_json_deserializer_is_used_with_null_response : response_deserialization_test_context
     {
         static Exception exception;
         static DeserializeFromJsonAttribute deserializer;
@@ -265,7 +265,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
     }
 
     [Subject(typeof(DeserializeFromJsonAttribute), "checking that can deserialize")]
-    public class when_json_deserializer_is_checking_with_null_response : response_deserialization_test_context
+    class when_json_deserializer_is_checking_with_null_response : response_deserialization_test_context
     {
         static Exception exception;
         static DeserializeFromJsonAttribute deserializer;

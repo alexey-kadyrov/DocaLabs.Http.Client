@@ -5,7 +5,7 @@ using Moq;
 
 namespace DocaLabs.Http.Client.Tests._Utils
 {
-    public class response_deserialization_test_context
+    class response_deserialization_test_context
     {
         protected static Mock<WebRequest> mock_request;
         protected static Mock<WebResponse> mock_response;

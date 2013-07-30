@@ -81,6 +81,9 @@ namespace DocaLabs.Http.Client.Binding
         /// <returns>Return value from the stream or null.</returns>
         public virtual object Read(BindingContext context, WebRequest request, Type resultType)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if(resultType == null)
                 throw new ArgumentNullException("resultType");
 
@@ -115,9 +118,12 @@ namespace DocaLabs.Http.Client.Binding
             if (deserializer != null)
                 return deserializer.Deserialize(responseStream, resultType);
 
-            deserializer = context.HttpClient.GetType().GetCustomAttribute<ResponseDeserializationAttribute>(true);
-            if (deserializer != null)
-                return deserializer.Deserialize(responseStream, resultType);
+            if (context.HttpClient != null)
+            {
+                deserializer = context.HttpClient.GetType().GetCustomAttribute<ResponseDeserializationAttribute>(true);
+                if (deserializer != null)
+                    return deserializer.Deserialize(responseStream, resultType);
+            }
 
             var provider = FindProvider(responseStream, resultType);
             if (provider != null)
