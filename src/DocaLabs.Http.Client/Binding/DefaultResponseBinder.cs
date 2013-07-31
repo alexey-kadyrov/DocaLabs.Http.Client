@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Utils;
 
@@ -21,6 +22,7 @@ namespace DocaLabs.Http.Client.Binding
 
         /// <summary>
         /// Gets or sets the list of deserialization providers.
+        /// The setter and getter are thread safe.
         /// </summary>
         public IList<IResponseDeserializationProvider> Providers
         {
@@ -98,7 +100,7 @@ namespace DocaLabs.Http.Client.Binding
                 object richResponse = null;
 
                 if (responseType != resultType)
-                    richResponse = Activator.CreateInstance(responseType, stream.Response, value);
+                    richResponse = Activator.CreateInstance(resultType, stream.Response, value);
 
                 if (value.Equals(stream))
                     stream = null;
@@ -114,6 +116,15 @@ namespace DocaLabs.Http.Client.Binding
 
         object ReadStream(BindingContext context, HttpResponseStream responseStream, Type resultType)
         {
+            if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
+                return responseStream;
+
+            if (resultType == typeof (VoidType))
+            {
+                SpinStream(responseStream);
+                return VoidType.Value;
+            }
+
             var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
             if (deserializer != null)
                 return deserializer.Deserialize(responseStream, resultType);
@@ -135,13 +146,16 @@ namespace DocaLabs.Http.Client.Binding
             if (resultType == typeof(byte[]))
                 return responseStream.AsByteArray();
 
-            if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
-                return responseStream;
-
-            if (resultType == typeof(VoidType))
-                return VoidType.Value;
-
             throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
+        }
+
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        static void SpinStream(Stream responseStream)
+        {
+            var buffer = new byte[1024];
+            while (responseStream.Read(buffer, 0, buffer.Length) == buffer.Length)
+            {
+            }
         }
 
         IResponseDeserialization FindProvider(HttpResponseStream responseStream, Type resultType)
