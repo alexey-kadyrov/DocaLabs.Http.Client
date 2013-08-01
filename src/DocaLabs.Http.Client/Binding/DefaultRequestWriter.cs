@@ -7,10 +7,13 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
+    /// <summary>
+    /// Default request writer.
+    /// </summary>
     public class DefaultRequestWriter
     {
         /// <summary>
-        /// Looks for IRequestSerialization on model or client level.
+        /// Writes data to the request's body or sets the content length to zero if the model cannot be serialized.
         /// Looks for RequestSerializationAttribute descendants defined on:
         ///     1. input model class level
         ///     2. One of it's properties
@@ -28,6 +31,10 @@ namespace DocaLabs.Http.Client.Binding
                 request.SetContentLengthToZeroIfBodyIsRequired();
         }
 
+        /// <summary>
+        /// Tries to figure out what HTTP verb should be used based on http client and model information.
+        /// It checks for RequestSerializationAttribute on the model or client types or on any property of the model.
+        /// </summary>
         public string InferRequestMethod(object httpClient, object model)
         {
             if (httpClient == null)
