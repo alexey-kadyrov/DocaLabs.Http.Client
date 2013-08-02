@@ -168,6 +168,37 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_false_for_icredentials_property_with_ignore_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
 
+        // RequestBodyAsForm
+        It should_return_false_for_indexer_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestBodyAsFormHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
         // request serialization
         It should_return_false_for_indexer_with_request_serialization_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(short)).IsImplicitUrlPathOrQuery().ShouldBeFalse();
@@ -357,6 +388,37 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_return_false_for_icredentials_property_with_ignore_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        // RequestBodyAsForm
+        It should_return_false_for_indexer_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestBodyAsFormHint).IsExplicitUrlQuery().ShouldBeFalse();
 
         // request serialization
         It should_return_false_for_indexer_with_request_serialization_hint =
@@ -548,6 +610,37 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_false_for_icredentials_property_with_ignore_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsExplicitUrlPath().ShouldBeFalse();
 
+        // RequestBodyAsForm
+        It should_return_false_for_indexer_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestBodyAsFormHint).IsExplicitUrlPath().ShouldBeFalse();
+
         // request serialization
         It should_return_false_for_indexer_with_request_serialization_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(short)).IsExplicitUrlPath().ShouldBeFalse();
@@ -737,6 +830,37 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_return_false_for_icredentials_property_with_ignore_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsHeader().ShouldBeFalse();
+
+        // RequestBodyAsForm
+        It should_return_false_for_indexer_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestBodyAsFormHint).IsHeader().ShouldBeFalse();
 
         // request serialization
         It should_return_false_for_indexer_with_request_serialization_hint =
@@ -928,6 +1052,37 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_false_for_icredentials_property_with_ignore_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsCredentials().ShouldBeFalse();
 
+        // RequestBodyAsForm
+        It should_return_false_for_indexer_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_simple_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_object_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_generic_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_namevaluecollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_simple_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_object_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_webheadercollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
+        It should_return_false_for_icredentials_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestBodyAsFormHint).IsCredentials().ShouldBeFalse();
+
         // request serialization
         It should_return_false_for_indexer_with_request_serialization_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(short)).IsCredentials().ShouldBeFalse();
@@ -1118,6 +1273,37 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_false_for_icredentials_property_with_ignore_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsRequestStream().ShouldBeFalse();
 
+        // RequestBodyAsForm
+        It should_return_false_for_indexer_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsRequestStream().ShouldBeFalse();
+
+        It should_return_true_for_simple_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_object_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.DictionaryWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_generic_dictionary_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.GenericDictionaryWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_namevaluecollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.NameValueCollectionWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_simple_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleArrayWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_object_array_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.ObjectArrayWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_webheadercollection_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WebHeaderCollectionWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
+        It should_return_true_for_icredentials_property_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
+
         // request serialization
         It should_return_false_for_indexer_with_request_serialization_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(short)).IsRequestStream().ShouldBeFalse();
@@ -1250,6 +1436,27 @@ namespace DocaLabs.Http.Client.Tests.Binding
         public WebHeaderCollection WebHeaderCollectionWithIgnoreHint { get; set; }
         [RequestUse(RequestUseTargets.Ignore)]
         public ICredentials CredentialsWithIgnoreHint { get; set; }
+
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public string this[char idx] { get { return ""; } set { } }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public string SimpleWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public object ObjectWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public IDictionary DictionaryWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public IDictionary<string, string> GenericDictionaryWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public NameValueCollection NameValueCollectionWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public string[] SimpleArrayWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public object[] ObjectArrayWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public WebHeaderCollection WebHeaderCollectionWithRequestBodyAsFormHint { get; set; }
+        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        public ICredentials CredentialsWithRequestBodyAsFormHint { get; set; }
 
         [SerializeAsJson]
         public string this[short idx] { get { return ""; } set { } }

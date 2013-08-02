@@ -21,7 +21,8 @@ namespace DocaLabs.Http.Client.Binding
                 !info.IsExplicitUrlPath() &&
                 !info.IsExplicitUrlQuery() &&
                 !info.IsHeader() &&
-                !info.IsCredentials();
+                !info.IsCredentials() &&
+                !info.IsRequestStream();
         }
 
         /// <summary>
@@ -84,7 +85,15 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsRequestStream(this PropertyInfo info)
         {
-            return CanPropertyBeUsedInRequest(info) && info.GetCustomAttribute<RequestSerializationAttribute>(true) != null;
+            if (!CanPropertyBeUsedInRequest(info))
+                return false;
+
+            var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
+
+            if (useAttribute != null && (useAttribute.Targets & RequestUseTargets.RequestBodyAsForm) != 0)
+                return true;
+
+            return info.GetCustomAttribute<RequestSerializationAttribute>(true) != null;
         }
 
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)

@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Net;
 using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Binding
 {
+    // ReSharper disable UnusedMember.Local
+
     [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
     class when_trying_to_infer_http_method_for_null_client
     {
@@ -24,259 +28,111 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class Model
         {
+            public string Value { get; set; }
         }
     }
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_http_client_and_query_and_property_of_query_have_request_serialization_attribute
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static IRequestSerialization serializer;
 
-    //    Because of =
-    //        () => serializer = new DefaultRequestWriter().Write(new TestHttpClient(), new Query());
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_model_without_any_serialization_hints
+    {
+        static DefaultRequestWriter writer;
+        static string method;
 
-    //    It should_return_attribute_that_is_defined_on_the_query_class =
-    //        () => serializer.ShouldBeOfType<SerializeAsJsonAttribute>();
+        Establish context =
+            () => writer = new DefaultRequestWriter();
 
-    //    [SerializeAsJson]
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
 
-    //        [SerializeAsForm]
-    //        public string Name { get; set; }
-    //    }
+        It should_return_get_method =
+            () => method.ShouldBeEqualIgnoringCase("GET");
 
-    //    [SerializeAsXml]
-    //    class TestHttpClient : HttpClient<Query, string>
-    //    {
-    //        public TestHttpClient()
-    //            : base(new Uri("http://foo.bar/"))
-    //        {
-    //        }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
 
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_http_client_and_property_of_query_have_request_serialization_attribute
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static IRequestSerialization serializer;
+        class Model
+        {
+            public string Value { get; set; }
+        }
+    }
 
-    //    Because of =
-    //        () => serializer = RequestBodySerializationFactory.GetSerializer(new TestHttpClient(), new Query());
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_model_without_any_serialization_hints_but_with_request_usage_hints
+    {
+        static DefaultRequestWriter writer;
+        static string method;
 
-    //    It should_return_attribute_that_is_defined_on_the_property_of_the_query_class =
-    //        () => serializer.ShouldBeOfType<SerializeAsFormAttribute>();
+        Establish context =
+            () => writer = new DefaultRequestWriter();
 
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
 
-    //        [SerializeAsForm]
-    //        public string Name { get; set; }
-    //    }
+        It should_return_get_method =
+            () => method.ShouldBeEqualIgnoringCase("GET");
 
-    //    [SerializeAsXml]
-    //    class TestHttpClient : HttpClient<Query, string>
-    //    {
-    //        public TestHttpClient()
-    //            : base(new Uri("http://foo.bar/"))
-    //        {
-    //        }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
 
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_only_query_has_request_serialization_attribute
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static IRequestSerialization serializer;
+        class Model
+        {
+            [RequestUse(RequestUseTargets.UrlQuery)]
+            public string Value1 { get; set; }
 
-    //    Because of =
-    //        () => serializer = RequestBodySerializationFactory.GetSerializer(new TestHttpClient(), new Query());
+            [RequestUse(RequestUseTargets.UrlPath)]
+            public string Value2 { get; set; }
 
-    //    It should_return_attribute_that_is_defined_on_the_query_class =
-    //        () => serializer.ShouldBeOfType<SerializeAsJsonAttribute>();
+            [RequestUse(RequestUseTargets.RequestHeader)]
+            public string Value3 { get; set; }
 
-    //    [SerializeAsJson]
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
-    //        public string Name { get; set; }
-    //    }
+            [RequestUse(RequestUseTargets.Ignore)]
+            public string Value4 { get; set; }
 
-    //    class TestHttpClient : HttpClient<Query, string>
-    //    {
-    //        public TestHttpClient()
-    //            : base(new Uri("http://foo.bar/"))
-    //        {
-    //        }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
+            public WebHeaderCollection Headers { get; set; }
 
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_only_http_client_has_request_serialization_attribute
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static IRequestSerialization serializer;
+            public ICredentials Credentials { get; set; }
+        }
+    }
 
-    //    Because of =
-    //        () => serializer = RequestBodySerializationFactory.GetSerializer(new TestHttpClient(), new Query());
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_model_without_any_serialization_hints_but_with_request_usage_as_form_in_the_body
+    {
+        static DefaultRequestWriter writer;
+        static string method;
 
-    //    It should_return_attribute_that_is_defined_on_the_http_client_class =
-    //        () => serializer.ShouldBeOfType<SerializeAsXmlAttribute>();
+        Establish context =
+            () => writer = new DefaultRequestWriter();
 
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
-    //        public string Name { get; set; }
-    //    }
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
 
-    //    [SerializeAsXml]
-    //    class TestHttpClient : HttpClient<Query, string>
-    //    {
-    //        public TestHttpClient()
-    //            : base(new Uri("http://foo.bar/"))
-    //        {
-    //        }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
+        It should_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
 
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_only_property_of_query_have_request_serialization_attribute
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static IRequestSerialization serializer;
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
 
-    //    Because of =
-    //        () => serializer = RequestBodySerializationFactory.GetSerializer(new TestHttpClient(), new Query());
+        class Model
+        {
+            [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+            public string Value2 { get; set; }
+        }
+    }
 
-    //    It should_return_attribute_that_is_defined_on_the_property_of_the_query_class =
-    //        () => serializer.ShouldBeOfType<SerializeAsFormAttribute>();
-
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
-
-    //        [SerializeAsForm]
-    //        public string Name { get; set; }
-    //    }
-
-    //    class TestHttpClient : HttpClient<Query, string>
-    //    {
-    //        public TestHttpClient()
-    //            : base(new Uri("http://foo.bar/"))
-    //        {
-    //        }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
-
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_no_one_has_request_serialization_attribute
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static IRequestSerialization serializer;
-
-    //    Because of =
-    //        () => serializer = RequestBodySerializationFactory.GetSerializer(new TestHttpClient(), new Query());
-
-    //    It should_return_null =
-    //        () => serializer.ShouldBeNull();
-
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
-    //        public string Name { get; set; }
-    //    }
-
-    //    class TestHttpClient : HttpClient<Query, string>
-    //    {
-    //        public TestHttpClient()
-    //            : base(new Uri("http://foo.bar/"))
-    //        {
-    //        }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
-
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_http_clinet_is_null
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static Exception exception;
-
-    //    Because of =
-    //        () => exception = Catch.Exception(() => RequestBodySerializationFactory.GetSerializer(null, new Query()));
-
-    //    It should_throw_argument_null_exception =
-    //        () => exception.ShouldBeOfType<ArgumentNullException>();
-
-    //    It should_report_http_client_argument =
-    //        () => ((ArgumentNullException)exception).ParamName.ShouldEqual("httpClient");
-
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
-    //        public string Name { get; set; }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
-
-    //[Subject(typeof(DefaultRequestWriter))]
-    //class when_called_from_different_threads_concurrently
-    //{
-    //    // ReSharper disable UnusedMember.Local
-    //    static int counter;
-    //    static int current_concurrency;
-    //    static int achieved_concurrency;
-    //    static object locker;
-
-    //    Establish context =
-    //        () => locker = new object();
-
-    //    Because of = () =>
-    //    {
-    //        Parallel.For(0, 500000, i =>
-    //        {
-    //            var concurrencyLevel = Interlocked.Increment(ref current_concurrency);
-
-    //            lock (locker)
-    //            {
-    //                if (achieved_concurrency < concurrencyLevel)
-    //                    achieved_concurrency = concurrencyLevel;
-    //            }
-
-    //            if (RequestBodySerializationFactory.GetSerializer(new TestHttpClient(), new Query()) == null)
-    //                Interlocked.Increment(ref counter);
-
-    //            Interlocked.Decrement(ref current_concurrency);
-    //        });
-
-    //        Console.WriteLine(@"Achieved concurrency of: {0}", achieved_concurrency);
-    //    };
-
-    //    It should_not_fail_any_call =
-    //        () => counter.ShouldEqual(500000);
-
-    //    class Query
-    //    {
-    //        public string Id { get; set; }
-    //        public string Name { get; set; }
-    //    }
-
-    //    class TestHttpClient : HttpClient<Query, string>
-    //    {
-    //        public TestHttpClient()
-    //            : base(new Uri("http://foo.bar/"))
-    //        {
-    //        }
-    //    }
-    //    // ReSharper restore UnusedMember.Local
-    //}
+    // ReSharper restore UnusedMember.Local
 }
