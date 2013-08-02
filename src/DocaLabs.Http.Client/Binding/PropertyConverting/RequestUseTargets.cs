@@ -10,28 +10,28 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     public enum RequestUseTargets
     {
         /// <summary>
+        /// Default uninitialized value.
+        /// </summary>
+        Unknown = 0,
+
+        /// <summary>
         /// Ignore.
         /// </summary>
-        Ignore = 0,
+        Ignore = 1,
 
         /// <summary>
         /// To the URL's query.
         /// </summary>
-        UrlQuery = 1,
+        UrlQuery = 2,
 
         /// <summary>
         /// To the URL's path.
         /// </summary>
-        UrlPath = 2,
+        UrlPath = 4,
 
         /// <summary>
         /// To the web request header.
         /// </summary>
-        RequestHeader = 4,
-
-        /// <summary>
-        /// To the web request's form.
-        /// </summary>
-        RequestBodyAsForm = 8
+        RequestHeader = 8
     }
 }

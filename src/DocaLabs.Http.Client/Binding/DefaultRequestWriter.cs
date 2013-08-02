@@ -62,28 +62,26 @@ namespace DocaLabs.Http.Client.Binding
             if (model == null)
                 return null;
 
-            var serializer = TryQueryClassLevel(model);
+            var serializer = TryModelClassLevel(model);
             if (serializer != null)
                 return serializer;
 
-            return TryQueryPropertyLevel(model) ?? TryHttpClientClassLevel(httpClient);
+            return TryModelPropertyLevel(model) ?? TryHttpClientClassLevel(httpClient);
         }
 
-        static IRequestSerialization TryQueryClassLevel(object query)
+        static IRequestSerialization TryModelClassLevel(object query)
         {
             return query.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
         }
 
-        static IRequestSerialization TryQueryPropertyLevel(object query)
+        static IRequestSerialization TryModelPropertyLevel(object query)
         {
             // ReSharper disable LoopCanBeConvertedToQuery
             foreach (var property in query.GetType().GetProperties())
             {
-                var serializer = property.GetCustomAttribute<RequestSerializationAttribute>(true);
-                if (serializer == null)
-                    continue;
-
-                return serializer;
+                var serializer = property.TryGetRequestSerializer();
+                if (serializer != null)
+                    return serializer;
             }
 
             return null;

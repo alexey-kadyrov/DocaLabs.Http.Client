@@ -45,10 +45,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         static RequestUseAttribute attribute;
 
         Because of =
-            () => attribute = new RequestUseAttribute(RequestUseTargets.RequestBodyAsForm, "new name");
+            () => attribute = new RequestUseAttribute(RequestUseTargets.RequestHeader, "new name");
 
         It should_set_the_target_to_the_specified_targets =
-            () => attribute.Targets.ShouldEqual(RequestUseTargets.RequestBodyAsForm);
+            () => attribute.Targets.ShouldEqual(RequestUseTargets.RequestHeader);
 
         It should_set_the_name_to_the_specified_value =
             () => attribute.Name.ShouldEqual("new name");

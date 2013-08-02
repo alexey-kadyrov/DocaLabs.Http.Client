@@ -35,7 +35,7 @@ namespace DocaLabs.Http.Client.Binding
 
             var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
-            return useAttribute != null && (useAttribute.Targets & RequestUseTargets.UrlPath) != 0;
+            return useAttribute != null && useAttribute.Targets.HasFlag(RequestUseTargets.UrlPath);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace DocaLabs.Http.Client.Binding
 
             var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
-            return useAttribute != null && (useAttribute.Targets & RequestUseTargets.UrlQuery) != 0;
+            return useAttribute != null && useAttribute.Targets.HasFlag(RequestUseTargets.UrlQuery);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace DocaLabs.Http.Client.Binding
             var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
             if (useAttribute != null)
-                return (useAttribute.Targets & RequestUseTargets.RequestHeader) != 0;
+                return useAttribute.Targets.HasFlag(RequestUseTargets.RequestHeader);
 
             return 
                 typeof (WebHeaderCollection).IsAssignableFrom(info.PropertyType) && 
@@ -85,15 +85,15 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsRequestStream(this PropertyInfo info)
         {
-            if (!CanPropertyBeUsedInRequest(info))
-                return false;
+            return info.TryGetRequestSerializer() != null;
+        }
 
-            var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
-
-            if (useAttribute != null && (useAttribute.Targets & RequestUseTargets.RequestBodyAsForm) != 0)
-                return true;
-
-            return info.GetCustomAttribute<RequestSerializationAttribute>(true) != null;
+        /// <summary>
+        /// Returns IRequestSerialization if the property can be used to serialize into request stream.
+        /// </summary>
+        public static IRequestSerialization TryGetRequestSerializer(this PropertyInfo info)
+        {
+            return !CanPropertyBeUsedInRequest(info) ? null : info.GetCustomAttribute<RequestSerializationAttribute>(true);
         }
 
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)
@@ -104,7 +104,7 @@ namespace DocaLabs.Http.Client.Binding
 
             var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);
 
-            return useAttribute == null || useAttribute.Targets != RequestUseTargets.Ignore;
+            return useAttribute == null || (!useAttribute.Targets.HasFlag(RequestUseTargets.Ignore));
         }
     }
 }

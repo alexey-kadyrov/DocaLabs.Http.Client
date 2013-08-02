@@ -116,15 +116,6 @@ namespace DocaLabs.Http.Client.Binding
 
         object ReadStream(BindingContext context, HttpResponseStream responseStream, Type resultType)
         {
-            if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
-                return responseStream;
-
-            if (resultType == typeof (VoidType))
-            {
-                SpinStream(responseStream);
-                return VoidType.Value;
-            }
-
             var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
             if (deserializer != null)
                 return deserializer.Deserialize(responseStream, resultType);
@@ -134,6 +125,15 @@ namespace DocaLabs.Http.Client.Binding
                 deserializer = context.HttpClient.GetType().GetCustomAttribute<ResponseDeserializationAttribute>(true);
                 if (deserializer != null)
                     return deserializer.Deserialize(responseStream, resultType);
+            }
+
+            if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
+                return responseStream;
+
+            if (resultType == typeof(VoidType))
+            {
+                SpinStream(responseStream);
+                return VoidType.Value;
             }
 
             var provider = FindProvider(responseStream, resultType);

@@ -44,6 +44,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_false_for_icredentials_property_without_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithoutHint).IsImplicitUrlPathOrQuery().ShouldBeFalse();
 
+        // all hints
+        It should_return_false_for_all_hints =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WithAllHints).IsImplicitUrlPathOrQuery().ShouldBeFalse();
+
         // query
         It should_return_false_for_indexer_with_query_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(string)).IsImplicitUrlPathOrQuery().ShouldBeFalse();
@@ -264,6 +268,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_return_false_for_icredentials_property_without_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithoutHint).IsExplicitUrlQuery().ShouldBeFalse();
+
+        // all hints
+        It should_return_true_for_all_hints =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WithAllHints).IsExplicitUrlQuery().ShouldBeTrue();
 
         // query
         It should_return_false_for_indexer_with_query_hint =
@@ -486,6 +494,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_false_for_icredentials_property_without_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithoutHint).IsExplicitUrlPath().ShouldBeFalse();
 
+        // all hints
+        It should_return_true_for_all_hints =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WithAllHints).IsExplicitUrlPath().ShouldBeTrue();
+
         // query
         It should_return_false_for_indexer_with_query_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(string)).IsExplicitUrlPath().ShouldBeFalse();
@@ -706,6 +718,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_return_false_for_icredentials_property_without_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithoutHint).IsHeader().ShouldBeFalse();
+
+        // all hints
+        It should_return_true_for_all_hints =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WithAllHints).IsHeader().ShouldBeTrue();
 
         // query
         It should_return_false_for_indexer_with_query_hint =
@@ -928,6 +944,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_true_for_icredentials_property_without_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithoutHint).IsCredentials().ShouldBeTrue();
 
+        // all hints
+        It should_return_false_for_all_hints =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WithAllHints).IsCredentials().ShouldBeFalse();
+
         // query
         It should_return_false_for_indexer_with_query_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(string)).IsCredentials().ShouldBeFalse();
@@ -1149,6 +1169,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_false_for_icredentials_property_without_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithoutHint).IsRequestStream().ShouldBeFalse();
 
+        // all hints
+        It should_return_true_for_all_hints =
+            () => Reflect<TestModel>.GetPropertyInfo(x => x.WithAllHints).IsRequestStream().ShouldBeTrue();
+
         // query
         It should_return_false_for_indexer_with_query_hint =
             () => Reflect<TestModel>.GetIndexerInfo(typeof(string)).IsRequestStream().ShouldBeFalse();
@@ -1353,6 +1377,9 @@ namespace DocaLabs.Http.Client.Tests.Binding
         public WebHeaderCollection WebHeaderCollectionWithoutHint { get; set; }
         public ICredentials CredentialsWithoutHint { get; set; }
 
+        [SerializeAsForm, RequestUse(RequestUseTargets.UrlQuery | RequestUseTargets.UrlPath | RequestUseTargets.RequestHeader)]
+        public string WithAllHints { get; set; }
+
         [RequestUse(RequestUseTargets.UrlQuery)]
         public string this[string idx] { get { return ""; } set { } }
         [RequestUse(RequestUseTargets.UrlQuery)]
@@ -1437,25 +1464,25 @@ namespace DocaLabs.Http.Client.Tests.Binding
         [RequestUse(RequestUseTargets.Ignore)]
         public ICredentials CredentialsWithIgnoreHint { get; set; }
 
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public string this[char idx] { get { return ""; } set { } }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public string SimpleWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public object ObjectWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public IDictionary DictionaryWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public IDictionary<string, string> GenericDictionaryWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public NameValueCollection NameValueCollectionWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public string[] SimpleArrayWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public object[] ObjectArrayWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public WebHeaderCollection WebHeaderCollectionWithRequestBodyAsFormHint { get; set; }
-        [RequestUse(RequestUseTargets.RequestBodyAsForm)]
+        [SerializeAsForm]
         public ICredentials CredentialsWithRequestBodyAsFormHint { get; set; }
 
         [SerializeAsJson]
