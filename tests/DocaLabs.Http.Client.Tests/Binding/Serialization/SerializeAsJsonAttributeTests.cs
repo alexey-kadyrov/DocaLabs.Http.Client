@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
@@ -89,7 +90,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
         Because of =
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
-        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+        It should_set_request_content_type_as_application_json_with_utf_32_charset =
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-32");
 
         It should_serialize_object =
@@ -221,5 +222,212 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
 
         It should_wrap_the_original_exception =
             () => exception.InnerException.ShouldNotBeNull();
+    }
+    
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_string : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context = 
+            () => attribute = new SerializeAsJsonAttribute();
+
+        Because of =
+            () => attribute.Serialize("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}", mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+
+        It should_serialize_object = () => ParseRequestDataAsJson<TestTarget>().ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_string_with_gzip_content_encoding : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute { RequestContentEncoding = KnownContentEncodings.Gzip };
+
+        Because of =
+            () => attribute.Serialize("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}", mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+
+        It should_add_content_encoding_request_header =
+            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+
+        It should_add_gzip_content_encoding =
+            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+
+        It should_serialize_object = () => ParseDecodedRequestDataAsJson<TestTarget>().ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_string_with_utf_32_charset : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute { CharSet = Encoding.UTF32.WebName };
+
+        Because of =
+            () => attribute.Serialize("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}", mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_32_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-32");
+
+        It should_serialize_object = () => ParseRequestDataAsJson<TestTarget>(Encoding.UTF32).ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_byte_array : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute();
+
+        Because of =
+            () => attribute.Serialize(Encoding.UTF8.GetBytes("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}"), mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+
+        It should_serialize_object = () => ParseRequestDataAsJson<TestTarget>().ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_byte_array_with_gzip_content_encoding : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute { RequestContentEncoding = KnownContentEncodings.Gzip };
+
+        Because of =
+            () => attribute.Serialize(Encoding.UTF8.GetBytes("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}"), mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+
+        It should_add_content_encoding_request_header =
+            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+
+        It should_add_gzip_content_encoding =
+            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+
+        It should_serialize_object = () => ParseDecodedRequestDataAsJson<TestTarget>().ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_byte_array_with_utf_32_charset : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute { CharSet = Encoding.UTF32.WebName };
+
+        Because of =
+            () => attribute.Serialize(Encoding.UTF32.GetBytes("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}"), mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_32_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-32");
+
+        It should_serialize_object = () => ParseRequestDataAsJson<TestTarget>(Encoding.UTF32).ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_stream : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute();
+
+        Because of =
+            () => attribute.Serialize(new MemoryStream(Encoding.UTF8.GetBytes("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}")), mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+
+        It should_serialize_object = () => ParseRequestDataAsJson<TestTarget>().ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_stream_with_gzip_content_encoding : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute { RequestContentEncoding = KnownContentEncodings.Gzip };
+
+        Because of =
+            () => attribute.Serialize(new MemoryStream(Encoding.UTF8.GetBytes("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}")), mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_8_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+
+        It should_add_content_encoding_request_header =
+            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+
+        It should_add_gzip_content_encoding =
+            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+
+        It should_serialize_object = () => ParseDecodedRequestDataAsJson<TestTarget>().ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
+    }
+
+    [Subject(typeof(SerializeAsJsonAttribute))]
+    class when_serialize_as_json_attribute_is_used_on_already_serialized_stream_with_utf_32_charset : request_serialization_test_context
+    {
+        static SerializeAsJsonAttribute attribute;
+
+        Establish context =
+            () => attribute = new SerializeAsJsonAttribute { CharSet = Encoding.UTF32.WebName };
+
+        Because of =
+            () => attribute.Serialize(new MemoryStream(Encoding.UTF32.GetBytes("{\"Value1\" : 2012, \"Value2\" : \"Hello World!\"}")), mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_json_with_utf_32_charset =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-32");
+
+        It should_serialize_object = () => ParseRequestDataAsJson<TestTarget>(Encoding.UTF32).ShouldBeSimilar(new TestTarget
+        {
+            Value1 = 2012,
+            Value2 = "Hello World!"
+        });
     }
 }
