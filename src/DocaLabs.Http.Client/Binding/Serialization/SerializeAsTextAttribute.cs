@@ -4,16 +4,16 @@ using System.Net;
 using System.Text;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
-using DocaLabs.Http.Client.Utils.JsonSerialization;
 
 namespace DocaLabs.Http.Client.Binding.Serialization
 {
     /// <summary>
-    /// Serializes a given object into the web request in json format.
+    /// Serializes a given object into the web request as text.
     /// </summary>
-    public class SerializeAsJsonAttribute : RequestSerializationAttribute
+    public class SerializeAsTextAttribute : RequestSerializationAttribute
     {
         string _charSet;
+        string _contentType;
 
         /// <summary>
         /// Gets or sets the content encoding, if ContentEncoding blank or null no encoding is done.
@@ -37,11 +37,27 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         }
 
         /// <summary>
+        /// Gets or sets content type. The default value is 'text/plain'
+        /// </summary>
+        public string ContentType
+        {
+            get { return _contentType; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentNullException("value");
+
+                _contentType = value;
+            }
+        }
+
+        /// <summary>
         /// Initializes an instance of the SerializeAsJsonAttribute class.
         /// </summary>
-        public SerializeAsJsonAttribute()
+        public SerializeAsTextAttribute()
         {
             CharSet = CharSets.Utf8;
+            ContentType = "text/plain";
         }
 
         /// <summary>
@@ -54,7 +70,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            request.ContentType = string.Format("application/json; charset={0}", CharSet);
+            request.ContentType = string.Format("{0}; charset={1}", ContentType, CharSet);
             
             if(string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(obj, request);
@@ -115,6 +131,9 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         byte[] GetData(object obj)
         {
+            if(obj == null)
+                return new byte[0];
+
             var encoding = GetEncoding();
 
             var a = obj as byte[];
@@ -122,9 +141,14 @@ namespace DocaLabs.Http.Client.Binding.Serialization
                 return a;
 
             var s = obj as string;
-            return s != null 
-                ? encoding.GetBytes(s) 
-                : encoding.GetBytes(obj == null ? "" : JsonSerializationProvider.Serializer.Serialize(obj));
+            if( s != null )
+                return encoding.GetBytes(s);
+
+            var type = obj.GetType();
+            if (type.IsSimpleType())
+                return encoding.GetBytes(CustomConverter.Current.ChangeType<string>(obj));
+
+            throw new HttpClientException(string.Format(Resources.Text.object_must_be_of_string_byte_array_or_stream_type, type));
         }
     }
 }

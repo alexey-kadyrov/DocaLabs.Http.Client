@@ -86,6 +86,7 @@
     <Compile Include="Binding\PropertyConverting\SimpleDictionaryValueConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleValueConverterTests.cs" />
     <Compile Include="Binding\RequestUsageExtensionsTests.cs" />
+    <Compile Include="Binding\Serialization\SerializeAsTextAttributeTests.cs" />
     <Compile Include="Configuration\ClientHeaderElementTests.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />

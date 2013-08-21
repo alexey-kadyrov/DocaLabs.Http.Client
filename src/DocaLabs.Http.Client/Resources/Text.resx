@@ -171,6 +171,9 @@
   <data name="null_response_stream" xml:space="preserve">
     <value>Response stream is null.</value>
   </data>
+  <data name="object_must_be_of_string_byte_array_or_stream_type" xml:space="preserve">
+    <value>The object {0} must be either string or byte[] or Stream or simple type (e.g. int, double, etc.).</value>
+  </data>
   <data name="path_mapping_is_strictly_positioonal" xml:space="preserve">
     <value>The path mapping is strictly positional, if there is an empty value all other values after that must be empty as well. This values {0} violate this rule.</value>
   </data>

@@ -29,15 +29,18 @@ namespace DocaLabs.Http.Client.Tests._Utils
         Cleanup after_each =
             () => request_data.Dispose();
 
-        protected static string GetDecodedRequestData()
+        protected static string GetDecodedRequestData(Encoding encoding = null)
         {
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+
             // at this stage the request_data is already disposed
             using (var requestStream = new MemoryStream(request_data.ToArray()))
             using (var dataStream = new MemoryStream())
             using (var decomressionStream = new GZipStream(requestStream, CompressionMode.Decompress))
             {
                 decomressionStream.CopyTo(dataStream);
-                return Encoding.UTF8.GetString(dataStream.ToArray());
+                return encoding.GetString(dataStream.ToArray());
             }
         }
 

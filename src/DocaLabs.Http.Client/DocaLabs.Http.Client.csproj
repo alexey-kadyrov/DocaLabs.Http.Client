@@ -77,6 +77,7 @@
     <Compile Include="Binding\DefaultRequestWriter.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
+    <Compile Include="Binding\Serialization\SerializeAsTextAttribute.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
     <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="RichRequest.cs" />
