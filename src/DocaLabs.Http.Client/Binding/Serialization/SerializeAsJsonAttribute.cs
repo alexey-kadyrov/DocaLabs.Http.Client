@@ -54,16 +54,12 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            var encoding = GetEncoding();
-
-            var data = encoding.GetBytes(obj == null ? "" : JsonSerializationProvider.Serializer.Serialize(obj));
-
             request.ContentType = string.Format("application/json; charset={0}", CharSet);
             
             if(string.IsNullOrWhiteSpace(RequestContentEncoding))
-                Write(data, request);
+                Write(obj, request);
             else
-                CompressAndWrite(data, request);
+                CompressAndWrite(obj, request);
         }
 
         Encoding GetEncoding()
@@ -78,24 +74,57 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
-        static void Write(byte[] data, WebRequest request)
+        void Write(object obj, WebRequest request)
         {
-            using (var stream = request.GetRequestStream())
+            using (var requestStream = request.GetRequestStream())
             {
-                stream.Write(data, 0, data.Length);
+                var s = obj as Stream;
+                if (s != null)
+                {
+                    s.CopyTo(requestStream);
+                }
+                else
+                {
+                    var data = GetData(obj);
+                    requestStream.Write(data, 0, data.Length);
+                }
             }
         }
 
-        void CompressAndWrite(byte[] data, WebRequest request)
+        void CompressAndWrite(object obj, WebRequest request)
         {
             request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
 
             using (var requestStream = request.GetRequestStream())
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
-            using (var dataStream = new MemoryStream(data))
             {
-                dataStream.CopyTo(compressionStream);
+                var s = obj as Stream;
+                if (s != null)
+                {
+                    s.CopyTo(compressionStream);
+                }
+                else
+                {
+                    using (var dataStream = new MemoryStream(GetData(obj)))
+                    {
+                        dataStream.CopyTo(compressionStream);
+                    }
+                }
             }
+        }
+
+        byte[] GetData(object obj)
+        {
+            var encoding = GetEncoding();
+
+            var a = obj as byte[];
+            if (a != null)
+                return a;
+
+            var s = obj as string;
+            return s != null 
+                ? encoding.GetBytes(s) 
+                : encoding.GetBytes(obj == null ? "" : JsonSerializationProvider.Serializer.Serialize(obj));
         }
     }
 }
