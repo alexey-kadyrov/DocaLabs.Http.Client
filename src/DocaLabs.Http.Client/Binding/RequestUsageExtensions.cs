@@ -93,7 +93,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static IRequestSerialization TryGetRequestSerializer(this PropertyInfo info)
         {
-            return !CanPropertyBeUsedInRequest(info) ? null : info.GetCustomAttribute<RequestSerializationAttribute>(true);
+            return info.GetCustomAttribute<RequestSerializationAttribute>(true);
         }
 
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)

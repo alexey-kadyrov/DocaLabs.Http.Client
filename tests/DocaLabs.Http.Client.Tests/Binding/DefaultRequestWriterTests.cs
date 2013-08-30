@@ -201,6 +201,66 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_property_with_serialization_hint
+    {
+        static DefaultRequestWriter writer;
+        static string method;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
+
+        It should_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class Model
+        {
+            [TestRequestSerializationAttribute]
+            public string Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_property_with_serialization_hint_and_client_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+        static string method;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
+
+        It should_still_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class Model
+        {
+            [TestRequestSerializationAttribute, RequestUse(RequestUseTargets.Ignore)]
+            public string Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
     class when_trying_to_infer_http_method_for_model_with_serialization_hint
     {
         static DefaultRequestWriter writer;
@@ -231,6 +291,36 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_model_with_serialization_hint_and_client_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+        static string method;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
+
+        It should_still_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        [TestRequestSerializationAttribute, RequestUse(RequestUseTargets.Ignore)]
+        class Model
+        {
+            public string Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
     class when_trying_to_infer_http_method_for_client_with_serialization_hint
     {
         static DefaultRequestWriter writer;
@@ -246,6 +336,36 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => method.ShouldBeEqualIgnoringCase("POST");
 
         [TestRequestSerializationAttribute]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class Model
+        {
+            public string Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_client_with_serialization_hint_and_client_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+        static string method;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
+
+        It should_still_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
+
+        [TestRequestSerializationAttribute, RequestUse(RequestUseTargets.Ignore)]
         class Client : HttpClient<Model, string>
         {
             public Client()
@@ -284,10 +404,256 @@ namespace DocaLabs.Http.Client.Tests.Binding
         }
     }
 
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_serialization_attribute_on_property_and_model_and_client_levels
+    {
+        static DefaultRequestWriter writer;
+
+        Cleanup after =
+            () => TestRequestSerializationAttribute.UsedMarker = "";
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedMarker = "";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+
+        It should_use_property_level_serializer =
+            () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("property");
+
+        [TestRequestSerialization(Marker = "model")]
+        class Model
+        {
+            [TestRequestSerialization(Marker = "property")]
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client")]
+        class Client : HttpClient<Model, string>
+        {
+            public Client() : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_serialization_attribute_on_model_and_client_levels
+    {
+        static DefaultRequestWriter writer;
+
+        Cleanup after =
+            () => TestRequestSerializationAttribute.UsedMarker = "";
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedMarker = "";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+
+        It should_use_model_level_serializer =
+            () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("model");
+
+        [TestRequestSerialization(Marker = "model")]
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client")]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_serialization_attribute_on_client_levels
+    {
+        static DefaultRequestWriter writer;
+
+        Cleanup after =
+            () => TestRequestSerializationAttribute.UsedMarker = "";
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedMarker = "";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+
+        It should_use_client_level_serializer =
+            () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("client");
+
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client")]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_serialization_attribute_on_property_level_and_property_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+
+        Cleanup after =
+            () => TestRequestSerializationAttribute.UsedMarker = "";
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedMarker = "";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+
+        It should_still_use_property_serializer =
+            () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("property");
+
+        class Model
+        {
+            [TestRequestSerialization(Marker = "property"), RequestUse(RequestUseTargets.Ignore)]
+            public string Value { get; set; }
+        }
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_serialization_attribute_on_model_level_and_model_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+
+        Cleanup after =
+            () => TestRequestSerializationAttribute.UsedMarker = "";
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedMarker = "";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+
+        It should_still_use_model_serializer =
+            () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("model");
+
+        [TestRequestSerialization(Marker = "model"), RequestUse(RequestUseTargets.Ignore)]
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_serialization_attribute_on_client_level_and_client_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+
+        Cleanup after =
+            () => TestRequestSerializationAttribute.UsedMarker = "";
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedMarker = "";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+
+        It should_still_use_client_serializer =
+            () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("client");
+
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client"), RequestUse(RequestUseTargets.Ignore)]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_null_model
+    {
+        static HttpWebRequest web_request; 
+        static DefaultRequestWriter writer;
+
+        Establish context = () =>
+        {
+            web_request = (HttpWebRequest)WebRequest.CreateDefault(new Uri("http://foo.bar"));
+            web_request.ContentLength = 99;
+            web_request.Method = "POST";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), null, web_request);
+
+        It should_set_content_length_to_zero =
+            () => web_request.ContentLength.ShouldEqual(0);
+
+        [TestRequestSerialization]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
     class TestRequestSerializationAttribute : RequestSerializationAttribute
     {
+        public static string UsedMarker { get; set; }
+        public string Marker { get; set; }
+
         public override void Serialize(object obj, WebRequest request)
         {
+            UsedMarker = Marker;
         }
     }
 

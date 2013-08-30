@@ -1298,8 +1298,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithIgnoreHint).IsRequestStream().ShouldBeFalse();
 
         // RequestBodyAsForm
-        It should_return_false_for_indexer_with_request_body_as_form_hint =
-            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsRequestStream().ShouldBeFalse();
+        It should_return_true_for_indexer_with_request_body_as_form_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(char)).IsRequestStream().ShouldBeTrue();
 
         It should_return_true_for_simple_property_with_request_body_as_form_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
@@ -1329,8 +1329,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => Reflect<TestModel>.GetPropertyInfo(x => x.CredentialsWithRequestBodyAsFormHint).IsRequestStream().ShouldBeTrue();
 
         // request serialization
-        It should_return_false_for_indexer_with_request_serialization_hint =
-            () => Reflect<TestModel>.GetIndexerInfo(typeof(short)).IsRequestStream().ShouldBeFalse();
+        It should_return_true_for_indexer_with_request_serialization_hint =
+            () => Reflect<TestModel>.GetIndexerInfo(typeof(short)).IsRequestStream().ShouldBeTrue();
 
         It should_return_true_for_simple_property_with_request_serialization_hint =
             () => Reflect<TestModel>.GetPropertyInfo(x => x.SimpleWithRequestSerializationHint).IsRequestStream().ShouldBeTrue();

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.Serialization;
-using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -47,14 +45,7 @@ namespace DocaLabs.Http.Client.Binding
 
         static bool ShouldWrite(object httpClient, object model)
         {
-            if (model == null)
-                return false;
-
-            var modelType = model.GetType();
-
-            return modelType.GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || httpClient.GetType().GetCustomAttribute<RequestSerializationAttribute>(true) != null
-                   || modelType.GetAllPublicInstanceProperties().Any(x => x.IsRequestStream());
+            return GetSerializer(httpClient, model) != null;
         }
 
         static IRequestSerialization GetSerializer(object httpClient, object model)
@@ -62,11 +53,9 @@ namespace DocaLabs.Http.Client.Binding
             if (model == null)
                 return null;
 
-            var serializer = TryModelClassLevel(model);
-            if (serializer != null)
-                return serializer;
-
-            return TryModelPropertyLevel(model) ?? TryHttpClientClassLevel(httpClient);
+            return TryModelPropertyLevel(model) 
+                ?? TryModelClassLevel(model) 
+                ?? TryHttpClientClassLevel(httpClient);
         }
 
         static IRequestSerialization TryModelClassLevel(object query)
