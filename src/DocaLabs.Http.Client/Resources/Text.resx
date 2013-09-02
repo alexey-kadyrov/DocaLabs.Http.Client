@@ -129,6 +129,9 @@
   <data name="cannot_figure_out_how_to_deserialize" xml:space="preserve">
     <value>Cannot figure out how to deserialize web response.</value>
   </data>
+  <data name="cannot_mix_network_credential_with_other" xml:space="preserve">
+    <value>Cannot mix network credential with other types for {0}.</value>
+  </data>
   <data name="compression_format_is_not_suppoerted" xml:space="preserve">
     <value>Compression format {0} is not supported.</value>
   </data>

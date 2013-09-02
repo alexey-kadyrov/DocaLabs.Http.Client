@@ -97,6 +97,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot mix network credential with other types for {0}..
+        /// </summary>
+        internal static string cannot_mix_network_credential_with_other {
+            get {
+                return ResourceManager.GetString("cannot_mix_network_credential_with_other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compression format {0} is not supported..
         /// </summary>
         internal static string compression_format_is_not_suppoerted {

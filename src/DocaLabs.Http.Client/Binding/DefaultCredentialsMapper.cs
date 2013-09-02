@@ -8,10 +8,18 @@ using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
+    /// <summary>
+    /// Default credentials mapper.
+    /// </summary>
     public class DefaultCredentialsMapper
     {
         readonly ConcurrentDictionary<Type, PropertyMap> _propertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
+        /// <summary>
+        /// Maps the model to credentials by checking whenever any of its properties returns non null object implementing ICredentials.
+        /// If more then one NetworkCredential value is detected then CredentialCache object is returned with all of then cached.
+        /// In this case the UriPartial.Authority of the URL is used to add credentials to the CredentialCache and the property name is used as the authentication type.
+        /// </summary>
         public ICredentials Map(object model, Uri url)
         {
             return model == null 
@@ -21,28 +29,41 @@ namespace DocaLabs.Http.Client.Binding
 
         static ICredentials GetCredentials(object model, Uri url, PropertyMap map)
         {
-            switch (map.Credentials.Count)
+            var credentials = GetAllCredentialValues(model, map);
+
+            switch (credentials.Count)
             {
                 case 0:
                     return null;
 
                 case 1:
-                    return map.Credentials[0].GetValue(model) as ICredentials;
+                    return credentials.Values.First();
 
                 default:
-                    return GetAsCredentialCache(model, url, map);
+                    return GetAsCredentialCache(url, credentials);
             }
         }
 
-        static ICredentials GetAsCredentialCache(object model, Uri url, PropertyMap map)
+        static IDictionary<string, ICredentials> GetAllCredentialValues(object model, PropertyMap map)
         {
-            if (url == null)
-                return null;
+            var credentials = new Dictionary<string, ICredentials>();
 
+            foreach (var info in map.Credentials)
+            {
+                var value = info.GetValue(model) as ICredentials;
+                if (value != null)
+                    credentials[info.Name] = value;
+            }
+
+            return credentials;
+        }
+
+        static ICredentials GetAsCredentialCache(Uri url, IEnumerable<KeyValuePair<string, ICredentials>> credentials)
+        {
             var builder = new CredentialCacheBuilder(url);
 
-            foreach (var property in map.Credentials)
-                builder.Add(model, property);
+            foreach (var credential in credentials)
+                builder.AddNetworkCredential(credential.Key, credential.Value);
 
             return builder.CredentialCache;
         }
@@ -77,13 +98,13 @@ namespace DocaLabs.Http.Client.Binding
                 _prefix = new Uri(url.GetLeftPart(UriPartial.Authority));
             }
 
-            public void Add(object model, PropertyInfo property)
+            public void AddNetworkCredential(string authenticationType, ICredentials credential)
             {
-                var value = property.GetValue(model) as NetworkCredential;
+                var value = credential as NetworkCredential;
                 if (value == null)
-                    return;
+                    throw new ArgumentException(string.Format(Resources.Text.cannot_mix_network_credential_with_other, credential), "credential");
 
-                CredentialCache.Add(_prefix, property.Name, value);
+                CredentialCache.Add(_prefix, authenticationType, value);
             }
         }
     }

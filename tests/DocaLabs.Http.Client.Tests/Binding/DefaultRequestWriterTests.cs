@@ -3,6 +3,7 @@ using System.Net;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Binding.Serialization;
+using DocaLabs.Http.Client.Tests.Binding._Utils;
 using Machine.Specifications;
 using Moq;
 using It = Machine.Specifications.It;
@@ -225,7 +226,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class Model
         {
-            [TestRequestSerializationAttribute]
+            [TestRequestSerialization]
             public string Value { get; set; }
         }
     }
@@ -255,7 +256,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         class Model
         {
-            [TestRequestSerializationAttribute, RequestUse(RequestUseTargets.Ignore)]
+            [TestRequestSerialization, RequestUse(RequestUseTargets.Ignore)]
             public string Value { get; set; }
         }
     }
@@ -283,7 +284,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             }
         }
 
-        [TestRequestSerializationAttribute]
+        [TestRequestSerialization]
         class Model
         {
             public string Value { get; set; }
@@ -313,7 +314,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             }
         }
 
-        [TestRequestSerializationAttribute, RequestUse(RequestUseTargets.Ignore)]
+        [TestRequestSerialization, RequestUse(RequestUseTargets.Ignore)]
         class Model
         {
             public string Value { get; set; }
@@ -335,7 +336,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_return_post_method =
             () => method.ShouldBeEqualIgnoringCase("POST");
 
-        [TestRequestSerializationAttribute]
+        [TestRequestSerialization]
         class Client : HttpClient<Model, string>
         {
             public Client()
@@ -365,7 +366,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_still_return_post_method =
             () => method.ShouldBeEqualIgnoringCase("POST");
 
-        [TestRequestSerializationAttribute, RequestUse(RequestUseTargets.Ignore)]
+        [TestRequestSerialization, RequestUse(RequestUseTargets.Ignore)]
         class Client : HttpClient<Model, string>
         {
             public Client()
@@ -643,17 +644,6 @@ namespace DocaLabs.Http.Client.Tests.Binding
                 : base(new Uri("http://foo.bar/"))
             {
             }
-        }
-    }
-
-    class TestRequestSerializationAttribute : RequestSerializationAttribute
-    {
-        public static string UsedMarker { get; set; }
-        public string Marker { get; set; }
-
-        public override void Serialize(object obj, WebRequest request)
-        {
-            UsedMarker = Marker;
         }
     }
 

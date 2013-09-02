@@ -73,7 +73,9 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Binding\DefaultCredentialsMapperTests.cs" />
     <Compile Include="Binding\DefaultHeaderMapperTests.cs" />
+    <Compile Include="Binding\DefaultRequestBinderTests.cs" />
     <Compile Include="Binding\DefaultResponseBinderTests.cs" />
     <Compile Include="Binding\DefaultUrlComposerTests.cs" />
     <Compile Include="Binding\ModelBindersTests.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Binding\PropertyConverting\SimpleValueConverterTests.cs" />
     <Compile Include="Binding\RequestUsageExtensionsTests.cs" />
     <Compile Include="Binding\Serialization\SerializeAsTextAttributeTests.cs" />
+    <Compile Include="Binding\_Utils\TestRequestSerializationAttribute.cs" />
     <Compile Include="Configuration\ClientHeaderElementTests.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
