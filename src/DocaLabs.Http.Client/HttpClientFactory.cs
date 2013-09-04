@@ -176,7 +176,7 @@ namespace DocaLabs.Http.Client
         static Type MakeBaseType(Type baseType, ClientInterfaceInfo interfaceInfo)
         {
             if (baseType == null)
-                return typeof (HttpClient<,>).MakeGenericType(interfaceInfo.QueryType, interfaceInfo.ResultType);
+                return typeof (HttpClient<,>).MakeGenericType(interfaceInfo.InputModelType, interfaceInfo.OutputModelType);
 
             if(!baseType.IsGenericTypeDefinition)
                 return baseType;
@@ -184,7 +184,7 @@ namespace DocaLabs.Http.Client
             if(baseType.GetGenericArguments().Length != 2)
                 throw new ArgumentException(string.Format(Resources.Text.if_base_class_generic_it_must_have_two_parameters, baseType.FullName), "baseType");
 
-            return baseType.MakeGenericType(interfaceInfo.QueryType, interfaceInfo.ResultType);
+            return baseType.MakeGenericType(interfaceInfo.InputModelType, interfaceInfo.OutputModelType);
         }
 
         static TypeBuilder DefineType(Type baseType, Type interfaceType)
@@ -220,7 +220,7 @@ namespace DocaLabs.Http.Client
         static ConstructorInfo GetBaseConstructor(Type baseType, ClientInterfaceInfo interfaceInfo, ref bool threeParamCtor)
         {
             var baseCtor = baseType.GetConstructor(
-                new[] {typeof (Uri), typeof (string), interfaceInfo.RetryStragtegyType});
+                new[] {typeof (Uri), typeof (string), interfaceInfo.ExecuteStrategyType});
 
             if (baseCtor == null)
             {
@@ -230,7 +230,7 @@ namespace DocaLabs.Http.Client
 
                 if (baseCtor == null)
                     throw new ArgumentException(string.Format(Resources.Text.must_implement_constructor,
-                                                baseType.FullName, interfaceInfo.RetryStragtegyType.FullName), "baseType");
+                                                baseType.FullName, interfaceInfo.ExecuteStrategyType.FullName), "baseType");
             }
 
             return baseCtor;
@@ -246,10 +246,10 @@ namespace DocaLabs.Http.Client
 
         static void BuildServiceCallMethod(Type baseType, ClientInterfaceInfo interfaceInfo, TypeBuilder typeBuilder)
         {
-            var baseExecute = baseType.GetMethod("Execute", new[] { interfaceInfo.QueryType });
+            var baseExecute = baseType.GetMethod("Execute", new[] { interfaceInfo.InputModelType });
             if (baseExecute == null)
                 throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method, 
-                                            baseType.FullName, interfaceInfo.ResultType.FullName, interfaceInfo.QueryType.FullName), "baseType");
+                                            baseType.FullName, interfaceInfo.OutputModelType.FullName, interfaceInfo.InputModelType.FullName), "baseType");
 
             var newExecute = DefineServiceCallMethod(interfaceInfo, typeBuilder);
 
@@ -257,13 +257,13 @@ namespace DocaLabs.Http.Client
 
             executeGenerator.Emit(OpCodes.Ldarg_0);
 
-            executeGenerator.Emit(interfaceInfo.QueryType != typeof(VoidType)
+            executeGenerator.Emit(interfaceInfo.InputModelType != typeof(VoidType)
                 ? OpCodes.Ldarg_1
                 : OpCodes.Ldnull);
 
             executeGenerator.Emit(OpCodes.Call, baseExecute);
 
-            if(interfaceInfo.OriginalResultType == typeof(void))
+            if(interfaceInfo.OriginalOutputModelType == typeof(void))
                 executeGenerator.Emit(OpCodes.Pop);
 
             executeGenerator.Emit(OpCodes.Ret);
@@ -277,11 +277,11 @@ namespace DocaLabs.Http.Client
                 interfaceInfo.ServiceExecuteMethod.Name,
                 MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
                 CallingConventions.Standard | CallingConventions.HasThis,
-                interfaceInfo.ResultType != typeof (VoidType)
-                    ? interfaceInfo.ResultType
+                interfaceInfo.OutputModelType != typeof (VoidType)
+                    ? interfaceInfo.OutputModelType
                     : typeof (void),
-                interfaceInfo.QueryType != typeof(VoidType)
-                    ? new[] { interfaceInfo.QueryType }
+                interfaceInfo.InputModelType != typeof(VoidType)
+                    ? new[] { interfaceInfo.InputModelType }
                     : null
             );
         }
@@ -289,10 +289,10 @@ namespace DocaLabs.Http.Client
         class ClientInterfaceInfo
         {
             public MethodInfo ServiceExecuteMethod { get; private set; }
-            public Type QueryType { get; private set; }
-            public Type ResultType { get; private set; }
-            public Type RetryStragtegyType { get; private set; }
-            public Type OriginalResultType { get; private set; }
+            public Type InputModelType { get; private set; }
+            public Type OutputModelType { get; private set; }
+            public Type ExecuteStrategyType { get; private set; }
+            public Type OriginalOutputModelType { get; private set; }
             public IEnumerable<AttributeInfo> Attributes { get; private set; }
 
             public ClientInterfaceInfo(Type interfaceType)
@@ -308,21 +308,21 @@ namespace DocaLabs.Http.Client
                     throw new ArgumentException(string.Format(Resources.Text.must_have_only_one_method, interfaceType.FullName), "interfaceType");
 
                 ServiceExecuteMethod = methods[0];
-                ResultType = OriginalResultType = ServiceExecuteMethod.ReturnType;
+                OutputModelType = OriginalOutputModelType = ServiceExecuteMethod.ReturnType;
 
-                if (ResultType == typeof (void))
-                    ResultType = typeof (VoidType);
+                if (OutputModelType == typeof (void))
+                    OutputModelType = typeof (VoidType);
 
                 var parameters = ServiceExecuteMethod.GetParameters();
                 if (parameters.Length > 1)
                     throw new ArgumentException(string.Format(Resources.Text.method_must_have_no_more_than_one_argument, ServiceExecuteMethod.Name, interfaceType.FullName), "interfaceType");
 
-                QueryType = parameters.Length == 0 
+                InputModelType = parameters.Length == 0 
                     ? typeof(VoidType)
                     : parameters[0].ParameterType;
 
-                // typeof(Func<Func<Result>, Result>)
-                RetryStragtegyType = typeof(Func<,>).MakeGenericType(typeof(Func<>).MakeGenericType(ResultType), ResultType);
+                // IExecuteStrategy<TInputModel, TOutputModel>)
+                ExecuteStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(InputModelType, OutputModelType);
 
                 Attributes = interfaceType.CustomAttributes
                     .Where(x => x.IsValidOn(AttributeTargets.Class))

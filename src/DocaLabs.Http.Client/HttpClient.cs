@@ -50,7 +50,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Execute strategy for calling the remote endpoint.
         /// </summary>
-        protected IExecuteStrategy<TOutputModel> ExecuteStrategy { get; private set; }
+        protected IExecuteStrategy<TInputModel, TOutputModel> ExecuteStrategy { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the HttpClient.
@@ -58,7 +58,7 @@ namespace DocaLabs.Http.Client
         /// <param name="baseUrl">The URL of the service.</param>
         /// <param name="configurationName">If the configuration name is not null it'll be used to get the endpoint configuration from the config file.</param>
         /// <param name="executeStrategy">If the parameter null then the default retry strategy will be used.</param>
-        public HttpClient(Uri baseUrl = null, string configurationName = null, IExecuteStrategy<TOutputModel> executeStrategy = null)
+        public HttpClient(Uri baseUrl = null, string configurationName = null, IExecuteStrategy<TInputModel, TOutputModel> executeStrategy = null)
         {
             BaseUrl = baseUrl;
 
@@ -97,7 +97,7 @@ namespace DocaLabs.Http.Client
         {
             try
             {
-                return ExecuteStrategy.Execute(() => ExecutePipeline(model));
+                return ExecuteStrategy.Execute(model, ExecutePipeline);
             }
             catch (HttpClientException)
             {
@@ -192,9 +192,9 @@ namespace DocaLabs.Http.Client
         ///     2 seconds between the first and second retries, 
         ///     5 seconds between the second and third retries.
         /// </summary>
-        protected IExecuteStrategy<TOutputModel> GetDefaultExecuteStrategy()
+        protected IExecuteStrategy<TInputModel, TOutputModel> GetDefaultExecuteStrategy()
         {
-            return new DefaultExecuteStrategy<TOutputModel>(new[]
+            return new DefaultExecuteStrategy<TInputModel, TOutputModel>(new[]
             {
                 TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5)
             });
@@ -224,7 +224,7 @@ namespace DocaLabs.Http.Client
                 Method = Configuration.Method;
         }
 
-        TOutputModel ExecutePipeline(object model)
+        TOutputModel ExecutePipeline(TInputModel model)
         {
             var context = new BindingContext(this, model, Configuration, BaseUrl);
 

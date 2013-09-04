@@ -3,20 +3,20 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests
 {
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_which_succeeds_first_time
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static string result;
 
         Establish context = 
-            () =>strategy = new DefaultExecuteStrategy<string>(new[] {TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)});
+            () =>strategy = new DefaultExecuteStrategy<string, string>(new[] {TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)});
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            result = strategy.Execute(() => "Hello World!");
+            result = strategy.Execute("Hello World!", x => x);
             duration = DateTime.UtcNow - started;
         };
 
@@ -27,21 +27,21 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_which_fails_all_retries
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new TestException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new TestException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -59,27 +59,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_which_succeeds_after_retry
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static string result;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(200) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(200) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
 
-            result = strategy.Execute(() =>
+            result = strategy.Execute("Hello World!", x =>
             {
                 ++attempts; 
                 if( attempts == 1) 
                     throw new TestException();
-                return "Hello World!";
+                return x;
             });
 
             duration = DateTime.UtcNow - started;
@@ -99,21 +99,21 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_argument_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new ArgumentException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new ArgumentException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -127,21 +127,21 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_exception_derived_from_argument_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new TestException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new TestException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -159,21 +159,21 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_null_refrence_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new NullReferenceException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new NullReferenceException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -187,21 +187,21 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_exception_derived_from_null_reference_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new TestException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new TestException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -219,21 +219,21 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_not_supported_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new NotSupportedException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new NotSupportedException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -247,21 +247,21 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_exception_derived_from_not_supported_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new TestException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new TestException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -279,21 +279,21 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_not_implemented_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new NotImplementedException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new NotImplementedException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -307,21 +307,21 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_exception_derived_from_not_implemented_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new TestException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new TestException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -339,21 +339,21 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_http_client_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new HttpClientException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new HttpClientException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -367,21 +367,21 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_throws_exception_derived_from_http_client_exception
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new TestException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new TestException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -399,21 +399,21 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_which_fails_using_strategy_initialized_with_null_array_of_retry_timeouts
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(null);
+            () => strategy = new DefaultExecuteStrategy<string, string>(null);
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new TestException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new TestException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -431,20 +431,20 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_action_which_succeeds_first_time_using_strategy_initialized_with_null_array_of_retry_timeouts
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static TimeSpan duration;
         static string result;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(null);
+            () => strategy = new DefaultExecuteStrategy<string, string>(null);
 
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            result = strategy.Execute(() => "Hello World!");
+            result = strategy.Execute("Hello World!", x => x);
             duration = DateTime.UtcNow - started;
         };
 
@@ -455,18 +455,18 @@ namespace DocaLabs.Http.Client.Tests
             () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>))]
+    [Subject(typeof(DefaultExecuteStrategy<,>))]
     class when_executing_null_action
     {
-        static DefaultExecuteStrategy<string> strategy;
+        static DefaultExecuteStrategy<string, string> strategy;
         static int attempts;
         static Exception exception;
 
         Establish context =
-            () => strategy = new DefaultExecuteStrategy<string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
+            () => strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
 
         Because of = 
-            () => exception = Catch.Exception(() => strategy.Execute(null));
+            () => exception = Catch.Exception(() => strategy.Execute("Hello World!", null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -475,7 +475,7 @@ namespace DocaLabs.Http.Client.Tests
             () => ((ArgumentNullException) exception).ParamName.ShouldEqual("action");
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>), "inheritable behaviour")]
+    [Subject(typeof(DefaultExecuteStrategy<,>), "inheritable behaviour")]
     class when_using_derived_startgey_to_execute_action_which_succeeds_first_time
     {
         static DerivedStrategy strategy;
@@ -488,7 +488,7 @@ namespace DocaLabs.Http.Client.Tests
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            result = strategy.Execute(() => "Hello World!");
+            result = strategy.Execute("Hello World!", x => x);
             duration = DateTime.UtcNow - started;
         };
 
@@ -507,7 +507,7 @@ namespace DocaLabs.Http.Client.Tests
         It should_not_call_can_retry =
             () => strategy.CanRetryCalls.ShouldEqual(0);
 
-        class DerivedStrategy : DefaultExecuteStrategy<string>
+        class DerivedStrategy : DefaultExecuteStrategy<string, string>
         {
             public int OnRetryingCalls { get; private set; }
             public int OnRethrowingCalls { get; private set; }
@@ -536,7 +536,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(DefaultExecuteStrategy<>), "inheritable behaviour")]
+    [Subject(typeof(DefaultExecuteStrategy<,>), "inheritable behaviour")]
     class when_using_derived_startgey_to_execute_action_which_fails_all_retries
     {
         static DerivedStrategy strategy;
@@ -550,7 +550,7 @@ namespace DocaLabs.Http.Client.Tests
         Because of = () =>
         {
             var started = DateTime.UtcNow;
-            exception = Catch.Exception(() => strategy.Execute(() => { ++attempts; throw new NullReferenceException(); }));
+            exception = Catch.Exception(() => strategy.Execute("Hello World!", x => { ++attempts; throw new NullReferenceException(); }));
             duration = DateTime.UtcNow - started;
         };
 
@@ -572,7 +572,7 @@ namespace DocaLabs.Http.Client.Tests
         It should_call_can_retry_for_each_retry =
             () => strategy.CanRetryCalls.ShouldEqual(2);
 
-        class DerivedStrategy : DefaultExecuteStrategy<string>
+        class DerivedStrategy : DefaultExecuteStrategy<string, string>
         {
             public int OnRetryingCalls { get; private set; }
             public int OnRethrowingCalls { get; private set; }

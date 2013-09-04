@@ -7,8 +7,7 @@ namespace DocaLabs.Http.Client
     /// <summary>
     /// Implements IExecuteStrategy to execute and retry if possible the action.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class DefaultExecuteStrategy<T> : IExecuteStrategy<T>
+    public class DefaultExecuteStrategy<TInputModel, TOutputModel> : IExecuteStrategy<TInputModel, TOutputModel>
     {
         readonly TimeSpan[] _retryTimeouts;
 
@@ -24,9 +23,7 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Executes the given action.
         /// </summary>
-        /// <param name="action">Action.</param>
-        /// <returns>The return value of the action.</returns>
-        public T Execute(Func<T> action)
+        public TOutputModel Execute(TInputModel model, Func<TInputModel, TOutputModel> action)
         {
             if(action == null)
                 throw new ArgumentNullException("action");
@@ -37,7 +34,7 @@ namespace DocaLabs.Http.Client
             {
                 try
                 {
-                    return action();
+                    return action(model);
                 }
                 catch (Exception e)
                 {
