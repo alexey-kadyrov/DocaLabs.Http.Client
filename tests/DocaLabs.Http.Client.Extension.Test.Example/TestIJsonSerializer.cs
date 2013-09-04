@@ -8,7 +8,7 @@ namespace DocaLabs.Http.Client.Extension.Test.Example
     {
         public string Serialize(object obj)
         {
-            return "--success--";
+            return new DefaultJsonSerializer().Serialize(obj);
         }
     }
 }
