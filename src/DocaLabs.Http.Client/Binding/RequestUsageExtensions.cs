@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Binding.Serialization;
@@ -20,7 +21,7 @@ namespace DocaLabs.Http.Client.Binding
                 info.GetCustomAttribute<RequestSerializationAttribute>(true) == null &&
                 !info.IsExplicitUrlPath() &&
                 !info.IsExplicitUrlQuery() &&
-                !info.IsHeader() &&
+                !info.IsHeader(true) &&
                 !info.IsCredentials() &&
                 !info.IsRequestStream();
         }
@@ -53,8 +54,9 @@ namespace DocaLabs.Http.Client.Binding
 
         /// <summary>
         /// Returns true if the property is defined to pass its data to request headers.
+        /// If checkImplicitConditions is false then it doesn't check for WebHeaderCollection on the property type.
         /// </summary>
-        public static bool IsHeader(this PropertyInfo info)
+        public static bool IsHeader(this PropertyInfo info, bool checkImplicitConditions)
         {
             if (!CanPropertyBeUsedInRequest(info))
                 return false;
@@ -63,6 +65,9 @@ namespace DocaLabs.Http.Client.Binding
 
             if (useAttribute != null)
                 return useAttribute.Targets.HasFlag(RequestUseTargets.RequestHeader);
+
+            if (!checkImplicitConditions)
+                return false;
 
             return 
                 typeof (WebHeaderCollection).IsAssignableFrom(info.PropertyType) && 
@@ -94,6 +99,14 @@ namespace DocaLabs.Http.Client.Binding
         public static IRequestSerialization TryGetRequestSerializer(this PropertyInfo info)
         {
             return info.GetCustomAttribute<RequestSerializationAttribute>(true);
+        }
+
+        /// <summary>
+        /// Returns true if the type has RequestSerializationAttribute descendant applied.
+        /// </summary>
+        public static bool IsSerializableToRequestBody(this Type type)
+        {
+            return type.GetCustomAttribute<RequestSerializationAttribute>(true) != null;
         }
 
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)

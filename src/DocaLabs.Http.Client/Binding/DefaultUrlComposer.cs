@@ -13,15 +13,18 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer
     {
-        readonly PropertyMaps _implicitPathOrQueryMaps = new PropertyMaps(RequestUsageExtensions.IsImplicitUrlPathOrQuery);
-        readonly PropertyMaps _explicitQueryMaps = new PropertyMaps(RequestUsageExtensions.IsExplicitUrlQuery);
-        readonly PropertyMaps _explicitPathMaps = new PropertyMaps(RequestUsageExtensions.IsExplicitUrlPath);
+        readonly PropertyMaps _implicitPathOrQueryMaps = new PropertyMaps();
+        readonly PropertyMaps _explicitQueryMaps = new PropertyMaps();
+        readonly PropertyMaps _explicitPathMaps = new PropertyMaps();
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
         /// </summary>
-        public string Compose(object model, Uri baseUrl)
+        public string Compose(object client, object model, Uri baseUrl)
         {
+            if(client == null)
+                throw new ArgumentNullException("client");
+
             if (baseUrl == null)
                 throw new ArgumentNullException("baseUrl");
 
@@ -29,7 +32,7 @@ namespace DocaLabs.Http.Client.Binding
             {
                 return Ignore(model)
                     ? baseUrl.OriginalString
-                    : CreateUrlFrom(model, baseUrl).AbsoluteUri;
+                    : CreateUrlFrom(client, model, baseUrl).AbsoluteUri;
             }
             catch (HttpClientException)
             {
@@ -51,7 +54,7 @@ namespace DocaLabs.Http.Client.Binding
             return useAttribute != null && useAttribute.Targets == RequestUseTargets.Ignore;
         }
 
-        Uri CreateUrlFrom(object model, Uri baseUrl)
+        Uri CreateUrlFrom(object client, object model, Uri baseUrl)
         {
             var path = new NameValueCollection();
             var query = new NameValueCollection();
@@ -59,14 +62,20 @@ namespace DocaLabs.Http.Client.Binding
             var existingPath = GetExistingPath(baseUrl);
             var exstingQuery = GetExistingQuery(baseUrl);
 
-            var instancConverter = PropertyMaps.TryGetModelValueConverter(model);
-            if (instancConverter != null)
+            var isSerializableToRequestBody = client.GetType().IsSerializableToRequestBody() || model.GetType().IsSerializableToRequestBody();
+
+            var instanceConverter = PropertyMaps.TryGetDictionaryModelValueConverter(model);
+
+            if (instanceConverter != null)
             {
-                ProcessImplicitPathOrQuery(existingPath, instancConverter.Convert(model), path, query);
+                if (!isSerializableToRequestBody)
+                    ProcessImplicitPathOrQuery(existingPath, instanceConverter.Convert(model), path, query);
             }
             else
             {
-                ProcessImplicitPathOrQuery(existingPath, _implicitPathOrQueryMaps.Convert(model), path, query);
+                if(!isSerializableToRequestBody)
+                    ProcessImplicitPathOrQuery(existingPath, _implicitPathOrQueryMaps.Convert(model, RequestUsageExtensions.IsImplicitUrlPathOrQuery), path, query);
+
                 ProcessExplicitPath(model, path);
                 ProcessExplicitQuery(model, query);
             }
@@ -122,12 +131,12 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessExplicitQuery(object model, NameValueCollection query)
         {
-            query.Add(_explicitQueryMaps.Convert(model));
+            query.Add(_explicitQueryMaps.Convert(model, RequestUsageExtensions.IsExplicitUrlQuery));
         }
 
         void ProcessExplicitPath(object model, NameValueCollection path)
         {
-            path.Add(_explicitPathMaps.Convert(model));
+            path.Add(_explicitPathMaps.Convert(model, RequestUsageExtensions.IsExplicitUrlPath));
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)

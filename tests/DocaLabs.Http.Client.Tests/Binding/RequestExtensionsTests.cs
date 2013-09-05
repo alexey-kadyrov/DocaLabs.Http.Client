@@ -101,7 +101,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.SetupAllProperties();
             web_request.Setup(x => x.Headers).Returns(headers);
 
-            binding_context = new BindingContext(null, model, new ClientEndpointElement(), new Uri("http://foo.bar"))
+            binding_context = new BindingContext(new TestClient(), model, new ClientEndpointElement(), new Uri("http://foo.bar"))
             {
                 Model = model
             };
@@ -121,6 +121,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
         {
             [PropertyOverrides(Name = "")]
             public WebHeaderCollection Headers { [UsedImplicitly] get; set; }
+        }
+
+        class TestClient : HttpClient<string, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
         }
     }
 

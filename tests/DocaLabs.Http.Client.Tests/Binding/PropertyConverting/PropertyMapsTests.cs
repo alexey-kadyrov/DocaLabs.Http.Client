@@ -117,11 +117,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             instance.SelfObjectProperty = instance;
             instance.TestClassWithOtherMakingCircularReference.Class = instance;
 
-            maps = new PropertyMaps(x => true);
+            maps = new PropertyMaps();
         };
 
         Because of =
-            () => result = maps.Convert(instance);
+            () => result = maps.Convert(instance, x => true);
 
         It should_convert_all_eligible_properties =
             () => result.Count.ShouldEqual(36);
@@ -402,11 +402,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 { "k1", "v1" },
                 { "k2", "v2" }
             };
-            maps = new PropertyMaps(x => true);
+            maps = new PropertyMaps();
         };
 
         Because of =
-            () => result = maps.Convert(source);
+            () => result = maps.Convert(source, x => true);
 
         It should_return_all_source_keys =
             () => result.AllKeys.ShouldContainOnly("k1", "k2");
@@ -432,11 +432,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 { "k1", "v1" },
                 { "k2", "v2" }
             };
-            maps = new PropertyMaps(x => true);
+            maps = new PropertyMaps();
         };
 
         Because of =
-            () => result = maps.Convert(source);
+            () => result = maps.Convert(source, x => true);
 
         It should_return_all_source_keys =
             () => result.AllKeys.ShouldContainOnly("k1", "k2");
@@ -466,11 +466,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 { "k1", 1 },
                 { "k2", 2 }
             };
-            maps = new PropertyMaps(x => true);
+            maps = new PropertyMaps();
         };
 
         Because of =
-            () => result = maps.Convert(source);
+            () => result = maps.Convert(source, x => true);
 
         It should_return_all_source_keys =
             () => result.AllKeys.ShouldContainOnly("k1", "k2");
@@ -496,11 +496,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 { "k1", 1 },
                 { "k2", 2 }
             };
-            maps = new PropertyMaps(x => true);
+            maps = new PropertyMaps();
         };
 
         Because of =
-            () => result = maps.Convert(source);
+            () => result = maps.Convert(source, x => true);
 
         It should_return_all_source_keys =
             () => result.AllKeys.ShouldContainOnly("k1", "k2");
@@ -517,16 +517,43 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     }
 
     [Subject(typeof(PropertyMaps))]
+    class when_converting_with_null_accept_property_delegate
+    {
+        static NameValueCollection source;
+        static PropertyMaps maps;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            source = new NameValueCollection
+            {
+                { "k1", "v1" },
+                { "k2", "v2" }
+            };
+            maps = new PropertyMaps();
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => maps.Convert(source, null));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_accpet_property_check_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("acceptPropertyCheck");
+    }
+
+    [Subject(typeof(PropertyMaps))]
     class when_converting_null_instance
     {
         static NameValueCollection result;
         static PropertyMaps maps;
 
         Establish context =
-            () => maps = new PropertyMaps(x => true);
+            () => maps = new PropertyMaps();
 
         Because of =
-            () => result = maps.Convert(null);
+            () => result = maps.Convert(null, x => true);
 
         It should_return_empty_collection =
             () => result.ShouldBeEmpty();
@@ -546,11 +573,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 Property1 = 1,
                 Property2 = 2
             };
-            maps = new PropertyMaps(x => x.Name == "Property1");
+            maps = new PropertyMaps();
         };
 
         Because of =
-            () => result = maps.Convert(instance);
+            () => result = maps.Convert(instance, x => x.Name == "Property1");
 
         It should_convert_only_accepted_properties =
             () => result.AllKeys.ShouldContainOnly("Property1");
@@ -569,21 +596,21 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_trying_to_get_model_converter_for_null
     {
         It should_return_null =
-            () => PropertyMaps.TryGetModelValueConverter(null).ShouldBeNull();
+            () => PropertyMaps.TryGetDictionaryModelValueConverter(null).ShouldBeNull();
     }
 
     [Subject(typeof(PropertyMaps))]
     class when_trying_to_get_model_converter_for_namevaluecollection
     {
         It should_return_converter =
-            () => PropertyMaps.TryGetModelValueConverter(new NameValueCollection()).ShouldNotBeNull();
+            () => PropertyMaps.TryGetDictionaryModelValueConverter(new NameValueCollection()).ShouldNotBeNull();
     }
 
     [Subject(typeof(PropertyMaps))]
     class when_trying_to_get_model_converter_for_namevaluecollection_subclass
     {
         It should_return_converter =
-            () => PropertyMaps.TryGetModelValueConverter(new NameValueCollectionSubclass()).ShouldNotBeNull();
+            () => PropertyMaps.TryGetDictionaryModelValueConverter(new NameValueCollectionSubclass()).ShouldNotBeNull();
 
         class NameValueCollectionSubclass : NameValueCollection
         {
@@ -594,21 +621,21 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_trying_to_get_model_converter_for_hashtable
     {
         It should_return_converter =
-            () => PropertyMaps.TryGetModelValueConverter(new Hashtable()).ShouldNotBeNull();
+            () => PropertyMaps.TryGetDictionaryModelValueConverter(new Hashtable()).ShouldNotBeNull();
     }
 
     [Subject(typeof(PropertyMaps))]
     class when_trying_to_get_model_converter_for_generic_dictionary
     {
         It should_return_converter =
-            () => PropertyMaps.TryGetModelValueConverter(new Dictionary<string, string>()).ShouldNotBeNull();
+            () => PropertyMaps.TryGetDictionaryModelValueConverter(new Dictionary<string, string>()).ShouldNotBeNull();
     }
 
     [Subject(typeof(PropertyMaps))]
     class when_trying_to_get_model_converter_for_generic_dictionary_subclass
     {
         It should_return_converter =
-            () => PropertyMaps.TryGetModelValueConverter(new DictionarySubclass<string, string>()).ShouldNotBeNull();
+            () => PropertyMaps.TryGetDictionaryModelValueConverter(new DictionarySubclass<string, string>()).ShouldNotBeNull();
 
         class DictionarySubclass<TKey, TValue> : Dictionary<TKey, TValue>
         {
@@ -619,7 +646,75 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
     class when_trying_to_get_model_converter_for_generic_dictionary_subclass_with_defined_generic_arguments
     {
         It should_return_converter =
-            () => PropertyMaps.TryGetModelValueConverter(new DictionarySubclass()).ShouldNotBeNull();
+            () => PropertyMaps.TryGetDictionaryModelValueConverter(new DictionarySubclass()).ShouldNotBeNull();
+
+        class DictionarySubclass : Dictionary<int, int>
+        {
+        }
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_check_whenever_model_is_dictionary_for_null
+    {
+        It should_return_false =
+            () => PropertyMaps.IsDictionaryModel(null).ShouldBeFalse();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_check_whenever_model_is_dictionary_for_object
+    {
+        It should_return_false =
+            () => PropertyMaps.IsDictionaryModel(typeof(object)).ShouldBeFalse();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_check_whenever_model_is_dictionary_for_namevaluecollection
+    {
+        It should_return_true =
+            () => PropertyMaps.IsDictionaryModel(typeof(NameValueCollection)).ShouldBeTrue();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_check_whenever_model_is_dictionary_for_namevaluecollection_subclass
+    {
+        It should_return_true =
+            () => PropertyMaps.IsDictionaryModel(typeof(NameValueCollectionSubclass)).ShouldBeTrue();
+
+        class NameValueCollectionSubclass : NameValueCollection
+        {
+        }
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_check_whenever_model_is_dictionary_for_hashtable
+    {
+        It should_return_true =
+            () => PropertyMaps.IsDictionaryModel(typeof(Hashtable)).ShouldBeTrue();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_check_whenever_model_is_dictionary_for_generic_dictionary
+    {
+        It should_return_true =
+            () => PropertyMaps.IsDictionaryModel(typeof(Dictionary<string, string>)).ShouldBeTrue();
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_check_whenever_model_is_dictionary_for_generic_dictionary_subclass
+    {
+        It should_return_true =
+            () => PropertyMaps.IsDictionaryModel(typeof(DictionarySubclass<string, string>)).ShouldBeTrue();
+
+        class DictionarySubclass<TKey, TValue> : Dictionary<TKey, TValue>
+        {
+        }
+    }
+
+    [Subject(typeof(PropertyMaps))]
+    class when_trying_to_check_whenever_model_is_dictionary_for_generic_dictionary_subclass_with_defined_generic_arguments
+    {
+        It should_return_true =
+            () => PropertyMaps.IsDictionaryModel(typeof(DictionarySubclass)).ShouldBeTrue();
 
         class DictionarySubclass : Dictionary<int, int>
         {

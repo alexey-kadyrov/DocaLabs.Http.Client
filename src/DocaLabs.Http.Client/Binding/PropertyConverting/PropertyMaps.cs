@@ -23,30 +23,22 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         readonly ConcurrentDictionary<Type, PropertyMap> _maps = new ConcurrentDictionary<Type, PropertyMap>();
 
         /// <summary>
-        /// Delegate which is used to check whenever the passed property should be parsed.
-        /// </summary>
-        public Func<PropertyInfo, bool> AcceptPropertyCheck { get; private set; }
-
-        /// <summary>
-        /// Initializes an instance of the PropertyMaps class.
-        /// </summary>
-        public PropertyMaps(Func<PropertyInfo, bool> acceptPropertyCheck)
-        {
-            AcceptPropertyCheck = acceptPropertyCheck;
-        }
-
-        /// <summary>
         /// Converts instance into NameValueCollection where keys/values correspond to property names/values.
         /// </summary>
-        public NameValueCollection Convert(object instance)
+        /// <param name="instance">Value to be converted.</param>
+        /// <param name="acceptPropertyCheck">Delegate which is used to check whenever the passed property should be parsed.</param>
+        public NameValueCollection Convert(object instance, Func<PropertyInfo, bool> acceptPropertyCheck)
         {
-            return Convert(instance, new HashSet<object>());
+            if (acceptPropertyCheck == null)
+                throw new ArgumentNullException("acceptPropertyCheck");
+
+            return Convert(instance, new HashSet<object>(), acceptPropertyCheck);
         }
 
         /// <summary>
         /// Return IValueConverter if the model can be converted by NameValueCollectionValueConverter or SimpleDictionaryValueConverter.
         /// </summary>
-        public static IValueConverter TryGetModelValueConverter(object model)
+        public static IValueConverter TryGetDictionaryModelValueConverter(object model)
         {
             if (model == null)
                 return null;
@@ -61,7 +53,15 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 : null;
         }
 
-        internal NameValueCollection Convert(object instance, ISet<object> processed)
+        /// <summary>
+        /// Return true the model can be converted by NameValueCollectionValueConverter or SimpleDictionaryValueConverter.
+        /// </summary>
+        public static bool IsDictionaryModel(Type type)
+        {
+            return type != null && (NameValueCollectionValueConverter.CanConvert(type) || SimpleDictionaryValueConverter.CanConvert(type));
+        }
+
+        internal NameValueCollection Convert(object instance, ISet<object> processed, Func<PropertyInfo, bool> acceptPropertyCheck)
         {
             if (instance == null)
                 return new NameValueCollection();
@@ -77,7 +77,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             _maps.TryAdd(type, map);
 
-            map.Parse(instance);
+            map.Parse(instance, acceptPropertyCheck);
 
             return map.Convert(instance, processed);
         }
@@ -92,21 +92,21 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 _maps = maps;
             }
 
-            internal void Parse(object instance)
+            internal void Parse(object instance, Func<PropertyInfo, bool> acceptPropertyCheck)
             {
                 var type = instance.GetType();
 
                 _converters = SkipParsing(type)
                     ? new List<IPropertyConverter>()
                     : type.GetAllPublicInstanceProperties()
-                            .Select(ParseProperty)
+                            .Select(x => ParseProperty(x, acceptPropertyCheck))
                             .Where(x => x != null)
                             .ToList();
             }
 
             internal NameValueCollection Convert(object instance, ISet<object> processed)
             {
-                var modelConverter = TryGetModelValueConverter(instance);
+                var modelConverter = TryGetDictionaryModelValueConverter(instance);
                 if (modelConverter != null)
                     return modelConverter.Convert(instance);
 
@@ -123,21 +123,21 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 return values;
             }
 
-            IPropertyConverter ParseProperty(PropertyInfo propertyInfo)
+            IPropertyConverter ParseProperty(PropertyInfo propertyInfo, Func<PropertyInfo, bool> acceptPropertyCheck)
             {
-                return _maps.AcceptPropertyCheck(propertyInfo)
-                    ? GetConverter(propertyInfo)
+                return acceptPropertyCheck(propertyInfo)
+                    ? GetConverter(propertyInfo, acceptPropertyCheck)
                     : null;
             }
 
-            IPropertyConverter GetConverter(PropertyInfo property)
+            IPropertyConverter GetConverter(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck)
             {
                 return TryGetCustomPropertyParser(property)
                     ?? NameValueCollectionPropertyConverter.TryCreate(property)
                     ?? SimpleDictionaryPropertyConverter.TryCreate(property)
                     ?? SimpleCollectionPropertyConverter.TryCreate(property)
                     ?? SimplePropertyConverter.TryCreate(property)
-                    ?? ObjectPropertyConverter.TryCreate(property, _maps);
+                    ?? ObjectPropertyConverter.TryCreate(property, _maps, acceptPropertyCheck);
             }
 
             static IPropertyConverter TryGetCustomPropertyParser(PropertyInfo property)
@@ -151,10 +151,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             static bool SkipParsing(Type type)
             {
-                return type == typeof(object) ||
-                    type.IsSimpleType() ||
-                    NameValueCollectionValueConverter.CanConvert(type) ||
-                    SimpleDictionaryValueConverter.CanConvert(type);
+                return type == typeof(object) || type.IsSimpleType() || IsDictionaryModel(type);
             }
 
             class ObjectPropertyConverter : IPropertyConverter
@@ -164,11 +161,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 readonly string _name;
                 readonly string _format;
                 readonly CultureInfo _culture;
+                readonly Func<PropertyInfo, bool> _acceptPropertyCheck;
 
-                ObjectPropertyConverter(PropertyInfo property, PropertyMaps maps)
+                ObjectPropertyConverter(PropertyInfo property, PropertyMaps maps, Func<PropertyInfo, bool> acceptPropertyCheck)
                 {
                     _property = property;
                     _maps = maps;
+                    _acceptPropertyCheck = acceptPropertyCheck;
 
                     var requestUse = property.GetCustomAttribute<PropertyOverridesAttribute>();
                     if (requestUse != null)
@@ -182,10 +181,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         _name = _property.Name;
                 }
 
-                public static IPropertyConverter TryCreate(PropertyInfo property, PropertyMaps maps)
+                public static IPropertyConverter TryCreate(PropertyInfo property, PropertyMaps maps, Func<PropertyInfo, bool> acceptPropertyCheck)
                 {
                     return CanConvert(property)
-                        ? new ObjectPropertyConverter(property, maps)
+                        ? new ObjectPropertyConverter(property, maps, acceptPropertyCheck)
                         : null;
                 }
 
@@ -243,7 +242,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                     processed.Add(value);
 
-                    var nestedValues = _maps.Convert(value, processed);
+                    var nestedValues = _maps.Convert(value, processed, _acceptPropertyCheck);
 
                     var values = new NameValueCollection();
 

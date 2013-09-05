@@ -49,7 +49,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
                 PathValue2 = "another path",
                 QueryValue1 = "Hello World!"
             };
-            binding_context = new BindingContext(null, model, null, base_url)
+            binding_context = new BindingContext(new TestClient(), model, null, base_url)
             {
                 Model = model
             };
@@ -66,6 +66,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string PathValue1 { [UsedImplicitly] get; set; }
             public string QueryValue1 { [UsedImplicitly] get; set; }
             public string PathValue2 { [UsedImplicitly] get; set; }
+        }
+
+        class TestClient : HttpClient<string, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
         }
     }
 
@@ -161,7 +169,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
                 MyHeader = "Hello World!",
                 JustValue = "Nothing"
             };
-            binding_context = new BindingContext(null, model, null, null)
+            binding_context = new BindingContext(new TestClient(), model, null, null)
             {
                 Model = model
             };
@@ -183,6 +191,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string MyHeader { [UsedImplicitly] get; set; }
 
             public string JustValue { [UsedImplicitly] get; set; }
+        }
+
+        class TestClient : HttpClient<string, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
         }
     }
 

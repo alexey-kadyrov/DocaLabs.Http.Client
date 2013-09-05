@@ -36,7 +36,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public virtual string ComposeUrl(BindingContext context)
         {
-            return _urlComposer.Compose(context.Model, context.BaseUrl);
+            return _urlComposer.Compose(context.HttpClient, context.Model, context.BaseUrl);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public virtual WebHeaderCollection GetHeaders(BindingContext context)
         {
-            return _headerMapper.Map(context.Model);
+            return _headerMapper.Map(context.HttpClient, context.Model);
         }
 
         /// <summary>

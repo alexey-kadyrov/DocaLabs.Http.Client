@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
-        readonly static PropertyMaps Maps = new PropertyMaps(IsFormProperty);
+        readonly static PropertyMaps Maps = new PropertyMaps();
         string _charSet;
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if (model == null)
                 return "";
 
-            var values = Maps.Convert(model);
+            var values = Maps.Convert(model, IsFormProperty);
 
             return new QueryStringBuilder().Add(values).ToString();
         }
