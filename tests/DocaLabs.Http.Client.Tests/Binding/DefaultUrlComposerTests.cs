@@ -196,6 +196,69 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultUrlComposer))]
+    class when_url_composer_is_used_for_same_model_but_one_client_has_request_serialization_attribute_but_another_does_not
+    {
+        static Uri base_url;
+        static TestModel model;
+        static DefaultUrlComposer composer;
+        static string url_with_serialization;
+        static string url_without_serialization;
+
+        Establish context = () =>
+        {
+            composer = new DefaultUrlComposer();
+            base_url = new Uri("http://foo.bar/product/{PathValue}/red?c=en-IE");
+            model = new TestModel
+            {
+                PathValue = "get this",
+                QueryValue = "Hello World!"
+            };
+        };
+
+        Because of = () =>
+        {
+            url_with_serialization = composer.Compose(new TestClientWithSerialization(), model, base_url);
+            url_without_serialization = composer.Compose(new TestClientWithoutSerialization(), model, base_url);
+        };
+
+        It should_not_add_implicit_values_only_to_when_mapping_for_request_serializable_hint =
+            () => url_with_serialization.ShouldEqual("http://foo.bar/product/%7BPathValue%7D/red?c=en-IE");
+
+        It should_add_implicit_values_only_to_when_mapping_without_request_serializable_hint =
+            () => url_without_serialization.ShouldEqual("http://foo.bar/product/get%20this/red?c=en-IE&QueryValue=Hello+World!");
+
+        [TestSerializer]
+        class TestClientWithSerialization : HttpClient<TestModel, string>
+        {
+            public TestClientWithSerialization()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestClientWithoutSerialization : HttpClient<TestModel, string>
+        {
+            public TestClientWithoutSerialization()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestModel
+        {
+            public string PathValue { get; set; }
+            public string QueryValue { get; set; }
+        }
+
+        class TestSerializerAttribute : RequestSerializationAttribute
+        {
+            public override void Serialize(object obj, WebRequest request)
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultUrlComposer))]
     class when_url_composer_is_used_for_namevaluecollection_model
     {
         static Uri base_url;

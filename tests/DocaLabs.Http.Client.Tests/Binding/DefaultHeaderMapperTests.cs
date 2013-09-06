@@ -6,6 +6,7 @@ using System.Net;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Binding.Serialization;
+using DocaLabs.Testing.Common;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Binding
@@ -142,6 +143,77 @@ namespace DocaLabs.Http.Client.Tests.Binding
         class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestSerializerAttribute : RequestSerializationAttribute
+        {
+            public override void Serialize(object obj, WebRequest request)
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultHeaderMapper))]
+    class when_default_header_mapper_used_for_model_and_one_client_with_request_serialization_attribute_and_another_without
+    {
+        static TestModel model;
+        static WebHeaderCollection headers_with_serialization;
+        static WebHeaderCollection headers_without_serialization;
+
+        Establish context = () => model = new TestModel
+        {
+            MyHeader = "Hello World!",
+            JustValue = "Nothing",
+            AnotherMyHeader = "header-x",
+            Headers = new WebHeaderCollection
+            {
+                {"header-11", "value-11"}
+            }
+        };
+
+        Because of = () =>
+        {
+            headers_with_serialization = new DefaultHeaderMapper().Map(new TestClientWithSerialization(), model);
+            headers_without_serialization = new DefaultHeaderMapper().Map(new TestClientWithoutSerialization(), model);
+        };
+
+        It should_map_only_properties_explicitly_marked_as_header_whne_mapping_with_serialization = () => headers_with_serialization.ShouldContainOnly(
+                new NameValue("MyHeader", "Hello World!"), 
+                new NameValue("AnotherMyHeader", "header-x"));
+
+        It should_map_properties_implicit_and_explicitly_marked_as_header_whne_mapping_with_serialization = () => headers_without_serialization.ShouldContainOnly(
+                new NameValue("MyHeader", "Hello World!"),
+                new NameValue("AnotherMyHeader", "header-x"),
+                new NameValue("Headers.header-11", "value-11"));
+
+        class TestModel
+        {
+            [RequestUse(RequestUseTargets.RequestHeader)]
+            public string MyHeader { get; set; }
+
+            public string JustValue { get; set; }
+
+            [RequestUse(RequestUseTargets.RequestHeader)]
+            public string AnotherMyHeader { get; set; }
+
+            public WebHeaderCollection Headers { get; set; }
+        }
+
+        [TestSerializer]
+        class TestClientWithSerialization : HttpClient<TestModel, string>
+        {
+            public TestClientWithSerialization()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestClientWithoutSerialization : HttpClient<TestModel, string>
+        {
+            public TestClientWithoutSerialization()
                 : base(new Uri("http://foo.bar"))
             {
             }
