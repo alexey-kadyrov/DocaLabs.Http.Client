@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using DocaLabs.Http.Client.RequestSerialization;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Mapping.PropertyConverters
@@ -48,9 +49,15 @@ namespace DocaLabs.Http.Client.Mapping.PropertyConverters
                 {
                     var customeMapper = value as ICustomQueryMapper;
 
-                    values = customeMapper != null
-                        ? customeMapper.ToParameterDictionary()
-                        : new CustomNameValueCollection { { Name, value.ToString() } };
+                    if (customeMapper != null)
+                    {
+                        values = customeMapper.ToParameterDictionary();
+                    }
+                    else
+                    {
+                        if(Info.GetCustomAttributes(typeof(RequestSerializationAttribute), true).Length == 0)
+                            values = new CustomNameValueCollection { { Name, value.ToString() } };
+                    }
                 }
             }
 

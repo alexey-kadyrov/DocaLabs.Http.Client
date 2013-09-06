@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using DocaLabs.Http.Client.ContentEncoding;
 using DocaLabs.Http.Client.RequestSerialization;
 using DocaLabs.Http.Client.Tests._Utils;
@@ -29,7 +28,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_application_json_with_utf_8_charset =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json");
 
         It should_serialize_object =
             () => ParseRequestDataAsJson<TestTarget>().ShouldBeSimilar(original_object);
@@ -56,7 +55,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(original_object, mock_web_request.Object);
 
         It should_set_request_content_type_as_application_json_with_utf_8_charset =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json");
 
         It should_add_content_encoding_request_header =
             () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
@@ -69,42 +68,12 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
     }
 
     [Subject(typeof(SerializeAsJsonAttribute))]
-    class when_serialize_as_json_attribute_is_used_with_utf_32_charset : request_serialization_test_context
-    {
-        static TestTarget original_object;
-        static SerializeAsJsonAttribute attribute;
-
-        Establish context = () =>
-        {
-            original_object = new TestTarget
-            {
-                Value1 = 2012,
-                Value2 = "Hello World!"
-            };
-
-            attribute = new SerializeAsJsonAttribute { CharSet = Encoding.UTF32.WebName };
-        };
-
-        Because of =
-            () => attribute.Serialize(original_object, mock_web_request.Object);
-
-        It should_set_request_content_type_as_application_json_with_utf_8_charset =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-32");
-
-        It should_serialize_object =
-            () => ParseRequestDataAsJson<TestTarget>(Encoding.UTF32).ShouldBeSimilar(original_object);
-    }
-
-    [Subject(typeof(SerializeAsJsonAttribute))]
     public class when_serialize_as_json_attribute_is_newed
     {
         static SerializeAsJsonAttribute attribute;
 
         Because of =
             () => attribute = new SerializeAsJsonAttribute();
-
-        It should_set_charset_to_utf8 =
-            () => attribute.CharSet.ShouldEqual(Encoding.UTF8.WebName);
 
         It should_set_request_content_encoding_to_null =
             () => attribute.RequestContentEncoding.ShouldBeNull();
@@ -122,7 +91,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
             () => attribute.Serialize(null, mock_web_request.Object);
 
         It should_set_request_content_type_as_application_json_with_utf_8_charset =
-            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json; charset=utf-8");
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/json");
 
         It should_serialize_to_empty_string =
             () => GetRequestData().ShouldBeEmpty();
@@ -143,7 +112,7 @@ namespace DocaLabs.Http.Client.Tests.RequestSerialization
                 Value2 = "Hello World!"
             };
 
-            attribute = new SerializeAsJsonAttribute { CharSet = Encoding.UTF32.WebName };
+            attribute = new SerializeAsJsonAttribute();
         };
 
         Because of =

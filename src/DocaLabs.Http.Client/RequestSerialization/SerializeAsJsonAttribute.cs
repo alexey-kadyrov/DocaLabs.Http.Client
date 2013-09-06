@@ -19,19 +19,6 @@ namespace DocaLabs.Http.Client.RequestSerialization
         public string RequestContentEncoding { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of text encoding to be used for Xml serialization. The default value is UTF-8.
-        /// </summary>
-        public string CharSet { get; set; }
-
-        /// <summary>
-        /// Initializes an instance of the SerializeAsJsonAttribute class.
-        /// </summary>
-        public SerializeAsJsonAttribute()
-        {
-            CharSet = Encoding.UTF8.WebName;
-        }
-
-        /// <summary>
         /// Serializes a given object into the web request in json format
         /// </summary>
         /// <param name="obj">Object to be serialized.</param>
@@ -41,9 +28,9 @@ namespace DocaLabs.Http.Client.RequestSerialization
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            var data = Encoding.GetEncoding(CharSet).GetBytes(obj == null ? "" : JsonSerializationProvider.Serializer.Serialize(obj));
+            var data = Encoding.UTF8.GetBytes(obj == null ? "" : JsonSerializationProvider.Serializer.Serialize(obj));
 
-            request.ContentType = string.Format("application/json; charset={0}", CharSet);
+            request.ContentType = string.Format("application/json");
             
             if(string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(data, request);
