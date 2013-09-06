@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using DocaLabs.Http.Client.Binding.Serialization;
@@ -34,10 +33,9 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
         It should_set_request_content_type_as_url_encoded_form_with_utf_8_charset =
             () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded; charset=utf-8");
 
-        It should_serialize_all_properties =
-            () => HttpUtility.ParseQueryString(GetRequestData()).ShouldContainOnly(
-                new KeyValuePair<string, string>("Value1", "2012"),
-                new KeyValuePair<string, string>("Value2", "Hello World!"));
+        It should_serialize_all_properties = () => HttpUtility.ParseQueryString(GetRequestData()).ShouldContainOnly(
+                new NameValue("Value1", "2012"),
+                new NameValue("Value2", "Hello World!"));
 
         It should_properly_url_encode_values =
             () => GetRequestData().ShouldContain("Hello+World!");
@@ -72,10 +70,9 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
         It should_add_gzip_content_encoding =
             () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
 
-        It should_serialize_all_properties =
-            () => HttpUtility.ParseQueryString(GetDecodedRequestData()).ShouldContainOnly(
-                new KeyValuePair<string, string>("Value1", "2012"),
-                new KeyValuePair<string, string>("Value2", "Hello World!"));
+        It should_serialize_all_properties = () => HttpUtility.ParseQueryString(GetDecodedRequestData()).ShouldContainOnly(
+                new NameValue("Value1", "2012"),
+                new NameValue("Value2", "Hello World!"));
 
         It should_properly_url_encode_values =
             () => GetDecodedRequestData().ShouldContain("Hello+World!");
@@ -104,10 +101,9 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
         It should_set_request_content_type_as_url_encoded_form_with_utf_8_charset =
             () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded; charset=utf-32");
 
-        It should_serialize_all_properties =
-            () => HttpUtility.ParseQueryString(GetRequestData(Encoding.UTF32)).ShouldContainOnly(
-                new KeyValuePair<string, string>("Value1", "2012"),
-                new KeyValuePair<string, string>("Value2", "Hello World!"));
+        It should_serialize_all_properties = () => HttpUtility.ParseQueryString(GetRequestData(Encoding.UTF32)).ShouldContainOnly(
+                new NameValue("Value1", "2012"),
+                new NameValue("Value2", "Hello World!"));
 
         It should_properly_url_encode_values =
             () => GetRequestData(Encoding.UTF32).ShouldContain("Hello+World!");

@@ -42,7 +42,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string JustValue { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -87,7 +87,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string AnotherMyHeader { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -139,7 +139,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         }
 
         [TestSerializer]
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -198,7 +198,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public WebHeaderCollection Headers { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -229,16 +229,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(new TestClient(), model);
 
-        It should_map_properties_marked_as_header =
-            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+        It should_not_map =
+            () => headers.ShouldBeEmpty();
 
-        It should_convert_values_for_first_header =
-            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
-
-        It should_convert_values_for_second_header =
-            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
-
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<NameValueCollection, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -262,16 +256,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(new TestClient(), model);
 
-        It should_map_properties_marked_as_header =
-            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+        It should_not_map =
+            () => headers.ShouldBeEmpty();
 
-        It should_convert_values_for_first_header =
-            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
-
-        It should_convert_values_for_second_header =
-            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
-
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<Hashtable, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -299,7 +287,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => headers.ShouldBeEmpty();
 
         [TestSerializer]
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<Hashtable, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -333,7 +321,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_not_map =
             () => headers.ShouldBeEmpty();
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestHashTable, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -373,7 +361,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => headers.ShouldBeEmpty();
 
         [TestSerializer]
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<NameValueCollection, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -407,7 +395,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_not_map =
             () => headers.ShouldBeEmpty();
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestNameValueCollection, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -447,7 +435,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => headers.ShouldBeEmpty();
 
         [TestSerializer]
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<Dictionary<string, string>, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -481,7 +469,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_not_map =
             () => headers.ShouldBeEmpty();
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestDictionary, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -517,16 +505,10 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Because of =
             () => headers = new DefaultHeaderMapper().Map(new TestClient(), model);
 
-        It should_map_properties_marked_as_header =
-            () => headers.AllKeys.ShouldContainOnly("MyHeader", "AnotherMyHeader");
+        It should_not_map =
+            () => headers.ShouldBeEmpty();
 
-        It should_convert_values_for_first_header =
-            () => headers.GetValues("MyHeader").ShouldContainOnly("Hello World!");
-
-        It should_convert_values_for_second_header =
-            () => headers.GetValues("AnotherMyHeader").ShouldContainOnly("header-x");
-
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<Dictionary<string, string>, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -569,7 +551,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string JustValue { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -613,7 +595,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string JustValue { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -663,7 +645,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public WebHeaderCollection AnotherMyHeaders { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -701,7 +683,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string JustValue { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -738,7 +720,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string JustValue { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -771,7 +753,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string Value2 { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -830,7 +812,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_not_map_any_properties =
             () => headers.ShouldBeEmpty();
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<int, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -882,7 +864,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public WebHeaderCollection AnotherMyHeaders2 { get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))

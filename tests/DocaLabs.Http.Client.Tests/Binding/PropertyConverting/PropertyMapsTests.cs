@@ -539,7 +539,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
 
-        It should_report_accpet_property_check_argument =
+        It should_report_accept_property_check_argument =
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("acceptPropertyCheck");
     }
 

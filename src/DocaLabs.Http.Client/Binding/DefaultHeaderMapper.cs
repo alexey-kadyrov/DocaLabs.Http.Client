@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultHeaderMapper
     {
-        readonly PropertyMaps _maps = new PropertyMaps();
+        readonly ClientPropertyMaps _maps = new ClientPropertyMaps();
 
         /// <summary>
         /// Maps a model to the collection of key, values. The property must have the RequesUseAttribute with the header target bit set.
@@ -26,15 +26,12 @@ namespace DocaLabs.Http.Client.Binding
             var checkImplicitConditions = !model.GetType().IsSerializableToRequestBody() &&
                                           !client.GetType().IsSerializableToRequestBody();
 
-            if (!checkImplicitConditions && PropertyMaps.IsDictionaryModel(model.GetType()))
-                return new WebHeaderCollection();
-
-            return new WebHeaderCollection { _maps.Convert(model, x => x.IsHeader(checkImplicitConditions)) };
+            return new WebHeaderCollection { _maps.Convert(client, model, x => x.IsHeader(checkImplicitConditions)) };
         }
 
         static bool Ignore(object model)
         {
-            if (model == null)
+            if (model == null || PropertyMaps.IsDictionaryModel(model.GetType()))
                 return true;
 
             var useAttribute = model.GetType().GetCustomAttribute<RequestUseAttribute>(true);

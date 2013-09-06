@@ -20,11 +20,19 @@ namespace DocaLabs.Http.Client.Binding
         /// If more then one NetworkCredential value is detected then CredentialCache object is returned with all of then cached.
         /// In this case the UriPartial.Authority of the URL is used to add credentials to the CredentialCache and the property name is used as the authentication type.
         /// </summary>
-        public ICredentials Map(object model, Uri url)
+        public ICredentials Map(object client, object model, Uri url)
         {
-            return model == null 
+            if(client == null)
+                throw new ArgumentNullException("client");
+
+            return Ignore(client, model) 
                 ? null 
                 : GetCredentials(model, url, _propertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+        }
+
+        static bool Ignore(object client, object model)
+        {
+            return model == null || model.GetType().IsSerializableToRequestBody() || client.GetType().IsSerializableToRequestBody();
         }
 
         static ICredentials GetCredentials(object model, Uri url, PropertyMap map)

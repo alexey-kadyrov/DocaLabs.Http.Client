@@ -123,7 +123,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public WebHeaderCollection Headers { [UsedImplicitly] get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -285,7 +285,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
             request_binder = ModelBinders.DefaultRequestBinder;
-            binding_context = new BindingContext(null, model, new ClientEndpointElement(), new Uri("http://foo.bar"))
+            binding_context = new BindingContext(new TestClient(), model, new ClientEndpointElement(), new Uri("http://foo.bar"))
             {
                 Model = model
             };
@@ -306,6 +306,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
         class TestModel
         {
             public ICredentials Credentials { get; set; }
+        }
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
         }
     }
 
@@ -329,7 +337,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
             request_binder = ModelBinders.DefaultRequestBinder;
-            binding_context = new BindingContext(null, model, null, new Uri("http://foo.bar"))
+            binding_context = new BindingContext(new TestClient(), model, null, new Uri("http://foo.bar"))
             {
                 Model = model
             };
@@ -347,6 +355,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
         class TestModel
         {
             public ICredentials Credentials { get; set; }
+        }
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
         }
     }
 

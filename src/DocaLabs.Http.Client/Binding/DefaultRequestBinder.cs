@@ -60,7 +60,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public virtual ICredentials GetCredentials(BindingContext context)
         {
-            return _credentialsMapper.Map(context.Model, context.RequestUrl);
+            return _credentialsMapper.Map(context.HttpClient, context.Model, context.RequestUrl);
         }
 
         /// <summary>

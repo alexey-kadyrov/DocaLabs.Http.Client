@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Net;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Configuration;
@@ -146,7 +145,7 @@ namespace DocaLabs.Http.Client
 
             request.Method = GetRequestMethod(binder, context);
 
-            if (Configuration.AutoSetAcceptEncoding && (!typeof(Image).IsAssignableFrom(typeof(TOutputModel))))
+            if (ShouldSetAcceptEncoding(context))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
             request.CopyCredentialsFrom(binder, context);
@@ -168,6 +167,15 @@ namespace DocaLabs.Http.Client
             return string.IsNullOrWhiteSpace(Method) 
                 ? binder.InferRequestMethod(context) 
                 : Method;
+        }
+
+        /// <summary>
+        /// If the method returns true the ContentDecoderFactory.AddAcceptEncodings is called to set the Accept-Encoding header. 
+        /// The default implementation returns Configuration.AutoSetAcceptEncoding value;
+        /// </summary>
+        protected virtual bool ShouldSetAcceptEncoding(BindingContext context)
+        {
+            return Configuration.AutoSetAcceptEncoding;
         }
 
         /// <summary>

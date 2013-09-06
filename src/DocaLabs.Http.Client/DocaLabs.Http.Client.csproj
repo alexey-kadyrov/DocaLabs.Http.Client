@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
+    <Compile Include="Binding\PropertyConverting\ClientPropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\FormatCulture.cs" />
     <Compile Include="Binding\PropertyConverting\IValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />

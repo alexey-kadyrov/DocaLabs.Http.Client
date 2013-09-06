@@ -13,9 +13,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer
     {
-        readonly PropertyMaps _implicitPathOrQueryMaps = new PropertyMaps();
-        readonly PropertyMaps _explicitQueryMaps = new PropertyMaps();
-        readonly PropertyMaps _explicitPathMaps = new PropertyMaps();
+        readonly ClientPropertyMaps _implicitPathOrQueryMaps = new ClientPropertyMaps();
+        readonly ClientPropertyMaps _explicitQueryMaps = new ClientPropertyMaps();
+        readonly ClientPropertyMaps _explicitPathMaps = new ClientPropertyMaps();
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
@@ -73,11 +73,11 @@ namespace DocaLabs.Http.Client.Binding
             }
             else
             {
-                if(!isSerializableToRequestBody)
-                    ProcessImplicitPathOrQuery(existingPath, _implicitPathOrQueryMaps.Convert(model, RequestUsageExtensions.IsImplicitUrlPathOrQuery), path, query);
+                if (!isSerializableToRequestBody)
+                    ProcessImplicitPathOrQuery(existingPath, _implicitPathOrQueryMaps.Convert(client, model, RequestUsageExtensions.IsImplicitUrlPathOrQuery), path, query);
 
-                ProcessExplicitPath(model, path);
-                ProcessExplicitQuery(model, query);
+                ProcessExplicitPath(client, model, path);
+                ProcessExplicitQuery(client, model, query);
             }
 
             return new UriBuilder(GetBaseUrl(baseUrl))
@@ -129,14 +129,14 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        void ProcessExplicitQuery(object model, NameValueCollection query)
+        void ProcessExplicitQuery(object client, object model, NameValueCollection query)
         {
-            query.Add(_explicitQueryMaps.Convert(model, RequestUsageExtensions.IsExplicitUrlQuery));
+            query.Add(_explicitQueryMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlQuery));
         }
 
-        void ProcessExplicitPath(object model, NameValueCollection path)
+        void ProcessExplicitPath(object client, object model, NameValueCollection path)
         {
-            path.Add(_explicitPathMaps.Convert(model, RequestUsageExtensions.IsExplicitUrlPath));
+            path.Add(_explicitPathMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlPath));
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)

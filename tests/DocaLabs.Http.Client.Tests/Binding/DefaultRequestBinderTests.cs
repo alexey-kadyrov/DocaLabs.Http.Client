@@ -68,7 +68,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string PathValue2 { [UsedImplicitly] get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -193,7 +193,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             public string JustValue { [UsedImplicitly] get; set; }
         }
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -219,7 +219,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
                 Value = "Hello World!",
                 Credentials2 = original_credentials
             };
-            binding_context = new BindingContext(null, model, null, new Uri("http://contoso.com/"))
+            binding_context = new BindingContext(new TestClient(), model, null, new Uri("http://contoso.com/"))
             {
                 Model = model
             };
@@ -238,6 +238,14 @@ namespace DocaLabs.Http.Client.Tests.Binding
             [UsedImplicitly]
             public ICredentials Credentials1 { get; set; }
             public ICredentials Credentials2 { [UsedImplicitly] get; set; }
+        }
+
+        class TestClient : HttpClient<Model, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
         }
     }
 

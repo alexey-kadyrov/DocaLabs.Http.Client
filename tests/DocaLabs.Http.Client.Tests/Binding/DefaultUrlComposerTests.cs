@@ -39,7 +39,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_add_model_values_to_appropariate_path_and_query_parts =
             () => url.ShouldEqual("http://foo.bar/product/get%20this/red/another%20path?c=en-IE&QueryValue1=Hello+World!");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -80,7 +80,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_add_model_values_to_appropariate_path_and_query_parts =
             () => url.ShouldEqual("http://foo.bar/product/get%20this/red/Hello%20World!?c=en-IE&PathAndQueryValue=Hello+World!");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -122,7 +122,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_add_explict_values_only_to_appropariate_path_and_query_parts =
             () => url.ShouldEqual("http://foo.bar/product/red/Hello%20World!?c=en-IE&PathAndQueryValue=Hello+World!");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -172,7 +172,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => url.ShouldEqual("http://foo.bar/product/red/Hello%20World!?c=en-IE&PathAndQueryValue=Hello+World!");
 
         [TestSerializer]
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -221,7 +221,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_add_model_values_to_appropariate_path_and_query_parts =
             () => url.ShouldEqual("http://foo.bar/product/get%20this/red/another%20path?c=en-IE&QueryValue1=Hello+World!");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<NameValueCollection, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -257,7 +257,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => url.ShouldEqual("http://foo.bar/product/%7BpathValue1%7D/red/%7BpathValue2%7D?c=en-IE");
 
         [TestSerializer]
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<NameValueCollection, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -299,7 +299,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_not_add_model_values =
             () => url.ShouldEqual("http://foo.bar/product/%7BpathValue1%7D/red/%7BpathValue2%7D?c=en-IE");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestNameValueCollection, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -346,7 +346,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_add_model_values_to_appropariate_path_and_query_parts =
             () => url.ShouldEqual("http://foo.bar/product/get%20this/red/another%20path?c=en-IE&QueryValue1=Hello+World!");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<Dictionary<string, string>, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -382,7 +382,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => url.ShouldEqual("http://foo.bar/product/%7BpathValue1%7D/red/%7BpathValue2%7D?c=en-IE");
 
         [TestSerializer]
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<Dictionary<string, string>, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -424,7 +424,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_not_add_model_values =
             () => url.ShouldEqual("http://foo.bar/product/%7BpathValue1%7D/red/%7BpathValue2%7D?c=en-IE");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestDictionary, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -500,7 +500,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_report_base_url_argument =
             () => ((ArgumentNullException) exception).ParamName.ShouldEqual("baseUrl");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -578,7 +578,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_wrap_the_original_exception =
             () => exception.InnerException.ShouldBeOfType<TargetInvocationException>();
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -618,7 +618,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_add_model_values_to_appropariate_query_parts =
             () => url.ShouldEqual("http://foo.bar/?c=en-IE&QueryValue1=Hello+World!");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))
@@ -658,7 +658,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_add_model_values_to_appropariate_path_and_query_parts =
             () => url.ShouldEqual("http://foo.bar/product/get%20this/red/another%20path?QueryValue1=Hello+World!");
 
-        class TestClient : HttpClient<string, string>
+        class TestClient : HttpClient<TestModel, string>
         {
             public TestClient()
                 : base(new Uri("http://foo.bar"))

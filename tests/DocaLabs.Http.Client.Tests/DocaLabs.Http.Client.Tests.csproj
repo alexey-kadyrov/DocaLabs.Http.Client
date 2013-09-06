@@ -79,6 +79,7 @@
     <Compile Include="Binding\DefaultResponseBinderTests.cs" />
     <Compile Include="Binding\DefaultUrlComposerTests.cs" />
     <Compile Include="Binding\ModelBindersTests.cs" />
+    <Compile Include="Binding\PropertyConverting\ClientPropertyMapsTests.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyOverridesAttributeTests.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverterTests.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverterTests.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Configuration\EndpointConfigurationTests.cs" />
     <Compile Include="Binding\RequestExtensionsTests.cs" />
     <Compile Include="DefaultExecuteStrategyTests.cs" />
+    <Compile Include="HttpClientTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactoryTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentEncoderFactoryTests.cs" />
     <Compile Include="Utils\ContentEncoding\GZipContentDecoderTests.cs" />
