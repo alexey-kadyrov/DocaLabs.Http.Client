@@ -21,8 +21,10 @@ namespace DocaLabs.Http.Client.Tests._Utils
             {
                 var result = Activator.CreateInstance<TOutputModel>();
 
-                if (typeof(TInputModel) != typeof(VoidType) && typeof(TOutputModel) != typeof(VoidType))
-                    typeof(TOutputModel).GetProperty("Value").SetValue(result, typeof(TInputModel).GetProperty("Value").GetValue(model, null));
+                if (typeof(TInputModel) != typeof(VoidType) && typeof(TOutputModel) != typeof(VoidType) && typeof(TOutputModel).GetProperty("Value") != null)
+                {
+                    typeof (TOutputModel).GetProperty("Value").SetValue(result, model);
+                }
 
                 Client.ExecutionMarker = "Pipeline was executed.";
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Threading;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Utils;
 
@@ -13,21 +14,26 @@ namespace DocaLabs.Http.Client
     /// </summary>
     public static class HttpClientFactory
     {
-        const string Suffix = "__http_client_impl";
+        const string AssemblySuffix = "__assembly_http_client_impl";
+        const string ClientSuffix = "__http_client_impl";
+        const string ModelSuffix = "__model_impl";
+
         static readonly ModuleBuilder ModuleBuilder;
         static readonly object Locker;
-        static readonly Dictionary<Type, CreatedTypeInfo> Constructors;
+        static readonly Dictionary<Type, ClientTypeInfo> Constructors;
+
+        static long _typeCount;
 
         static HttpClientFactory()
         {
-            var assemblyName = typeof(HttpClientFactory).Namespace + Suffix;
+            var assemblyName = typeof(HttpClientFactory).Namespace + AssemblySuffix;
 
             var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
                 new AssemblyName(assemblyName),
-                AssemblyBuilderAccess.Run);
+                AssemblyBuilderAccess.RunAndSave);
 
             ModuleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName);
-            Constructors = new Dictionary<Type, CreatedTypeInfo>();
+            Constructors = new Dictionary<Type, ClientTypeInfo>();
             Locker = new object();
         }
 
@@ -102,7 +108,7 @@ namespace DocaLabs.Http.Client
         /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
         public static object CreateInstance(Type baseType, Type interfaceType, Uri baseUrl = null, string configurationName = null)
         {
-            var constructor = GetMappedConstructor(baseType, interfaceType);
+            var constructor = GetConstructor(baseType, interfaceType);
 
             if (string.IsNullOrWhiteSpace(configurationName))
                 configurationName = interfaceType.FullName;
@@ -110,20 +116,20 @@ namespace DocaLabs.Http.Client
             return constructor.Invoke(new object[] { baseUrl, configurationName });
         }
 
-        static ConstructorInfo GetMappedConstructor(Type baseType, Type interfaceType)
+        static ConstructorInfo GetConstructor(Type baseType, Type interfaceType)
         {
             if (interfaceType == null)
                 throw new ArgumentNullException("interfaceType");
 
             lock (Locker)
             {
-                CreatedTypeInfo constructor;
+                ClientTypeInfo constructor;
 
                 if (!Constructors.TryGetValue(interfaceType, out constructor))
                 {
-                    Constructors[interfaceType] = constructor = new CreatedTypeInfo
+                    Constructors[interfaceType] = constructor = new ClientTypeInfo
                     {
-                        ConstructorInfo = InitType(baseType, interfaceType),
+                        ConstructorInfo = BuildTypeFrom(baseType, interfaceType).GetConstructor(new[] { typeof(Uri), typeof(string) }),
                         OriginalBaseType = baseType
                     };
                 }
@@ -137,163 +143,33 @@ namespace DocaLabs.Http.Client
             }
         }
 
-        static ConstructorInfo InitType(Type baseType, Type interfaceType)
-        {
-            return BuildTypeFrom(baseType, interfaceType).GetConstructor(new[] { typeof(Uri), typeof(string) });
-        }
-
         static Type BuildTypeFrom(Type baseType, Type interfaceType)
         {
             var interfaceInfo = new ClientInterfaceInfo(interfaceType);
 
-            baseType = MakeBaseType(baseType, interfaceInfo);
+            baseType = interfaceInfo.EnsureBaseType(baseType);
 
-            var typeBuilder = DefineType(baseType, interfaceType);
+            var typeBuilder = ModuleBuilder.DefineType(
+                string.Format("{0}{1}{2}", interfaceType.FullName, Interlocked.Increment(ref _typeCount), ClientSuffix),
+                TypeAttributes.Class | TypeAttributes.Public, baseType, new[] { interfaceType });
 
-            TransferAttributes(typeBuilder, interfaceInfo);
+            interfaceInfo.TransferCustomAttributes(typeBuilder);
 
-            BuildConstructor(baseType, interfaceInfo, typeBuilder);
+            interfaceInfo.BuildConstructor(baseType, typeBuilder);
 
-            BuildServiceCallMethod(baseType, interfaceInfo, typeBuilder);
+            interfaceInfo.BuildServiceCallMethod(baseType, typeBuilder);
 
             return typeBuilder.CreateType();
         }
 
-        static void TransferAttributes(TypeBuilder typeBuilder, ClientInterfaceInfo interfaceInfo)
-        {
-            foreach (var builder in interfaceInfo.Attributes.Select(x => new CustomAttributeBuilder(
-                                                                        x.Constructor, 
-                                                                        x.ConstructorArguments, 
-                                                                        x.InitializedProperties, 
-                                                                        x.InitializedPropertyValues,
-                                                                        x.InitializedFields,
-                                                                        x.InitializedFieldsValues)))
-            {
-                typeBuilder.SetCustomAttribute(builder);
-            }
-        }
-
-        static Type MakeBaseType(Type baseType, ClientInterfaceInfo interfaceInfo)
-        {
-            if (baseType == null)
-                return typeof (HttpClient<,>).MakeGenericType(interfaceInfo.InputModelType, interfaceInfo.OutputModelType);
-
-            if(!baseType.IsGenericTypeDefinition)
-                return baseType;
-
-            if(baseType.GetGenericArguments().Length != 2)
-                throw new ArgumentException(string.Format(Resources.Text.if_base_class_generic_it_must_have_two_parameters, baseType.FullName), "baseType");
-
-            return baseType.MakeGenericType(interfaceInfo.InputModelType, interfaceInfo.OutputModelType);
-        }
-
-        static TypeBuilder DefineType(Type baseType, Type interfaceType)
-        {
-            return ModuleBuilder.DefineType(
-                string.Format("{0}{1}{2}", interfaceType.FullName, Constructors.Count, Suffix),
-                TypeAttributes.Class | TypeAttributes.Public,
-                baseType,
-                new[] { interfaceType });
-        }
-
-        static void BuildConstructor(Type baseType, ClientInterfaceInfo interfaceInfo, TypeBuilder typeBuilder)
-        {
-            var threeParamCtor = true;
-
-            var baseCtor = GetBaseConstructor(baseType, interfaceInfo, ref threeParamCtor);
-
-            var ctor = DefineConstructor(typeBuilder);
-
-            var ctorGenerator = ctor.GetILGenerator();
-
-            ctorGenerator.Emit(OpCodes.Ldarg_0);
-            ctorGenerator.Emit(OpCodes.Ldarg_1);
-            ctorGenerator.Emit(OpCodes.Ldarg_2);
-
-            if (threeParamCtor)
-                ctorGenerator.Emit(OpCodes.Ldnull);
-
-            ctorGenerator.Emit(OpCodes.Call, baseCtor);
-            ctorGenerator.Emit(OpCodes.Ret);
-        }
-
-        static ConstructorInfo GetBaseConstructor(Type baseType, ClientInterfaceInfo interfaceInfo, ref bool threeParamCtor)
-        {
-            var baseCtor = baseType.GetConstructor(
-                new[] {typeof (Uri), typeof (string), interfaceInfo.ExecuteStrategyType});
-
-            if (baseCtor == null)
-            {
-                threeParamCtor = false;
-
-                baseCtor = baseType.GetConstructor(new[] {typeof (Uri), typeof (string)});
-
-                if (baseCtor == null)
-                    throw new ArgumentException(string.Format(Resources.Text.must_implement_constructor,
-                                                baseType.FullName, interfaceInfo.ExecuteStrategyType.FullName), "baseType");
-            }
-
-            return baseCtor;
-        }
-
-        static ConstructorBuilder DefineConstructor(TypeBuilder typeBuilder)
-        {
-            var ctor = typeBuilder.DefineConstructor(
-                MethodAttributes.Public, CallingConventions.Standard | CallingConventions.HasThis,
-                new[] {typeof (Uri), typeof (string)});
-            return ctor;
-        }
-
-        static void BuildServiceCallMethod(Type baseType, ClientInterfaceInfo interfaceInfo, TypeBuilder typeBuilder)
-        {
-            var baseExecute = baseType.GetMethod("Execute", new[] { interfaceInfo.InputModelType });
-            if (baseExecute == null)
-                throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method, 
-                                            baseType.FullName, interfaceInfo.OutputModelType.FullName, interfaceInfo.InputModelType.FullName), "baseType");
-
-            var newExecute = DefineServiceCallMethod(interfaceInfo, typeBuilder);
-
-            var executeGenerator = newExecute.GetILGenerator();
-
-            executeGenerator.Emit(OpCodes.Ldarg_0);
-
-            executeGenerator.Emit(interfaceInfo.InputModelType != typeof(VoidType)
-                ? OpCodes.Ldarg_1
-                : OpCodes.Ldnull);
-
-            executeGenerator.Emit(OpCodes.Call, baseExecute);
-
-            if(interfaceInfo.OriginalOutputModelType == typeof(void))
-                executeGenerator.Emit(OpCodes.Pop);
-
-            executeGenerator.Emit(OpCodes.Ret);
-
-            typeBuilder.DefineMethodOverride(newExecute, interfaceInfo.ServiceExecuteMethod);
-        }
-
-        static MethodBuilder DefineServiceCallMethod(ClientInterfaceInfo interfaceInfo, TypeBuilder typeBuilder)
-        {
-            return typeBuilder.DefineMethod(
-                interfaceInfo.ServiceExecuteMethod.Name,
-                MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
-                CallingConventions.Standard | CallingConventions.HasThis,
-                interfaceInfo.OutputModelType != typeof (VoidType)
-                    ? interfaceInfo.OutputModelType
-                    : typeof (void),
-                interfaceInfo.InputModelType != typeof(VoidType)
-                    ? new[] { interfaceInfo.InputModelType }
-                    : null
-            );
-        }
-
         class ClientInterfaceInfo
         {
-            public MethodInfo ServiceExecuteMethod { get; private set; }
-            public Type InputModelType { get; private set; }
-            public Type OutputModelType { get; private set; }
-            public Type ExecuteStrategyType { get; private set; }
-            public Type OriginalOutputModelType { get; private set; }
-            public IEnumerable<AttributeInfo> Attributes { get; private set; }
+            readonly MethodInfo _serviceExecuteMethod;
+            readonly InputModelInfo _inputModelInfo;
+            readonly Type _outputModelType;
+            readonly Type _originalOutputModelType;
+            readonly Type _executeStrategyType;
+            readonly CustomeAttributes _attributes;
 
             public ClientInterfaceInfo(Type interfaceType)
             {
@@ -301,36 +177,246 @@ namespace DocaLabs.Http.Client
                     throw new ArgumentException(string.Format(Resources.Text.must_be_interface, interfaceType.FullName), "interfaceType");
 
                 if(interfaceType.IsGenericTypeDefinition)
-                    throw new ArgumentException(string.Format(Resources.Text.interface_cannot_be_generic_type_defienition, interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.Text.interface_cannot_be_generic_type_definition, interfaceType.FullName), "interfaceType");
 
                 var methods = interfaceType.GetMethods();
                 if (methods.Length != 1)
                     throw new ArgumentException(string.Format(Resources.Text.must_have_only_one_method, interfaceType.FullName), "interfaceType");
 
-                ServiceExecuteMethod = methods[0];
-                OutputModelType = OriginalOutputModelType = ServiceExecuteMethod.ReturnType;
+                _serviceExecuteMethod = methods[0];
+                _outputModelType = _originalOutputModelType = _serviceExecuteMethod.ReturnType;
 
-                if (OutputModelType == typeof (void))
-                    OutputModelType = typeof (VoidType);
+                if (_outputModelType == typeof (void))
+                    _outputModelType = typeof (VoidType);
 
-                var parameters = ServiceExecuteMethod.GetParameters();
-                if (parameters.Length > 1)
-                    throw new ArgumentException(string.Format(Resources.Text.method_must_have_no_more_than_one_argument, ServiceExecuteMethod.Name, interfaceType.FullName), "interfaceType");
+                _inputModelInfo = new InputModelInfo(_serviceExecuteMethod);
 
-                InputModelType = parameters.Length == 0 
-                    ? typeof(VoidType)
-                    : parameters[0].ParameterType;
+                _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
 
-                // IExecuteStrategy<TInputModel, TOutputModel>)
-                ExecuteStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(InputModelType, OutputModelType);
+                _attributes = new CustomeAttributes(interfaceType, AttributeTargets.Class);
+            }
 
-                Attributes = interfaceType.CustomAttributes
-                    .Where(x => x.IsValidOn(AttributeTargets.Class))
-                    .Select(x => new AttributeInfo(x));
+            public Type EnsureBaseType(Type baseType)
+            {
+                if (baseType == null)
+                    return typeof(HttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+
+                if (!baseType.IsGenericTypeDefinition)
+                    return baseType;
+
+                if (baseType.GetGenericArguments().Length != 2)
+                    throw new ArgumentException(string.Format(Resources.Text.if_base_class_generic_it_must_have_two_parameters, baseType.FullName), "baseType");
+
+                return baseType.MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+            }
+
+            public void TransferCustomAttributes(TypeBuilder typeBuilder)
+            {
+                _attributes.Transfer(typeBuilder);
+            }
+
+            public void BuildConstructor(Type baseType, TypeBuilder typeBuilder)
+            {
+                var threeParamCtor = true;
+
+                var baseCtor = GetBaseConstructor(baseType, ref threeParamCtor);
+
+                var ctor = typeBuilder.DefineConstructor(
+                    MethodAttributes.Public, CallingConventions.Standard | CallingConventions.HasThis, new[] { typeof(Uri), typeof(string) });
+
+                var ctorGenerator = ctor.GetILGenerator();
+
+                ctorGenerator.Emit(OpCodes.Ldarg_0);
+                ctorGenerator.Emit(OpCodes.Ldarg_1);
+                ctorGenerator.Emit(OpCodes.Ldarg_2);
+
+                if (threeParamCtor)
+                    ctorGenerator.Emit(OpCodes.Ldnull);
+
+                ctorGenerator.Emit(OpCodes.Call, baseCtor);
+                ctorGenerator.Emit(OpCodes.Ret);
+            }
+
+            public void BuildServiceCallMethod(Type baseType, TypeBuilder typeBuilder)
+            {
+                var baseExecute = baseType.GetMethod("Execute", new[] { _inputModelInfo.ModelType });
+                if (baseExecute == null)
+                    throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method,
+                                                baseType.FullName, _outputModelType.FullName, _inputModelInfo.ModelType.FullName), "baseType");
+
+                var newExecute = DefineServiceCallMethod(typeBuilder);
+
+                var executeGenerator = newExecute.GetILGenerator();
+
+                _inputModelInfo.EmitLoadModel(executeGenerator);
+
+                executeGenerator.Emit(OpCodes.Call, baseExecute);
+
+                if (_originalOutputModelType == typeof(void))
+                    executeGenerator.Emit(OpCodes.Pop);
+
+                executeGenerator.Emit(OpCodes.Ret);
+
+                typeBuilder.DefineMethodOverride(newExecute, _serviceExecuteMethod);
+            }
+
+            ConstructorInfo GetBaseConstructor(Type baseType, ref bool threeParamCtor)
+            {
+                var baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string), _executeStrategyType });
+
+                if (baseCtor == null)
+                {
+                    threeParamCtor = false;
+
+                    baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string) });
+
+                    if (baseCtor == null)
+                        throw new ArgumentException(string.Format(Resources.Text.must_implement_constructor, baseType.FullName, _executeStrategyType.FullName), "baseType");
+                }
+
+                return baseCtor;
+            }
+
+            MethodBuilder DefineServiceCallMethod(TypeBuilder typeBuilder)
+            {
+                return typeBuilder.DefineMethod(
+                    _serviceExecuteMethod.Name,
+                    MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
+                    CallingConventions.Standard | CallingConventions.HasThis,
+                    _outputModelType != typeof(VoidType)
+                        ? _outputModelType
+                        : typeof(void),
+                    _inputModelInfo.GetServiceCallArgTypes());
             }
         }
 
-        class AttributeInfo
+        class InputModelInfo
+        {
+            bool _isCreated;
+            Type[] _serviceCallArgTypes;
+ 
+            public Type ModelType { get; private set; }
+
+            public InputModelInfo(MethodBase serviceCall)
+            {
+                var parameters = serviceCall.GetParameters();
+
+                if (parameters.Length > 1)
+                {
+                    CreateInputModel(serviceCall);
+                }
+                else if (parameters.Length == 1 && parameters[0].ParameterType.IsSimpleType())
+                {
+                    CreateInputModel(serviceCall);
+                }
+                else if (parameters.Length == 0)
+                {
+                    ModelType = typeof (VoidType);
+                }
+                else
+                {
+                    ModelType = parameters[0].ParameterType;
+                    _serviceCallArgTypes = new[] { ModelType };
+                }
+            }
+
+            public Type[] GetServiceCallArgTypes()
+            {
+                return _serviceCallArgTypes;
+            }
+
+            public void EmitLoadModel(ILGenerator executeGenerator)
+            {
+                if (!_isCreated)
+                {
+                    executeGenerator.Emit(OpCodes.Ldarg_0);
+                    executeGenerator.Emit(ModelType != typeof(VoidType)
+                                              ? OpCodes.Ldarg_1
+                                              : OpCodes.Ldnull);
+                }
+                else
+                {
+                    EmitInitializeAndLoadModel(executeGenerator);
+                }
+            }
+
+            void EmitInitializeAndLoadModel(ILGenerator executeGenerator)
+            {
+                var properties = ModelType.GetProperties();
+
+                var model = executeGenerator.DeclareLocal(ModelType);
+
+                executeGenerator.Emit(OpCodes.Newobj, ModelType.GetConstructor(new Type[0]));
+                executeGenerator.Emit(OpCodes.Stloc, model);
+
+                for (var i = 0; i < properties.Length; i++)
+                {
+                    var property = properties[i];
+
+                    executeGenerator.Emit(OpCodes.Ldloc, model);
+                    executeGenerator.Emit(OpCodes.Ldarg, i + 1);
+                    executeGenerator.Emit(OpCodes.Callvirt, property.GetSetMethod());
+                }
+
+                executeGenerator.Emit(OpCodes.Ldarg_0);
+                executeGenerator.Emit(OpCodes.Ldloc, model);
+            }
+
+            void CreateInputModel(MethodBase serviceCall)
+            {
+                var parameters = serviceCall.GetParameters();
+
+                _isCreated = true;
+                _serviceCallArgTypes = parameters.Select(x => x.ParameterType).ToArray();
+
+                var methodNameBase = serviceCall.DeclaringType != null
+                    ? serviceCall.DeclaringType.FullName + "_" + serviceCall.Name
+                    : serviceCall.Name;
+
+                var typeBuilder = ModuleBuilder.DefineType(
+                    string.Format("{0}{1}{2}", methodNameBase, Interlocked.Increment(ref _typeCount), ModelSuffix),
+                    TypeAttributes.Class | TypeAttributes.Public);
+
+                foreach (var parameter in parameters)
+                    CreateProperty(typeBuilder, parameter);
+
+                new CustomeAttributes(serviceCall, AttributeTargets.Property).Transfer(typeBuilder);
+
+                ModelType = typeBuilder.CreateType();
+            }
+
+            static void CreateProperty(TypeBuilder modelBulder, ParameterInfo parameter)
+            {
+                var propertyName = parameter.Name;
+                var propertyType = parameter.ParameterType;
+
+                var fieldBuilder = modelBulder.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
+
+                var propertyBuilder = modelBulder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
+
+                const MethodAttributes getSetAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
+
+                var getterBuilder = modelBulder.DefineMethod("get_" + propertyName, getSetAttr, propertyType, Type.EmptyTypes);
+                var getterIL = getterBuilder.GetILGenerator();
+                getterIL.Emit(OpCodes.Ldarg_0);
+                getterIL.Emit(OpCodes.Ldfld, fieldBuilder);
+                getterIL.Emit(OpCodes.Ret);
+
+                var setterBuilder = modelBulder.DefineMethod("set_" + propertyName, getSetAttr, null, new[] { propertyType });
+                var settrIL = setterBuilder.GetILGenerator();
+                settrIL.Emit(OpCodes.Ldarg_0);
+                settrIL.Emit(OpCodes.Ldarg_1);
+                settrIL.Emit(OpCodes.Stfld, fieldBuilder);
+                settrIL.Emit(OpCodes.Ret);
+
+                propertyBuilder.SetGetMethod(getterBuilder);
+                propertyBuilder.SetSetMethod(setterBuilder);
+
+                new CustomeAttributes(parameter, AttributeTargets.Property).Transfer(propertyBuilder);
+            }
+        }
+
+        class CustomAttributeInfo
         {
             public ConstructorInfo Constructor { get; private set; }
             public object[] ConstructorArguments { get; private set; }
@@ -339,7 +425,7 @@ namespace DocaLabs.Http.Client
             public FieldInfo[] InitializedFields { get; private set; }
             public object[] InitializedFieldsValues { get; private set; }
 
-            public AttributeInfo(CustomAttributeData data)
+            public CustomAttributeInfo(CustomAttributeData data)
             {
                 Constructor = data.Constructor;
                 ConstructorArguments = data.ConstructorArguments.Select(x => x.Value).ToArray();
@@ -379,8 +465,55 @@ namespace DocaLabs.Http.Client
                 InitializedFieldsValues = fieldValues.ToArray();
             }
         }
-    
-        class CreatedTypeInfo
+
+        class CustomeAttributes
+        {
+            readonly IEnumerable<CustomAttributeInfo> _attributes;
+
+            public CustomeAttributes(MemberInfo owner, AttributeTargets targets)
+            {
+                _attributes = owner.CustomAttributes
+                    .Where(x => x.IsValidOn(targets))
+                    .Select(x => new CustomAttributeInfo(x));
+            }
+
+            public CustomeAttributes(ParameterInfo owner, AttributeTargets targets)
+            {
+                _attributes = owner.CustomAttributes
+                    .Where(x => x.IsValidOn(targets))
+                    .Select(x => new CustomAttributeInfo(x));
+            }
+
+            public void Transfer(PropertyBuilder propertyBuilder)
+            {
+                foreach (var builder in _attributes.Select(x => new CustomAttributeBuilder(
+                                                                            x.Constructor,
+                                                                            x.ConstructorArguments,
+                                                                            x.InitializedProperties,
+                                                                            x.InitializedPropertyValues,
+                                                                            x.InitializedFields,
+                                                                            x.InitializedFieldsValues)))
+                {
+                    propertyBuilder.SetCustomAttribute(builder);
+                }
+            }
+
+            public void Transfer(TypeBuilder typeBuilder)
+            {
+                foreach (var builder in _attributes.Select(x => new CustomAttributeBuilder(
+                                                                            x.Constructor,
+                                                                            x.ConstructorArguments,
+                                                                            x.InitializedProperties,
+                                                                            x.InitializedPropertyValues,
+                                                                            x.InitializedFields,
+                                                                            x.InitializedFieldsValues)))
+                {
+                    typeBuilder.SetCustomAttribute(builder);
+                }
+            }
+        }
+
+        class ClientTypeInfo
         {
             public ConstructorInfo ConstructorInfo { get; set; }
             public Type OriginalBaseType { get; set; }

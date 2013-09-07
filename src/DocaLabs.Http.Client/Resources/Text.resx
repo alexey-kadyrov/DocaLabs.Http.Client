@@ -153,11 +153,8 @@
   <data name="input_argument_can_be_only_string_or_guid" xml:space="preserve">
     <value>Input argument can be only of string or Guid type.</value>
   </data>
-  <data name="interface_cannot_be_generic_type_defienition" xml:space="preserve">
+  <data name="interface_cannot_be_generic_type_definition" xml:space="preserve">
     <value>Interface {0} cannot be generic type definition.</value>
-  </data>
-  <data name="method_must_have_no_more_than_one_argument" xml:space="preserve">
-    <value>The method {0} in {1} must have no more than one parameter.</value>
   </data>
   <data name="must_be_interface" xml:space="preserve">
     <value>The type {0} must be interface.</value>

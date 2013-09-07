@@ -171,18 +171,9 @@ namespace DocaLabs.Http.Client.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Interface {0} cannot be generic type definition..
         /// </summary>
-        internal static string interface_cannot_be_generic_type_defienition {
+        internal static string interface_cannot_be_generic_type_definition {
             get {
-                return ResourceManager.GetString("interface_cannot_be_generic_type_defienition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The method {0} in {1} must have no more than one parameter..
-        /// </summary>
-        internal static string method_must_have_no_more_than_one_argument {
-            get {
-                return ResourceManager.GetString("method_must_have_no_more_than_one_argument", resourceCulture);
+                return ResourceManager.GetString("interface_cannot_be_generic_type_definition", resourceCulture);
             }
         }
         

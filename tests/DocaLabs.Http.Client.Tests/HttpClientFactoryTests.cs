@@ -30,7 +30,7 @@ namespace DocaLabs.Http.Client.Tests
             () => instance = HttpClientFactory.CreateInstance<IGenericService<TestsQuery, TestResultValue>>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.GetResult(new TestsQuery { Value = "Hello!" }).Value.ShouldEqual("Hello!");
+            () => ((TestsQuery)(instance.GetResult(new TestsQuery { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
     }
 
     [Subject(typeof(HttpClientFactory))]
@@ -42,7 +42,7 @@ namespace DocaLabs.Http.Client.Tests
             () => instance = HttpClientFactory.CreateInstance<IServiceWithQueryAndResult2>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.GetResult(new TestsQuery { Value = "Hello!" }).Value.ShouldEqual("Hello!");
+            () => ((TestsQuery)(instance.GetResult(new TestsQuery { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
     }
 
     [Subject(typeof(HttpClientFactory))]
@@ -51,10 +51,10 @@ namespace DocaLabs.Http.Client.Tests
         static IServiceWithQueryAndResult3 instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IServiceWithQueryAndResult3>(typeof(TestHttpClientBaseType<TestsQuery, TestsQuery>), new Uri("http://foo.bar/"));
+            () => instance = HttpClientFactory.CreateInstance<IServiceWithQueryAndResult3>(typeof(TestHttpClientBaseType<TestsQuery, TestResultValue>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.GetResult(new TestsQuery { Value = "Hello!" }).Value.ShouldEqual("Hello!");
+            () => ((TestsQuery)(instance.GetResult(new TestsQuery { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
     }
 
     [Subject(typeof(HttpClientFactory))]
@@ -66,7 +66,7 @@ namespace DocaLabs.Http.Client.Tests
             () => instance = HttpClientFactory.CreateInstance<IServiceWithQueryAndResult5>(typeof(NonGenericTestHttpClientBaseType), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.GetResult(new TestsQuery { Value = "Hello!" }).Value.ShouldEqual("Hello!");
+            () => ((TestsQuery)(instance.GetResult(new TestsQuery { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
     }
 
     [Subject(typeof(HttpClientFactory))]
@@ -81,7 +81,7 @@ namespace DocaLabs.Http.Client.Tests
             () => instance = HttpClientFactory.CreateInstance<IServiceWithQueryAndResult4>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_still_be_able_to_create_instane_and_call_the_service =
-            () => instance.GetResult(new TestsQuery { Value = "Hello!" }).Value.ShouldEqual("Hello!");
+            () => ((TestsQuery)(instance.GetResult(new TestsQuery { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
     }
 
     [Subject(typeof(HttpClientFactory))]
@@ -93,7 +93,7 @@ namespace DocaLabs.Http.Client.Tests
             () => instance = HttpClientFactory.CreateInstance<IDecoratedService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.GetResult(new TestsQuery { Value = "Hello!" }).Value.ShouldEqual("Hello!");
+            () => ((TestsQuery)(instance.GetResult(new TestsQuery { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
 
         It should_not_transfer_attribute_that_is_not_defined_for_class =
             () => instance.GetType().GetCustomAttribute<InterfaceOnlyAttribute>().ShouldBeNull();
@@ -141,6 +141,23 @@ namespace DocaLabs.Http.Client.Tests
         It should_be_able_to_call_the_service = () =>
         {
             instance.Do();
+            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
+        };
+    }
+
+    [Subject(typeof(HttpClientFactory))]
+    class when_creating_instance_for_interface_with_method_with_more_than_one_simple_type_args
+    {
+        static IServiceWithMethodWithMoreThanOneArg instance;
+
+        Because of =
+            () => instance = HttpClientFactory.CreateInstance<IServiceWithMethodWithMoreThanOneArg>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+
+        It should_be_able_to_call_the_service = () =>
+        {
+            var value = instance.GetResult(42, "Hello World!");
+            value.Value.GetType().GetProperty("query").GetValue(value.Value).ShouldEqual(42);
+            value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
             instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
         };
     }
@@ -305,21 +322,6 @@ namespace DocaLabs.Http.Client.Tests
 
         Because of =
             () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithoutAnyMethod>(new Uri("http://foo.bar/")));
-
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
-
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
-    }
-
-    [Subject(typeof(HttpClientFactory))]
-    class when_creating_instance_for_interface_with_method_with_more_than_one_arg
-    {
-        static Exception exception;
-
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithMethodWithMoreThanOneArg>(new Uri("http://foo.bar/")));
 
         It should_throw_argument_exception =
             () => exception.ShouldBeOfType<ArgumentException>();
