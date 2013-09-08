@@ -7,7 +7,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// If the mapping is set to the URL's path the name is used as a substitution mask. The mask is case insensitive. 
     /// The Url template can be specified like: http://contoso.com/{propertyName1}/{propertyName2}.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, Inherited = true, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, Inherited = true, AllowMultiple = false)]
     public class RequestUseAttribute : PropertyOverridesAttribute
     {
         /// <summary>

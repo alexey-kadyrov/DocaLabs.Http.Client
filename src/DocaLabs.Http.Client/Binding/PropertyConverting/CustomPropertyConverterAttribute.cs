@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Defines methods to get a custom converter that should be used to convert a property into name-value pairs.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public abstract class CustomPropertyConverterAttribute : Attribute
     {
         /// <summary>

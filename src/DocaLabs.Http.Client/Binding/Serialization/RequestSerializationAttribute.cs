@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// <summary>
     /// Defines base class for attributes that are used to serialize objects into a web request stream.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
     public abstract class RequestSerializationAttribute : Attribute, IRequestSerialization
     {
         /// <summary>

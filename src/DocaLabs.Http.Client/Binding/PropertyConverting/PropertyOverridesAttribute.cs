@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// <summary>
     /// Specifies additional information about a property for converting.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, Inherited = true, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Interface, Inherited = true, AllowMultiple = false)]
     public class PropertyOverridesAttribute : Attribute
     {
         /// <summary>

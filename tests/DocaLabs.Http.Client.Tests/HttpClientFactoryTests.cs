@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
+using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using Machine.Specifications;
 
@@ -146,12 +148,12 @@ namespace DocaLabs.Http.Client.Tests
     }
 
     [Subject(typeof(HttpClientFactory))]
-    class when_creating_instance_for_interface_with_method_with_more_than_one_simple_type_args
+    public class when_creating_instance_for_interface_with_method_with_more_than_one_simple_type_args
     {
-        static IServiceWithMethodWithMoreThanOneArg instance;
+        static ITestService instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IServiceWithMethodWithMoreThanOneArg>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => instance = HttpClientFactory.CreateInstance<ITestService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
@@ -160,6 +162,140 @@ namespace DocaLabs.Http.Client.Tests
             value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
             instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
         };
+
+        public interface ITestService
+        {
+            TestResultValue GetResult(int query, string notOk);
+        }
+    }
+
+    [Subject(typeof(HttpClientFactory))]
+    public class when_creating_instance_for_interface_with_method_with_one_simple_type_arg
+    {
+        static ITestService instance;
+
+        Because of =
+            () => instance = HttpClientFactory.CreateInstance<ITestService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+
+        It should_be_able_to_call_the_service = () =>
+        {
+            var value = instance.GetResult("Hello World!");
+            value.Value.ShouldNotBeOfType(typeof(string));
+            value.Value.GetType().GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
+            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
+        };
+
+        public interface ITestService
+        {
+            TestResultValue GetResult(string key);
+        }
+    }
+
+    [Subject(typeof(HttpClientFactory))]
+    public class when_creating_instance_for_interface_with_mixed_more_than_one_args
+    {
+        static ITestService instance;
+        static DateTime time;
+        static Guid guid;
+
+        Establish context = () =>
+        {
+            time = DateTime.UtcNow;
+            guid = Guid.NewGuid();
+        };
+
+        Because of =
+            () => instance = HttpClientFactory.CreateInstance<ITestService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+
+        It should_be_able_to_call_the_service = () =>
+        {
+            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
+
+            var type = value.Value.GetType();
+
+            //attributes
+            type.GetCustomAttributes().ShouldBeEmpty();
+            type.GetProperty("key").GetCustomAttributes().ShouldBeEmpty();
+            type.GetProperty("time").GetCustomAttributes().ShouldBeEmpty();
+            type.GetProperty("guid").GetCustomAttributes().ShouldBeEmpty();
+            type.GetProperty("data").GetCustomAttributes().ShouldBeEmpty();
+            type.GetProperty("number").GetCustomAttributes().ShouldBeEmpty();
+
+            type.GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
+            type.GetProperty("time").GetValue(value.Value).ShouldEqual(time);
+            type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
+            type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
+            type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
+
+            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
+        };
+
+        public interface ITestService
+        {
+            TestResultValue GetResult(string key, DateTime time, Guid guid, Data data, decimal number);
+        }
+
+        public class Data
+        {
+            public string Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(HttpClientFactory))]
+    public class when_creating_instance_for_interface_with_mixed_more_than_one_args_with_attributes
+    {
+        static ITestService instance;
+        static DateTime time;
+        static Guid guid;
+
+        Establish context = () =>
+        {
+            time = DateTime.UtcNow;
+            guid = Guid.NewGuid();
+        };
+
+        Because of =
+            () => instance = HttpClientFactory.CreateInstance<ITestService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+
+        It should_be_able_to_call_the_service_and_transfer_attributes = () =>
+        {
+            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
+
+            var type = value.Value.GetType();
+
+            //attributes
+            type.GetCustomAttribute<SerializeAsJsonAttribute>().RequestContentEncoding.ShouldEqual("gzip");
+            type.GetProperty("key").GetCustomAttribute<PropertyOverridesAttribute>().Name.ShouldEqual("with-key");
+            type.GetProperty("time").GetCustomAttribute<RequestUseAttribute>().Targets.ShouldEqual(RequestUseTargets.UrlQuery);
+            type.GetProperty("guid").GetCustomAttribute<RequestUseAttribute>().Targets.ShouldEqual(RequestUseTargets.UrlPath);
+            type.GetProperty("data").GetCustomAttribute<RequestUseAttribute>().Targets.ShouldEqual(RequestUseTargets.UrlQuery | RequestUseTargets.UrlPath);
+            type.GetProperty("number").GetCustomAttribute<RequestUseAttribute>().Targets.ShouldEqual(RequestUseTargets.RequestHeader);
+
+            // values
+            type.GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
+            type.GetProperty("time").GetValue(value.Value).ShouldEqual(time);
+            type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
+            type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
+            type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
+
+            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
+        };
+
+        public interface ITestService
+        {
+            [SerializeAsJson(RequestContentEncoding = "gzip")]
+            TestResultValue GetResult(
+                [PropertyOverrides(Name = "with-key")] string key, 
+                [RequestUse(RequestUseTargets.UrlQuery)] DateTime time,
+                [RequestUse(RequestUseTargets.UrlPath)] Guid guid,
+                [RequestUse(RequestUseTargets.UrlQuery | RequestUseTargets.UrlPath)] Data data,
+                [RequestUse(RequestUseTargets.RequestHeader)] decimal number);
+        }
+
+        public class Data
+        {
+            public string Value { get; set; }
+        }
     }
 
     [Subject(typeof(HttpClientFactory))]
