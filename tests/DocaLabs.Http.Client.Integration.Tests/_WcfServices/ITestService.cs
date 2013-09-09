@@ -1,7 +1,7 @@
 ﻿using System.ServiceModel;
 using System.ServiceModel.Web;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Service
+namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
 {
     [ServiceContract]
     public interface ITestService

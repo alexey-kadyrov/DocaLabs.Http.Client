@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using ServiceStack.WebHost.Endpoints;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Service
+namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
 {
     class TestServerHost<TService> : IDisposable
     {
@@ -19,7 +19,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
 
             Console.WriteLine(@"Starting {0}.", typeof(TService));
 
-            Task.Factory.StartNew(Listener);
+            Task.Factory.StartNew(Worker);
 
             ServerReady.WaitOne();
 
@@ -32,19 +32,19 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
             ServerStopped.WaitOne(TimeSpan.FromSeconds(1));
         }
 
-        void Listener()
+        void Worker()
         {
-            ServiceHost host = null;
+            var host = new AppHost();
 
             try
             {
                 ServerStopped.Reset();
 
-                host = new ServiceHost(typeof (TService));
-
-                host.Open();
+                host.Init();
+                host.Start("http://*:1337/");
 
                 ServerReady.Set();
+
                 StopServer.WaitOne();
             }
             catch (Exception e)
@@ -54,11 +54,22 @@ namespace DocaLabs.Http.Client.Integration.Tests._Service
             }
             finally
             {
-                if(host != null)
-                    ((IDisposable)host).Dispose();
+                ((IDisposable)host).Dispose();
             }
 
             ServerStopped.Set();
+        }
+
+        public class AppHost : AppHostHttpListenerBase
+        {
+            public AppHost() : base("StarterTemplate HttpListener", typeof(TService).Assembly) { }
+
+            public override void Configure(Funq.Container container)
+            {
+                Routes
+                    .Add<Hello>("/" + typeof(TService).Name.ToLower())
+                    .Add<Hello>("/" + typeof(TService).Name.ToLower() + "/{Name}");
+            }
         }
     }
 }

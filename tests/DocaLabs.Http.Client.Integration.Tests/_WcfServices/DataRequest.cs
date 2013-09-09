@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Service
+namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
 {
     [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/DocaLabs.Http.Client.Integration.Tests._Service")]
     public class DataRequest

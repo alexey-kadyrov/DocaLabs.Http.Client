@@ -1,5 +1,5 @@
 ﻿using DocaLabs.Http.Client.Integration.Tests._Contract;
-using DocaLabs.Http.Client.Integration.Tests._Service;
+using DocaLabs.Http.Client.Integration.Tests._WcfServices;
 using Machine.Specifications;
 using DataRequest = DocaLabs.Http.Client.Integration.Tests._Contract.DataRequest;
 using DataResponse = DocaLabs.Http.Client.Integration.Tests._Contract.DataResponse;
