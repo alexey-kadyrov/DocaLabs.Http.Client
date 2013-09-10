@@ -83,17 +83,17 @@ namespace DocaLabs.Http.Client.Integration.Tests
         Because of =
             () => exception = Catch.Exception(() => client.Get(new GetUser { Id = Guid.Empty }));
 
-        It should_throw_http_client_exception_exception =
-            () => exception.ShouldBeOfType<HttpClientException>();
+        It should_throw_http_client_web_exception_exception =
+            () => exception.ShouldBeOfType<HttpClientWebException>();
 
         It should_return_additional_information_about_the_response =
-            () => ((HttpClientException) exception).Response.ShouldNotBeNull();
+            () => ((HttpClientWebException)exception).Response.ShouldNotBeNull();
 
         It should_return_404_status_code =
-            () => ((HttpClientException) exception).Response.StatusCode.ShouldEqual(404);
+            () => ((HttpClientWebException)exception).Response.StatusCode.ShouldEqual(404);
 
         It should_return_status_description =
-            () => ((HttpClientException)exception).Response.StatusDescription.ShouldEqual("User 00000000-0000-0000-0000-000000000000 does not exist.");
+            () => ((HttpClientWebException)exception).Response.StatusDescription.ShouldEqual("User 00000000-0000-0000-0000-000000000000 does not exist.");
 
         public interface IGetUserService
         {

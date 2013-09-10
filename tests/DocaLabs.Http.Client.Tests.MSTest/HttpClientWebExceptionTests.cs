@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DocaLabs.Http.Client.Tests.MSTest
 {
     [TestClass]
-    public class HttpClientExceptionTests
+    public class HttpClientWebExceptionTests
     {
         [TestMethod]
         public void WhenHttpClientExceptionIsNewedUsingOverloadConstructorWithMessageAndInnerExceptionOfTypeWebException()
@@ -26,8 +26,8 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 };
 
                 var innerException = new WebException("Failed request", null, WebExceptionStatus.ProtocolError, shimHttpWebResponse);
-                
-                var targetException = new HttpClientException("Request Failed", innerException);
+
+                var targetException = new HttpClientWebException("Request Failed", innerException);
 
                 Assert.AreSame(innerException, targetException.InnerException);
                 Assert.AreEqual("Request Failed", targetException.Message);

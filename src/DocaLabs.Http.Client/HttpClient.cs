@@ -102,7 +102,11 @@ namespace DocaLabs.Http.Client
             {
                 throw;
             }
-            catch(Exception e)
+            catch (WebException e)
+            {
+                throw new HttpClientWebException(string.Format(Resources.Text.failed_execute_request, BaseUrl, GetType().FullName), e);
+            }
+            catch (Exception e)
             {
                 throw new HttpClientException(string.Format(Resources.Text.failed_execute_request, BaseUrl, GetType().FullName), e);
             }
