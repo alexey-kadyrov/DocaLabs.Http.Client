@@ -103,8 +103,9 @@
     <Compile Include="_Contract\ITestPostXmlService1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Contract\DataResponse.cs" />
-    <Compile Include="_ServiceStackServices\Hello.cs" />
+    <Compile Include="_ServiceStackServices\GetUser.cs" />
     <Compile Include="_ServiceStackServices\TestServerHost.cs" />
+    <Compile Include="_ServiceStackServices\User.cs" />
     <Compile Include="_WcfServices\DataRequest.cs" />
     <Compile Include="_WcfServices\ITestService.cs" />
     <Compile Include="_WcfServices\DataResponse.cs" />

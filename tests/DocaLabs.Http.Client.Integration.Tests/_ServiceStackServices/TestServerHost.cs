@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Funq;
 using ServiceStack.WebHost.Endpoints;
 
 namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
@@ -62,13 +63,15 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
 
         public class AppHost : AppHostHttpListenerBase
         {
-            public AppHost() : base("StarterTemplate HttpListener", typeof(TService).Assembly) { }
+            public AppHost() : base("StarterTemplate HttpListener", typeof (TService).Assembly)
+            {
+                SetConfig(new EndpointHostConfig { DebugMode = true });
+            }
 
             public override void Configure(Funq.Container container)
             {
                 Routes
-                    .Add<Hello>("/" + typeof(TService).Name.ToLower())
-                    .Add<Hello>("/" + typeof(TService).Name.ToLower() + "/{Name}");
+                    .Add<GetUser>("/users/{id}", "GET");
             }
         }
     }

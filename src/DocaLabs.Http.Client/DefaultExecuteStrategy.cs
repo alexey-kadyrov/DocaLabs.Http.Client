@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 
 namespace DocaLabs.Http.Client
@@ -73,7 +74,25 @@ namespace DocaLabs.Http.Client
             if(e is NotImplementedException)
                 return false;
 
+            var webException = e as WebException;
+            if (webException != null)
+                return CanRetry(webException);
+
             return !(e is HttpClientException);
+        }
+
+        /// <summary>
+        /// Checks whenever the WebExcpetion can be retried. It's called from CanRetry(Exception e).
+        /// The default implementation returns true only for HttpStatusCode.GatewayTimeout or HttpStatusCode.RequestTimeout or Status is WebExceptionStatus.ConnectFailure.
+        /// </summary>
+        protected virtual bool CanRetry(WebException e)
+        {
+            if (e.Status == WebExceptionStatus.ConnectFailure)
+                return true;
+
+            var httpResponse = e.Response as HttpWebResponse;
+            return httpResponse != null && 
+                    (httpResponse.StatusCode == HttpStatusCode.GatewayTimeout || httpResponse.StatusCode == HttpStatusCode.RequestTimeout);
         }
 
         /// <summary>
