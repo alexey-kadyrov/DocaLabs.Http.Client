@@ -111,6 +111,18 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                     Height = 480
                 },
                 NoGetter = "no-getter",
+                Nested2WithEmptyBaseName = new NestedClass2
+                {
+                    Value42 = "42-1"
+                },
+                Nested2WithOverridenBaseName = new NestedClass2
+                {
+                    Value42 = "42-2",
+                },
+                Nested2WithInheritedBaseName = new NestedClass2
+                {
+                    Value42 = "42-3"
+                }
             };
 
             instance.SelfClassProperty = instance;
@@ -124,7 +136,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result = maps.Convert(instance, x => true);
 
         It should_convert_all_eligible_properties =
-            () => result.Count.ShouldEqual(36);
+            () => result.Count.ShouldEqual(39);
 
         It should_not_convert_nullable_int_property_set_to_null =
             () => result["NullableNullIntProperty"].ShouldBeNull();
@@ -273,6 +285,15 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_convert_object_using_specified_format =
             () => result.GetValues("ObjectWhichIsSetToTestClassWithToStringOverridden").ShouldContainOnly("640x480");
 
+        It should_convert_nested_class_properties_with_empty_base_name_using_just_nested_class_property_names =
+            () => result.GetValues("Value42").ShouldContainOnly("42-1");
+
+        It should_convert_nested_class_properties_with_overidden_base_name_using_that_name_and_nested_class_property_names =
+            () => result.GetValues("OverridenBaseName.Value42").ShouldContainOnly("42-2");
+
+        It should_convert_nested_class_properties_with_inherited_base_name_using_property_name_and_nested_class_property_names =
+            () => result.GetValues("Nested2WithInheritedBaseName.Value42").ShouldContainOnly("42-3");
+
         class TestClass
         {
             public int IntProperty { get; set; }
@@ -328,6 +349,12 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             string PrivateProperty { get; set; }
             public static string StaticProperty { get; set; }
 
+            [PropertyOverrides(Name = "")]
+            public NestedClass2 Nested2WithEmptyBaseName { get; set; }
+            [PropertyOverrides(Name = "OverridenBaseName")]
+            public NestedClass2 Nested2WithOverridenBaseName { get; set; }
+            public NestedClass2 Nested2WithInheritedBaseName { get; set; }
+
             public TestClass()
             {
                 PrivateProperty = "private-value";
@@ -356,6 +383,11 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             [PropertyOverrides(Name = "")]
             public object ObjectWhichBecomesSimpleValueWithEmptyBaseName { get; set; }
             public TestClass2 Class2 { get; set; }
+        }
+
+        class NestedClass2
+        {
+            public string Value42 { get; set; }
         }
 
         class TestClassWithOtherMakingCircularReference

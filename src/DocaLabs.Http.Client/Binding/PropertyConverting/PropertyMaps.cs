@@ -199,12 +199,12 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                             if (converter != null)
                                 return converter.Convert(value);
 
-                            if(String.IsNullOrWhiteSpace(_format))
+                            if(string.IsNullOrWhiteSpace(_format))
                                 return ConvertObject(value, processed);
 
                             return new NameValueCollection
                             {
-                                { GetNonEmptyPropertyName(), String.Format(_format, value) }
+                                { GetNonEmptyPropertyName(), string.Format(_format, value) }
                             };
                         }
                     }
@@ -232,7 +232,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                 string GetNonEmptyPropertyName()
                 {
-                    return String.IsNullOrWhiteSpace(_name) ? _property.Name : _name;
+                    return string.IsNullOrWhiteSpace(_name) ? _property.Name : _name;
                 }
 
                 NameValueCollection ConvertObject(object value, ISet<object> processed)
@@ -246,7 +246,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                     var values = new NameValueCollection();
 
-                    var baseName = GetNonEmptyPropertyName();
+                    var baseName = _name ?? _property.Name;
 
                     foreach (var key in nestedValues.AllKeys)
                     {
@@ -255,7 +255,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         {
                             foreach (var vv in vvs)
                             {
-                                values.Add(baseName + "." + key, vv);
+                                values.Add(string.IsNullOrWhiteSpace(baseName) ? key : baseName + "." + key, vv);
                             }
                         }
                     }

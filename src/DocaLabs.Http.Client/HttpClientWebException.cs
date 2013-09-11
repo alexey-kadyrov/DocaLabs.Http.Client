@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 
 namespace DocaLabs.Http.Client
 {
@@ -39,6 +40,29 @@ namespace DocaLabs.Http.Client
                 : base(response)
             {
             }
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+
+            if (Response != null)
+            {
+                builder.Append("HttpClientWebException: ").AppendLine(Message)
+                       .Append("StatusCode: ").Append(Response.StatusCode).AppendLine()
+                       .Append("StatusDescription: ").AppendLine(Response.StatusDescription)
+                       .Append("ETag: ").AppendLine(Response.ETag)
+                       .Append("LastModified: ").Append(Response.LastModified).AppendLine()
+                       .AppendLine("Headers:");
+
+                foreach (var key in Response.Headers.AllKeys)
+                    builder.Append(key).Append(": ").AppendLine(Response.Headers[key]);
+
+                builder.AppendLine()
+                       .AppendLine("Exception:");
+            }
+
+            return builder.Append(base.ToString()).ToString();
         }
     }
 }

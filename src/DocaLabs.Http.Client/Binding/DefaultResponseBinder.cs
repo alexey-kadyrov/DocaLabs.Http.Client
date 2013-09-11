@@ -91,10 +91,12 @@ namespace DocaLabs.Http.Client.Binding
 
             var responseType = _responseTypes.GetOrAdd(resultType, t => t.TryGetWrappedResponseModelType() ?? t);
 
-            var stream = new HttpResponseStream(request);
+            HttpResponseStream stream = null;
 
             try
             {
+                stream = new HttpResponseStream(request);
+
                 var value = ReadStream(context, stream, responseType);
 
                 object richResponse = null;
@@ -107,11 +109,24 @@ namespace DocaLabs.Http.Client.Binding
 
                 return richResponse ?? value;
             }
+            catch (WebException e)
+            {
+                if (Is3XX(e) && responseType != resultType)
+                    return Activator.CreateInstance(resultType, e.Response, null);
+
+                throw;
+            }
             finally
             {
                 if (stream != null)
                     stream.Dispose();
             }
+        }
+
+        static bool Is3XX(WebException e)
+        {
+            var httpResponse = e.Response as HttpWebResponse;
+            return (httpResponse != null && ((int)httpResponse.StatusCode) >= 300 && ((int)httpResponse.StatusCode) < 400);
         }
 
         object ReadStream(BindingContext context, HttpResponseStream responseStream, Type resultType)

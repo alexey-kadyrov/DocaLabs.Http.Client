@@ -42,6 +42,18 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(1, targetException.Response.Headers.AllKeys.Length);
                 Assert.AreEqual("Server", targetException.Response.Headers.AllKeys[0]);
                 Assert.AreEqual("Test", targetException.Response.Headers["Server"]);
+
+                var str = targetException.ToString();
+
+                Assert.IsTrue(str.Contains("HttpClientWebException: Request Failed"));
+                Assert.IsTrue(str.Contains("StatusCode: 404"));
+                Assert.IsTrue(str.Contains("StatusDescription: Entity not found."));
+                Assert.IsTrue(str.Contains("ETag: "));
+                Assert.IsTrue(str.Contains("LastModified: "));
+                Assert.IsTrue(str.Contains("Headers:"));
+                Assert.IsTrue(str.Contains("Server: Test"));
+                Assert.IsTrue(str.Contains("DocaLabs.Http.Client.HttpClientWebException"));
+                Assert.IsTrue(str.Contains("System.Net.WebException"));
             }
         }
     }
