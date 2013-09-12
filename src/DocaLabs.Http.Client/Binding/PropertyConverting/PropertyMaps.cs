@@ -242,7 +242,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                     processed.Add(value);
 
-                    var nestedValues = _maps.Convert(value, processed, _acceptPropertyCheck);
+                    var customValueConverter = value as ICustomValueConverter;
+                    var nestedValues = customValueConverter != null
+                        ? customValueConverter.ConvertProperties()
+                        : _maps.Convert(value, processed, _acceptPropertyCheck);
 
                     var values = new NameValueCollection();
 
@@ -255,12 +258,20 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         {
                             foreach (var vv in vvs)
                             {
-                                values.Add(string.IsNullOrWhiteSpace(baseName) ? key : baseName + "." + key, vv);
+                                values.Add(MakeKey(baseName, key), vv);
                             }
                         }
                     }
 
                     return values;
+                }
+
+                static string MakeKey(string baseName, string key)
+                {
+                    if(string.IsNullOrWhiteSpace(key))
+                        return string.IsNullOrWhiteSpace(baseName) ? "" : baseName;
+
+                    return string.IsNullOrWhiteSpace(baseName) ? key : baseName + "." + key;
                 }
 
                 static bool CanConvert(PropertyInfo property)

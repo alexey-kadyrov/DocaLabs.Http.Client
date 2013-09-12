@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Reflection;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using Machine.Specifications;
 
@@ -122,6 +123,26 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
                 Nested2WithInheritedBaseName = new NestedClass2
                 {
                     Value42 = "42-3"
+                },
+                ImageSize = new ImageSize
+                {
+                    Width = 200,
+                    Height = 100
+                },
+                CustomConvertableClass = new CustomConvertableClass
+                {
+                    CustomValue1 = "cv1",
+                    CustomValue2 = "cv2"
+                },
+                ImageSizeWithOveroddenName = new ImageSize
+                {
+                    Width = 400,
+                    Height = 200
+                },
+                CustomConvertableClassWithEmptyBaseName = new CustomConvertableClass
+                {
+                    CustomValue1 = "empty-cv1",
+                    CustomValue2 = "empty-cv2"
                 }
             };
 
@@ -136,7 +157,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             () => result = maps.Convert(instance, x => true);
 
         It should_convert_all_eligible_properties =
-            () => result.Count.ShouldEqual(39);
+            () => result.Count.ShouldEqual(42);
 
         It should_not_convert_nullable_int_property_set_to_null =
             () => result["NullableNullIntProperty"].ShouldBeNull();
@@ -294,6 +315,15 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         It should_convert_nested_class_properties_with_inherited_base_name_using_property_name_and_nested_class_property_names =
             () => result.GetValues("Nested2WithInheritedBaseName.Value42").ShouldContainOnly("42-3");
 
+        It should_convert_nested_class_implementing_cutom_value_conveter =
+            () => result.GetValues("ImageSize").ShouldContainOnly("200x100");
+
+        It should_convert_nested_class_implementing_cutom_value_conveter_and_overidden_name =
+            () => result.GetValues("ImageSize2").ShouldContainOnly("400x200");
+
+        It should_convert_nested_class_with_cutom_conveter_attribute_and_overidden_name =
+            () => result.GetValues("CustomValues").ShouldContainOnly("empty-cv1--empty-cv2", "cv1--cv2");
+
         class TestClass
         {
             public int IntProperty { get; set; }
@@ -355,11 +385,63 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
             public NestedClass2 Nested2WithOverridenBaseName { get; set; }
             public NestedClass2 Nested2WithInheritedBaseName { get; set; }
 
+            public ImageSize ImageSize { get; set; }
+            [CustomConverter]
+            public CustomConvertableClass CustomConvertableClass { get; set; }
+
+            [PropertyOverrides(Name = "ImageSize2")]
+            public ImageSize ImageSizeWithOveroddenName { get; set; }
+            [CustomConverter, PropertyOverrides(Name = "to-be-ignored")]
+            public CustomConvertableClass CustomConvertableClassWithEmptyBaseName { get; set; }
+
             public TestClass()
             {
                 PrivateProperty = "private-value";
                 StaticProperty = "always-the-same";
             }
+        }
+
+        class ImageSize : ICustomValueConverter
+        {
+            public int Width { get; set; }
+            public int Height { get; set; }
+
+            public NameValueCollection ConvertProperties()
+            {
+                return new NameValueCollection
+                {
+                    { "", string.Format("{0}x{1}", Width, Height) }
+                };
+            }
+        }
+
+        class CustomConverterAttribute : CustomPropertyConverterAttribute
+        {
+            public override IPropertyConverter GetConverter(PropertyInfo property)
+            {
+                return property.PropertyType == typeof(CustomConvertableClass) ? new CustomConverter(property) : null;
+            }
+
+            class CustomConverter : CustomPropertyConverterBase
+            {
+                public CustomConverter(PropertyInfo propertyInfo) : base(propertyInfo)
+                {
+                }
+
+                public override NameValueCollection Convert(object value)
+                {
+                    return new NameValueCollection
+                    {
+                        { "CustomValues", string.Format("{0}--{1}", ((CustomConvertableClass)value).CustomValue1, ((CustomConvertableClass)value).CustomValue2) }
+                    };
+                }
+            }
+        }
+
+        class CustomConvertableClass
+        {
+            public string CustomValue1 { get; set; }
+            public string CustomValue2 { get; set; }
         }
 
         class TestClass2
