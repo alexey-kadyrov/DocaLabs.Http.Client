@@ -22,7 +22,8 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                     StatusDescriptionGet = () => "Entity not found.",
                     SupportsHeadersGet = () => true,
                     LastModifiedGet = () => lastModified,
-                    HeadersGet = () => new WebHeaderCollection { { "Server", "Test" } }
+                    HeadersGet = () => new WebHeaderCollection { { "Server", "Test" } },
+                    ContentTypeGet = () => "application/json"
                 };
 
                 var innerException = new WebException("Failed request", null, WebExceptionStatus.ProtocolError, shimHttpWebResponse);
@@ -38,13 +39,23 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual("Entity not found.", targetException.Response.StatusDescription);
                 Assert.IsNull(targetException.Response.ETag);
                 Assert.AreEqual(lastModified.ToUniversalTime(), targetException.Response.LastModified);
+                Assert.AreEqual("application/json", targetException.Response.ContentType);
 
                 Assert.AreEqual(1, targetException.Response.Headers.AllKeys.Length);
                 Assert.AreEqual("Server", targetException.Response.Headers.AllKeys[0]);
                 Assert.AreEqual("Test", targetException.Response.Headers["Server"]);
 
-                var str = targetException.ToString();
+                Assert.AreEqual(404, targetException.StatusCode);
+                Assert.AreEqual("Entity not found.", targetException.StatusDescription);
+                Assert.IsNull(targetException.ETag);
+                Assert.AreEqual(lastModified.ToUniversalTime(), targetException.LastModified);
+                Assert.AreEqual("application/json", targetException.ContentType);
 
+                Assert.AreEqual(1, targetException.Headers.AllKeys.Length);
+                Assert.AreEqual("Server", targetException.Headers.AllKeys[0]);
+                Assert.AreEqual("Test", targetException.Headers["Server"]);
+
+                var str = targetException.ToString();
                 Assert.IsTrue(str.Contains("HttpClientWebException: Request Failed"));
                 Assert.IsTrue(str.Contains("StatusCode: 404"));
                 Assert.IsTrue(str.Contains("StatusDescription: Entity not found."));

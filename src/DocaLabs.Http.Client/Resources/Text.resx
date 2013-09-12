@@ -120,9 +120,6 @@
   <data name="base_type_does_not_match" xml:space="preserve">
     <value>Base type argument {0} does not match the original argument {1}.</value>
   </data>
-  <data name="binder_must_implement" xml:space="preserve">
-    <value>The binder {0} must implement at least one oth the next interfaces: IMutator, IUrlQueryComposer, IHeaderMapper, or IRequestWriter.</value>
-  </data>
   <data name="cannot_convert_from_0_to_1" xml:space="preserve">
     <value>Cannot convert from type {0} to type {1}.</value>
   </data>
@@ -137,9 +134,6 @@
   </data>
   <data name="configuration_file_0_not_found" xml:space="preserve">
     <value>Configuration file {0} is not found.</value>
-  </data>
-  <data name="expected_retsult_to_be_image_or_bitmap_classes" xml:space="preserve">
-    <value>Expected that {0} will be Image or Bitmap classes.</value>
   </data>
   <data name="failed_create_url" xml:space="preserve">
     <value>Failed to create Url {0}.</value>
@@ -173,15 +167,6 @@
   </data>
   <data name="object_must_be_of_string_byte_array_or_stream_type" xml:space="preserve">
     <value>The object {0} must be either string or byte[] or Stream or simple type (e.g. int, double, etc.).</value>
-  </data>
-  <data name="path_mapping_is_strictly_positioonal" xml:space="preserve">
-    <value>The path mapping is strictly positional, if there is an empty value all other values after that must be empty as well. This values {0} violate this rule.</value>
-  </data>
-  <data name="property_cannot_be_indexer" xml:space="preserve">
-    <value>Does not support indexers.</value>
-  </data>
-  <data name="property_must_be_simple" xml:space="preserve">
-    <value>Type of property {0} in {1} must be simple.</value>
   </data>
   <data name="separated_coll_attr_cannot_be_used_for_0_in_1" xml:space="preserve">
     <value>SeparatedCollectionConverterAttribute cannot be used for property {0} in {1}.</value>

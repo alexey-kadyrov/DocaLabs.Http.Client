@@ -7,9 +7,75 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web;
+using Moq;
+using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests
 {
+    [Subject(typeof(HttpClient<,>))]
+    class when_instantiating_http_service_with_null_base_url_and_there_is_configuration_which_supplies_it
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => new Client<InModel, string>(null));
+
+        It should_throw_argument_exception =
+            () => exception.ShouldBeOfType<ArgumentException>();
+
+        It shoould_report_base_url_argument =
+            () => ((ArgumentException) exception).ParamName.ShouldEqual("baseUrl");
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    class when_executing_http_service_witch_throws_exception
+    {
+        static Exception original_exception;
+        static Mock<IExecuteStrategy<InModel, string>> strategy; 
+        static Client<InModel, string> client;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            original_exception = new Exception();
+            strategy = new Mock<IExecuteStrategy<InModel, string>>();
+            strategy.Setup(x => x.Execute(Moq.It.IsAny<InModel>(), Moq.It.IsAny<Func<InModel, string>>())).Throws(original_exception);
+            client = new Client<InModel, string>(new Uri("http://foo.bar/"), strategy.Object);
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => client.Execute(new InModel()));
+
+        It should_throw_http_client_exception =
+            () => exception.ShouldBeOfType<HttpClientException>();
+
+        It shoould_wrap_the_original_exception =
+            () => exception.InnerException.ShouldBeTheSameAs(original_exception);
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    class when_executing_http_service_witch_throws_htt_client_exception
+    {
+        static HttpClientException original_exception;
+        static Mock<IExecuteStrategy<InModel, string>> strategy;
+        static Client<InModel, string> client;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            original_exception = new HttpClientException();
+            strategy = new Mock<IExecuteStrategy<InModel, string>>();
+            strategy.Setup(x => x.Execute(Moq.It.IsAny<InModel>(), Moq.It.IsAny<Func<InModel, string>>())).Throws(original_exception);
+            client = new Client<InModel, string>(new Uri("http://foo.bar/"), strategy.Object);
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => client.Execute(new InModel()));
+
+        It should_throw_the_same_http_client_exception =
+            () => exception.ShouldBeTheSameAs(original_exception);
+    }
+
     [Subject(typeof(HttpClient<,>))]
     class when_calling_http_service_for_model_without_any_request_serialization_hints
     {
@@ -322,13 +388,19 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    class Client<TIn, TOut> : HttpClient<TIn, TOut>
+    public class Client<TIn, TOut> : HttpClient<TIn, TOut>
     {
         public BindingContext Context { get; private set; }
         public WebRequest Request { get; private set; }
 
         public Client(Uri url)
             : base(url)
+        {
+            Method = "POST";
+        }
+
+        public Client(Uri url, IExecuteStrategy<TIn, TOut> strategy)
+            : base(url, null, strategy)
         {
             Method = "POST";
         }
@@ -346,7 +418,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    class InModel
+    public class InModel
     {
         public string ImplictPathValue { get; set; }
         public string ImpilicitQueryValue { get; set; }

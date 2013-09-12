@@ -70,15 +70,6 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The binder {0} must implement at least one oth the next interfaces: IMutator, IUrlQueryComposer, IHeaderMapper, or IRequestWriter..
-        /// </summary>
-        internal static string binder_must_implement {
-            get {
-                return ResourceManager.GetString("binder_must_implement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot convert from type {0} to type {1}..
         /// </summary>
         internal static string cannot_convert_from_0_to_1 {
@@ -120,15 +111,6 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string configuration_file_0_not_found {
             get {
                 return ResourceManager.GetString("configuration_file_0_not_found", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Expected that {0} will be Image or Bitmap classes..
-        /// </summary>
-        internal static string expected_retsult_to_be_image_or_bitmap_classes {
-            get {
-                return ResourceManager.GetString("expected_retsult_to_be_image_or_bitmap_classes", resourceCulture);
             }
         }
         
@@ -228,33 +210,6 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string object_must_be_of_string_byte_array_or_stream_type {
             get {
                 return ResourceManager.GetString("object_must_be_of_string_byte_array_or_stream_type", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The path mapping is strictly positional, if there is an empty value all other values after that must be empty as well. This values {0} violate this rule..
-        /// </summary>
-        internal static string path_mapping_is_strictly_positioonal {
-            get {
-                return ResourceManager.GetString("path_mapping_is_strictly_positioonal", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Does not support indexers..
-        /// </summary>
-        internal static string property_cannot_be_indexer {
-            get {
-                return ResourceManager.GetString("property_cannot_be_indexer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type of property {0} in {1} must be simple..
-        /// </summary>
-        internal static string property_must_be_simple {
-            get {
-                return ResourceManager.GetString("property_must_be_simple", resourceCulture);
             }
         }
         

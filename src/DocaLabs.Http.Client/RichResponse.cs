@@ -9,6 +9,11 @@ namespace DocaLabs.Http.Client
     public abstract class RichResponse
     {
         /// <summary>
+        /// Content type of the data being received.
+        /// </summary>
+        public string ContentType { get; private set; }
+
+        /// <summary>
         /// Gets the status of the response.
         /// </summary>
         public int StatusCode { get; private set; }
@@ -59,6 +64,8 @@ namespace DocaLabs.Http.Client
                 throw new ArgumentNullException("response");
 
             Headers = new WebHeaderCollection();
+
+            ContentType = response.ContentType;
 
             if (response.SupportsHeaders)
             {

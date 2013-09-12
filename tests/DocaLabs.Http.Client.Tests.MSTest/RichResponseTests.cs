@@ -17,6 +17,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
             {
                 var shimWebResponse = new ShimWebResponse(new ShimHttpWebResponse
                 {
+                    ContentTypeGet = () => "application/json",
                     SupportsHeadersGet = () => false
                 });
 
@@ -28,6 +29,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(DateTime.MinValue, richResponse.LastModified);
                 Assert.AreEqual(0, richResponse.Headers.AllKeys.Length);
                 Assert.AreEqual("Hello World!", richResponse.Value);
+                Assert.AreEqual("application/json", richResponse.ContentType);
             }
         }
 
@@ -47,7 +49,8 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 var webResponse = new ShimWebResponse(new ShimHttpWebResponse
                 {
                     SupportsHeadersGet = () => true,
-                    HeadersGet = () => new WebHeaderCollection { { "ETag", "W/\"123\"" } }
+                    HeadersGet = () => new WebHeaderCollection { { "ETag", "W/\"123\"" } },
+                    ContentTypeGet = () => "application/json"
                 });
 
                 var richResponse = new RichResponse<string>(webResponse, "Hello World!");
@@ -62,6 +65,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual("W/\"123\"", richResponse.Headers["ETag"]);
 
                 Assert.AreEqual("Hello World!", richResponse.Value);
+                Assert.AreEqual("application/json", richResponse.ContentType);
             }
         }
 
@@ -78,7 +82,8 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                     StatusDescriptionGet = () => "Conflict on the server.",
                     SupportsHeadersGet = () => true,
                     LastModifiedGet = () => lastModified,
-                    HeadersGet = () => new WebHeaderCollection { { "ETag", "W/\"123\"" } }
+                    HeadersGet = () => new WebHeaderCollection { { "ETag", "W/\"123\"" } },
+                    ContentTypeGet = () => "application/json"
                 };
 
                 var richResponse = new RichResponse<string>(shimHttpWebResponse, "Hello World!");
@@ -93,6 +98,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual("W/\"123\"", richResponse.Headers["ETag"]);
 
                 Assert.AreEqual("Hello World!", richResponse.Value);
+                Assert.AreEqual("application/json", richResponse.ContentType);
             }
         }
 
@@ -140,7 +146,8 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                     StatusDescriptionGet = () => "Conflict on the server.",
                     SupportsHeadersGet = () => true,
                     LastModifiedGet = () => lastModified,
-                    HeadersGet = () => new WebHeaderCollection { { "custom-header", "custom-value" } }
+                    HeadersGet = () => new WebHeaderCollection { { "custom-header", "custom-value" } },
+                    ContentTypeGet = () => "application/json"
                 };
 
                 var richResponse = new RichResponse<string>(httpWebResponse, "Hello World!");
@@ -155,6 +162,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual("custom-value", richResponse.Headers["custom-header"]);
 
                 Assert.AreEqual("Hello World!", richResponse.Value);
+                Assert.AreEqual("application/json", richResponse.ContentType);
             }
         }
 
@@ -202,7 +210,8 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                     StatusDescriptionGet = () => "Conflict on the server.",
                     SupportsHeadersGet = () => true,
                     LastModifiedGet = () => lastModified,
-                    HeadersGet = () => new WebHeaderCollection { { "custom-header", "custom-value" } }
+                    HeadersGet = () => new WebHeaderCollection { { "custom-header", "custom-value" } },
+                    ContentTypeGet = () => "application/json"
                 };
 
                 var richResponse = new RichResponse<int>(httpWebResponse, null);
@@ -215,8 +224,10 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(1, richResponse.Headers.AllKeys.Length);
                 Assert.AreEqual("custom-header", richResponse.Headers.AllKeys[0]);
                 Assert.AreEqual("custom-value", richResponse.Headers["custom-header"]);
+                Assert.AreEqual("application/json", richResponse.ContentType);
 
                 Assert.AreEqual(0, richResponse.Value);
+                Assert.AreEqual("application/json", richResponse.ContentType);
             }
         }
 
@@ -230,13 +241,15 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                     StatusCodeGet = () => HttpStatusCode.Conflict,
                     StatusDescriptionGet = () => "Conflict on the server.",
                     SupportsHeadersGet = () => true,
-                    HeadersGet = () => new WebHeaderCollection()
+                    HeadersGet = () => new WebHeaderCollection(),
+                    ContentTypeGet = () => "application/json"
                 };
 
                 var richResponse = new RichResponse<string>(httpWebResponse, "Hello World!");
 
                 Assert.IsTrue(richResponse.Is(HttpStatusCode.Conflict));
                 Assert.IsFalse(richResponse.Is(HttpStatusCode.ExpectationFailed));
+                Assert.AreEqual("application/json", richResponse.ContentType);
             }
         }
 
