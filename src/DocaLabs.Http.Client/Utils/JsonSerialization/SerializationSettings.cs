@@ -33,5 +33,14 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
             MaxJsonLength = 2097152;
             RecursionLimit = 100;
         }
+
+        /// <summary>
+        /// Initializes a new isntance of the SerializationSettings class with the specified type resolver.
+        /// </summary>
+        public SerializationSettings(JavaScriptTypeResolver typeResolver)
+            : this()
+        {
+            TypeResolver = typeResolver;
+        }
     }
 }

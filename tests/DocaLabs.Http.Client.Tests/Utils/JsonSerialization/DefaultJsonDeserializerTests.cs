@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
@@ -24,6 +25,36 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
             Value1 = 2012,
             Value2 = "Hello World!"
         });
+    }
+
+    [Subject(typeof(DefaultJsonDeserializer))]
+    class when_updating_serialization_settings_with_null_type_for_default_json_deserializer
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => DefaultJsonDeserializer.UpdateSettings(null, new SerializationSettings()));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_type_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
+    }
+
+    [Subject(typeof(DefaultJsonDeserializer))]
+    class when_updating_serialization_settings_with_null_settings_for_default_json_deserializer
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => DefaultJsonDeserializer.UpdateSettings(typeof(TestTarget), null));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_settings_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("settings");
     }
 
     [Subject(typeof(DefaultJsonDeserializer))]

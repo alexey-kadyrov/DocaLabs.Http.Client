@@ -31,15 +31,15 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
         /// Updates/adds settings information which will be used when the specified type is being deserialized.
         /// Use that to customize behaviour of the JsonConvert.
         /// </summary>
-        static public void UpdateSettings(Type type, SerializationSettings setting)
+        static public void UpdateSettings(Type type, SerializationSettings settings)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            if (setting == null)
-                throw new ArgumentNullException("setting");
+            if (settings == null)
+                throw new ArgumentNullException("settings");
 
-            Settings[type] = setting;
+            Settings[type] = settings;
         }
     }
 }
