@@ -114,6 +114,7 @@
     <Compile Include="Utils\JsonSerialization\IJsonSerializer.cs" />
     <Compile Include="Utils\JsonSerialization\JsonSerializationProvider.cs" />
     <Compile Include="Binding\Serialization\ContentTypeExtensions.cs" />
+    <Compile Include="Utils\JsonSerialization\SerializationSettings.cs" />
     <Compile Include="Utils\LibraryExtensionsComposer.cs" />
     <Compile Include="Utils\ReflectionExtensions.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromPlainTextAttribute.cs" />

@@ -69,7 +69,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 
         class TestDeserializer : IJsonDeserializer
         {
-            public object Deserialize(string value, Type type)
+            public object Deserialize(string value, Type resultType)
             {
                 return null;
             }
@@ -104,7 +104,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 
         class TestDeserializer : IJsonDeserializer
         {
-            public object Deserialize(string value, Type type)
+            public object Deserialize(string value, Type resultType)
             {
                 return null;
             }

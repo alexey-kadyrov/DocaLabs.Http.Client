@@ -11,6 +11,6 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
         /// <summary>
         /// Deserializes an object from string in JSON notation.
         /// </summary>
-        object Deserialize(string value, Type type);
+        object Deserialize(string value, Type resultType);
     }
 }
