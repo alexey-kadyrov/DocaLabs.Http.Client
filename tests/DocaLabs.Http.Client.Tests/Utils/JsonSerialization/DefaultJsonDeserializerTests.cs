@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
+using Moq;
+using Newtonsoft.Json;
+using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 {
@@ -55,6 +59,50 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 
         It should_report_settings_argument =
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("settings");
+    }
+
+    [Subject(typeof(DefaultJsonDeserializer))]
+    class when_default_json_deserializer_is_used_with_customized_type_resolver
+    {
+        static Model model;
+        static Mock<JavaScriptTypeResolver> type_resolver;
+        static string json_string;
+        static DefaultJsonDeserializer deserializer;
+
+        Establish context = () =>
+        {
+            type_resolver = new Mock<JavaScriptTypeResolver>() { CallBase = true };
+            type_resolver.Setup(x => x.ResolveType(Moq.It.IsAny<string>())).Returns((string id) => typeof(InnerModel));
+            type_resolver.Setup(x => x.ResolveTypeId(Moq.It.IsAny<Type>())).Returns((Type type) => type.Name);
+
+            DefaultJsonDeserializer.UpdateSettings(typeof(Model), new SerializationSettings(type_resolver.Object));
+
+            model = new Model
+            {
+                Value = "Hello World!"
+            };
+
+            deserializer = new DefaultJsonDeserializer();
+        };
+
+        Because of =
+            () => model = (Model)deserializer.Deserialize("{Value:\"Hello World!\", InnerModel : { \"__type\" : \"InnerModel\", \"InnerValue\" : \"Value42\"}}", typeof(Model));
+
+        It should_deserialize_object = () => model.ShouldMatch(x => x.Value == "Hello World!" && ((InnerModel)x.InnerModel).InnerValue == "Value42");
+
+        It should_use_provided_type_resolver =
+            () => type_resolver.Verify(x => x.ResolveType("InnerModel"));
+
+        class Model
+        {
+            public string Value { get; set; }
+            public object InnerModel { get; set; }
+        }
+
+        class InnerModel
+        {
+            public string InnerValue { get; set; }
+        }
     }
 
     [Subject(typeof(DefaultJsonDeserializer))]

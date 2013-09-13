@@ -106,7 +106,6 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
         }
     }
 
-
     [Subject(typeof(DefaultJsonSerializer))]
     class when_default_json_serializer_is_used_concurrently
     {
