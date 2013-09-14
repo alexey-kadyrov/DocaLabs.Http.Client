@@ -9,6 +9,16 @@ using ServiceStack.Text;
 
 namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
 {
+    public class GetUserRequest : GetUser
+    {
+        public string Format { get; set; }
+
+        public GetUserRequest()
+        {
+            Format = "json";
+        }
+    }
+
     public class GetUser : IReturn<User>
     {
         public Guid Id  { get; set; }
@@ -19,6 +29,15 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
     {
         public object Get(GetUser request)
         {
+            if (Request.RawUrl.Contains("/v1/"))
+            {
+                return new HttpResult
+                {
+                    StatusCode = HttpStatusCode.Redirect,
+                    Location = Request.RawUrl.Replace("/v1/", "/v2/")
+                };
+            }
+
             var user = Users.Data.FirstOrDefault(x => x.Id == request.Id);
             if(user == null)
                 throw HttpError.NotFound("User {0} does not exist.".Fmt(request.Id));

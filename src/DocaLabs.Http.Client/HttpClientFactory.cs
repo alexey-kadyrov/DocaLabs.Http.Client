@@ -45,6 +45,20 @@ namespace DocaLabs.Http.Client
         /// The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
         /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </typeparam>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
+        public static TInterface CreateInstance<TInterface>(string configurationName)
+        {
+            return (TInterface)CreateInstance(typeof(TInterface), null, configurationName);
+        }
+
+        /// <summary>
+        /// Creates an instance of a concrete class implementing the TInterface, the class is expected to be derived from HttpClient.
+        /// </summary>
+        /// <typeparam name="TInterface">
+        /// Interface which should be implemented, the interface must implement only one method.
+        /// The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+        /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+        /// </typeparam>
         /// <param name="baseUrl">The base URL of the service.</param>
         /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
         public static TInterface CreateInstance<TInterface>(Uri baseUrl = null, string configurationName = null)

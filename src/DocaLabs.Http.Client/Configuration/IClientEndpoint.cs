@@ -24,7 +24,7 @@ namespace DocaLabs.Http.Client.Configuration
         string Method { get; set; }
 
         /// <summary>
-        /// Gets or sets the request timeout. Default value is 90 seconds.
+        /// Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
         /// </summary>
         int Timeout { get; set; }
 

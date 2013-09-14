@@ -9,7 +9,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     public class when_getting_a_json_object
     {
         static TestServerHost<IGetUserService> host;
-        static GetUser request;
+        static GetUserRequest request;
         static IGetUserService client;
         static User result;
 
@@ -18,8 +18,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         Establish context = () =>
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>(new Uri("http://localhost:1337/users/{id}?format=json"));
-            request = new GetUser { Id = Users.Data[0].Id };
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
             host = new TestServerHost<IGetUserService>();
         };
 
@@ -31,7 +31,37 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         public interface IGetUserService
         {
-            User Get(GetUser request);
+            User Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_redirected
+    {
+        static TestServerHost<IGetUserService> host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static User result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV1");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost<IGetUserService>();
+        };
+
+        Because of =
+            () => result = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        public interface IGetUserService
+        {
+            User Get(GetUserRequest request);
         }
     }
 
@@ -39,7 +69,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     public class when_getting_an_xml_object
     {
         static TestServerHost<IGetUserService> host;
-        static GetUser request;
+        static GetUserRequest request;
         static IGetUserService client;
         static User result;
 
@@ -48,8 +78,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         Establish context = () =>
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>(new Uri("http://localhost:1337/users/{id}?format=xml"));
-            request = new GetUser { Id = Users.Data[0].Id };
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id, Format = "xml" };
             host = new TestServerHost<IGetUserService>();
         };
 
@@ -61,7 +91,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         public interface IGetUserService
         {
-            User Get(GetUser request);
+            User Get(GetUserRequest request);
         }
     }
 
@@ -69,7 +99,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     public class when_getting_a_json_object_and_rich_response_information
     {
         static TestServerHost<IGetUserService> host;
-        static GetUser request;
+        static GetUserRequest request;
         static IGetUserService client;
         static RichResponse<User> result;
 
@@ -78,8 +108,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         Establish context = () =>
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>(new Uri("http://localhost:1337/users/{id}?format=json"));
-            request = new GetUser { Id = Users.Data[0].Id };
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
             host = new TestServerHost<IGetUserService>();
         };
 
@@ -100,7 +130,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         public interface IGetUserService
         {
-            RichResponse<User> Get(GetUser request);
+            RichResponse<User> Get(GetUserRequest request);
         }
     }
 
@@ -108,7 +138,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     public class when_conditionally_getting_a_json_object_using_rich_response
     {
         static TestServerHost<IGetUserService> host;
-        static RichRequest<GetUser> request;
+        static RichRequest<GetUserRequest> request;
         static IGetUserService client;
         static RichResponse<User> result;
 
@@ -117,10 +147,10 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         Establish context = () =>
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>(new Uri("http://localhost:1337/users/{id}?format=json"));
-            request = new RichRequest<GetUser>
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new RichRequest<GetUserRequest>
             {
-                Value = new GetUser { Id = Users.Data[0].Id },
+                Value = new GetUserRequest { Id = Users.Data[0].Id },
                 IfNoneMatch = Users.ETags[Users.Data[0].Id]
             };
             host = new TestServerHost<IGetUserService>();
@@ -143,7 +173,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         public interface IGetUserService
         {
-            RichResponse<User> Get(RichRequest<GetUser> request);
+            RichResponse<User> Get(RichRequest<GetUserRequest> request);
         }
     }
 
@@ -151,7 +181,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
     public class when_conditionally_getting_a_json_object_and_not_using_rich_response
     {
         static TestServerHost<IGetUserService> host;
-        static RichRequest<GetUser> request;
+        static RichRequest<GetUserRequest> request;
         static IGetUserService client;
         static Exception exception;
 
@@ -160,10 +190,10 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         Establish context = () =>
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>(new Uri("http://localhost:1337/users/{id}?format=json"));
-            request = new RichRequest<GetUser>
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new RichRequest<GetUserRequest>
             {
-                Value = new GetUser { Id = Users.Data[0].Id },
+                Value = new GetUserRequest { Id = Users.Data[0].Id },
                 IfNoneMatch = Users.ETags[Users.Data[0].Id]
             };
             host = new TestServerHost<IGetUserService>();
@@ -190,7 +220,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         public interface IGetUserService
         {
-            User Get(RichRequest<GetUser> request);
+            User Get(RichRequest<GetUserRequest> request);
         }
     }
 
@@ -206,12 +236,12 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         Establish context = () =>
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>(new Uri("http://localhost:1337/users/{id}?format=xml"));
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
             host = new TestServerHost<IGetUserService>();
         };
 
         Because of =
-            () => exception = Catch.Exception(() => client.Get(new GetUser { Id = Guid.Empty }));
+            () => exception = Catch.Exception(() => client.Get(new GetUserRequest { Id = Guid.Empty }));
 
         It should_throw_http_client_web_exception_exception =
             () => exception.ShouldBeOfType<HttpClientWebException>();
@@ -227,7 +257,35 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         public interface IGetUserService
         {
-            User Get(GetUser request);
+            User Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_querying_wrong_address
+    {
+        static TestServerHost<IGetUserService> host;
+        static IGetUserService client;
+        static Exception exception;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("badGetUserrequest");
+            host = new TestServerHost<IGetUserService>();
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => client.Get(new GetUserRequest { Id = Guid.Empty }));
+
+        It should_throw_http_client_web_exception_exception =
+            () => exception.ShouldBeOfType<HttpClientWebException>();
+
+        public interface IGetUserService
+        {
+            User Get(GetUserRequest request);
         }
     }
 }

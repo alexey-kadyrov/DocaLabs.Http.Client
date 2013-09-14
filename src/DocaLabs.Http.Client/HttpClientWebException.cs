@@ -11,6 +11,11 @@ namespace DocaLabs.Http.Client
     public class HttpClientWebException : HttpClientException
     {
         /// <summary>
+        /// Gets the status of the response.
+        /// </summary>
+        public WebExceptionStatus Status { get; private set; }
+
+        /// <summary>
         /// Gets additional information about the exception if the inner exception was of WebException.
         /// </summary>
         public ResponseInfo Response { get; private set; }
@@ -54,8 +59,17 @@ namespace DocaLabs.Http.Client
             : base(message, innerException)
         {
             var webException = innerException as WebException;
-            if(webException != null)
-                Response = new ResponseInfo(webException.Response);
+            if (webException != null)
+            {
+                if(webException.Response != null)
+                    Response = new ResponseInfo(webException.Response);
+
+                Status = webException.Status;
+            }
+            else
+            {
+                Status = WebExceptionStatus.UnknownError;
+            }
         }
 
         /// <summary>
