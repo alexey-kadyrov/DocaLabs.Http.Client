@@ -26,7 +26,7 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
         public int RecursionLimit { get; set; }
 
         /// <summary>
-        /// Initializes a new isntance of the SerializationSettings class with the default settings.
+        /// Initializes a new instance of the SerializationSettings class with the default settings.
         /// </summary>
         public SerializationSettings()
         {
@@ -35,7 +35,7 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
         }
 
         /// <summary>
-        /// Initializes a new isntance of the SerializationSettings class with the specified type resolver.
+        /// Initializes a new instance of the SerializationSettings class with the specified type resolver.
         /// </summary>
         public SerializationSettings(JavaScriptTypeResolver typeResolver)
             : this()

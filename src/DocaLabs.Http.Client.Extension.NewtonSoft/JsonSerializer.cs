@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Extension.NewtonSoft
     /// Implements IJsonSerializer using Newtonsoft JsonConvert.
     /// </summary>
     [Export(typeof(IJsonSerializer))]
-    public class NewtonSoftDefaultJsonSerializer : IJsonSerializer
+    public class JsonSerializer : IJsonSerializer
     {
         static readonly ConcurrentDictionary<Type, SerializationSettings> Settings = new ConcurrentDictionary<Type, SerializationSettings>();
 
@@ -30,15 +30,15 @@ namespace DocaLabs.Http.Client.Extension.NewtonSoft
         /// Updates/adds settings information which will be used when the specified type is being serialized.
         /// Use that to customize behaviour of the JsonConvert.
         /// </summary>
-        static public void UpdateSettings(Type type, SerializationSettings setting)
+        static public void UpdateSettings(Type type, SerializationSettings settings)
         {
             if(type == null)
                 throw new ArgumentNullException("type");
 
-            if(setting == null)
-                throw new ArgumentNullException("setting");
+            if(settings == null)
+                throw new ArgumentNullException("settings");
 
-            Settings[type] = setting;
+            Settings[type] = settings;
         }
     }
 }

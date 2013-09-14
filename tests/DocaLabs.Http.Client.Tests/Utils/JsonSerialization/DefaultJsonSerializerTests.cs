@@ -6,6 +6,7 @@ using DocaLabs.Http.Client.Tests._Utils;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 using DocaLabs.Testing.Common;
 using Machine.Specifications;
+using Machine.Specifications.Annotations;
 using Moq;
 using Newtonsoft.Json;
 using It = Machine.Specifications.It;
@@ -77,7 +78,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 
         Establish context = () =>
         {
-            type_resolver = new Mock<JavaScriptTypeResolver>() { CallBase = true };
+            type_resolver = new Mock<JavaScriptTypeResolver> { CallBase = true };
             type_resolver.Setup(x => x.ResolveType(Moq.It.IsAny<string>())).Returns((string id) => Type.GetType(id));
             type_resolver.Setup(x => x.ResolveTypeId(Moq.It.IsAny<Type>())).Returns((Type type) => type.Name);
 
@@ -102,7 +103,79 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 
         class Model
         {
-            public string Value { get; set; }
+            public string Value { [UsedImplicitly] get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultJsonSerializer))]
+    class when_default_json_serializer_is_used_with_customized_max_json_length
+    {
+        static Exception exception;
+        static Model model;
+        static DefaultJsonSerializer serializer;
+
+        Establish context = () =>
+        {
+            DefaultJsonSerializer.UpdateSettings(typeof(Model), new SerializationSettings { MaxJsonLength = 5 } );
+
+            model = new Model
+            {
+                Value = "Hello World!"
+            };
+
+            serializer = new DefaultJsonSerializer();
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => serializer.Serialize(model));
+
+        It should_use_that_settings =
+            () => exception.ShouldNotBeNull();
+
+        class Model
+        {
+            public string Value { [UsedImplicitly] get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultJsonSerializer))]
+    class when_default_json_serializer_is_used_with_customized_recursion_limit
+    {
+        static Exception exception;
+        static Model model;
+        static DefaultJsonSerializer serializer;
+
+        Establish context = () =>
+        {
+            DefaultJsonSerializer.UpdateSettings(typeof(Model), new SerializationSettings { RecursionLimit = 1 });
+
+            model = new Model
+            {
+                Value = "Hello World!",
+                AnotherModel = new InnerModel
+                {
+                    InnerValue = "Value42"
+                }
+            };
+
+            serializer = new DefaultJsonSerializer();
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => serializer.Serialize(model));
+
+        It should_use_that_settings =
+            () => exception.ShouldNotBeNull();
+
+        class Model
+        {
+            public string Value { [UsedImplicitly] get; set; }
+            public InnerModel AnotherModel { [UsedImplicitly] get; set; }
+        }
+
+        class InnerModel
+        {
+            public string InnerValue { [UsedImplicitly] get; set; }
         }
     }
 
