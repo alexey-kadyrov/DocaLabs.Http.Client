@@ -4,27 +4,15 @@ using System.Net;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
-using ServiceStack.ServiceInterface.Cors;
 using ServiceStack.Text;
 
 namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
 {
-    public class GetUserRequest : GetUser
-    {
-        public string Format { get; set; }
-
-        public GetUserRequest()
-        {
-            Format = "json";
-        }
-    }
-
     public class GetUser : IReturn<User>
     {
         public Guid Id  { get; set; }
     }
 
-    [EnableCors(allowedMethods: "GET")]
     public class GetUserService : Service
     {
         public object Get(GetUser request)

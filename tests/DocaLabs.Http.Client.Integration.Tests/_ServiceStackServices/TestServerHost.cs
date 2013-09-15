@@ -6,7 +6,7 @@ using ServiceStack.WebHost.Endpoints;
 
 namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
 {
-    class TestServerHost<TService> : IDisposable
+    class TestServerHost : IDisposable
     {
         ManualResetEvent ServerReady { get; set; }
         ManualResetEvent StopServer { get; set; }
@@ -18,13 +18,13 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
             StopServer = new ManualResetEvent(false);
             ServerStopped = new ManualResetEvent(true);
 
-            Console.WriteLine(@"Starting {0}.", typeof(TService));
+            Console.WriteLine(@"Starting TestServerHost.");
 
             Task.Factory.StartNew(Worker);
 
             ServerReady.WaitOne();
 
-            Console.WriteLine(@"{0} started.", typeof(TService));
+            Console.WriteLine(@"TestServerHost started.");
         }
 
         public void Dispose()
@@ -64,7 +64,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
         public class AppHost : AppHostHttpListenerBase
         {
             public AppHost() 
-                : base("StarterTemplate HttpListener", typeof (TService).Assembly)
+                : base("StarterTemplate HttpListener", typeof (AppHost).Assembly)
             {
                 SetConfig(new EndpointHostConfig { DebugMode = true });
             }
@@ -72,8 +72,11 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
             public override void Configure(Container container)
             {
                 Routes
+                    .Add<GetUser>("/v1/users/{id}", "GET")
                     .Add<GetUser>("/v2/users/{id}", "GET")
-                    .Add<GetUser>("/v1/users/{id}", "GET");
+                    .Add<UpdateUserRequest>("/v2/users", "PUT")
+                    .Add<AddUserRequest>("/v2/users", "POST")
+                    .Add<DeleteUserRequest>("/v2/users/{id}", "DELETE");
             }
         }
     }

@@ -53,7 +53,7 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// Creates a new instance of the DefaultResponseBinder class with Json,Xml, and plain text deserializers.
+        /// Creates a new instance of the DefaultResponseBinder class with Json, Xml, and plain text deserializers.
         /// </summary>
         public DefaultResponseBinder()
         {

@@ -7,14 +7,14 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
     static class Users
     {
         readonly static Random Random;
-        public static User[] Data { get; private set; }
+        public static List<User> Data { get; private set; }
         public static Dictionary<Guid, string> ETags { get; private set; }
 
         static Users()
         {
             Random = new Random();
 
-            Data = new[]
+            Data = new List<User>
             {
                 new User
                 {
@@ -29,6 +29,13 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
                     FirstName = "Michael",
                     LastName = "Goodwill",
                     Email = "michael.goodwill@foo.bar"
+                },
+                new User
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = "Daniel",
+                    LastName = "Banbury",
+                    Email = "daniel.bunbury@foo.bar"
                 }
             };
 
