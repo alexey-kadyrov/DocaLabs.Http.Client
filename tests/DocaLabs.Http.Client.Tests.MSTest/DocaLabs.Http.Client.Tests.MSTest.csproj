@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="DefaultExecuteStrategyTests.cs" />
     <Compile Include="DefaultResponseBinderTests.cs" />
+    <Compile Include="ExceptionExtensionsTests.cs" />
     <Compile Include="HttpClientWebExceptionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RichResponseTests.cs" />

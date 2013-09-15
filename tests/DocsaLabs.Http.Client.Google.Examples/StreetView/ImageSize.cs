@@ -1,6 +1,9 @@
-﻿namespace DocsaLabs.Http.Client.Google.Examples.StreetView
+﻿using System.Collections.Specialized;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
+
+namespace DocsaLabs.Http.Client.Google.Examples.StreetView
 {
-    public class ImageSize
+    public class ImageSize : ICustomValueConverter
     {
         public int Width { get; set; }
         public int Height { get; set; }
@@ -17,9 +20,9 @@
             Height = height;
         }
 
-        public override string ToString()
+        public NameValueCollection ConvertProperties()
         {
-            return string.Format("{0}x{1}", Width, Height);
+            return new NameValueCollection { { "", string.Format("{0}x{1}", Width, Height) } };
         }
     }
 }

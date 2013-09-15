@@ -1,9 +1,7 @@
-﻿using System;
-using DocsaLabs.Http.Client.Google.Examples.Utils;
+﻿using DocsaLabs.Http.Client.Google.Examples.Utils;
 
 namespace DocsaLabs.Http.Client.Google.Examples.StreetView
 {
-    [Serializable]
     public class StreetViewRequest
     {
         // ReSharper disable InconsistentNaming

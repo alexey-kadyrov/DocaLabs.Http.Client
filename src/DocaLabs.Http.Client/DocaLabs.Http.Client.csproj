@@ -82,6 +82,7 @@
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="Binding\Serialization\SerializeAsTextAttribute.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="HttpClientWebException.cs" />
     <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="RichRequest.cs" />

@@ -21,6 +21,7 @@ namespace DocaLabs.Http.Client
         static readonly ModuleBuilder ModuleBuilder;
         static readonly object Locker;
         static readonly Dictionary<Type, ClientTypeInfo> Constructors;
+        static readonly Random Random; // it's used from under Locker so should be safe.
 
         static long _typeCount;
 
@@ -34,6 +35,7 @@ namespace DocaLabs.Http.Client
 
             ModuleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName);
             Constructors = new Dictionary<Type, ClientTypeInfo>();
+            Random = new Random();
             Locker = new object();
         }
 
@@ -164,7 +166,7 @@ namespace DocaLabs.Http.Client
             baseType = interfaceInfo.EnsureBaseType(baseType);
 
             var typeBuilder = ModuleBuilder.DefineType(
-                string.Format("{0}{1}{2}", interfaceType.FullName, Interlocked.Increment(ref _typeCount), ClientSuffix),
+                string.Format("{0}{1}{2}{3}", interfaceType.FullName, Interlocked.Increment(ref _typeCount), Random.Next(), ClientSuffix),
                 TypeAttributes.Class | TypeAttributes.Public, baseType, new[] { interfaceType });
 
             interfaceInfo.TransferCustomAttributes(typeBuilder);
@@ -388,7 +390,7 @@ namespace DocaLabs.Http.Client
                     : serviceCall.Name;
 
                 var typeBuilder = ModuleBuilder.DefineType(
-                    string.Format("{0}{1}{2}", methodNameBase, Interlocked.Increment(ref _typeCount), ModelSuffix),
+                    string.Format("{0}{1}{2}{3}", methodNameBase, Interlocked.Increment(ref _typeCount), Random.Next(), ModelSuffix),
                     TypeAttributes.Class | TypeAttributes.Public);
 
                 foreach (var parameter in parameters)
