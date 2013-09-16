@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Specialized;
 using System.Globalization;
+using DocaLabs.Http.Client.Binding.PropertyConverting;
 
 namespace DocsaLabs.Http.Client.Google.Examples.Utils
 {
     [Serializable]
-    public struct GeoLocation : IEquatable<GeoLocation>
+    public struct GeoLocation : IEquatable<GeoLocation>, ICustomValueConverter
     {
         /// <summary>
         /// The average radius for a spherical approximation of the figure of the Earth is approximately 6371,010 meters.
@@ -29,11 +31,11 @@ namespace DocsaLabs.Http.Client.Google.Examples.Utils
         public GeoLocation(string value)
             : this()
         {
-            if(string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException("value");
 
             var cc = value.Split(',');
-            if(cc.Length != 2)
+            if (cc.Length != 2)
                 throw new FormatException("Wrong format " + value);
 
             Initialize(double.Parse(cc[0]), double.Parse(cc[1]));
@@ -99,7 +101,7 @@ namespace DocsaLabs.Http.Client.Google.Examples.Utils
         public GeoBoundary GetBoundingCoordinates(double distance)
         {
             if (distance <= 0d)
-                throw new ArgumentOutOfRangeException("distance", "Distance must be greater than zero.");
+                throw new ArgumentOutOfRangeException("distance", @"Distance must be greater than zero.");
 
             var radLat = DegreeToRadian(Latitude);
             var radLon = DegreeToRadian(Longitude);
@@ -139,10 +141,10 @@ namespace DocsaLabs.Http.Client.Google.Examples.Utils
         void Initialize(double latitude, double longitude)
         {
             if (latitude < -90d || latitude > 90d)
-                throw new ArgumentOutOfRangeException("latitude", latitude, "latitude must be between -90 and 90");
+                throw new ArgumentOutOfRangeException("latitude", latitude, @"Latitude must be between -90 and 90.");
 
             if (longitude < -180d || longitude > 180d)
-                throw new ArgumentOutOfRangeException("longitude", longitude, "longitude must be between -180 and 180");
+                throw new ArgumentOutOfRangeException("longitude", longitude, @"Longitude must be between -180 and 180.");
 
             Latitude = latitude;
             Longitude = longitude;
@@ -197,6 +199,11 @@ namespace DocsaLabs.Http.Client.Google.Examples.Utils
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "{0},{1}", Latitude, Longitude);
+        }
+
+        public NameValueCollection ConvertProperties()
+        {
+            return new NameValueCollection { { "", string.Format(CultureInfo.InvariantCulture, "{0},{1}", Latitude, Longitude) } };
         }
     }
 }
