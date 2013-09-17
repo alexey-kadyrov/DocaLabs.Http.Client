@@ -44,6 +44,11 @@ namespace DocaLabs.Http.Client.Tests._Utils
             }
         }
 
+        protected static long GetRequestDataLength()
+        {
+            return request_data.Length;
+        }
+
         protected static string GetRequestData(Encoding encoding = null)
         {
             if (encoding == null)

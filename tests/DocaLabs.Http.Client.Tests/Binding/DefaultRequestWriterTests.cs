@@ -27,8 +27,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
 
-        It should_report_http_client_argument =
-            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("httpClient");
+        It should_report_client_argument =
+            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("client");
 
         class Model
         {
@@ -396,8 +396,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
 
-        It should_report_http_client_argument =
-            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("httpClient");
+        It should_report_client_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("client");
 
         class Model
         {

@@ -232,6 +232,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must be of Stream type but is {0}..
+        /// </summary>
+        internal static string the_value_must_be_of_stream_type {
+            get {
+                return ResourceManager.GetString("the_value_must_be_of_stream_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type {0} cannot be converted to byte array..
         /// </summary>
         internal static string type_0_cannot_be_converted_to_byte_array {

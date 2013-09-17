@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
@@ -23,7 +24,7 @@ namespace DocaLabs.Http.Client.Binding
                 !info.IsExplicitUrlQuery() &&
                 !info.IsHeader(true) &&
                 !info.IsCredentials() &&
-                !info.IsRequestStream();
+                !info.IsRequestBody();
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Returns true if the property can be used to serialize into request stream.
         /// </summary>
-        public static bool IsRequestStream(this PropertyInfo info)
+        public static bool IsRequestBody(this PropertyInfo info)
         {
             return info.TryGetRequestSerializer() != null;
         }
@@ -98,7 +99,13 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static IRequestSerialization TryGetRequestSerializer(this PropertyInfo info)
         {
-            return info.GetCustomAttribute<RequestSerializationAttribute>(true);
+            var serializer = info.GetCustomAttribute<RequestSerializationAttribute>(true);
+            if(serializer != null)
+                return serializer;
+
+            return typeof(Stream).IsAssignableFrom(info.PropertyType) 
+                ? new SerializeStreamAttribute() 
+                : null;
         }
 
         /// <summary>
@@ -106,7 +113,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsSerializableToRequestBody(this Type type)
         {
-            return type.GetCustomAttribute<RequestSerializationAttribute>(true) != null;
+            return type.GetCustomAttribute<RequestSerializationAttribute>(true) != null || typeof(Stream).IsAssignableFrom(type);
         }
 
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)
