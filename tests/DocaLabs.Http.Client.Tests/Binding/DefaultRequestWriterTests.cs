@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Net;
+using System.Text;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests.Binding._Utils;
+using DocaLabs.Http.Client.Tests._Utils;
 using Machine.Specifications;
+using Machine.Specifications.Annotations;
 using Moq;
 using It = Machine.Specifications.It;
 
@@ -381,6 +385,88 @@ namespace DocaLabs.Http.Client.Tests.Binding
         }
     }
 
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_property_of_stream_type
+    {
+        static DefaultRequestWriter writer;
+        static string method;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
+
+        It should_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class Model
+        {
+            public Stream Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_property_of_stream_derived_type
+    {
+        static DefaultRequestWriter writer;
+        static string method;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new Model());
+
+        It should_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class Model
+        {
+            public FileStream Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "InferRequestMethod")]
+    class when_trying_to_infer_http_method_for_model_of_stream_derived_type
+    {
+        static DefaultRequestWriter writer;
+        static string method;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => method = writer.InferRequestMethod(new Client(), new MemoryStream());
+
+        It should_return_post_method =
+            () => method.ShouldBeEqualIgnoringCase("POST");
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
     [Subject(typeof(DefaultRequestWriter), "Write")]
     class when_trying_to_write_using_null_client
     {
@@ -645,6 +731,60 @@ namespace DocaLabs.Http.Client.Tests.Binding
             {
             }
         }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_stream_property : request_serialization_test_context
+    {
+        static DefaultRequestWriter writer;
+        static Model model;
+
+        Establish context = () =>
+        {
+            writer = new DefaultRequestWriter();
+            model = new Model
+            {
+                Id = "123456789",
+                Value = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"))
+            };
+        };
+
+        Because of =
+            () => writer.Write(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_octet =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
+
+        It should_serialize_the_property_value =
+            () => GetRequestData().ShouldEqual("Hello World!");
+
+        class Model
+        {
+            public string Id { [UsedImplicitly] get; set; }
+            public Stream Value { [UsedImplicitly] get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_stream_model : request_serialization_test_context
+    {
+        static DefaultRequestWriter writer;
+        static Stream model;
+
+        Establish context = () =>
+        {
+            writer = new DefaultRequestWriter();
+            model = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
+        };
+
+        Because of =
+            () => writer.Write(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_octet =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
+
+        It should_serialize_the_property_value =
+            () => GetRequestData().ShouldEqual("Hello World!");
     }
 
     // ReSharper restore UnusedMember.Local

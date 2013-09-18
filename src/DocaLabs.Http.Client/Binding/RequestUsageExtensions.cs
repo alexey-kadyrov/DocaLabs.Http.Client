@@ -104,7 +104,7 @@ namespace DocaLabs.Http.Client.Binding
                 return serializer;
 
             return typeof(Stream).IsAssignableFrom(info.PropertyType) 
-                ? new SerializeStreamAttribute() 
+                ? new SerializeStreamAttribute(info) 
                 : null;
         }
 

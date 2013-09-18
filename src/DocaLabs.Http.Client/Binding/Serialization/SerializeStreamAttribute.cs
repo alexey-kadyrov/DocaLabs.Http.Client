@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding.Serialization
@@ -10,6 +11,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeStreamAttribute : RequestSerializationAttribute
     {
+        readonly PropertyInfo _info;
         string _contentType;
 
         /// <summary>
@@ -35,6 +37,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         /// <summary>
         /// Initializes an instance of the SerializeAsJsonAttribute class.
+        /// The instance will serialize the object itself in the Write method.
         /// </summary>
         public SerializeStreamAttribute()
         {
@@ -42,7 +45,18 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         }
 
         /// <summary>
-        /// Serializes a given object into the web request in json format
+        /// Initializes an instance of the SerializeAsJsonAttribute class for a specified property.
+        /// The instance will serialize the property value of the object in the Write method.
+        /// </summary>
+        public SerializeStreamAttribute(PropertyInfo info)
+            : this()
+        {
+            _info = info;
+        }
+
+        /// <summary>
+        /// Serializes a given object into the web request.
+        /// What actually will be serialized depends on which constructor was used - if the default then obj itself otherwise the property's value.
         /// </summary>
         /// <param name="obj">Object to be serialized.</param>
         /// <param name="request">Web request where to serialize to.</param>
@@ -53,17 +67,25 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
             request.ContentType = ContentType;
 
-            if (obj == null)
+            var value = GetValue(obj);
+            if (value == null)
                 return;
 
-            var stream = obj as Stream;
+            var stream = value as Stream;
             if (stream == null)
-                throw new ArgumentException(string.Format(Resources.Text.the_value_must_be_of_stream_type, obj.GetType()), "obj");
+                throw new ArgumentException(string.Format(Resources.Text.the_value_must_be_of_stream_type, value.GetType()), "obj");
             
             if(string.IsNullOrWhiteSpace(RequestContentEncoding))
                 Write(stream, request);
             else
                 CompressAndWrite(stream, request);
+        }
+
+        object GetValue(object obj)
+        {
+            return _info == null || obj == null
+                ? obj
+                : _info.GetValue(obj);
         }
 
         static void Write(Stream stream, WebRequest request)

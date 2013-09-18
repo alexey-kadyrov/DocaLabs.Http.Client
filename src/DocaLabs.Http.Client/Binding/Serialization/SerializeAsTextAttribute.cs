@@ -61,7 +61,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         }
 
         /// <summary>
-        /// Serializes a given object into the web request in json format
+        /// Serializes a given object into the web request.
         /// </summary>
         /// <param name="obj">Object to be serialized.</param>
         /// <param name="request">Web request where to serialize to.</param>
