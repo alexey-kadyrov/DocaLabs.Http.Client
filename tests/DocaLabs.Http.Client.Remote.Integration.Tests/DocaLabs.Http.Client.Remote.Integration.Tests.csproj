@@ -61,6 +61,7 @@
     <Compile Include="_Contract\IGoogleSearch.cs" />
     <Compile Include="_Contract\_MixedPost\IMixedPostData.cs" />
     <Compile Include="_Contract\_MixedPost\InnerPostDataRequest.cs" />
+    <Compile Include="_Contract\_MixedPost\MixedPostDataJsonResponse.cs" />
     <Compile Include="_Contract\_MixedPost\MixedPostDataRequest.cs" />
     <Compile Include="_Contract\_MixedPost\MixedPostDataResponse.cs" />
     <Compile Include="_Contract\_Post\IPostData.cs" />

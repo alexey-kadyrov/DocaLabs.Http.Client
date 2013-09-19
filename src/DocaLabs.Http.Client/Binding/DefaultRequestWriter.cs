@@ -23,9 +23,9 @@ namespace DocaLabs.Http.Client.Binding
             if (client == null)
                 throw new ArgumentNullException("client");
 
-            var serializer = GetSerializer(client, model);
-            if (serializer != null)
-                serializer.Serialize(model, request);
+            var info = GetSerializer(client, model);
+            if (info != null && info.ValueToBeSerialized != null)
+                info.Serializer.Serialize(info.ValueToBeSerialized, request);
             else
                 request.SetContentLengthToZeroIfBodyIsRequired();
         }
@@ -49,47 +49,72 @@ namespace DocaLabs.Http.Client.Binding
             return GetSerializer(client, model) != null;
         }
 
-        static IRequestSerialization GetSerializer(object client, object model)
+        static SerializerInfo GetSerializer(object client, object model)
         {
             if (model == null)
                 return null;
 
             return TryModelPropertyLevel(model) 
                 ?? TryModelClassLevel(model) 
-                ?? TryHttpClientClassLevel(client)
+                ?? TryHttpClientClassLevel(client, model)
                 ?? TryAsStream(model);
         }
 
-        static IRequestSerialization TryModelClassLevel(object model)
+        static SerializerInfo TryModelClassLevel(object model)
         {
-            return model.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
+            var serializer = model.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
+            return serializer == null 
+                ? null 
+                : new SerializerInfo(serializer, model);
         }
 
-        static IRequestSerialization TryModelPropertyLevel(object model)
+        static SerializerInfo TryModelPropertyLevel(object model)
         {
             // ReSharper disable LoopCanBeConvertedToQuery
             foreach (var property in model.GetType().GetProperties())
             {
                 var serializer = property.TryGetRequestSerializer();
                 if (serializer != null)
-                    return serializer;
+                    return new SerializerInfo(serializer, model, property);
             }
 
             return null;
             // ReSharper restore LoopCanBeConvertedToQuery
         }
 
-        static IRequestSerialization TryHttpClientClassLevel(object client)
+        static SerializerInfo TryHttpClientClassLevel(object client, object model)
         {
-            return client.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
+            var serializer = client.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
+
+            return serializer == null
+                ? null
+                : new SerializerInfo(serializer, model);
         }
 
-        static IRequestSerialization TryAsStream(object model)
+        static SerializerInfo TryAsStream(object model)
         {
             var stream = model as Stream;
             return stream != null
-                ? new SerializeStreamAttribute()
+                ? new SerializerInfo(new SerializeStreamAttribute(), model)
                 : null;
+        }
+
+        class SerializerInfo
+        {
+            public IRequestSerialization Serializer { get; private set; }
+            public object ValueToBeSerialized { get; private set; }
+
+            public SerializerInfo(IRequestSerialization serializer, object model)
+            {
+                Serializer = serializer;
+                ValueToBeSerialized = model;
+            }
+
+            public SerializerInfo(IRequestSerialization serializer, object model, PropertyInfo property)
+            {
+                Serializer = serializer;
+                ValueToBeSerialized = property.GetValue(model);
+            }
         }
     }
 }

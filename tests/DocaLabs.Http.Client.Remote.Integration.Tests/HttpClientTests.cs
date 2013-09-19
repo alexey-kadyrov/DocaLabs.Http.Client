@@ -66,7 +66,7 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         });
 
         It should_call_the_service_and_return_data =
-            () => result.Json.Data.Value.ShouldEqual("Hello World!");
+            () => result.Json.Value.ShouldEqual("Hello World!");
 
         It should_pass_data_in_query_string =
             () => result.Url.ShouldEqual("http://httpbin.org/post?Id=42");

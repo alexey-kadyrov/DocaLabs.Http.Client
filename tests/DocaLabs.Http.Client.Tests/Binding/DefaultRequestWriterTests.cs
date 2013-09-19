@@ -506,7 +506,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+            () => writer.Write(new Client(), new Model { Value = "Hello World!"}, new Mock<WebRequest>().Object);
 
         It should_use_property_level_serializer =
             () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("property");
@@ -522,6 +522,43 @@ namespace DocaLabs.Http.Client.Tests.Binding
         class Client : HttpClient<Model, string>
         {
             public Client() : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "Write")]
+    class when_trying_to_write_using_model_with_serialization_attribute_on_null_property_and_model_and_client_levels
+    {
+        static HttpWebRequest web_request;
+        static DefaultRequestWriter writer;
+
+        Establish context = () =>
+        {
+            web_request = (HttpWebRequest)WebRequest.CreateDefault(new Uri("http://foo.bar"));
+            web_request.ContentLength = 99;
+            web_request.Method = "POST";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => writer.Write(new Client(), new Model(), web_request);
+
+        It should_set_content_length_to_zero =
+            () => web_request.ContentLength.ShouldEqual(0);
+
+        [TestRequestSerialization(Marker = "model")]
+        class Model
+        {
+            [TestRequestSerialization(Marker = "property")]
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
             {
             }
         }
@@ -613,7 +650,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => writer.Write(new Client(), new Model(), new Mock<WebRequest>().Object);
+            () => writer.Write(new Client(), new Model { Value = "Hello World!"}, new Mock<WebRequest>().Object);
 
         It should_still_use_property_serializer =
             () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("property");

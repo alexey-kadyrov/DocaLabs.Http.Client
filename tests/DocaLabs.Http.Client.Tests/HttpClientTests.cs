@@ -1,4 +1,6 @@
-﻿using DocaLabs.Http.Client.Binding;
+﻿using System.IO;
+using System.Text;
+using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Testing.Common;
@@ -7,7 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web;
+using Machine.Specifications.Annotations;
 using Moq;
+using Newtonsoft.Json;
 using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests
@@ -385,6 +389,178 @@ namespace DocaLabs.Http.Client.Tests
             public ClientWithRequestSerializableModel(Uri url) : base(url)
             {
             }
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    class when_calling_http_service_for_model_with_mixed_targets_url_body_headers_credentials
+    {
+        static ClientWithMockedRequest<Model, string> client;
+        static Model model;
+
+        Cleanup after =
+            () => TestSerializerAttribute.SerializedObject = null;
+
+        Establish context = () =>
+        {
+            client = new ClientWithMockedRequest<Model, string>(new Uri("http://foo.bar/{UrlKey}"));
+            model = new Model
+            {
+                UrlKey = "123",
+                QueryKey = "q2",
+                Credentials = new NetworkCredential(),
+                Headers = new WebHeaderCollection
+                {
+                    { "x-header", "x-value"}
+                },
+                Body = new InnerModel
+                {
+                    Value = "Hello World!"
+                }
+            };
+        };
+
+        Because of =
+            () => client.Execute(model);
+
+        It should_create_url_with_all_suitable_values =
+            () => client.RequestUrl.ShouldEqual("http://foo.bar/123?QueryKey=q2");
+
+        It should_add_all_suiatble_header_values =
+            () => client.Request.Headers.ShouldContainOnly(new NameValue("Headers.x-header", "x-value"));
+
+        It should_set_credentials =
+            () => client.Request.Credentials.ShouldBeTheSameAs(model.Credentials);
+
+        It should_set_content_type_to_application_json =
+            () => client.Request.ContentType.ShouldBeEqualIgnoringCase("application/json");
+
+        It should_serialize_marked_inner_model =
+            () => JsonConvert.DeserializeObject<InnerModel>(Encoding.UTF8.GetString(client.RequestData.ToArray())).Value.ShouldEqual("Hello World!");
+
+        class Model
+        {
+            public string UrlKey { [UsedImplicitly] get; set; }
+            public string QueryKey { [UsedImplicitly] get; set; }
+            public WebHeaderCollection Headers { [UsedImplicitly] get; set; }
+            public ICredentials Credentials { get; set; }
+
+            [SerializeAsJson]
+            public InnerModel Body { [UsedImplicitly] get; set; }
+        }
+
+        class InnerModel
+        {
+            public string Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    class when_calling_http_service_for_model_with_stream_and_mixed_targets_url_body_headers_credentials
+    {
+        static ClientWithMockedRequest<Model, string> client;
+        static Model model;
+
+        Cleanup after =
+            () => TestSerializerAttribute.SerializedObject = null;
+
+        Establish context = () =>
+        {
+            client = new ClientWithMockedRequest<Model, string>(new Uri("http://foo.bar/{UrlKey}"));
+            model = new Model
+            {
+                UrlKey = "123",
+                QueryKey = "q2",
+                Credentials = new NetworkCredential(),
+                Headers = new WebHeaderCollection
+                {
+                    { "x-header", "x-value"}
+                },
+                Body = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"))
+            };
+        };
+
+        Because of =
+            () => client.Execute(model);
+
+        It should_create_url_with_all_suitable_values =
+            () => client.RequestUrl.ShouldEqual("http://foo.bar/123?QueryKey=q2");
+
+        It should_add_all_suiatble_header_values =
+            () => client.Request.Headers.ShouldContainOnly(new NameValue("Headers.x-header", "x-value"));
+
+        It should_set_credentials =
+            () => client.Request.Credentials.ShouldBeTheSameAs(model.Credentials);
+
+        It should_set_content_type_to_application_octet =
+            () => client.Request.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
+
+        It should_serialize_marked_inner_model =
+            () => Encoding.UTF8.GetString(client.RequestData.ToArray()).ShouldEqual("Hello World!");
+
+        class Model
+        {
+            public string UrlKey { [UsedImplicitly] get; set; }
+            public string QueryKey { [UsedImplicitly] get; set; }
+            public WebHeaderCollection Headers { [UsedImplicitly] get; set; }
+            public ICredentials Credentials { get; set; }
+            public Stream Body { [UsedImplicitly] get; set; }
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    class when_calling_http_service_for_stream_model
+    {
+        static ClientWithMockedRequest<Stream, string> client;
+        static Stream model;
+
+        Cleanup after =
+            () => TestSerializerAttribute.SerializedObject = null;
+
+        Establish context = () =>
+        {
+            client = new ClientWithMockedRequest<Stream, string>(new Uri("http://foo.bar/"));
+            model = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
+        };
+
+        Because of =
+            () => client.Execute(model);
+
+        It should_leave_original_url=
+            () => client.RequestUrl.ShouldEqual("http://foo.bar/");
+
+        It should_set_content_type_to_application_octet =
+            () => client.Request.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
+
+        It should_serialize_marked_inner_model =
+            () => Encoding.UTF8.GetString(client.RequestData.ToArray()).ShouldEqual("Hello World!");
+    }
+
+    public class ClientWithMockedRequest<TIn, TOut> : Client<TIn, TOut>
+    {
+        public MemoryStream RequestData { get; set; }
+        public Mock<HttpWebRequest> RequestMock { get; private set; }
+        public string RequestUrl { get; private set; }
+
+        public ClientWithMockedRequest(Uri url)
+            : base(url)
+        {
+            RequestData = new MemoryStream();
+
+            RequestMock = new Mock<HttpWebRequest> { CallBase = true };
+            RequestMock.SetupAllProperties();
+            RequestMock.Setup(x => x.GetRequestStream()).Returns(RequestData);
+            RequestMock.Object.Headers = new WebHeaderCollection();
+        }
+
+        public ClientWithMockedRequest(Uri url, IExecuteStrategy<TIn, TOut> strategy) : base(url, strategy)
+        {
+        }
+
+        protected override WebRequest CreateRequest(string url)
+        {
+            RequestUrl = url;
+            return RequestMock.Object;
         }
     }
 
