@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Text;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Integration.Tests._ServiceStackServices;
 using Machine.Specifications;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace DocaLabs.Http.Client.Integration.Tests
 {
@@ -503,6 +506,181 @@ namespace DocaLabs.Http.Client.Integration.Tests
         public interface IAddUserService
         {
             void Add(AddUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_posting_a_json_object_using_user_object_as_property
+    {
+        static TestServerHost host;
+        static AddUserRequestEx request;
+        static IAddUserService client;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
+            request = new AddUserRequestEx
+            {
+                PathPart = "users",
+                User = new AddUserRequest
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = "New FirstName",
+                    LastName = "New LastName",
+                    Email = "New Email"
+                }
+            };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => client.Add(request);
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == request.User.Id).ShouldMatch(x => x.Id == request.User.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        public class AddUserRequestEx
+        {
+            public string PathPart { get; set; }
+            [SerializeAsJson]
+            public AddUserRequest User { get; set; }
+        }
+
+        public interface IAddUserService
+        {
+            void Add(AddUserRequestEx request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_posting_a_json_object_using_user_object_as_stream_property
+    {
+        static TestServerHost host;
+        static Guid id;
+        static AddUserRequestEx request;
+        static IAddUserService client;
+
+        Cleanup after_each = () =>
+        {
+            request.User.Dispose();
+            host.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            id = Guid.NewGuid();
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
+            request = new AddUserRequestEx
+            {
+                PathPart = "users",
+                User = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new AddUserRequest
+                {
+                    Id = id,
+                    FirstName = "New FirstName",
+                    LastName = "New LastName",
+                    Email = "New Email"
+                })))
+            };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => client.Add(request);
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        public class AddUserRequestEx
+        {
+            public string PathPart { get; set; }
+            [SerializeAsJson]
+            public Stream User { get; set; }
+        }
+
+        public interface IAddUserService
+        {
+            void Add(AddUserRequestEx request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_posting_a_json_object_using_user_object_as_stream
+    {
+        static TestServerHost host;
+        static Guid id;
+        static Stream request;
+        static IAddUserService client;
+
+        Cleanup after_each = () =>
+        {
+            request.Dispose();
+            host.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            id = Guid.NewGuid();
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            request = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new AddUserRequest
+            {
+                Id = id,
+                FirstName = "New FirstName",
+                LastName = "New LastName",
+                Email = "New Email"
+            })));
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => client.Add(request);
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        [SerializeStream(ContentType = "application/json")]
+        public interface IAddUserService
+        {
+            void Add(Stream request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_posting_a_json_object_using_user_object_as_string
+    {
+        static TestServerHost host;
+        static Guid id;
+        static string request;
+        static IAddUserService client;
+
+        Cleanup after_each = 
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            id = Guid.NewGuid();
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            request = JsonConvert.SerializeObject(new AddUserRequest
+            {
+                Id = id,
+                FirstName = "New FirstName",
+                LastName = "New LastName",
+                Email = "New Email"
+            });
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => client.Add(request);
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        public interface IAddUserService
+        {
+            void Add([SerializeAsText(ContentType = "application/json")] string request);
         }
     }
 
