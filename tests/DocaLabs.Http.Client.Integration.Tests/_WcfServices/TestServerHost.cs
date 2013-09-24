@@ -40,7 +40,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
             {
                 ServerStopped.Reset();
 
-                host = new ServiceHost(typeof (TService));
+                host = new ServiceHost(typeof(TService));
 
                 host.Open();
 

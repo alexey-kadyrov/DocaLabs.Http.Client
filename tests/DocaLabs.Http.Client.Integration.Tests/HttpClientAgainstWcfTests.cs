@@ -30,6 +30,34 @@ namespace DocaLabs.Http.Client.Integration.Tests
     }
 
     [Subject(typeof(HttpClient<,>))]
+    public class when_getting_http_service_with_basic_authentication_which_returns_json_object
+    {
+        static TestServerHost<TestServiceWithBasicCredentials> host;
+        static ITestGetService client;
+        static DataResponse result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<ITestGetService>(null, "basicAuthenticationCall");
+            host = new TestServerHost<TestServiceWithBasicCredentials>();
+        };
+
+        Because of =
+            () => result = client.Get(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
+
+        It should_call_the_service_and_return_data =
+            () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "GET JSON: Hello World!");
+
+        public interface ITestGetService
+        {
+            DataResponse Get(DataRequest query);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
     class when_posting_http_service_without_any_authentication_which_returns_json_object
     {
         static TestServerHost<TestService> host;

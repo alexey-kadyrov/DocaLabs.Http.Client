@@ -114,6 +114,9 @@
     <Compile Include="_ServiceStackServices\UpdateUser.cs" />
     <Compile Include="_ServiceStackServices\User.cs" />
     <Compile Include="_ServiceStackServices\Users.cs" />
+    <Compile Include="_WcfServices\CustomUserNameValidator.cs" />
+    <Compile Include="_WcfServices\TestServiceWithBasicCredentials.cs" />
+    <Compile Include="_WcfServices\ITestService2.cs" />
     <Compile Include="_WcfServices\DataRequest.cs" />
     <Compile Include="_WcfServices\ITestService.cs" />
     <Compile Include="_WcfServices\DataResponse.cs" />
