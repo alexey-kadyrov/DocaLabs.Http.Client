@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Integration.Tests._Contract;
-using DocaLabs.Http.Client.Integration.Tests._Utils;
 using DocaLabs.Http.Client.Integration.Tests._WcfServices;
 using Machine.Specifications;
 using DataRequest = DocaLabs.Http.Client.Integration.Tests._Contract.DataRequest;
