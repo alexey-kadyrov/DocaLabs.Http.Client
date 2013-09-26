@@ -1,7 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using DocaLabs.Http.Client.Configuration;
+using DocaLabs.Http.Client.Integration.Tests._Utils;
 using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Integration.Tests.Configuration
@@ -16,11 +15,11 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
         static X509Certificate2 test_certificate;
 
         Cleanup after_each =
-            () => Delete();
+            () => CertificateUtils.Uninstall(test_certificate);
 
         Establish context = () =>
         {
-            Create();
+            test_certificate = CertificateUtils.Install();
             element = new ClientCertificateReferenceElement();
         };
 
@@ -34,39 +33,5 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
 
         It should_find_certificate =
             () => element.Find().Count.ShouldEqual(1);
-
-        static void Create()
-        {
-            var certStore = new X509Store(StoreName.TrustedPeople, StoreLocation.CurrentUser);
-
-            try
-            {
-                certStore.Open(OpenFlags.ReadWrite | OpenFlags.OpenExistingOnly);
-
-                test_certificate = new X509Certificate2(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test-certificate.cer"));
-
-                certStore.Add(test_certificate);
-            }
-            finally
-            {
-                certStore.Close();
-            }
-        }
-
-        static void Delete()
-        {
-            var certStore = new X509Store(StoreName.TrustedPeople, StoreLocation.CurrentUser);
-
-            try
-            {
-                certStore.Open(OpenFlags.ReadWrite | OpenFlags.OpenExistingOnly);
-
-                certStore.Remove(test_certificate);
-            }
-            finally
-            {
-                certStore.Close();
-            }
-        }
     }
 }

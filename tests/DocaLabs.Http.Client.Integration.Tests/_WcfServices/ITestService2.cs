@@ -8,5 +8,8 @@ namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
     {
         [OperationContract, WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Get?value1={value1}&value2={value2}")]
         DataResponse Get(int value1, string value2);
+
+        [OperationContract, WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Bare, ResponseFormat = WebMessageFormat.Json, UriTemplate = "Post")]
+        DataResponse Post(DataRequest data);
     }
 }

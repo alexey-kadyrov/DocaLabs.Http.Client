@@ -17,6 +17,16 @@ namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
             };
         }
 
+        public DataResponse Post(DataRequest data)
+        {
+            return new DataResponse
+            {
+                Value1 = data.Value1,
+                Value2 = "POST JSON: " + data.Value2,
+                Headers = GetHeaders()
+            };
+        }
+
         static string[] GetHeaders()
         {
             return WebOperationContext.Current == null
