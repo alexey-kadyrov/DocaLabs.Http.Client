@@ -1,0 +1,11 @@
+-- http://blogs.msdn.com/b/james_osbornes_blog/archive/2010/12/10/selfhosting-a-wcf-service-over-https.aspx
+
+makecert.exe -sk RootCA -sky signature -pe -n CN=localhost -r -sr LocalMachine -ss Root MyCA.cer
+
+makecert.exe -sk server -sky exchange -pe -n CN=localhost -ir LocalMachine -is Root -ic MyCA.cer -sr LocalMachine -ss My localhost.cer
+
+makecert.exe -sk server -sky exchange -pe -n CN=client -ir LocalMachine -is Root -ic MyCA.cer -sr LocalMachine -ss TrustedPeople client.cer
+
+netsh http delete sslcert ipport=0.0.0.0:5705
+
+netsh http add sslcert ipport=0.0.0.0:5705 certhash=<localhost.cer-thumbprint-here> appid={00112233-4455-6677-8899-AABBCCDDEEFF} clientcertnegotiation=enable

@@ -124,6 +124,7 @@
     <Compile Include="_ServiceStackServices\Users.cs" />
     <Compile Include="_Utils\CertificateUtils.cs" />
     <Compile Include="_WcfServices\CustomUserNameValidator.cs" />
+    <Compile Include="_WcfServices\TestServiceWithCertificate.cs" />
     <Compile Include="_WcfServices\TestServiceWithBasicCredentials.cs" />
     <Compile Include="_WcfServices\ITestService2.cs" />
     <Compile Include="_WcfServices\DataRequest.cs" />
@@ -150,12 +151,23 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="client.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="localhost.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MyCA.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="test-certificate.cer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="commands-to-generate-certificates.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

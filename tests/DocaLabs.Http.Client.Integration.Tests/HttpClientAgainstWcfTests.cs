@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Integration.Tests._Contract;
+using DocaLabs.Http.Client.Integration.Tests._Utils;
 using DocaLabs.Http.Client.Integration.Tests._WcfServices;
 using Machine.Specifications;
 using DataRequest = DocaLabs.Http.Client.Integration.Tests._Contract.DataRequest;
@@ -241,6 +243,51 @@ namespace DocaLabs.Http.Client.Integration.Tests
         public interface ITestPostService
         {
             DataResponse Post(DataRequest query);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_getting_http_service_with_certificate_authentication_which_returns_json_object
+    {
+        static TestServerHost<TestServiceWithCertificate> host;
+        static ITestGetService client;
+        static DataResponse result;
+        static X509Certificate2 ca_root_certificate;
+        static X509Certificate2 localhost_certificate;
+        static X509Certificate2 client_certificate;
+
+        Cleanup after_each = () =>
+        {
+            host.Dispose();
+
+            client_certificate.Uninstall(StoreName.TrustedPeople, StoreLocation.LocalMachine);
+            localhost_certificate.Uninstall(StoreName.My, StoreLocation.LocalMachine);
+            ca_root_certificate.Uninstall(StoreName.Root, StoreLocation.LocalMachine);
+
+            CertificateUtils.UnbindPort(5705);
+        };
+
+        Establish context = () =>
+        {
+            ca_root_certificate = CertificateUtils.Install("MyCA.cer", StoreName.Root, StoreLocation.LocalMachine);
+            localhost_certificate = CertificateUtils.Install("localhost.pfx", StoreName.My, StoreLocation.LocalMachine);
+            client_certificate = CertificateUtils.Install("client.pfx", StoreName.TrustedPeople, StoreLocation.LocalMachine);
+
+            localhost_certificate.BindToPort(5705);
+
+            client = HttpClientFactory.CreateInstance<ITestGetService>(null, "certificateAuthenticationGet");
+            host = new TestServerHost<TestServiceWithCertificate>();
+        };
+
+        Because of =
+            () => result = client.Get(new DataRequest { Value1 = 42, Value2 = "Hello World!" });
+
+        It should_call_the_service_and_return_data =
+            () => result.ShouldMatch(x => x.Value1 == 42 && x.Value2 == "GET JSON: Hello World!");
+
+        public interface ITestGetService
+        {
+            DataResponse Get(DataRequest query);
         }
     }
 

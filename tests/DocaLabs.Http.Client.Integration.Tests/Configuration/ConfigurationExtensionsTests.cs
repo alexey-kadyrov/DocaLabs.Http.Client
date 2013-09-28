@@ -15,11 +15,11 @@ namespace DocaLabs.Http.Client.Integration.Tests.Configuration
         static X509Certificate2 test_certificate;
 
         Cleanup after_each =
-            () => CertificateUtils.Uninstall(test_certificate);
+            () => test_certificate.Uninstall(StoreName.TrustedPeople, StoreLocation.CurrentUser);
 
         Establish context = () =>
         {
-            test_certificate = CertificateUtils.Install();
+            test_certificate = CertificateUtils.Install("test-certificate.cer", StoreName.TrustedPeople, StoreLocation.CurrentUser);
             element = new ClientCertificateReferenceElement();
         };
 
