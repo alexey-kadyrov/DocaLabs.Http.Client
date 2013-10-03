@@ -73,9 +73,6 @@
     <Fakes Include="Fakes\System.fakes" />
   </ItemGroup>
   <ItemGroup>
-    <Fakes Include="Fakes\mscorlib.fakes" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
