@@ -22,7 +22,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
             mock_request = new Mock<WebRequest>();
             mock_request.Setup(x => x.GetResponse()).Returns(mock_response.Object);
 
-            http_response_stream = new HttpResponseStream(mock_request.Object);
+            http_response_stream = HttpResponseStream.InitializeResponseStream(mock_request.Object);
         }
     }
 }

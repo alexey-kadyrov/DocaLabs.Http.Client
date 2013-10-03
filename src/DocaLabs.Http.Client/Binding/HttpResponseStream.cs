@@ -17,16 +17,19 @@ namespace DocaLabs.Http.Client.Binding
 
         ContentType _contentType;
 
-        internal WebResponse Response { get; private set; }
+        internal WebResponse Response { get; set; }
 
-        Stream RawResponseStream { get; set; }
+        /// <summary>
+        /// Gets or sets the raw response stream.
+        /// </summary>
+        protected Stream RawResponseStream { get; set; }
 
         Stream _dataStream;
 
         /// <summary>
         /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by ContentDecoderFactory.
         /// </summary>
-        Stream DataStream
+        protected Stream DataStream
         {
             get
             {
@@ -72,18 +75,27 @@ namespace DocaLabs.Http.Client.Binding
         public bool SupportsHeaders { get { return Response.SupportsHeaders; } }
 
         /// <summary>
-        /// Initializes an instance of the HttpResponse class for the provided WebRequest instance.
+        /// Initializes an instance of the HttpResponseStream class.
         /// </summary>
-        public HttpResponseStream(WebRequest request)
+        protected HttpResponseStream()
+        {
+        }
+
+        /// <summary>
+        /// Initializes the response stream from the WebRequest.
+        /// </summary>
+        public static HttpResponseStream InitializeResponseStream(WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            Response = request.GetResponse();
+            var stream = new HttpResponseStream { Response = request.GetResponse() };
 
-            RawResponseStream = Response.GetResponseStream();
-            if (RawResponseStream == null)
+            stream.RawResponseStream = stream.Response.GetResponseStream();
+            if (stream.RawResponseStream == null)
                 throw new Exception(Resources.Text.null_response_stream);
+
+            return stream;
         }
 
         /// <summary>
@@ -110,7 +122,7 @@ namespace DocaLabs.Http.Client.Binding
             if (encoding == null)
                 encoding = GetEncoding();
 
-            using (var reader = new StreamReader(DataStream, encoding, true, 2048, true))
+            using (var reader = new StreamReader(DataStream, encoding, true, 4096, true))
             {
                 return reader.ReadToEnd();
             }
@@ -154,7 +166,11 @@ namespace DocaLabs.Http.Client.Binding
             // ReSharper restore EmptyGeneralCatchClause
         }
 
-        Encoding GetEncoding()
+        /// <summary>
+        /// Tries to figure out the response stream encoding. If it cannot then CharSets.Iso88591 is returned.
+        /// </summary>
+        /// <returns></returns>
+        protected Encoding GetEncoding()
         {
             try
             {
@@ -225,7 +241,7 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// Gets or sets a value, in miliseconds, that determines how long the stream will attempt to read before timing out. 
+        /// Gets or sets a value, in milliseconds, that determines how long the stream will attempt to read before timing out. 
         /// </summary>
         public override int ReadTimeout
         {
@@ -234,7 +250,7 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// Gets or sets a value, in miliseconds, that determines how long the stream will attempt to write before timing out. 
+        /// Gets or sets a value, in milliseconds, that determines how long the stream will attempt to write before timing out. 
         /// </summary>
         public override int WriteTimeout
         {

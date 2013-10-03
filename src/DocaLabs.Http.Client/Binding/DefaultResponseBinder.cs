@@ -95,7 +95,7 @@ namespace DocaLabs.Http.Client.Binding
 
             try
             {
-                stream = new HttpResponseStream(request);
+                stream = HttpResponseStream.InitializeResponseStream(request);
 
                 var value = ReadStream(context, stream, responseType);
 
