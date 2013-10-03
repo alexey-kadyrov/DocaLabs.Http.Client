@@ -7,6 +7,7 @@ using Machine.Specifications;
 namespace DocaLabs.Testing.Common
 {
     // ReSharper disable StaticFieldInGenericType
+    // ReSharper disable UnusedMember.Local
 
     public class ExceptionIsNewedUsingDefaultConstructorContext<TException>
         where TException : Exception, new()
@@ -130,5 +131,6 @@ namespace DocaLabs.Testing.Common
             () => deserialized_exception.InnerException.Message.ShouldEqual("inner-message");
     }
 
+    // ReSharper restore UnusedMember.Local
     // ReSharper restore StaticFieldInGenericType
 }

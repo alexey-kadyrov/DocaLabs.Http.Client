@@ -362,7 +362,9 @@ namespace DocaLabs.Http.Client
 
                 var model = executeGenerator.DeclareLocal(ModelType);
 
+                // ReSharper disable AssignNullToNotNullAttribute
                 executeGenerator.Emit(OpCodes.Newobj, ModelType.GetConstructor(new Type[0]));
+                // ReSharper restore AssignNullToNotNullAttribute
                 executeGenerator.Emit(OpCodes.Stloc, model);
 
                 for (var i = 0; i < properties.Length; i++)

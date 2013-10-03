@@ -9,8 +9,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// </summary>
     public abstract class CustomPropertyConverterBase : IPropertyConverter
     {
+        /// <summary>
+        /// Gets the property info for which the instance was instantiated.
+        /// </summary>
         protected PropertyInfo PropertyInfo { get; private set; }
 
+        /// <summary>
+        /// Initializes an instance of the CustomPropertyConverterBase class fro the specified property info.
+        /// </summary>
         protected CustomPropertyConverterBase(PropertyInfo propertyInfo)
         {
             PropertyInfo = propertyInfo;

@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Machine.Specifications;
+using Machine.Specifications.Annotations;
 using Moq;
 using Newtonsoft.Json;
 
@@ -16,7 +17,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
         static MemoryStream request_data;
         protected static Mock<WebRequest> mock_web_request;
 
-        Establish context = () =>
+        [UsedImplicitly] Establish context = () =>
         {
             request_data = new MemoryStream();
 
@@ -26,7 +27,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
             mock_web_request.Object.Headers = new WebHeaderCollection();
         };
 
-        Cleanup after_each =
+        [UsedImplicitly] Cleanup after_each =
             () => request_data.Dispose();
 
         protected static string GetDecodedRequestData(Encoding encoding = null)

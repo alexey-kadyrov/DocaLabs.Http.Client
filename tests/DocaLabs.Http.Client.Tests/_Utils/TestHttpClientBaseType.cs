@@ -15,7 +15,9 @@ namespace DocaLabs.Http.Client.Tests._Utils
 
         class TestExecuteStrategy : IExecuteStrategy<TInputModel, TOutputModel>
         {
+            // ReSharper disable MemberCanBePrivate.Local
             public TestHttpClientBaseType<TInputModel, TOutputModel> Client { get; set; }
+            // ReSharper restore MemberCanBePrivate.Local
 
             public TOutputModel Execute(TInputModel model, Func<TInputModel, TOutputModel> action)
             {

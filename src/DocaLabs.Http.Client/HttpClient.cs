@@ -212,19 +212,6 @@ namespace DocaLabs.Http.Client
             });
         }
 
-        /// <summary>
-        /// Returns endpoint configuration. If configuration is not found in the app.config (or web.config) then the default will be used.
-        /// </summary>
-        /// <param name="configurationName">The parameter that was passed to the constructor. It it's empty string then that full class name will be used.</param>
-        /// <returns></returns>
-        protected virtual IClientEndpoint GetConfigurationElement(string configurationName)
-        {
-            if (string.IsNullOrWhiteSpace(configurationName))
-                configurationName = GetType().FullName;
-
-            return EndpointConfiguration.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
-        }
-
         void ReadConfiguration(string configurationName)
         {
             Configuration = GetConfigurationElement(configurationName);
@@ -234,6 +221,14 @@ namespace DocaLabs.Http.Client
 
             if (string.IsNullOrWhiteSpace(Method))
                 Method = Configuration.Method;
+        }
+
+        IClientEndpoint GetConfigurationElement(string configurationName)
+        {
+            if (string.IsNullOrWhiteSpace(configurationName))
+                configurationName = GetType().FullName;
+
+            return EndpointConfiguration.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
         }
 
         TOutputModel ExecutePipeline(TInputModel model)

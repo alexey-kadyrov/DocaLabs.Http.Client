@@ -41,7 +41,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
         {
             [UsedImplicitly]
             public string StringValue { get; set; }
-            public int IntValue { get; set; }
+            public int IntValue { get; [UsedImplicitly] set; }
         }
     }
 
@@ -83,7 +83,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
         class Model
         {
-            public string StringValue { get; set; }
+            public string StringValue { [UsedImplicitly] get; set; }
             public int IntValue { get; set; }
         }
     }

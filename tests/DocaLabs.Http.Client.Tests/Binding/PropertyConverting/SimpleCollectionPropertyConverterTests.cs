@@ -556,7 +556,7 @@ namespace DocaLabs.Http.Client.Tests.Binding.PropertyConverting
 
             instance = new TestClass
             {
-                Values = new[] { new DateTime(2013, 2, 7),  }
+                Values = new[] { new DateTime(2013, 2, 7) }
             };
 
             converter = SimpleCollectionPropertyConverter.TryCreate(typeof(TestClass).GetProperty("Values"));

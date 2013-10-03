@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace DocaLabs.Http.Client
@@ -73,8 +74,32 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
+        /// This protected constructor is used for deserialization.
+        /// </summary>
+        protected HttpClientWebException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Status = (WebExceptionStatus)info.GetInt32("Status");
+            Response = info.GetValue("Response", typeof(ResponseInfo)) as ResponseInfo;
+        }
+
+        /// <summary>
+        /// Sets the SerializationInfo with information about the exception
+        /// </summary>
+        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+
+            info.AddValue("Status", (int)Status);
+            info.AddValue("Response", Response);
+        }
+
+        /// <summary>
         /// COntains additional information about the response.
         /// </summary>
+        [Serializable]
         public class ResponseInfo : RichResponse
         {
             /// <summary>
@@ -87,6 +112,9 @@ namespace DocaLabs.Http.Client
             }
         }
 
+        /// <summary>
+        /// Returns a string that represents the information of current exception.
+        /// </summary>
         public override string ToString()
         {
             var builder = new StringBuilder();

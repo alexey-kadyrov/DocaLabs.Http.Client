@@ -6,6 +6,7 @@ namespace DocaLabs.Http.Client
     /// <summary>
     /// Defines additional information about the web response.
     /// </summary>
+    [Serializable]
     public abstract class RichResponse
     {
         /// <summary>
@@ -97,6 +98,7 @@ namespace DocaLabs.Http.Client
     /// If you subclass that you must provide constructor with parameters (WebResponse response, object value).
     /// </summary>
     /// <typeparam name="T">Your output model.</typeparam>
+    [Serializable]
     public class RichResponse<T> : RichResponse
     {
         /// <summary>

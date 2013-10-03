@@ -234,6 +234,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         static void CallAllOverriddenStreamMethodsAndProperties()
         {
+            // ReSharper disable UnusedVariable
             #pragma warning disable 168
 
             var canRead = http_response_stream.CanRead;
@@ -258,6 +259,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             http_response_stream.Write(buffer, 888, 999);
 
             #pragma warning restore 168
+            // ReSharper restore UnusedVariable
         }
 
         It should_call_can_read_on_the_undelying_stream =

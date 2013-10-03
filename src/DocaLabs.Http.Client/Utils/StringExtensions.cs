@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Utils
     {
         /// <summary>
         /// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string.
-        /// Thanks for the idea: <see cref="http://stackoverflow.com/a/244933"/>
+        /// Thanks for the idea: http://stackoverflow.com/a/244933/
         /// </summary>
         /// <param name="str">The current string.</param>
         /// <param name="oldValue">The string to be replaced.</param>

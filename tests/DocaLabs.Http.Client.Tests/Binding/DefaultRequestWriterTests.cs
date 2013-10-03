@@ -515,7 +515,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         class Model
         {
             [TestRequestSerialization(Marker = "property")]
-            public string Value { get; set; }
+            public string Value { [UsedImplicitly] get; set; }
         }
 
         [TestRequestSerialization(Marker = "client")]
@@ -658,7 +658,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         class Model
         {
             [TestRequestSerialization(Marker = "property"), RequestUse(RequestUseTargets.Ignore)]
-            public string Value { get; set; }
+            public string Value { [UsedImplicitly] get; set; }
         }
 
         class Client : HttpClient<Model, string>
