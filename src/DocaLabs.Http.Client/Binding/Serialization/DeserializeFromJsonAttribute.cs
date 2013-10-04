@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 
@@ -34,6 +36,11 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             var s = responseStream.AsString(encoding);
 
             return ToResultType(resultType, s);
+        }
+
+        public override async Task<object> DeserializeAsync(HttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        {
+            return base.DeserializeAsync(responseStream, resultType, cancellationToken);
         }
 
         /// <summary>

@@ -53,8 +53,9 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Binding\AsyncHttpResponseStream.cs" />
+    <Compile Include="Binding\AsyncBindingContext.cs" />
     <Compile Include="Binding\BindingContext.cs" />
+    <Compile Include="Binding\IAsyncResponseBinder.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
     <Compile Include="Binding\PropertyConverting\ClientPropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\CustomPropertyConverterBase.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Binding\DefaultRequestWriter.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
+    <Compile Include="Binding\Serialization\IAsyncResponseDeserialization.cs" />
     <Compile Include="Binding\Serialization\SerializeStreamAttribute.cs" />
     <Compile Include="Binding\Serialization\SerializeAsTextAttribute.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />

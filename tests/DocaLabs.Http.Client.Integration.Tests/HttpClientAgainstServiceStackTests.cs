@@ -463,6 +463,131 @@ namespace DocaLabs.Http.Client.Integration.Tests
     }
 
     [Subject(typeof(HttpClient<,>))]
+    public class when_posting_a_json_object_and_getting_data_back
+    {
+        static TestServerHost host;
+        static AddUserAndReturnDataRequest request;
+        static IAddUserService client;
+        static User result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
+            request = new AddUserAndReturnDataRequest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "New FirstName",
+                LastName = "New LastName",
+                Email = "New Email"
+            };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Add(request);
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        It should_return_the_date =
+            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        [SerializeAsJson]
+        public interface IAddUserService
+        {
+            User Add(AddUserAndReturnDataRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_posting_a_json_object_and_ignoring_retruned_data
+    {
+        static TestServerHost host;
+        static AddUserAndReturnDataRequest request;
+        static IAddUserService client;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
+            request = new AddUserAndReturnDataRequest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "New FirstName",
+                LastName = "New LastName",
+                Email = "New Email"
+            };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => client.Add(request);
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        [SerializeAsJson]
+        public interface IAddUserService
+        {
+            void Add(AddUserAndReturnDataRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_posting_a_json_object_and_ignoring_retruned_data_but_getting_additional_information_about_response
+    {
+        static TestServerHost host;
+        static AddUserAndReturnDataRequest request;
+        static IAddUserService client;
+        static RichResponse<VoidType> result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
+            request = new AddUserAndReturnDataRequest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "New FirstName",
+                LastName = "New LastName",
+                Email = "New Email"
+            };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Add(request);
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        It should_get_response_status =
+            () => result.StatusCode.ShouldEqual(200);
+
+        It should_get_etag =
+            () => result.ETag.ShouldEqual(Users.ETags[request.Id]);
+
+        It should_get_content_type =
+            () => result.ContentType.ShouldBeEqualIgnoringCase("application/json");
+
+        It should_get_status_description =
+            () => result.StatusDescription.ShouldBeEqualIgnoringCase("OK");
+
+        [SerializeAsJson]
+        public interface IAddUserService
+        {
+            RichResponse<VoidType> Add(AddUserAndReturnDataRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
     public class when_posting_a_conflicting_json_object
     {
         static TestServerHost host;

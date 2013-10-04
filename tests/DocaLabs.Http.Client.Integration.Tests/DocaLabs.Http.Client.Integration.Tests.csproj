@@ -115,6 +115,7 @@
     <Compile Include="_Contract\ITestPostXmlService1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Contract\DataResponse.cs" />
+    <Compile Include="_ServiceStackServices\AddUserAndReturnData.cs" />
     <Compile Include="_ServiceStackServices\AddUser.cs" />
     <Compile Include="_ServiceStackServices\DeleteUser.cs" />
     <Compile Include="_ServiceStackServices\GetUser.cs" />

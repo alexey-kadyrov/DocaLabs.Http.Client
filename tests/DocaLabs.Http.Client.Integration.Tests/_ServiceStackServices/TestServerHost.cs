@@ -76,6 +76,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
                     .Add<GetUser>("/v2/users/{id}", "GET")
                     .Add<UpdateUserRequest>("/v2/users", "PUT")
                     .Add<AddUserRequest>("/v2/users", "POST")
+                    .Add<AddUserAndReturnDataRequest>("/v2/users-and-return-data", "POST")
                     .Add<DeleteUserRequest>("/v2/users/{id}", "DELETE");
             }
         }

@@ -66,7 +66,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => HttpResponseStream.InitializeResponseStream(null));
+            () => exception = Catch.Exception(() => HttpResponseStream.CreateResponseStream(null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -95,7 +95,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => exception = Catch.Exception(() => HttpResponseStream.InitializeResponseStream(mock_request.Object));
+            () => exception = Catch.Exception(() => HttpResponseStream.CreateResponseStream(mock_request.Object));
 
         It should_throw_exception =
             () => exception.ShouldBeOfType<Exception>();
@@ -178,7 +178,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => http_response_stream = HttpResponseStream.InitializeResponseStream(mock_request.Object);
+            () => http_response_stream = HttpResponseStream.CreateResponseStream(mock_request.Object);
 
         It should_return_is_mutually_authenticated_from_wrapped_web_response =
             () => http_response_stream.IsMutuallyAuthenticated.ShouldBeTrue();
@@ -225,7 +225,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             mock_request = new Mock<WebRequest>();
             mock_request.Setup(x => x.GetResponse()).Returns(mock_response.Object);
 
-            http_response_stream = HttpResponseStream.InitializeResponseStream(mock_request.Object);
+            http_response_stream = HttpResponseStream.CreateResponseStream(mock_request.Object);
         };
 
         Because of =
