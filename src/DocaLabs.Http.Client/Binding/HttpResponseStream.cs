@@ -103,7 +103,9 @@ namespace DocaLabs.Http.Client.Binding
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            var stream = new HttpResponseStream { Response = await request.GetResponseAsync() };
+            var stream = new HttpResponseStream();
+            
+            stream.Response = await request.GetResponseAsync();
 
             stream.InitializeResponseStream();
 
@@ -154,19 +156,19 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// Returns the content of the response stream as a string using the specified encoding.
+        /// Asynchronously reads the response stream and returns the content of the response stream as a string using the specified encoding.
         /// If the encoding is null it will try to infer the encoding from the response's character set.
         /// If the encoding cannot be inferred then it assumes text data and uses ISO-8859-1 
         /// (see 3.7.1 of RFC 2616 for default charset for text subtypes).
         /// </summary>
-        public async Task<string> AsStringAsync(Encoding encoding = null)
+        public Task<string> AsStringAsync(Encoding encoding = null)
         {
             if (encoding == null)
                 encoding = GetEncoding();
 
             using (var reader = new StreamReader(DataStream, encoding, true, 4096, true))
             {
-                return await reader.ReadToEndAsync();
+                return reader.ReadToEndAsync();
             }
         }
 

@@ -53,6 +53,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AsyncDefaultExecuteStrategy.cs" />
+    <Compile Include="AsyncHttpClient.cs" />
     <Compile Include="Binding\AsyncBindingContext.cs" />
     <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\IAsyncResponseBinder.cs" />
@@ -86,7 +88,9 @@
     <Compile Include="Binding\Serialization\SerializeStreamAttribute.cs" />
     <Compile Include="Binding\Serialization\SerializeAsTextAttribute.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
+    <Compile Include="DefaultExecuteStrategyBase.cs" />
     <Compile Include="ExceptionExtensions.cs" />
+    <Compile Include="HttpClientBase.cs" />
     <Compile Include="HttpClientWebException.cs" />
     <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="RichRequest.cs" />

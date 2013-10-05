@@ -10,8 +10,10 @@ namespace DocaLabs.Http.Client.Binding
     {
         static readonly ConcurrentDictionary<Type, IRequestBinder> RequestBinders;
         static readonly ConcurrentDictionary<Type, IResponseBinder> ResponseBinders;
+        static readonly ConcurrentDictionary<Type, IAsyncResponseBinder> AsyncResponseBinders;
         static volatile IRequestBinder _defaultRequestBinder;
         static volatile IResponseBinder _defaultResponseBinder;
+        static volatile IAsyncResponseBinder _asyncDefaultResponseBinder;
 
         /// <summary>
         /// Gets or sets the default request binder which is used if there is no input model specific binder set.
@@ -30,7 +32,23 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// Gets or sets the default request binder which is used if there is no output model specific binder set.
+        /// Gets or sets the asynchronous default request binder which is used if there is no output model specific binder set.
+        /// By default it's DefaultResponseBinder.
+        /// </summary>
+        public static IAsyncResponseBinder AsyncDefaultResponseBinder
+        {
+            get { return _asyncDefaultResponseBinder; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+
+                _asyncDefaultResponseBinder = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the synchronous default request binder which is used if there is no output model specific binder set.
         /// By default it's DefaultResponseBinder.
         /// </summary>
         public static IResponseBinder DefaultResponseBinder
@@ -49,8 +67,10 @@ namespace DocaLabs.Http.Client.Binding
         {
             RequestBinders = new ConcurrentDictionary<Type, IRequestBinder>();
             ResponseBinders = new ConcurrentDictionary<Type, IResponseBinder>();
+            AsyncResponseBinders = new ConcurrentDictionary<Type, IAsyncResponseBinder>();
             _defaultRequestBinder = new DefaultRequestBinder();
             _defaultResponseBinder = new DefaultResponseBinder();
+            _asyncDefaultResponseBinder = (IAsyncResponseBinder)_defaultResponseBinder;
         }
 
         /// <summary>
@@ -68,7 +88,7 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// Adds the specified item to the output model binder dictionary.
+        /// Adds the specified item to the synchronous output model binder dictionary.
         /// </summary>
         public static void Add(Type type, IResponseBinder binder)
         {
@@ -79,6 +99,20 @@ namespace DocaLabs.Http.Client.Binding
                 throw new ArgumentNullException("binder");
 
             ResponseBinders[type] = binder;
+        }
+
+        /// <summary>
+        /// Adds the specified item to the asynchronous output model binder dictionary.
+        /// </summary>
+        public static void Add(Type type, IAsyncResponseBinder binder)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            if (binder == null)
+                throw new ArgumentNullException("binder");
+
+            AsyncResponseBinders[type] = binder;
         }
 
         /// <summary>
@@ -103,6 +137,18 @@ namespace DocaLabs.Http.Client.Binding
             return ResponseBinders.TryGetValue(modelType, out responseBinder)
                 ? responseBinder
                 : DefaultResponseBinder;
+        }
+
+        /// <summary>
+        /// Gets a custom request binder associated with the output model. 
+        /// If there is no binders registered for the model then DefaultResponseBinder is returned.
+        /// </summary>
+        public static IAsyncResponseBinder GetAsyncResponseBinder(Type modelType)
+        {
+            IAsyncResponseBinder responseBinder;
+            return AsyncResponseBinders.TryGetValue(modelType, out responseBinder)
+                ? responseBinder
+                : AsyncDefaultResponseBinder;
         }
     }
 }

@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Utils;
@@ -13,7 +12,7 @@ using DocaLabs.Http.Client.Utils;
 namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
-    /// Defines helper methods to serialize a web response. All public methods are thread safe.
+    /// Defines helper methods to deserialize a web response. All public methods are thread safe.
     /// </summary>
     public class DefaultResponseBinder : IResponseBinder, IAsyncResponseBinder
     {
@@ -135,7 +134,7 @@ namespace DocaLabs.Http.Client.Binding
             {
                 stream = await HttpResponseStream.CreateAsyncResponseStream(request, context.CancellationToken);
 
-                var value = await ReadStreamAsync(context, stream, responseType, context.CancellationToken);
+                var value = await ReadStreamAsync(context, stream, responseType);
 
                 object richResponse = null;
 
@@ -210,40 +209,39 @@ namespace DocaLabs.Http.Client.Binding
             throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
 
-        async Task<object> ReadStreamAsync(AsyncBindingContext context, HttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        Task<object> ReadStreamAsync(AsyncBindingContext context, HttpResponseStream responseStream, Type resultType)
         {
             var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
             if (deserializer != null)
-                return await deserializer.DeserializeAsync(responseStream, resultType, cancellationToken);
+                return deserializer.DeserializeAsync(responseStream, resultType, context.CancellationToken);
 
             if (context.HttpClient != null)
             {
                 deserializer = context.HttpClient.GetType().GetCustomAttribute<ResponseDeserializationAttribute>(true);
                 if (deserializer != null)
-                    return await deserializer.DeserializeAsync(responseStream, resultType, cancellationToken);
+                    return deserializer.DeserializeAsync(responseStream, resultType, context.CancellationToken);
             }
 
             if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
-                return responseStream;
+                return Task.FromResult<object>(responseStream);
 
             if (resultType == typeof(VoidType))
-                return VoidType.Value;
+                return Task.FromResult<object>(VoidType.Value);
 
             var provider = FindProvider(responseStream, resultType);
             if (provider != null)
             {
                 var asyncProvider = provider as IAsyncResponseDeserialization;
-                if(asyncProvider != null)
-                    return await asyncProvider.DeserializeAsync(responseStream, resultType, cancellationToken);
-
-                return provider.Deserialize(responseStream, resultType);
+                return asyncProvider != null 
+                    ? asyncProvider.DeserializeAsync(responseStream, resultType, context.CancellationToken) 
+                    : Task.FromResult(provider.Deserialize(responseStream, resultType));
             }
 
             if (resultType == typeof(string))
-                return await responseStream.AsStringAsync();
+                return Task.FromResult<object>(responseStream.AsStringAsync());
 
             if (resultType == typeof(byte[]))
-                return await responseStream.AsByteArrayAsync(cancellationToken);
+                return Task.FromResult<object>(responseStream.AsByteArrayAsync(context.CancellationToken));
 
             throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
