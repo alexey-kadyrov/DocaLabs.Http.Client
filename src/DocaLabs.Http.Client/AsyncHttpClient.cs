@@ -130,9 +130,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual Task<TOutputModel> ParseResponse(AsyncBindingContext context, WebRequest request)
         {
-            var t = ModelBinders.GetAsyncResponseBinder(typeof(TOutputModel)).ReadAsync(context, request, typeof(TOutputModel));
-
-            return Task.FromResult((TOutputModel)t.Result);
+            return ModelBinders.GetAsyncResponseBinder(typeof(TOutputModel)).ReadAsync<TOutputModel>(context, request);
         }
 
         static IExecuteStrategy<TInputModel, Task<TOutputModel>> GetDefaultExecuteStrategy()
@@ -147,23 +145,11 @@ namespace DocaLabs.Http.Client
         {
             var context = new AsyncBindingContext(this, model, Configuration, BaseUrl, cancellationToken);
 
-            var inputModelType = GetInputModelType<TInputModel>(model);
+            var pipeline = InitializeExecutionPipeline<TInputModel>(model, context);
 
-            var binder = ModelBinders.GetRequestBinder(inputModelType);
+            TryWriteRequestData(pipeline.RequestBinder, context, pipeline.WebRequest);
 
-            context.Model = binder.TransformModel(context);
-
-            var url = ComposeUrl(binder, context);
-
-            var request = CreateRequest(url);
-
-            context.RequestUrl = request.RequestUri;
-
-            InitializeRequest(binder, context, request);
-
-            TryWriteRequestData(binder, context, request);
-
-            return ParseResponse(context, request);
+            return ParseResponse(context, pipeline.WebRequest);
         }
     }
 }

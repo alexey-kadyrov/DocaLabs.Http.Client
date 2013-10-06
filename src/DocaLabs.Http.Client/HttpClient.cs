@@ -114,23 +114,11 @@ namespace DocaLabs.Http.Client
         {
             var context = new BindingContext(this, model, Configuration, BaseUrl);
 
-            var inputModelType = GetInputModelType<TInputModel>(model);
+            var pipeline = InitializeExecutionPipeline<TInputModel>(model, context);
 
-            var binder = ModelBinders.GetRequestBinder(inputModelType);
+            TryWriteRequestData(pipeline.RequestBinder, context, pipeline.WebRequest);
 
-            context.Model = binder.TransformModel(context);
-
-            var url = ComposeUrl(binder, context);
-
-            var request = CreateRequest(url);
-
-            context.RequestUrl = request.RequestUri;
-
-            InitializeRequest(binder, context, request);
-
-            TryWriteRequestData(binder, context, request);
-
-            return ParseResponse(context, request);
+            return ParseResponse(context, pipeline.WebRequest);
         }
     }
 }

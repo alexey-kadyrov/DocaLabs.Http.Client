@@ -52,6 +52,195 @@ namespace DocaLabs.Http.Client.Integration.Tests
     }
 
     [Subject(typeof(HttpClient<,>))]
+    public class when_getting_a_json_object_as_stream
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static Stream stream;
+
+        Cleanup after_each = () =>
+        {
+            host.Dispose();
+            stream.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => stream = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser()
+        {
+            using (var reader = new StreamReader(stream, Encoding.UTF8, true, 4096, true))
+            {
+                return JsonConvert.DeserializeObject<User>(reader.ReadToEnd());
+            }
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            Stream Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_getting_a_json_object_as_http_response_stream
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static HttpResponseStream stream;
+
+        Cleanup after_each = () =>
+        {
+            host.Dispose();
+            stream.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => stream = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser()
+        {
+            return JsonConvert.DeserializeObject<User>(stream.AsString());
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            HttpResponseStream Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_getting_a_json_object_as_string
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static string result;
+
+        Cleanup after_each = 
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser()
+        {
+            return JsonConvert.DeserializeObject<User>(result);
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            string Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_getting_a_json_object_as_byte_array
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static byte[] result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser()
+        {
+            return JsonConvert.DeserializeObject<User>(Encoding.UTF8.GetString(result));
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            byte[] Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
     public class when_getting_a_json_object_using_autogenerated_model
     {
         static TestServerHost host;

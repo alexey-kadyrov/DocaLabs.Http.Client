@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using DocaLabs.Http.Client.Remote.Integration.Tests._Contract;
 using DocaLabs.Http.Client.Remote.Integration.Tests._Contract._Authentication;
 using DocaLabs.Http.Client.Remote.Integration.Tests._Contract._Get;
@@ -15,8 +16,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IGetData client;
         static GetDataResponse result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IGetData>(new Uri("http://httpbin.org/get"));
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IGetData>(new Uri("http://httpbin.org/get"));
+        };
 
         Because of =
             () => result = client.Get(new GetDataRequest { Id = "red" });
@@ -34,8 +38,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IPostData client;
         static PostDataResponse result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IPostData>(new Uri("http://httpbin.org/post"));
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IPostData>(new Uri("http://httpbin.org/post"));
+        };
 
         Because of =
             () => result = client.Post(new PostDataRequest { Id = 42 });
@@ -53,8 +60,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IMixedPostData client;
         static MixedPostDataResponse result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IMixedPostData>(new Uri("http://httpbin.org/post"));
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IMixedPostData>(new Uri("http://httpbin.org/post"));
+        };
 
         Because of = () => result = client.Post(new MixedPostDataRequest
         {
@@ -81,8 +91,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IPutData client;
         static PutDataResponse result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IPutData>(null, "put");
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IPutData>(null, "put");
+        };
 
         Because of =
             () => result = client.Post(new PutDataRequest { Id = 42 });
@@ -100,8 +113,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IAuthenticatedUser client;
         static AuthenticatedUser result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(null, "basicUserAuthentication");
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(null, "basicUserAuthentication");
+        };
 
         Because of =
             () => result = client.Get();
@@ -116,8 +132,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IAuthenticatedUser client;
         static AuthenticatedUser result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(new Uri("https://httpbin.org/basic-auth/first/passwd42"), "basicUserAuthentication");
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(new Uri("https://httpbin.org/basic-auth/first/passwd42"), "basicUserAuthentication");
+        };
 
         Because of =
             () => result = client.Get();
@@ -132,8 +151,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IAuthenticatedUser client;
         static AuthenticatedUser result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(null, "digestAuthentication");
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(null, "digestAuthentication");
+        };
 
         Because of =
             () => result = client.Get();
@@ -148,8 +170,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IAuthenticatedUser client;
         static AuthenticatedUser result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(new Uri("https://httpbin.org/digest-auth/qop/first/passwd42"), "digestAuthentication");
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IAuthenticatedUser>(new Uri("https://httpbin.org/digest-auth/qop/first/passwd42"), "digestAuthentication");
+        };
 
         Because of =
             () => result = client.Get();
@@ -164,8 +189,11 @@ namespace DocaLabs.Http.Client.Remote.Integration.Tests
         static IGoogleSearch client;
         static string result;
 
-        Establish context =
-            () => client = HttpClientFactory.CreateInstance<IGoogleSearch>(new Uri("https://www.google.com/"));
+        Establish context = () =>
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // to be gentle on the remote endpoint, once in second is enough
+            client = HttpClientFactory.CreateInstance<IGoogleSearch>(new Uri("https://www.google.com/"));
+        };
 
         Because of =
             () => result = client.GetPage();

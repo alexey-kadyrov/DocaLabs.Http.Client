@@ -16,7 +16,6 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultResponseBinder : IResponseBinder, IAsyncResponseBinder
     {
-        readonly object _locker;
         readonly ConcurrentDictionary<Type, Type> _responseTypes;
         IList<IResponseDeserializationProvider> _providers;
 
@@ -26,14 +25,11 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public IList<IResponseDeserializationProvider> Providers
         {
+            // reference assignment is thread safe
+
             get
             {
-                IList<IResponseDeserializationProvider> providers;
-
-                lock (_locker)
-                {
-                    providers = _providers;
-                }
+                var providers = _providers;
 
                 return providers.ToList();
             }
@@ -45,10 +41,7 @@ namespace DocaLabs.Http.Client.Binding
 
                 var providers = value.ToList();
 
-                lock (_locker)
-                {
-                    _providers = providers;
-                }
+                _providers = providers;
             }
         }
 
@@ -57,7 +50,6 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public DefaultResponseBinder()
         {
-            _locker = new object();
             _responseTypes = new ConcurrentDictionary<Type, Type>();
             _providers = new List<IResponseDeserializationProvider>
             {
@@ -122,10 +114,11 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="request">The WebRequest object.</param>
-        /// <param name="resultType">Expected type for the return value.</param>
-        /// <returns>Return value from the stream or null.</returns>
-        public async Task<object> ReadAsync(AsyncBindingContext context, WebRequest request, Type resultType)
+        /// <returns>Return value from the stream or default value of T.</returns>
+        public async Task<T> ReadAsync<T>(AsyncBindingContext context, WebRequest request)
         {
+            var resultType = typeof (T);
+
             var responseType = GetResponseType(context, resultType);
 
             HttpResponseStream stream = null;
@@ -144,12 +137,12 @@ namespace DocaLabs.Http.Client.Binding
                 if (value.Equals(stream))
                     stream = null;
 
-                return richResponse ?? value;
+                return (T)(richResponse ?? value);
             }
             catch (WebException e)
             {
                 if (Is3XX(e) && responseType != resultType)
-                    return Activator.CreateInstance(resultType, e.Response, null);
+                    return (T)Activator.CreateInstance(resultType, e.Response, null);
 
                 throw;
             }
@@ -232,8 +225,8 @@ namespace DocaLabs.Http.Client.Binding
             if (provider != null)
             {
                 var asyncProvider = provider as IAsyncResponseDeserialization;
-                return asyncProvider != null 
-                    ? asyncProvider.DeserializeAsync(responseStream, resultType, context.CancellationToken) 
+                return asyncProvider != null
+                    ? asyncProvider.DeserializeAsync(responseStream, resultType, context.CancellationToken)
                     : Task.FromResult(provider.Deserialize(responseStream, resultType));
             }
 
@@ -248,12 +241,9 @@ namespace DocaLabs.Http.Client.Binding
 
         IResponseDeserialization FindProvider(HttpResponseStream responseStream, Type resultType)
         {
-            IList<IResponseDeserializationProvider> providers;
+            // reference assignment is thread safe
 
-            lock (_locker)
-            {
-                providers = _providers;
-            }
+            var providers = _providers;
 
             return providers.FirstOrDefault(x => x.CanDeserialize(responseStream, resultType));
         }

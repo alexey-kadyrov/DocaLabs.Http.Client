@@ -114,6 +114,33 @@ namespace DocaLabs.Http.Client
                 : model.GetType();
         }
 
+        /// <summary>
+        /// Initializes the execution pipeline:
+        ///     * Infers the type of the input model
+        ///     * Gets the request model binder for the inferred input model type
+        ///     * Transforms the model (if the binder does it)
+        ///     * Composes URL using provided base URL and the input model properties
+        ///     * Creates and initializes the WebRequest instance
+        /// </summary>
+        protected virtual InitializedPipeline InitializeExecutionPipeline<TInputModel>(object model, BindingContext context)
+        {
+            var inputModelType = GetInputModelType<TInputModel>(model);
+
+            var binder = ModelBinders.GetRequestBinder(inputModelType);
+
+            context.Model = binder.TransformModel(context);
+
+            var url = ComposeUrl(binder, context);
+
+            var request = CreateRequest(url);
+
+            context.RequestUrl = request.RequestUri;
+
+            InitializeRequest(binder, context, request);
+
+            return new InitializedPipeline(binder, request);
+        }
+
         void ReadConfiguration(string configurationName)
         {
             Configuration = GetConfigurationElement(configurationName);
@@ -131,6 +158,31 @@ namespace DocaLabs.Http.Client
                 configurationName = GetType().FullName;
 
             return EndpointConfiguration.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
+        }
+
+        /// <summary>
+        /// Holds the result of the InitializeExecutionPipeline call.
+        /// </summary>
+        protected class InitializedPipeline 
+        {
+            /// <summary>
+            /// Gets the request binder.
+            /// </summary>
+            public IRequestBinder RequestBinder { get; private set; }
+            
+            /// <summary>
+            /// Gets the instance of the WebRequest class.
+            /// </summary>
+            public WebRequest WebRequest { get; private set; }
+
+            /// <summary>
+            /// Initializes an instance of the InitializedPipeline class with the specified request binder and WebRequest instance.
+            /// </summary>
+            public InitializedPipeline(IRequestBinder requestBinder, WebRequest webRequest)
+            {
+                RequestBinder = requestBinder;
+                WebRequest = webRequest;
+            }
         }
     }
 }

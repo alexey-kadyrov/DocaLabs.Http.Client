@@ -23,35 +23,34 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Executes the given action.
         /// </summary>
-        public Task<TOutputModel> Execute(TInputModel model, Func<TInputModel, Task<TOutputModel>> action)
+        public async Task<TOutputModel> Execute(TInputModel model, Func<TInputModel, Task<TOutputModel>> action)
         {
-            return action(model);
-            //if(action == null)
-            //    throw new ArgumentNullException("action");
+            if (action == null)
+                throw new ArgumentNullException("action");
 
-            //var attempt = 0;
+            var attempt = 0;
 
-            //while (true)
-            //{
-            //    try
-            //    {
-            //        return await action(model);
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        if (attempt >= _retryTimeouts.Length || !CanRetry(e))
-            //        {
-            //            OnRethrowing(attempt, _retryTimeouts.Length, e);
-            //            throw;
-            //        }
+            while (true)
+            {
+                try
+                {
+                    return await action(model);
+                }
+                catch (Exception e)
+                {
+                    if (attempt >= _retryTimeouts.Length || !CanRetry(e))
+                    {
+                        OnRethrowing(attempt, _retryTimeouts.Length, e);
+                        throw;
+                    }
 
-            //        OnRetrying(attempt, _retryTimeouts.Length, e);
+                    OnRetrying(attempt, _retryTimeouts.Length, e);
 
-            //        Thread.Sleep(_retryTimeouts[attempt]);
+                    Thread.Sleep(_retryTimeouts[attempt]);
 
-            //        ++attempt;
-            //    }
-            //}
+                    ++attempt;
+                }
+            }
         }
     }
 }

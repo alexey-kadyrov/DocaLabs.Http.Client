@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
@@ -14,8 +13,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="request">The WebRequest object.</param>
-        /// <param name="resultType">Expected type for the return value.</param>
-        /// <returns>Return value from the stream or null.</returns>
-        Task<object> ReadAsync(AsyncBindingContext context, WebRequest request, Type resultType);
+        /// <returns>Return value from the stream or default value of T.</returns>
+        Task<T> ReadAsync<T>(AsyncBindingContext context, WebRequest request);
     }
 }
