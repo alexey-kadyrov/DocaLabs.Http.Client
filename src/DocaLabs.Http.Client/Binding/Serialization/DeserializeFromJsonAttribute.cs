@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 
@@ -32,6 +34,26 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             var encoding = GetEncoding();
 
             var s = responseStream.AsString(encoding);
+
+            return ToResultType(resultType, s);
+        }
+
+        /// <summary>
+        /// Asynchronously Deserializes the response stream content using JSON format.
+        /// The method is using Newtonsoft deserializer with default settings.
+        /// If the response stream content is empty then the default(TResult) is returned.
+        /// </summary>
+        public override async Task<object> DeserializeAsync(HttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        {
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
+
+            if (resultType == null)
+                throw new ArgumentNullException("resultType");
+
+            var encoding = GetEncoding();
+
+            var s = await responseStream.AsStringAsync(encoding);
 
             return ToResultType(resultType, s);
         }

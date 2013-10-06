@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Utils;
 
@@ -47,7 +48,7 @@ namespace DocaLabs.Http.Client
         /// The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
         /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </typeparam>
-        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
         public static TInterface CreateInstance<TInterface>(string configurationName)
         {
             return (TInterface)CreateInstance(typeof(TInterface), null, configurationName);
@@ -62,7 +63,7 @@ namespace DocaLabs.Http.Client
         /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </typeparam>
         /// <param name="baseUrl">The base URL of the service.</param>
-        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
         public static TInterface CreateInstance<TInterface>(Uri baseUrl = null, string configurationName = null)
         {
             return (TInterface)CreateInstance(typeof(TInterface), baseUrl, configurationName);
@@ -77,7 +78,7 @@ namespace DocaLabs.Http.Client
         /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </param>
         /// <param name="baseUrl">The base URL of the service.</param>
-        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
         public static object CreateInstance(Type interfaceType, Uri baseUrl = null, string configurationName = null)
         {
             return CreateInstance(null, interfaceType, baseUrl, configurationName);
@@ -99,7 +100,7 @@ namespace DocaLabs.Http.Client
         ///     (Uri baseUrl, string configurationName)
         /// </param>
         /// <param name="baseUrl">The base URL of the service.</param>
-        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
         public static TInterface CreateInstance<TInterface>(Type baseType, Uri baseUrl = null, string configurationName = null)
         {
             return (TInterface)CreateInstance(baseType, typeof(TInterface), baseUrl, configurationName);
@@ -121,7 +122,7 @@ namespace DocaLabs.Http.Client
         /// The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
         /// </param>
         /// <param name="baseUrl">The base URL of the service.</param>
-        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the config file, if the parameter is null it will default to the interface's type full name.</param>
+        /// <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
         public static object CreateInstance(Type baseType, Type interfaceType, Uri baseUrl = null, string configurationName = null)
         {
             var constructor = GetConstructor(baseType, interfaceType);
@@ -182,10 +183,11 @@ namespace DocaLabs.Http.Client
         {
             readonly MethodInfo _serviceExecuteMethod;
             readonly InputModelInfo _inputModelInfo;
-            readonly Type _outputModelType;
-            readonly Type _originalOutputModelType;
-            readonly Type _executeStrategyType;
+            Type _executeStrategyType;
             readonly CustomeAttributes _attributes;
+            Type _outputModelType;
+            Type _originalOutputModelType;
+            bool _asyncClient;
 
             public ClientInterfaceInfo(Type interfaceType)
             {
@@ -200,14 +202,12 @@ namespace DocaLabs.Http.Client
                     throw new ArgumentException(string.Format(Resources.Text.must_have_only_one_method, interfaceType.FullName), "interfaceType");
 
                 _serviceExecuteMethod = methods[0];
-                _outputModelType = _originalOutputModelType = _serviceExecuteMethod.ReturnType;
 
-                if (_outputModelType == typeof (void))
-                    _outputModelType = typeof (VoidType);
+                InitializeOutputModelType();
 
                 _inputModelInfo = new InputModelInfo(_serviceExecuteMethod);
 
-                _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+                InitializeExecuteStrategyType();
 
                 _attributes = new CustomeAttributes(interfaceType, AttributeTargets.Class);
             }
@@ -215,7 +215,11 @@ namespace DocaLabs.Http.Client
             public Type EnsureBaseType(Type baseType)
             {
                 if (baseType == null)
-                    return typeof(HttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+                {
+                    return _asyncClient
+                        ? typeof (AsyncHttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType)
+                        : typeof(HttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+                }
 
                 if (!baseType.IsGenericTypeDefinition)
                     return baseType;
@@ -276,6 +280,42 @@ namespace DocaLabs.Http.Client
                 typeBuilder.DefineMethodOverride(newExecute, _serviceExecuteMethod);
             }
 
+            void InitializeOutputModelType()
+            {
+                _outputModelType = _originalOutputModelType = _serviceExecuteMethod.ReturnType;
+
+                if (_outputModelType == typeof(void))
+                {
+                    _outputModelType = typeof(VoidType);
+                }
+                else if (_outputModelType == typeof(Task))
+                {
+                    _outputModelType = typeof(VoidType);
+                    _asyncClient = true;
+                }
+                else if (_outputModelType.IsGenericType)
+                {
+                    var outputGeneric = _outputModelType.GetGenericTypeDefinition();
+                    if (outputGeneric == typeof(Task<>))
+                    {
+                        _outputModelType = _outputModelType.GetGenericArguments()[0];
+                        _asyncClient = true;
+                    }
+                }
+            }
+
+            void InitializeExecuteStrategyType()
+            {
+                if (_asyncClient)
+                {
+                    _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _originalOutputModelType);
+                }
+                else
+                {
+                    _executeStrategyType = typeof (IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+                }
+            }
+
             ConstructorInfo GetBaseConstructor(Type baseType, ref bool threeParamCtor)
             {
                 var baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string), _executeStrategyType });
@@ -299,9 +339,7 @@ namespace DocaLabs.Http.Client
                     _serviceExecuteMethod.Name,
                     MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
                     CallingConventions.Standard | CallingConventions.HasThis,
-                    _outputModelType != typeof(VoidType)
-                        ? _outputModelType
-                        : typeof(void),
+                    _originalOutputModelType,
                     _inputModelInfo.GetServiceCallArgTypes());
             }
         }

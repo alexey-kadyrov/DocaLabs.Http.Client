@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Integration.Tests._ServiceStackServices;
 using Machine.Specifications;
 using Newtonsoft.Json;
@@ -6,11 +7,51 @@ using Newtonsoft.Json;
 namespace DocaLabs.Http.Client.Integration.Tests
 {
     [Subject(typeof(AsyncHttpClient<,>))]
+    public class when_asynchronously_getting_a_json_object
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static User result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Get(request).Result;
+
+        It should_call_the_service_and_return_data =
+            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            Task<User> Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
     public class when_asynchronously_getting_a_json_object_as_string
     {
         static TestServerHost host;
         static GetUserRequest request;
-        static AsyncHttpClient<GetUserRequest, string> client;
+        static IGetUserService client;
         static string result;
 
         Cleanup after_each =
@@ -18,13 +59,13 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         Establish context = () =>
         {
-            client = new AsyncHttpClient<GetUserRequest, string>(null, "getUserV2");
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
             request = new GetUserRequest { Id = Users.Data[0].Id };
             host = new TestServerHost();
         };
 
         Because of = 
-            () => result = client.Execute(request).Result;
+            () => result = client.Get(request).Result;
 
         It should_call_the_service_and_return_data =
             () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
@@ -47,6 +88,34 @@ namespace DocaLabs.Http.Client.Integration.Tests
         public interface IGetUserService
         {
             Task<string> Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
+    public class when_asynchronously_getting_an_xml_object
+    {
+        static TestServerHost host;
+        static IGetUserService client;
+        static User result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Get(Users.Data[0].Id).Result;
+
+        It should_call_the_service_and_return_data =
+            () => result.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        public interface IGetUserService
+        {
+            Task<User> Get(Guid id, string format = "xml");
         }
     }
 }
