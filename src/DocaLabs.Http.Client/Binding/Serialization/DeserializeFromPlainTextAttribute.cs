@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.Serialization
@@ -29,6 +31,26 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             var encoding = GetEncoding();
 
             var value = responseStream.AsString(encoding);
+
+            return ToResultType(resultType, value);
+        }
+
+        /// <summary>
+        /// Asynchronously deserializes the response stream as plain string and then converts to the resulting type.
+        /// </summary>
+        public override async Task<object> DeserializeAsync(HttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        {
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
+
+            if (resultType == null)
+                throw new ArgumentNullException("resultType");
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var encoding = GetEncoding();
+
+            var value = await responseStream.AsStringAsync(encoding);
 
             return ToResultType(resultType, value);
         }

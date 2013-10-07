@@ -51,6 +51,8 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             var encoding = GetEncoding();
 
             var s = await responseStream.AsStringAsync(encoding);

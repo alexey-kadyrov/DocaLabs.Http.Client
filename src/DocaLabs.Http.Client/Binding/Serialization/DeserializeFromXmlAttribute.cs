@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Utils;
@@ -73,10 +76,34 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             if (resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            // stream is disposed by the reader
             using (var reader = XmlReader.Create(responseStream, GetXmlReaderSettings()))
             {
                 return new XmlSerializer(resultType).Deserialize(reader);
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously Deserializes xml object from the web response.
+        /// </summary>
+        public override async Task<object> DeserializeAsync(HttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        {
+            if (responseStream == null)
+                throw new ArgumentNullException("responseStream");
+
+            if (resultType == null)
+                throw new ArgumentNullException("resultType");
+
+            using (var buffer = new MemoryStream(4096))
+            {
+                // do at least reading asynchronously
+                await responseStream.CopyToAsync(buffer, 4096, cancellationToken);
+
+                buffer.Seek(0, SeekOrigin.Begin);
+
+                using (var reader = XmlReader.Create(buffer, GetXmlReaderSettings()))
+                {
+                    return new XmlSerializer(resultType).Deserialize(reader);
+                }
             }
         }
 
