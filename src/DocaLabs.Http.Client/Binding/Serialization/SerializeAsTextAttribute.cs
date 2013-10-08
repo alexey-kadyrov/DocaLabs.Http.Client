@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
@@ -63,8 +65,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Serializes a given object into the web request.
         /// </summary>
-        /// <param name="obj">Object to be serialized.</param>
-        /// <param name="request">Web request where to serialize to.</param>
         public override void Serialize(object obj, WebRequest request)
         {
             if(request == null)
@@ -76,6 +76,21 @@ namespace DocaLabs.Http.Client.Binding.Serialization
                 Write(obj, request);
             else
                 CompressAndWrite(obj, request);
+        }
+
+        /// <summary>
+        /// Asynchronously serializes a given object into the web request.
+        /// </summary>
+        public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            request.ContentType = string.Format("{0}; charset={1}", ContentType, CharSet);
+
+            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
+                ? WriteAsync(obj, request, cancellationToken) 
+                : CompressAndWriteAsync(obj, request, cancellationToken);
         }
 
         Encoding GetEncoding()
@@ -107,6 +122,24 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
+        async Task WriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        {
+            using (var requestStream = await request.GetRequestStreamAsync())
+            {
+                var s = obj as Stream;
+                if (s != null)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    await s.CopyToAsync(requestStream);
+                }
+                else
+                {
+                    var data = GetData(obj);
+                    await requestStream.WriteAsync(data, 0, data.Length, cancellationToken);
+                }
+            }
+        }
+
         void CompressAndWrite(object obj, WebRequest request)
         {
             request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
@@ -124,6 +157,30 @@ namespace DocaLabs.Http.Client.Binding.Serialization
                     using (var dataStream = new MemoryStream(GetData(obj)))
                     {
                         dataStream.CopyTo(compressionStream);
+                    }
+                }
+            }
+        }
+
+        async Task CompressAndWriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        {
+            request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
+
+            using (var requestStream = await request.GetRequestStreamAsync())
+            using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var s = obj as Stream;
+                if (s != null)
+                {
+                    await s.CopyToAsync(compressionStream);
+                }
+                else
+                {
+                    using (var dataStream = new MemoryStream(GetData(obj)))
+                    {
+                        await dataStream.CopyToAsync(compressionStream);
                     }
                 }
             }

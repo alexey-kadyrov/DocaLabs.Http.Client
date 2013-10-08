@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Utils;
@@ -104,12 +106,48 @@ namespace DocaLabs.Http.Client.Binding.Serialization
                 CompressAndWrite(obj, request);
         }
 
+        /// <summary>
+        /// Asynchronously serializes the specified object into the request stream.
+        /// </summary>
+        public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+
+            request.ContentType = string.Format("{0}; charset={1}", MediaType, Encoding);
+
+            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
+                ? WriteAsync(obj, request, cancellationToken) 
+                : CompressAndWriteAsync(obj, request, cancellationToken);
+        }
+
         void Write(object obj, WebRequest request)
         {
             // stream is disposed by the reader
             using (var writer = XmlWriter.Create(request.GetRequestStream(), GetSettings()))
             {
                 TryWriteDocType(writer);
+
+                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+            }
+        }
+
+        async Task WriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        {
+            // stream is disposed by the reader
+            using (var stream = await request.GetRequestStreamAsync())
+            using (var writer = XmlWriter.Create(stream, GetSettings(true)))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (!string.IsNullOrWhiteSpace(DocTypeName) || !string.IsNullOrWhiteSpace(DocTypeName) ||
+                    !string.IsNullOrWhiteSpace(DocTypeName) || !string.IsNullOrWhiteSpace(DocTypeName))
+                {
+                    await writer.WriteDocTypeAsync(DocTypeName, Pubid, Sysid, Subset);
+                }
 
                 new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
             }
@@ -138,13 +176,39 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
-        XmlWriterSettings GetSettings()
+        async Task CompressAndWriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        {
+            request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
+
+            // stream is disposed by the reader
+            var dataStream = new MemoryStream();
+
+            using (var writer = XmlWriter.Create(dataStream, GetSettings()))
+            {
+                TryWriteDocType(writer);
+
+                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+
+                dataStream.Seek(0, SeekOrigin.Begin);
+
+                using (var requestStream = await request.GetRequestStreamAsync())
+                using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    await dataStream.CopyToAsync(compressionStream);
+                }
+            }
+        }
+
+        XmlWriterSettings GetSettings(bool async = false)
         {
             return new XmlWriterSettings
             {
                 Encoding = GetEncoding(),
                 Indent = Indent,
-                IndentChars = IndentChars
+                IndentChars = IndentChars,
+                Async = async
             };
         }
 

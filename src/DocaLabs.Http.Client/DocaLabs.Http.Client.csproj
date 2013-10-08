@@ -57,6 +57,7 @@
     <Compile Include="AsyncHttpClient.cs" />
     <Compile Include="Binding\AsyncBindingContext.cs" />
     <Compile Include="Binding\BindingContext.cs" />
+    <Compile Include="Binding\IAsyncRequestWriter.cs" />
     <Compile Include="Binding\IAsyncResponseBinder.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
     <Compile Include="Binding\PropertyConverting\ClientPropertyMaps.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Binding\DefaultRequestWriter.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
+    <Compile Include="Binding\Serialization\IAsyncRequestSerialization.cs" />
     <Compile Include="Binding\Serialization\IAsyncResponseDeserialization.cs" />
     <Compile Include="Binding\Serialization\SerializeStreamAttribute.cs" />
     <Compile Include="Binding\Serialization\SerializeAsTextAttribute.cs" />

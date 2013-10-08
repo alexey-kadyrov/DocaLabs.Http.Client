@@ -1,11 +1,13 @@
 ﻿using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
 {
     /// <summary>
     /// Default implementation of the IRequestBinder
     /// </summary>
-    public class DefaultRequestBinder : IRequestBinder
+    public class DefaultRequestBinder : IRequestBinder, IAsyncRequestWriter
     {
         readonly DefaultUrlComposer _urlComposer;
         readonly DefaultRequestWriter _requestWriter;
@@ -69,6 +71,14 @@ namespace DocaLabs.Http.Client.Binding
         public virtual void Write(BindingContext context, WebRequest request)
         {
             _requestWriter.Write(context.HttpClient, context.Model, request);
+        }
+
+        /// <summary>
+        /// Uses DefaultRequestWriter to asynchronously write data into request's stream.
+        /// </summary>
+        public Task WriteAsync(BindingContext context, WebRequest request, CancellationToken cancellationToken)
+        {
+            return _requestWriter.WriteAsync(context.HttpClient, context.Model, request, cancellationToken);
         }
     }
 }

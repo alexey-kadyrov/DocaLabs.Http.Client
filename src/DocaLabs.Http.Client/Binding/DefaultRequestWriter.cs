@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding.Serialization;
 
 namespace DocaLabs.Http.Client.Binding
@@ -28,6 +30,28 @@ namespace DocaLabs.Http.Client.Binding
                 info.Serializer.Serialize(info.ValueToBeSerialized, request);
             else
                 request.SetContentLengthToZeroIfBodyIsRequired();
+        }
+
+        /// <summary>
+        /// Writes data to the request's body or sets the content length to zero if the model cannot be serialized.
+        /// Looks for RequestSerializationAttribute descendants defined on:
+        ///     1. input model class level
+        ///     2. One of it's properties
+        ///     3. HttpClient level
+        /// </summary>
+        public Task WriteAsync(object client, object model, WebRequest request, CancellationToken cancellationToken)
+        {
+            if (client == null)
+                throw new ArgumentNullException("client");
+
+            var info = GetSerializer(client, model);
+            if (info == null || info.ValueToBeSerialized == null)
+                return Task.Run(() => request.SetContentLengthToZeroIfBodyIsRequired(), cancellationToken);
+
+            var asyncSerializer = info.Serializer as IAsyncRequestSerialization;
+            return asyncSerializer != null 
+                ? asyncSerializer.SerializeAsync(info.ValueToBeSerialized, request, cancellationToken) 
+                : Task.Run(() => info.Serializer.Serialize(info.ValueToBeSerialized, request), cancellationToken);
         }
 
         /// <summary>
