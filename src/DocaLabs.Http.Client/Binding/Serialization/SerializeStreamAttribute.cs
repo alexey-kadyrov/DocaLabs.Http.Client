@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Utils.AsynchHelpers;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding.Serialization
@@ -72,7 +74,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// Asynchronously serializes a given object into the web request.
         /// What actually will be serialized depends on which constructor was used - if the default then obj itself otherwise the property's value.
         /// </summary>
-        public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        public override IUniversalAwaitable SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -80,15 +82,15 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             request.ContentType = ContentType;
 
             if (obj == null)
-                return Task.Run(() => { }, cancellationToken);
+                return new UniversalYieldAwaitable();
 
             var stream = obj as Stream;
             if (stream == null)
                 throw new ArgumentException(string.Format(Resources.Text.the_value_must_be_of_stream_type, obj.GetType()), "obj");
 
-            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
+            return new UniversalTaskAwaitable(string.IsNullOrWhiteSpace(RequestContentEncoding) 
                 ? WriteAsync(stream, request, cancellationToken) 
-                : CompressAndWriteAsync(stream, request, cancellationToken);
+                : CompressAndWriteAsync(stream, request, cancellationToken));
         }
 
         static void Write(Stream stream, WebRequest request)

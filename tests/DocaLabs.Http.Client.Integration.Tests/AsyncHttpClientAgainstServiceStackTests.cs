@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding.Serialization;
@@ -167,7 +168,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [Subject(typeof(AsyncHttpClient<,>))]
     public class when_asynchronously_getting_a_json_object_as_byte_array
     {
         static TestServerHost host;
@@ -209,6 +210,46 @@ namespace DocaLabs.Http.Client.Integration.Tests
         public interface IGetUserService
         {
             Task<byte[]> Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
+    public class when_asynchronously_posting_a_json_object_and_getting_data_back
+    {
+        static TestServerHost host;
+        static AddUserAndReturnDataRequest request;
+        static IAddUserService client;
+        static User result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
+            request = new AddUserAndReturnDataRequest
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "New FirstName",
+                LastName = "New LastName",
+                Email = "New Email"
+            };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Add(request).Result;
+
+        It should_call_the_service =
+            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        It should_return_the_date =
+            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+
+        [SerializeAsJson]
+        public interface IAddUserService
+        {
+            Task<User> Add(AddUserAndReturnDataRequest request);
         }
     }
 }

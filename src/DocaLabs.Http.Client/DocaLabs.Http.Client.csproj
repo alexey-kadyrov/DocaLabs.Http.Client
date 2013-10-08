@@ -97,6 +97,9 @@
     <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="RichRequest.cs" />
     <Compile Include="RichResponse.cs" />
+    <Compile Include="Utils\AsynchHelpers\IUniversalAwaitable.cs" />
+    <Compile Include="Utils\AsynchHelpers\IUniversalAwaiter.cs" />
+    <Compile Include="Utils\AsynchHelpers\UniversalTaskAwaitable.cs" />
     <Compile Include="Utils\CharSets.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
@@ -172,6 +175,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\AsynchHelpers\UniversalYieldAwaitable.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Text.resx">

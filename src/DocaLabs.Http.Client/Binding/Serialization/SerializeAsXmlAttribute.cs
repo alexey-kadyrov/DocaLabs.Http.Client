@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Utils.AsynchHelpers;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding.Serialization
@@ -109,7 +110,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Asynchronously serializes the specified object into the request stream.
         /// </summary>
-        public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        public override IUniversalAwaitable SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -119,9 +120,9 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
             request.ContentType = string.Format("{0}; charset={1}", MediaType, Encoding);
 
-            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
+            return new UniversalTaskAwaitable(string.IsNullOrWhiteSpace(RequestContentEncoding) 
                 ? WriteAsync(obj, request, cancellationToken) 
-                : CompressAndWriteAsync(obj, request, cancellationToken);
+                : CompressAndWriteAsync(obj, request, cancellationToken));
         }
 
         void Write(object obj, WebRequest request)
