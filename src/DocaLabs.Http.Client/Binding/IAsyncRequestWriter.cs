@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Threading;
-using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.AsynchHelpers;
+using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -14,6 +13,6 @@ namespace DocaLabs.Http.Client.Binding
         /// The method is called to write data asynchronously to the request's stream. It's expected that the method will set correctly
         /// property related to the data in the request, like content encoding, content length, etc.
         /// </summary>
-        IUniversalAwaitable WriteAsync(BindingContext context, WebRequest request, CancellationToken cancellationToken);
+        Task WriteAsync(BindingContext context, WebRequest request, CancellationToken cancellationToken);
     }
 }

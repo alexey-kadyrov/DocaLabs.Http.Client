@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Threading;
-using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.AsynchHelpers;
+using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -77,7 +76,7 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Uses DefaultRequestWriter to asynchronously write data into request's stream.
         /// </summary>
-        public IUniversalAwaitable WriteAsync(BindingContext context, WebRequest request, CancellationToken cancellationToken)
+        public Task WriteAsync(BindingContext context, WebRequest request, CancellationToken cancellationToken)
         {
             return _requestWriter.WriteAsync(context.HttpClient, context.Model, request, cancellationToken);
         }

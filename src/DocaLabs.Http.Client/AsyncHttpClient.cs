@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.AsynchHelpers;
 
 namespace DocaLabs.Http.Client
 {
@@ -122,17 +121,12 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Tries to write data to the request's body by examining the model type.
         /// </summary>
-        protected virtual IUniversalAwaitable TryWriteRequestData(IRequestBinder binder, AsyncBindingContext context, WebRequest request, CancellationToken cancellationToken)
+        protected virtual Task TryWriteRequestData(IRequestBinder binder, AsyncBindingContext context, WebRequest request, CancellationToken cancellationToken)
         {
             var asyncWriter = binder as IAsyncRequestWriter;
-            if (asyncWriter != null)
-                return asyncWriter.WriteAsync(context, request, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            binder.Write(context, request);
-
-            return new UniversalYieldAwaitable();
+            return asyncWriter != null 
+                ? asyncWriter.WriteAsync(context, request, cancellationToken) 
+                : TaskUtils.RunSynchronously(() => binder.Write(context, request), cancellationToken);
         }
 
         /// <summary>

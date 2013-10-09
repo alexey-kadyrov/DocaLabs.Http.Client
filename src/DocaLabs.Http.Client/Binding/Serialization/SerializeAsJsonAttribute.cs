@@ -4,8 +4,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.AsynchHelpers;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 
@@ -41,16 +39,16 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Asynchronously Serializes a given object into the web request in json format
         /// </summary>
-        public override IUniversalAwaitable SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
             request.ContentType = "application/json";
 
-            return new UniversalTaskAwaitable(string.IsNullOrWhiteSpace(RequestContentEncoding) 
+            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
                 ? WriteAsync(obj, request, cancellationToken) 
-                : CompressAndWriteAsync(obj, request, cancellationToken));
+                : CompressAndWriteAsync(obj, request, cancellationToken);
         }
 
         static void Write(object obj, WebRequest request)

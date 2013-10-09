@@ -3,9 +3,9 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.AsynchHelpers;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -40,7 +40,7 @@ namespace DocaLabs.Http.Client.Binding
         ///     2. One of it's properties
         ///     3. HttpClient level
         /// </summary>
-        public IUniversalAwaitable WriteAsync(object client, object model, WebRequest request, CancellationToken cancellationToken)
+        public Task WriteAsync(object client, object model, WebRequest request, CancellationToken cancellationToken)
         {
             if (client == null)
                 throw new ArgumentNullException("client");
@@ -48,18 +48,12 @@ namespace DocaLabs.Http.Client.Binding
             var info = GetSerializer(client, model);
 
             if (info == null || info.ValueToBeSerialized == null)
-            {
-                request.SetContentLengthToZeroIfBodyIsRequired();
-                return new UniversalYieldAwaitable();
-            }
+                return TaskUtils.RunSynchronously(request.SetContentLengthToZeroIfBodyIsRequired, cancellationToken);
 
             var asyncSerializer = info.Serializer as IAsyncRequestSerialization;
-            if (asyncSerializer != null)
-                return asyncSerializer.SerializeAsync(info.ValueToBeSerialized, request, cancellationToken);
-
-            info.Serializer.Serialize(info.ValueToBeSerialized, request);
-
-            return new UniversalYieldAwaitable();
+            return asyncSerializer != null 
+                ? asyncSerializer.SerializeAsync(info.ValueToBeSerialized, request, cancellationToken) 
+                : TaskUtils.RunSynchronously(() => info.Serializer.Serialize(info.ValueToBeSerialized, request), cancellationToken);
         }
 
         /// <summary>
