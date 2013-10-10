@@ -104,7 +104,6 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AsyncHttpClientAgainstServiceStackTests.cs" />
-    <Compile Include="AsyncHttpClientAgainstWcfTests.cs" />
     <Compile Include="Configuration\ConfigurationExtensionsTests.cs" />
     <Compile Include="Configuration\RequestExtensionsTests.cs" />
     <Compile Include="HttpClientAgainstServiceStackTests.cs" />

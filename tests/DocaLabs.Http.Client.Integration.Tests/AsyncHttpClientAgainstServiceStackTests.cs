@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Integration.Tests._ServiceStackServices;
 using Machine.Specifications;
@@ -15,7 +17,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
         static TestServerHost host;
         static GetUserRequest request;
         static IGetUserService client;
-        static User result;
+        static User result1;
+        static User result2;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -27,11 +30,21 @@ namespace DocaLabs.Http.Client.Integration.Tests
             host = new TestServerHost();
         };
 
-        Because of =
-            () => result = client.Get(request).Result;
+        Because of = () =>
+        {
+            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-        It should_call_the_service_and_return_data =
-            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+            Task.WaitAll(allTask);
+
+            result1 = allTask.Result[0];
+            result2 = allTask.Result[1];
+        };
+
+        It should_call_the_service_and_return_data_for_first_task =
+            () => result1.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_call_the_service_and_return_data_for_second_task =
+            () => result2.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
 
         public class GetUserRequest : GetUser
         {
@@ -49,13 +62,137 @@ namespace DocaLabs.Http.Client.Integration.Tests
         }
     }
 
+    [Subject(typeof(HttpClient<,>))]
+    public class when_asynchronously_getting_a_json_object_as_stream
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static Stream result1;
+        static Stream result2;
+
+        Cleanup after_each = () =>
+        {
+            host.Dispose();
+            result1.Dispose();
+            result2.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of = () =>
+        {
+            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
+
+            Task.WaitAll(allTask);
+
+            result1 = allTask.Result[0];
+            result2 = allTask.Result[1];
+        };
+
+        It should_call_the_service_and_return_data_for_the_first_task =
+            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_call_the_service_and_return_data_for_the_second_task =
+            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser(Stream stream)
+        {
+            using (var reader = new StreamReader(stream, Encoding.UTF8, true, 4096, true))
+            {
+                return JsonConvert.DeserializeObject<User>(reader.ReadToEnd());
+            }
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            Task<Stream> Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_asynchronously_getting_a_json_object_as_http_response_stream
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static HttpResponseStream result1;
+        static HttpResponseStream result2;
+
+        Cleanup after_each = () =>
+        {
+            host.Dispose();
+            result1.Dispose();
+            result2.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of = () =>
+        {
+            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
+
+            Task.WaitAll(allTask);
+
+            result1 = allTask.Result[0];
+            result2 = allTask.Result[1];
+        };
+
+        It should_call_the_service_and_return_data_for_the_first_task =
+            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_call_the_service_and_return_data_for_the_second_task =
+            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser(HttpResponseStream stream)
+        {
+            return JsonConvert.DeserializeObject<User>(stream.AsString());
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            Task<HttpResponseStream> Get(GetUserRequest request);
+        }
+    }
+
     [Subject(typeof(AsyncHttpClient<,>))]
     public class when_asynchronously_getting_a_json_object_as_string
     {
         static TestServerHost host;
         static GetUserRequest request;
         static IGetUserService client;
-        static string result;
+        static string result1;
+        static string result2;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -67,13 +204,23 @@ namespace DocaLabs.Http.Client.Integration.Tests
             host = new TestServerHost();
         };
 
-        Because of = 
-            () => result = client.Get(request).Result;
+        Because of = () =>
+        {
+            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-        It should_call_the_service_and_return_data =
-            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+            Task.WaitAll(allTask);
 
-        static User ToUser()
+            result1 = allTask.Result[0];
+            result2 = allTask.Result[1];
+        };
+
+        It should_call_the_service_and_return_data_for_the_first_task =
+            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_call_the_service_and_return_data_for_the_second_task =
+            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser(string result)
         {
             return JsonConvert.DeserializeObject<User>(result);
         }
@@ -100,7 +247,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
         static TestServerHost host;
         static GetUserRequest request;
         static IGetUserService client;
-        static string result;
+        static string result1;
+        static string result2;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -112,13 +260,23 @@ namespace DocaLabs.Http.Client.Integration.Tests
             host = new TestServerHost();
         };
 
-        Because of =
-            () => result = client.Get(request).Result;
+        Because of = () =>
+        {
+            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-        It should_call_the_service_and_return_data =
-            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+            Task.WaitAll(allTask);
 
-        static User ToUser()
+            result1 = allTask.Result[0];
+            result2 = allTask.Result[1];
+        };
+
+        It should_call_the_service_and_return_data_for_the_first_task =
+            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_call_the_service_and_return_data_for_the_second_task =
+            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser(string result)
         {
             return JsonConvert.DeserializeObject<User>(result);
         }
@@ -145,7 +303,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
     {
         static TestServerHost host;
         static IGetUserService client;
-        static User result;
+        static User result1;
+        static User result2;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -156,11 +315,21 @@ namespace DocaLabs.Http.Client.Integration.Tests
             host = new TestServerHost();
         };
 
-        Because of =
-            () => result = client.Get(Users.Data[0].Id).Result;
+        Because of = () =>
+        {
+            var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
 
-        It should_call_the_service_and_return_data =
-            () => result.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+            Task.WaitAll(allTask);
+
+            result1 = allTask.Result[0];
+            result2 = allTask.Result[1];
+        };
+
+        It should_call_the_service_and_return_data_for_the_first_task =
+            () => result1.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_call_the_service_and_return_data_for_the_second_task =
+            () => result2.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
 
         public interface IGetUserService
         {
@@ -174,7 +343,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
         static TestServerHost host;
         static GetUserRequest request;
         static IGetUserService client;
-        static byte[] result;
+        static byte[] result1;
+        static byte[] result2;
 
         Cleanup after_each =
             () => host.Dispose();
@@ -186,13 +356,23 @@ namespace DocaLabs.Http.Client.Integration.Tests
             host = new TestServerHost();
         };
 
-        Because of =
-            () => result = client.Get(request).Result;
+        Because of = () =>
+        {
+            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-        It should_call_the_service_and_return_data =
-            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+            Task.WaitAll(allTask);
 
-        static User ToUser()
+            result1 = allTask.Result[0];
+            result2 = allTask.Result[1];
+        };
+
+        It should_call_the_service_and_return_data_for_the_first_task =
+            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_call_the_service_and_return_data_for_the_second_task =
+            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        static User ToUser(byte[] result)
         {
             return JsonConvert.DeserializeObject<User>(Encoding.UTF8.GetString(result));
         }
