@@ -24,13 +24,9 @@ namespace DocaLabs.Http.Client.Utils
         /// <summary>
         /// Returns a completed task which does nothing.
         /// </summary>
-        public static Task CompletedTask(CancellationToken cancellationToken)
+        public static Task CompletedTask()
         {
-            var task = new Task(() => { }, cancellationToken);
-
-            task.RunSynchronously();
-
-            return task;
+            return Task.FromResult("");
         }
     }
 }

@@ -81,7 +81,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             request.ContentType = ContentType;
 
             if (obj == null)
-                return TaskUtils.CompletedTask(cancellationToken);
+                return TaskUtils.CompletedTask();
 
             var stream = obj as Stream;
             if (stream == null)
