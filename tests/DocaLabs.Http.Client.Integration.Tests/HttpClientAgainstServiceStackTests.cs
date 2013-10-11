@@ -103,6 +103,63 @@ namespace DocaLabs.Http.Client.Integration.Tests
     }
 
     [Subject(typeof(HttpClient<,>))]
+    public class when_getting_a_json_object_as_stream_wrapped_in_rich_response
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static RichResponse<Stream> result;
+
+        Cleanup after_each = () =>
+        {
+            host.Dispose();
+            result.Value.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_return_etag =
+            () => result.ETag.ShouldEqual(Users.ETags[request.Id]);
+
+        It should_return_200_status_code =
+            () => result.Is(HttpStatusCode.OK);
+
+        static User ToUser()
+        {
+            using (var reader = new StreamReader(result.Value, Encoding.UTF8, true, 4096, true))
+            {
+                return JsonConvert.DeserializeObject<User>(reader.ReadToEnd());
+            }
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            RichResponse<Stream> Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
     public class when_getting_a_json_object_as_http_response_stream
     {
         static TestServerHost host;
@@ -147,6 +204,63 @@ namespace DocaLabs.Http.Client.Integration.Tests
         public interface IGetUserService
         {
             HttpResponseStream Get(GetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_getting_a_json_object_as_http_response_stream_wrapped_in_rich_response
+    {
+        static TestServerHost host;
+        static GetUserRequest request;
+        static IGetUserService client;
+        static RichResponse<HttpResponseStream> result;
+
+        Cleanup after_each = () =>
+        {
+            host.Dispose();
+            result.Value.Dispose();
+        };
+
+        Establish context = () =>
+        {
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new GetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        It should_return_etag =
+            () => result.ETag.ShouldEqual(Users.ETags[request.Id]);
+
+        It should_return_200_status_code =
+            () => result.Is(HttpStatusCode.OK);
+
+        static User ToUser()
+        {
+            using (var reader = new StreamReader(result.Value, Encoding.UTF8, true, 4096, true))
+            {
+                return JsonConvert.DeserializeObject<User>(reader.ReadToEnd());
+            }
+        }
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest()
+            {
+                Format = "json";
+            }
+        }
+
+        public interface IGetUserService
+        {
+            RichResponse<HttpResponseStream> Get(GetUserRequest request);
         }
     }
 

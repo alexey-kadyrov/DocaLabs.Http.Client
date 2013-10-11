@@ -308,7 +308,10 @@ namespace DocaLabs.Http.Client
             {
                 if (_asyncClient)
                 {
-                    _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _originalOutputModelType);
+                    if (_originalOutputModelType == typeof(Task))
+                        _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, typeof(Task<VoidType>));
+                    else
+                        _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _originalOutputModelType);
                 }
                 else
                 {

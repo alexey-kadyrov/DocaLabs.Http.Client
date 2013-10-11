@@ -130,24 +130,24 @@ namespace DocaLabs.Http.Client.Binding
                 var deserializer = GetUserSpecifiedDeserializer(context, responseType);
                 if (deserializer == null)
                 {
-                    if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
+                    if (responseType == typeof(Stream) || responseType == typeof(HttpResponseStream))
                     {
-                        var retVal = (T)(object)stream;
+                        var retVal = stream;
                         stream = null;
-                        return retVal;
+                        return (T)MakeReturnValue(retVal, retVal, responseType, resultType);
                     }
 
-                    if (resultType == typeof(VoidType))
-                        return (T)(object)VoidType.Value;
+                    if (responseType == typeof(VoidType))
+                        return (T)MakeReturnValue(stream, VoidType.Value, responseType, resultType);
 
-                    deserializer = FindProvider(stream, resultType);
+                    deserializer = FindProvider(stream, responseType);
 
                     if (deserializer == null)
                     {
-                        if (resultType == typeof(string))
+                        if (responseType == typeof(string))
                             return await (Task<T>)(object)stream.AsStringAsync();
 
-                        if (resultType == typeof(byte[]))
+                        if (responseType == typeof(byte[]))
                             return await (Task<T>)(object)stream.AsByteArrayAsync(context.CancellationToken);
 
                         throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
@@ -157,15 +157,10 @@ namespace DocaLabs.Http.Client.Binding
                 var asyncDeserializer = deserializer as IAsyncResponseDeserialization;
 
                 var value = await (asyncDeserializer != null
-                    ? asyncDeserializer.DeserializeAsync(stream, resultType, context.CancellationToken)
-                    : Task.FromResult(deserializer.Deserialize(stream, resultType)));
+                    ? asyncDeserializer.DeserializeAsync(stream, responseType, context.CancellationToken)
+                    : Task.FromResult(deserializer.Deserialize(stream, responseType)));
 
-                object richResponse = null;
-
-                if (responseType != resultType)
-                    richResponse = Activator.CreateInstance(resultType, stream.Response, value);
-
-                return (T)(richResponse ?? value);
+                return (T)MakeReturnValue(stream, value, responseType, resultType);
             }
             catch (WebException e)
             {
@@ -179,6 +174,16 @@ namespace DocaLabs.Http.Client.Binding
                 if (stream != null)
                     stream.Dispose();
             }
+        }
+
+        static object MakeReturnValue(HttpResponseStream stream, object value, Type responseType, Type resultType)
+        {
+            object richResponse = null;
+
+            if (responseType != resultType)
+                richResponse = Activator.CreateInstance(resultType, stream.Response, value);
+
+            return richResponse ?? value;
         }
 
         Type GetResponseType(BindingContext context, Type resultType)
