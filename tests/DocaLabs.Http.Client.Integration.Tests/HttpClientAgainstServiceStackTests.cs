@@ -1186,4 +1186,33 @@ namespace DocaLabs.Http.Client.Integration.Tests
             void Delete(DeleteUserRequest request);
         }
     }
+
+    [Subject(typeof(HttpClient<,>))]
+    public class when_executing_request_without_any_parameters_and_return_data
+    {
+        static TestServerHost host;
+        static IDeleteUserService client;
+        static Guid id;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            id = Users.Data[2].Id;
+            client = HttpClientFactory.CreateInstance<IDeleteUserService>(new Uri(string.Format("http://localhost:1337/v2/users/{0}", id)), "noParametersRequest");
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => client.Delete();
+
+        It should_call_the_service =
+            () => Users.Data.ShouldNotContain(x => x.Id == id);
+
+        public interface IDeleteUserService
+        {
+            void Delete();
+        }
+    }
 }
