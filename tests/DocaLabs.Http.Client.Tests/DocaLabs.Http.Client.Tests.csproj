@@ -105,6 +105,7 @@
     <Compile Include="Configuration\ClientNetworkCredentialsElementTests.cs" />
     <Compile Include="Configuration\EndpointConfigurationTests.cs" />
     <Compile Include="Binding\RequestExtensionsTests.cs" />
+    <Compile Include="AsyncDefaultExecuteStrategyTests.cs" />
     <Compile Include="DefaultExecuteStrategyTests.cs" />
     <Compile Include="ExceptionExtensionsTests.cs" />
     <Compile Include="HttpClientTests.cs" />
