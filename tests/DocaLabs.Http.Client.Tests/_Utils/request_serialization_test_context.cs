@@ -2,6 +2,7 @@
 using System.IO.Compression;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -24,6 +25,7 @@ namespace DocaLabs.Http.Client.Tests._Utils
             mock_web_request = new Mock<WebRequest>();
             mock_web_request.SetupAllProperties();
             mock_web_request.Setup(x => x.GetRequestStream()).Returns(request_data);
+            mock_web_request.Setup(x => x.GetRequestStreamAsync()).Returns(Task.FromResult((Stream)request_data));
             mock_web_request.Object.Headers = new WebHeaderCollection();
         };
 

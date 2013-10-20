@@ -75,6 +75,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Binding\AsyncBindingContextTests.cs" />
+    <Compile Include="Binding\BindingContextTests.cs" />
     <Compile Include="Binding\DefaultCredentialsMapperTests.cs" />
     <Compile Include="Binding\DefaultHeaderMapperTests.cs" />
     <Compile Include="Binding\DefaultRequestBinderTests.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="AsyncDefaultExecuteStrategyTests.cs" />
     <Compile Include="DefaultExecuteStrategyTests.cs" />
     <Compile Include="ExceptionExtensionsTests.cs" />
+    <Compile Include="AsyncHttpClientTests.cs" />
     <Compile Include="HttpClientTests.cs" />
     <Compile Include="HttpClientWebExceptionTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactoryTests.cs" />

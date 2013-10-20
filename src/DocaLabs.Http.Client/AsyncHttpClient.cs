@@ -121,12 +121,12 @@ namespace DocaLabs.Http.Client
         /// <summary>
         /// Tries to write data to the request's body by examining the model type.
         /// </summary>
-        protected virtual Task TryWriteRequestData(IRequestBinder binder, AsyncBindingContext context, WebRequest request, CancellationToken cancellationToken)
+        protected virtual Task TryWriteRequestData(IRequestBinder binder, AsyncBindingContext context, WebRequest request)
         {
             var asyncWriter = binder as IAsyncRequestWriter;
             return asyncWriter != null 
-                ? asyncWriter.WriteAsync(context, request, cancellationToken) 
-                : TaskUtils.RunSynchronously(() => binder.Write(context, request), cancellationToken);
+                ? asyncWriter.WriteAsync(context, request) 
+                : TaskUtils.RunSynchronously(() => binder.Write(context, request), context.CancellationToken);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace DocaLabs.Http.Client
 
             var pipeline = InitializeExecutionPipeline<TInputModel>(model, context);
 
-            await TryWriteRequestData(pipeline.RequestBinder, context, pipeline.WebRequest, cancellationToken);
+            await TryWriteRequestData(pipeline.RequestBinder, context, pipeline.WebRequest);
 
             return await ParseResponse(context, pipeline.WebRequest);
         }

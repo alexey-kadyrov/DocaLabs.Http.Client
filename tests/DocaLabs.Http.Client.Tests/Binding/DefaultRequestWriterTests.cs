@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Binding.Serialization;
@@ -816,6 +818,424 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         Because of =
             () => writer.Write(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object);
+
+        It should_set_request_content_type_as_application_octet =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
+
+        It should_serialize_the_property_value =
+            () => GetRequestData().ShouldEqual("Hello World!");
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_null_client
+    {
+        static DefaultRequestWriter writer;
+        static Exception exception;
+
+        Establish context =
+            () => writer = new DefaultRequestWriter();
+
+        Because of =
+            () => exception = Catch.Exception(() => Task.WaitAll(writer.WriteAsync(null, new Model(), new Mock<WebRequest>().Object, CancellationToken.None)));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_client_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("client");
+
+        class Model
+        {
+            public string Value { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_serialization_attribute_on_property_and_model_and_client_levels
+    {
+        static DefaultRequestWriter writer;
+        static CancellationToken cancellation_token;
+
+        Cleanup after = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+        };
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+
+            writer = new DefaultRequestWriter();
+            cancellation_token = new CancellationTokenSource().Token;
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model { Value = "Hello World!" }, new Mock<WebRequest>().Object, cancellation_token));
+
+        It should_use_property_level_serializer =
+            () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("property");
+
+        It should_use_provided_cancellation_token =
+            () => TestRequestSerializationAttribute.UsedCancellationToken.ShouldEqual(cancellation_token);
+
+        [TestRequestSerialization(Marker = "model")]
+        class Model
+        {
+            [TestRequestSerialization(Marker = "property")]
+            public string Value { [UsedImplicitly] get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client")]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_serialization_attribute_on_null_property_and_model_and_client_levels
+    {
+        static HttpWebRequest web_request;
+        static DefaultRequestWriter writer;
+
+        Establish context = () =>
+        {
+            web_request = (HttpWebRequest)WebRequest.CreateDefault(new Uri("http://foo.bar"));
+            web_request.ContentLength = 99;
+            web_request.Method = "POST";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), web_request, CancellationToken.None));
+
+        It should_set_content_length_to_zero =
+            () => web_request.ContentLength.ShouldEqual(0);
+
+        [TestRequestSerialization(Marker = "model")]
+        class Model
+        {
+            [TestRequestSerialization(Marker = "property")]
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_serialization_attribute_on_model_and_client_levels
+    {
+        static DefaultRequestWriter writer;
+        static CancellationToken cancellation_token;
+
+        Cleanup after = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+        };
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+
+            writer = new DefaultRequestWriter();
+            cancellation_token = new CancellationTokenSource().Token;
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+
+        It should_use_model_level_serializer =
+            () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("model");
+
+        It should_use_provided_cancellation_token =
+            () => TestRequestSerializationAttribute.UsedCancellationToken.ShouldEqual(cancellation_token);
+
+        [TestRequestSerialization(Marker = "model")]
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client")]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_serialization_attribute_on_client_levels
+    {
+        static DefaultRequestWriter writer;
+        static CancellationToken cancellation_token;
+
+        Cleanup after = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+        };
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+
+            writer = new DefaultRequestWriter();
+            cancellation_token = new CancellationTokenSource().Token;
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+
+        It should_use_client_level_serializer =
+            () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("client");
+
+        It should_use_provided_cancellation_token =
+            () => TestRequestSerializationAttribute.UsedCancellationToken.ShouldEqual(cancellation_token);
+
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client")]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_serialization_attribute_on_property_level_and_property_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+        static CancellationToken cancellation_token;
+
+        Cleanup after = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+        };
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+
+            writer = new DefaultRequestWriter();
+            cancellation_token = new CancellationTokenSource().Token;
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model { Value = "Hello World!" }, new Mock<WebRequest>().Object, cancellation_token));
+
+        It should_still_use_property_serializer =
+            () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("property");
+
+        It should_still_use_provided_cancellation_token =
+            () => TestRequestSerializationAttribute.UsedCancellationToken.ShouldEqual(cancellation_token);
+
+        class Model
+        {
+            [TestRequestSerialization(Marker = "property"), RequestUse(RequestUseTargets.Ignore)]
+            public string Value { [UsedImplicitly] get; set; }
+        }
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_serialization_attribute_on_model_level_and_model_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+        static CancellationToken cancellation_token;
+
+        Cleanup after = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+        };
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+
+            writer = new DefaultRequestWriter();
+            cancellation_token = new CancellationTokenSource().Token;
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+
+        It should_still_use_model_serializer =
+            () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("model");
+
+        It should_still_use_provided_cancellation_token =
+            () => TestRequestSerializationAttribute.UsedCancellationToken.ShouldEqual(cancellation_token);
+
+        [TestRequestSerialization(Marker = "model"), RequestUse(RequestUseTargets.Ignore)]
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_serialization_attribute_on_client_level_and_client_has_use_in_request_ignore
+    {
+        static DefaultRequestWriter writer;
+        static CancellationToken cancellation_token;
+
+        Cleanup after = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+        };
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+
+            writer = new DefaultRequestWriter();
+            cancellation_token = new CancellationTokenSource().Token;
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+
+        It should_still_use_client_serializer =
+            () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("client");
+
+        It should_still_use_provided_cancellation_token =
+            () => TestRequestSerializationAttribute.UsedCancellationToken.ShouldEqual(cancellation_token);
+
+        class Model
+        {
+            public string Value { get; set; }
+        }
+
+        [TestRequestSerialization(Marker = "client"), RequestUse(RequestUseTargets.Ignore)]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_null_model
+    {
+        static HttpWebRequest web_request;
+        static DefaultRequestWriter writer;
+
+        Establish context = () =>
+        {
+            web_request = (HttpWebRequest)WebRequest.CreateDefault(new Uri("http://foo.bar"));
+            web_request.ContentLength = 99;
+            web_request.Method = "POST";
+            writer = new DefaultRequestWriter();
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new Client(), null, web_request, CancellationToken.None));
+
+        It should_set_content_length_to_zero =
+            () => web_request.ContentLength.ShouldEqual(0);
+
+        [TestRequestSerialization]
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_model_with_stream_property : request_serialization_test_context
+    {
+        static DefaultRequestWriter writer;
+        static Model model;
+
+        Establish context = () =>
+        {
+            writer = new DefaultRequestWriter();
+            model = new Model
+            {
+                Id = "123456789",
+                Value = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"))
+            };
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object, CancellationToken.None));
+
+        It should_set_request_content_type_as_application_octet =
+            () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
+
+        It should_serialize_the_property_value =
+            () => GetRequestData().ShouldEqual("Hello World!");
+
+        class Model
+        {
+            public string Id { [UsedImplicitly] get; set; }
+            public Stream Value { [UsedImplicitly] get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestWriter), "WriteAsync")]
+    class when_trying_to_write_asynchronously_using_stream_model : request_serialization_test_context
+    {
+        static DefaultRequestWriter writer;
+        static Stream model;
+
+        Establish context = () =>
+        {
+            writer = new DefaultRequestWriter();
+            model = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
+        };
+
+        Because of =
+            () => Task.WaitAll(writer.WriteAsync(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object, CancellationToken.None));
 
         It should_set_request_content_type_as_application_octet =
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");

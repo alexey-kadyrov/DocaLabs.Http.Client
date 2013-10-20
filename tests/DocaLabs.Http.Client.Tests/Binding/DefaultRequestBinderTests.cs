@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Tests.Binding._Utils;
@@ -11,7 +13,7 @@ using It = Machine.Specifications.It;
 namespace DocaLabs.Http.Client.Tests.Binding
 {
     [Subject(typeof(DefaultRequestBinder))]
-    class when_defult_request_binder_teransforms_model
+    class when_default_request_binder_transforms_model
     {
         static DefaultRequestBinder request_binder;
         static object original_model;
@@ -31,7 +33,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestBinder))]
-    class when_defult_request_binder_composing_url
+    class when_default_request_binder_composes_url
     {
         static DefaultRequestBinder request_binder;
         static Uri base_url;
@@ -78,7 +80,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestBinder))]
-    class when_defult_request_binder_is_infering_request_method_for_model_with_serialization_hint
+    class when_default_request_binder_is_infering_request_method_for_model_with_serialization_hint
     {
         static DefaultRequestBinder request_binder;
         static BindingContext binding_context;
@@ -117,7 +119,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestBinder))]
-    class when_defult_request_binder_is_infering_request_method_for_model_without_serialization_hint
+    class when_default_request_binder_is_infering_request_method_for_model_without_serialization_hint
     {
         static DefaultRequestBinder request_binder;
         static BindingContext binding_context;
@@ -155,7 +157,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestBinder))]
-    class when_defult_request_binder_gets_headers
+    class when_default_request_binder_gets_headers
     {
         static TestModel model;
         static WebHeaderCollection headers;
@@ -203,7 +205,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestBinder))]
-    class when_defult_request_binder_gets_credentials
+    class when_default_request_binder_gets_credentials
     {
         static DefaultRequestBinder request_binder;
         static BindingContext binding_context;
@@ -250,7 +252,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(DefaultRequestBinder))]
-    class when_defult_request_binder_writes_to_request_body_model_with_serialization_hint
+    class when_default_request_binder_writes_to_request_body_model_with_serialization_hint
     {
         static DefaultRequestBinder request_binder;
         static BindingContext binding_context;
@@ -274,6 +276,56 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_use_model_level_serializer =
             () => TestRequestSerializationAttribute.UsedMarker.ShouldEqual("model");
+
+        [TestRequestSerialization(Marker = "model")]
+        class Model
+        {
+            [UsedImplicitly]
+            public string Value { get; set; }
+        }
+
+        class Client : HttpClient<Model, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar/"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultRequestBinder))]
+    class when_default_request_binder_asynchronously_writes_to_request_body_model_with_serialization_hint
+    {
+        static DefaultRequestBinder request_binder;
+        static AsyncBindingContext binding_context;
+        static CancellationToken cancellation_token;
+
+        Cleanup after = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            TestRequestSerializationAttribute.UsedCancellationToken = CancellationToken.None;
+        };
+
+        Establish context = () =>
+        {
+            TestRequestSerializationAttribute.UsedAsyncMarker = "";
+            var model = new Model();
+            cancellation_token = new CancellationTokenSource().Token;
+            binding_context = new AsyncBindingContext(new Client(), model, null, null, cancellation_token)
+            {
+                Model = model
+            };
+            request_binder = new DefaultRequestBinder();
+        };
+
+        Because of =
+            () => Task.WaitAll(request_binder.WriteAsync(binding_context, new Mock<WebRequest>().Object));
+
+        It should_use_model_level_serializer =
+            () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("model");
+
+        It should_use_provided_cancellation_token =
+            () => TestRequestSerializationAttribute.UsedCancellationToken.ShouldEqual(cancellation_token);
 
         [TestRequestSerialization(Marker = "model")]
         class Model
