@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
@@ -8,10 +10,16 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultRequestBinder : IRequestBinder, IAsyncRequestWriter
     {
+        static readonly ConcurrentDictionary<Type, Func<BindingContext, object>> Transformers;
         readonly DefaultUrlComposer _urlComposer;
         readonly DefaultRequestWriter _requestWriter;
         readonly DefaultHeaderMapper _headerMapper;
         readonly DefaultCredentialsMapper _credentialsMapper;
+
+        static DefaultRequestBinder()
+        {
+            Transformers = new ConcurrentDictionary<Type, Func<BindingContext, object>>();
+        }
 
         /// <summary>
         /// Initializes a new instance of the DefaultRequestBinder class.
@@ -25,11 +33,22 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
+        /// Sets a transformer method for the type.
+        /// </summary>
+        public static void SetModelTransformer(Type type, Func<BindingContext, object> transformer)
+        {
+            Transformers[type] = transformer;
+        }
+
+        /// <summary>
         /// Returns the input model as its passed without any modification.
         /// </summary>
         public virtual object TransformModel(BindingContext context)
         {
-            return context.OriginalModel;
+            Func<BindingContext, object> transformer;
+            return Transformers.TryGetValue(context.InputModelType, out transformer) && transformer != null
+                ? transformer(context)
+                : context.OriginalModel;
         }
 
         /// <summary>

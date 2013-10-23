@@ -26,7 +26,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => transformed_model = request_binder.TransformModel(new BindingContext(null, original_model, null, null));
+            () => transformed_model = request_binder.TransformModel(new BindingContext(null, original_model, null, null, typeof(object), typeof(object)));
 
         It should_return_original_model =
             () => transformed_model.ShouldBeTheSameAs(original_model);
@@ -51,7 +51,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
                 PathValue2 = "another path",
                 QueryValue1 = "Hello World!"
             };
-            binding_context = new BindingContext(new TestClient(), model, null, base_url)
+            binding_context = new BindingContext(new TestClient(), model, null, base_url, typeof(TestModel), typeof(string))
             {
                 Model = model
             };
@@ -89,7 +89,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Establish context = () =>
         {
             var model = new Model();
-            binding_context = new BindingContext(new Client(), model, null, null)
+            binding_context = new BindingContext(new Client(), model, null, null, typeof(Model), typeof(string))
             {
                 Model = model
             };
@@ -128,7 +128,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Establish context = () =>
         {
             var model = new Model();
-            binding_context = new BindingContext(new Client(), model, null, null)
+            binding_context = new BindingContext(new Client(), model, null, null, typeof(Model), typeof(string))
             {
                 Model = model
             };
@@ -171,7 +171,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
                 MyHeader = "Hello World!",
                 JustValue = "Nothing"
             };
-            binding_context = new BindingContext(new TestClient(), model, null, null)
+            binding_context = new BindingContext(new TestClient(), model, null, null, typeof(TestModel), typeof(string))
             {
                 Model = model
             };
@@ -221,7 +221,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
                 Value = "Hello World!",
                 Credentials2 = original_credentials
             };
-            binding_context = new BindingContext(new TestClient(), model, null, new Uri("http://contoso.com/"))
+            binding_context = new BindingContext(new TestClient(), model, null, new Uri("http://contoso.com/"), typeof(Model), typeof(string))
             {
                 Model = model
             };
@@ -264,7 +264,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         {
             TestRequestSerializationAttribute.UsedMarker = "";
             var model = new Model();
-            binding_context = new BindingContext(new Client(), model, null, null)
+            binding_context = new BindingContext(new Client(), model, null, null, typeof(Model), typeof(string))
             {
                 Model = model
             };
@@ -311,7 +311,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             TestRequestSerializationAttribute.UsedAsyncMarker = "";
             var model = new Model();
             cancellation_token = new CancellationTokenSource().Token;
-            binding_context = new AsyncBindingContext(new Client(), model, null, null, cancellation_token)
+            binding_context = new AsyncBindingContext(new Client(), model, null, null, typeof(Model), typeof(string), cancellation_token)
             {
                 Model = model
             };

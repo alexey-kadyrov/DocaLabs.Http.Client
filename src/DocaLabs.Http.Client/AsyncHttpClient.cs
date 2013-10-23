@@ -147,7 +147,7 @@ namespace DocaLabs.Http.Client
 
         async Task<TOutputModel> ExecutePipeline(TInputModel model, CancellationToken cancellationToken)
         {
-            var context = new AsyncBindingContext(this, model, Configuration, BaseUrl, cancellationToken);
+            var context = new AsyncBindingContext(this, model, Configuration, BaseUrl, GetInputModelType<TInputModel>(model), typeof(TOutputModel), cancellationToken);
 
             var pipeline = InitializeExecutionPipeline<TInputModel>(model, context);
 

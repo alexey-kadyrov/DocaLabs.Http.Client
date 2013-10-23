@@ -29,7 +29,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.SetupAllProperties();
             web_request.Setup(x => x.Headers).Returns(headers);
 
-            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"));
+            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(object), typeof(object));
 
             binding_context.Configuration.Headers.Add(new ClientHeaderElement { Name = "x-header1", Value = "value11,value12" });
             binding_context.Configuration.Headers.Add(new ClientHeaderElement { Name = "x-header2", Value = "value2" });
@@ -63,7 +63,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.SetupAllProperties();
             web_request.Setup(x => x.Headers).Returns(headers);
 
-            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"));
+            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(object), typeof(object));
         };
 
         Because of =
@@ -101,7 +101,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.SetupAllProperties();
             web_request.Setup(x => x.Headers).Returns(headers);
 
-            binding_context = new BindingContext(new TestClient(), model, new ClientEndpointElement(), new Uri("http://foo.bar"))
+            binding_context = new BindingContext(new TestClient(), model, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(TestModel), typeof(string))
             {
                 Model = model
             };
@@ -233,7 +233,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Establish context = () =>
         {
             request_binder = new Mock<IRequestBinder>();
-            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"));
+            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(object), typeof(object));
         };
 
         Because of =
@@ -285,7 +285,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
             request_binder = ModelBinders.DefaultRequestBinder;
-            binding_context = new BindingContext(new TestClient(), model, new ClientEndpointElement(), new Uri("http://foo.bar"))
+            binding_context = new BindingContext(new TestClient(), model, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(TestModel), typeof(string))
             {
                 Model = model
             };
@@ -337,7 +337,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
             request_binder = ModelBinders.DefaultRequestBinder;
-            binding_context = new BindingContext(new TestClient(), model, null, new Uri("http://foo.bar"))
+            binding_context = new BindingContext(new TestClient(), model, null, new Uri("http://foo.bar"), typeof(TestModel), typeof(string))
             {
                 Model = model
             };
@@ -380,7 +380,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
             request_binder = new Mock<IRequestBinder>();
-            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"));
+            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(object), typeof(object));
         };
 
         Because of =
@@ -407,7 +407,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
             request_binder = new Mock<IRequestBinder>();
-            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"));
+            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(object), typeof(object));
 
             binding_context.Configuration.Credential.CredentialType = CredentialType.DefaultCredentials;
         };
@@ -436,7 +436,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             web_request.Object.AuthenticationLevel = AuthenticationLevel.None;
 
             request_binder = new Mock<IRequestBinder>();
-            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"))
+            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(object), typeof(object))
             {
                 Configuration = { AuthenticationLevel = AuthenticationLevel.MutualAuthRequired }
             };
@@ -464,7 +464,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         Establish context = () =>
         {
             request_binder = new Mock<IRequestBinder>();
-            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"));
+            binding_context = new BindingContext(null, null, new ClientEndpointElement(), new Uri("http://foo.bar"), typeof(object), typeof(object));
         };
 
         Because of =

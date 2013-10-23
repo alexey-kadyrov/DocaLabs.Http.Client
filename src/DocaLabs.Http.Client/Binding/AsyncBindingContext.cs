@@ -17,8 +17,8 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes in instance of the AsyncBindingContext class.
         /// </summary>
-        public AsyncBindingContext(object httpClient, object originalModel, IClientEndpoint configuration, Uri baseUrl, CancellationToken cancellationToken) 
-            : base(httpClient, originalModel, configuration, baseUrl)
+        public AsyncBindingContext(object httpClient, object originalModel, IClientEndpoint configuration, Uri baseUrl, Type inputModelType, Type outputModelType, CancellationToken cancellationToken) 
+            : base(httpClient, originalModel, configuration, baseUrl, inputModelType, outputModelType)
         {
             CancellationToken = cancellationToken;
         }

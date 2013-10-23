@@ -26,7 +26,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => binding_context = new AsyncBindingContext(http_client, "Hello World!", client_endpoint.Object, base_url, cancellation_token);
+            () => binding_context = new AsyncBindingContext(http_client, "Hello World!", client_endpoint.Object, base_url, typeof(string), typeof(decimal), cancellation_token);
 
         It should_set_http_client_to_the_specified_value =
             () => binding_context.HttpClient.ShouldBeTheSameAs(http_client);
@@ -45,6 +45,12 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_set_request_url_to_null_value =
             () => binding_context.RequestUrl.ShouldBeNull();
+
+        It should_set_input_model_type_to_the_specified_value =
+            () => binding_context.InputModelType.ShouldBeTheSameAs(typeof(string));
+
+        It should_set_output_model_type_to_the_specified_value =
+            () => binding_context.OutputModelType.ShouldBeTheSameAs(typeof(decimal));
 
         // the CancellationToken is value type!
         It should_set_cancellation_token_to_the_specified_value =

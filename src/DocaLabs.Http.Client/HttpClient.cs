@@ -99,7 +99,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual TOutputModel ParseResponse(BindingContext context, WebRequest request)
         {
-            return (TOutputModel)ModelBinders.GetResponseBinder(typeof(TOutputModel)).Read(context, request, typeof(TOutputModel));
+            return (TOutputModel)ModelBinders.GetResponseBinder(typeof(TOutputModel)).Read(context, request);
         }
 
         static IExecuteStrategy<TInputModel, TOutputModel> GetDefaultExecuteStrategy()
@@ -112,7 +112,7 @@ namespace DocaLabs.Http.Client
 
         TOutputModel ExecutePipeline(TInputModel model)
         {
-            var context = new BindingContext(this, model, Configuration, BaseUrl);
+            var context = new BindingContext(this, model, Configuration, BaseUrl, GetInputModelType<TInputModel>(model), typeof(TOutputModel));
 
             var pipeline = InitializeExecutionPipeline<TInputModel>(model, context);
 

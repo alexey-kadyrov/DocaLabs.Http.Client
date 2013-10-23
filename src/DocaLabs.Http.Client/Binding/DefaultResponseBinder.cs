@@ -71,11 +71,10 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="request">The WebRequest object.</param>
-        /// <param name="resultType">Expected type for the return value.</param>
         /// <returns>Return value from the stream or null.</returns>
-        public virtual object Read(BindingContext context, WebRequest request, Type resultType)
+        public virtual object Read(BindingContext context, WebRequest request)
         {
-            var responseType = GetResponseType(context, resultType);
+            var responseType = GetResponseType(context);
 
             HttpResponseStream stream = null;
 
@@ -87,8 +86,8 @@ namespace DocaLabs.Http.Client.Binding
 
                 object richResponse = null;
 
-                if (responseType != resultType)
-                    richResponse = Activator.CreateInstance(resultType, stream.Response, value);
+                if (responseType != context.OutputModelType)
+                    richResponse = Activator.CreateInstance(context.OutputModelType, stream.Response, value);
 
                 if (value.Equals(stream))
                     stream = null;
@@ -97,8 +96,8 @@ namespace DocaLabs.Http.Client.Binding
             }
             catch (WebException e)
             {
-                if (Is3XX(e) && responseType != resultType)
-                    return Activator.CreateInstance(resultType, e.Response, null);
+                if (Is3XX(e) && responseType != context.OutputModelType)
+                    return Activator.CreateInstance(context.OutputModelType, e.Response, null);
 
                 throw;
             }
@@ -119,7 +118,7 @@ namespace DocaLabs.Http.Client.Binding
         {
             var resultType = typeof(T);
 
-            var responseType = GetResponseType(context, resultType);
+            var responseType = GetResponseType(context);
 
             HttpResponseStream stream = null;
 
@@ -186,15 +185,12 @@ namespace DocaLabs.Http.Client.Binding
             return richResponse ?? value;
         }
 
-        Type GetResponseType(BindingContext context, Type resultType)
+        Type GetResponseType(BindingContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            if (resultType == null)
-                throw new ArgumentNullException("resultType");
-
-            return _responseTypes.GetOrAdd(resultType, t => t.TryGetWrappedResponseModelType() ?? t);
+            return _responseTypes.GetOrAdd(context.OutputModelType, t => t.TryGetWrappedResponseModelType() ?? t);
         }
 
         static bool Is3XX(WebException e)

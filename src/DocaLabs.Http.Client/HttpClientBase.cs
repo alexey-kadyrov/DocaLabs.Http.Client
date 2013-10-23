@@ -124,9 +124,7 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual InitializedPipeline InitializeExecutionPipeline<TInputModel>(object model, BindingContext context)
         {
-            var inputModelType = GetInputModelType<TInputModel>(model);
-
-            var binder = ModelBinders.GetRequestBinder(inputModelType);
+            var binder = ModelBinders.GetRequestBinder(context.InputModelType);
 
             context.Model = binder.TransformModel(context);
 

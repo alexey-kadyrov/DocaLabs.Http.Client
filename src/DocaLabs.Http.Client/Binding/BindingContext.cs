@@ -24,6 +24,16 @@ namespace DocaLabs.Http.Client.Binding
         public Uri BaseUrl { get; private set; }
 
         /// <summary>
+        /// Gets the input model type. Which is inferred from the original model or if it's null then from the generic parameter TInputModel on the http client.
+        /// </summary>
+        public Type InputModelType { get; private set; }
+
+        /// <summary>
+        /// Gets the output model type.
+        /// </summary>
+        public Type OutputModelType { get; private set; }
+
+        /// <summary>
         /// Gets the original input model which was passed to the HttpClient.Execute method, 
         /// it could be different from the Model due the transformation.
         /// </summary>
@@ -42,9 +52,11 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes in instance of the BindingContext class.
         /// </summary>
-        public BindingContext(object httpClient, object originalModel, IClientEndpoint configuration, Uri baseUrl)
+        public BindingContext(object httpClient, object originalModel, IClientEndpoint configuration, Uri baseUrl, Type inputModelType, Type outputModelType)
         {
             BaseUrl = baseUrl;
+            InputModelType = inputModelType;
+            OutputModelType = outputModelType;
             Configuration = configuration;
             OriginalModel = originalModel;
             HttpClient = httpClient;

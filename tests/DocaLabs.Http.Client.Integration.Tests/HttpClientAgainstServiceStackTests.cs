@@ -52,6 +52,53 @@ namespace DocaLabs.Http.Client.Integration.Tests
     }
 
     [Subject(typeof(HttpClient<,>))]
+    public class when_getting_a_json_object_using_canonnical_domain_model_for_input
+    {
+        static TestServerHost host;
+        static CanonicalGetUserRequest request;
+        static IGetUserService client;
+        static User result;
+
+        Cleanup after_each =
+            () => host.Dispose();
+
+        Establish context = () =>
+        {
+            DefaultRequestBinder.SetModelTransformer(typeof(CanonicalGetUserRequest), c => new GetUserRequest(((CanonicalGetUserRequest)c.OriginalModel).Id));
+            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            request = new CanonicalGetUserRequest { Id = Users.Data[0].Id };
+            host = new TestServerHost();
+        };
+
+        Because of =
+            () => result = client.Get(request);
+
+        It should_call_the_service_and_return_data =
+            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+
+        public class GetUserRequest : GetUser
+        {
+            public string Format { get; set; }
+
+            public GetUserRequest(Guid id)
+            {
+                Id = id;
+                Format = "json";
+            }
+        }
+
+        public class CanonicalGetUserRequest
+        {
+            public Guid Id { get; set; }
+        }
+
+        public interface IGetUserService
+        {
+            User Get(CanonicalGetUserRequest request);
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
     public class when_getting_a_json_object_as_stream
     {
         static TestServerHost host;

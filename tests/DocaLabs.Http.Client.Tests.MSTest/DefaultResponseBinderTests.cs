@@ -32,9 +32,9 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 mockRequest.Setup(x => x.GetResponse()).Returns(shimWebResponse);
 
                 var binder = new DefaultResponseBinder();
-                var bindingContext = new BindingContext(new Client(), null, null, null);
+                var bindingContext = new BindingContext(new Client(), null, null, null, typeof(string), typeof(RichResponse<Model>));
 
-                var data = (RichResponse<Model>)binder.Read(bindingContext, mockRequest.Object, typeof(RichResponse<Model>));
+                var data = (RichResponse<Model>)binder.Read(bindingContext, mockRequest.Object);
 
                 Assert.IsNotNull(data);
                 Assert.AreEqual("Hello World!", data.Value.Value);
@@ -63,11 +63,11 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 mockRequest.Setup(x => x.GetResponse()).Returns(shimWebResponse);
 
                 var binder = new DefaultResponseBinder();
-                var bindingContext = new BindingContext(new Client(), null, null, null);
+                var bindingContext = new BindingContext(new Client(), null, null, null, typeof(string), typeof(RichResponse<Model>));
 
                 try
                 {
-                    binder.Read(bindingContext, mockRequest.Object, typeof (RichResponse<Model>));
+                    binder.Read(bindingContext, mockRequest.Object);
                 }
                 catch (WebException)
                 {
@@ -100,9 +100,9 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 mockRequest.Setup(x => x.GetResponse()).Returns(shimWebResponse);
 
                 var binder = new DefaultResponseBinder();
-                var bindingContext = new BindingContext(new Client(), null, null, null);
+                var bindingContext = new BindingContext(new Client(), null, null, null, typeof(string), typeof(RichResponse<Model>));
 
-                var data = (RichResponse<Model>)binder.Read(bindingContext, mockRequest.Object, typeof(RichResponse<Model>));
+                var data = (RichResponse<Model>)binder.Read(bindingContext, mockRequest.Object);
 
                 Assert.IsNotNull(data);
                 Assert.IsNull(data.Value);
