@@ -13,6 +13,89 @@ using It = Machine.Specifications.It;
 namespace DocaLabs.Http.Client.Tests.Binding
 {
     [Subject(typeof(DefaultRequestBinder))]
+    class when_setting_null_transformer_in_default_request_binder
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => DefaultRequestBinder.SetModelTransformer(typeof(string), null));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_transformer_argument =
+            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("transformer");
+    }
+
+    [Subject(typeof(DefaultRequestBinder))]
+    class when_setting_transformer_for_null_type_in_default_request_binder
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => DefaultRequestBinder.SetModelTransformer(null, context => new object()));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_type_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
+    }
+
+    [Subject(typeof(DefaultRequestBinder))]
+    class when_default_request_binder_transforms_model_using_specified_transformer
+    {
+        static DefaultRequestBinder request_binder;
+        static object original_model;
+        static object transformed_model;
+
+        Establish context = () =>
+        {
+            original_model = new object();
+            request_binder = new DefaultRequestBinder();
+            DefaultRequestBinder.SetModelTransformer(typeof(Model), context => "Hello World!");
+        };
+
+        Because of =
+            () => transformed_model = request_binder.TransformModel(new BindingContext(null, original_model, null, null, typeof(Model), typeof(object)));
+
+        It should_return_the_result_of_the_transformation =
+            () => transformed_model.ShouldEqual("Hello World!");
+
+        class Model
+        {
+        }
+    }
+
+    [Subject(typeof(DefaultRequestBinder))]
+    class when_default_request_binder_transforms_model_which_does_not_have_specified_transformer
+    {
+        static DefaultRequestBinder request_binder;
+        static object original_model;
+        static object transformed_model;
+
+        Establish context = () =>
+        {
+            original_model = new Model2();
+            request_binder = new DefaultRequestBinder();
+            DefaultRequestBinder.SetModelTransformer(typeof(Model1), context => "Hello World!");
+        };
+
+        Because of =
+            () => transformed_model = request_binder.TransformModel(new BindingContext(null, original_model, null, null, typeof(Model), typeof(object)));
+
+        It should_return_original_model =
+            () => transformed_model.ShouldBeTheSameAs(original_model);
+
+        class Model1
+        {
+        }
+        class Model2
+        {
+        }
+    }
+
+    [Subject(typeof(DefaultRequestBinder))]
     class when_default_request_binder_transforms_model
     {
         static DefaultRequestBinder request_binder;

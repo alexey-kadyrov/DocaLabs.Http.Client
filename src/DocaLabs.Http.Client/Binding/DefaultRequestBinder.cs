@@ -37,6 +37,12 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static void SetModelTransformer(Type type, Func<BindingContext, object> transformer)
         {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            if(transformer == null)
+                throw new ArgumentNullException("transformer");
+
             Transformers[type] = transformer;
         }
 
@@ -46,7 +52,7 @@ namespace DocaLabs.Http.Client.Binding
         public virtual object TransformModel(BindingContext context)
         {
             Func<BindingContext, object> transformer;
-            return Transformers.TryGetValue(context.InputModelType, out transformer) && transformer != null
+            return Transformers.TryGetValue(context.InputModelType, out transformer)
                 ? transformer(context)
                 : context.OriginalModel;
         }

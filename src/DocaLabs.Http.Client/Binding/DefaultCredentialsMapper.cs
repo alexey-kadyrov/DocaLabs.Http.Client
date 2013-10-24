@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultCredentialsMapper
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _propertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        static readonly ConcurrentDictionary<Type, PropertyMap> PropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
 
         /// <summary>
         /// Maps the model to credentials by checking whenever any of its properties returns non null object implementing ICredentials.
@@ -27,7 +27,7 @@ namespace DocaLabs.Http.Client.Binding
 
             return Ignore(client, model) 
                 ? null 
-                : GetCredentials(model, url, _propertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+                : GetCredentials(model, url, PropertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
         }
 
         static bool Ignore(object client, object model)

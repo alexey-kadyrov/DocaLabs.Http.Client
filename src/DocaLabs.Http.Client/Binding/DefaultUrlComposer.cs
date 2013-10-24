@@ -13,9 +13,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultUrlComposer
     {
-        readonly ClientPropertyMaps _implicitPathOrQueryMaps = new ClientPropertyMaps();
-        readonly ClientPropertyMaps _explicitQueryMaps = new ClientPropertyMaps();
-        readonly ClientPropertyMaps _explicitPathMaps = new ClientPropertyMaps();
+        static readonly ClientPropertyMaps ImplicitPathOrQueryMaps = new ClientPropertyMaps();
+        static readonly ClientPropertyMaps ExplicitQueryMaps = new ClientPropertyMaps();
+        static readonly ClientPropertyMaps ExplicitPathMaps = new ClientPropertyMaps();
 
         /// <summary>
         /// Composes a new URL using the model's properties and the base URL.
@@ -74,7 +74,7 @@ namespace DocaLabs.Http.Client.Binding
             else
             {
                 if (!isSerializableToRequestBody)
-                    ProcessImplicitPathOrQuery(existingPath, _implicitPathOrQueryMaps.Convert(client, model, RequestUsageExtensions.IsImplicitUrlPathOrQuery), path, query);
+                    ProcessImplicitPathOrQuery(existingPath, ImplicitPathOrQueryMaps.Convert(client, model, RequestUsageExtensions.IsImplicitUrlPathOrQuery), path, query);
 
                 ProcessExplicitPath(client, model, path);
                 ProcessExplicitQuery(client, model, query);
@@ -131,12 +131,12 @@ namespace DocaLabs.Http.Client.Binding
 
         void ProcessExplicitQuery(object client, object model, NameValueCollection query)
         {
-            query.Add(_explicitQueryMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlQuery));
+            query.Add(ExplicitQueryMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlQuery));
         }
 
         void ProcessExplicitPath(object client, object model, NameValueCollection path)
         {
-            path.Add(_explicitPathMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlPath));
+            path.Add(ExplicitPathMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlPath));
         }
 
         static string ComposePath(NameValueCollection path, string existingPath)

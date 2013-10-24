@@ -716,515 +716,423 @@ namespace DocaLabs.Http.Client.Tests.Binding
         }
     }
 
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_class_derived_from_stream_with_deserialization_attribute : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static object data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = binder.Read(binding_context, mock_request.Object, typeof(Model));
-
-    //    It should_return_data_deserialized_by_the_attribute =
-    //        () => data.ShouldBeOfType<int>();
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-
-    //    [TestResponseDeserialization(ReturnType = typeof(int))]
-    //    class Model : MemoryStream
-    //    {
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_class_derived_from_stream_without_deserialization_attribute : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static Exception exception;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => exception = Catch.Exception(() => binder.Read(binding_context, mock_request.Object, typeof(MemoryStream)));
-
-    //    It should_throw_http_client_exception =
-    //        () => exception.ShouldBeOfType<HttpClientException>();
-
-    //    class Client : HttpClient<string, MemoryStream>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_http_response_stream_and_with_deserialization_attributes_on_client : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static object data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = binder.Read(binding_context, mock_request.Object, typeof(HttpResponseStream));
-
-    //    It should_return_data_deserialized_by_the_attribute =
-    //        () => data.ShouldBeOfType<int>();
-
-    //    [TestResponseDeserialization(ReturnType = typeof(int))]
-    //    class Client : HttpClient<string, HttpResponseStream>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_void_type_and_with_deserialization_attributes_on_client : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static object value;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => value = binder.Read(binding_context, mock_request.Object, typeof(VoidType));
-
-    //    It should_return_data_deserialized_by_the_attribute =
-    //        () => value.ShouldBeOfType<int>();
-
-    //    [TestResponseDeserialization(ReturnType = typeof(int))]
-    //    class Client : HttpClient<string, VoidType>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_type_with_response_deserialization_attribute : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static Model data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (Model)binder.Read(binding_context, mock_request.Object, typeof(Model));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-
-    //    [TestResponseDeserialization(ReturnType = typeof(Model))]
-    //    class Model
-    //    {
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_type_and_client_with_response_deserialization_attribute : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static Model data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (Model)binder.Read(binding_context, mock_request.Object, typeof(Model));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    [TestResponseDeserialization(ReturnType = typeof(object))]
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-
-    //    [TestResponseDeserialization(ReturnType = typeof(Model))]
-    //    class Model
-    //    {
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_client_with_response_deserialization_attribute : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static int data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (int)binder.Read(binding_context, mock_request.Object, typeof(int));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    [TestResponseDeserialization(ReturnType = typeof(int))]
-    //    class Client : HttpClient<string, int>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_from_json : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static Model data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("{Value:\"Hello World!\"}")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (Model)binder.Read(binding_context, mock_request.Object, typeof(Model));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    It should_deserialize_properties =
-    //        () => data.Value.ShouldEqual("Hello World!");
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_from_xml : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static Model data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("<Model><Value>Hello World!</Value></Model>")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (Model)binder.Read(binding_context, mock_request.Object, typeof(Model));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    It should_deserialize_properties =
-    //        () => data.Value.ShouldEqual("Hello World!");
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_from_plain_text : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static string data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (string)binder.Read(binding_context, mock_request.Object, typeof(string));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    It should_deserialize_value =
-    //        () => data.ShouldEqual("Hello World!");
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_as_plain_text_when_content_type_is_unknown_but_the_return_type_is_string : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static string data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("who-knows/what; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (string)binder.Read(binding_context, mock_request.Object, typeof(string));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    It should_deserialize_value =
-    //        () => data.ShouldEqual("Hello World!");
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_from_octet_stream : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static byte[] data;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("application/octet-stream", new MemoryStream(new byte[] { 1, 2, 3, 4 }));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => data = (byte[])binder.Read(binding_context, mock_request.Object, typeof(byte[]));
-
-    //    It should_return_expected_data_using_attribute_on_the_model =
-    //        () => data.ShouldNotBeNull();
-
-    //    It should_deserialize_value =
-    //        () => data.ShouldEqual(new byte[] { 1, 2, 3, 4 });
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_from_unknwon_encoding_type : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static Exception exception;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("who-knows/what; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => exception = Catch.Exception(() => binder.Read(binding_context, mock_request.Object, typeof(Model)));
-
-    //    It should_throw_http_client_exceptionl =
-    //        () => exception.ShouldBeOfType<HttpClientException>();
-
-    //    class Client : HttpClient<string, Model>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_http_response_stream : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static HttpResponseStream stream;
-
-    //    Cleanup after =
-    //        () => stream.Dispose();
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => stream = (HttpResponseStream)binder.Read(binding_context, mock_request.Object, typeof(HttpResponseStream));
-
-    //    It should_return_stream =
-    //        () => stream.ShouldBeOfType<HttpResponseStream>();
-
-    //    It should_return_stream_wiath_all_data =
-    //        () => stream.ReadAsString(Encoding.UTF8).ShouldEqual("Hello World!");
-
-    //    class Client : HttpClient<string, HttpResponseStream>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_stream : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static Stream stream;
-
-    //    Cleanup after =
-    //        () => stream.Dispose();
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => stream = (Stream)binder.Read(binding_context, mock_request.Object, typeof(Stream));
-
-    //    It should_return_stream =
-    //        () => stream.ShouldBeOfType<Stream>();
-
-    //    It should_return_stream_wiath_all_data =
-    //        () => stream.ReadAsString(Encoding.UTF8).ShouldEqual("Hello World!");
-
-    //    class Client : HttpClient<string, Stream>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
-
-    //[Subject(typeof(DefaultResponseBinder))]
-    //class when_asynchronously_reading_for_void_type : default_response_binder_test_context
-    //{
-    //    static DefaultResponseBinder binder;
-    //    static BindingContext binding_context;
-    //    static object value;
-
-    //    Establish context = () =>
-    //    {
-    //        Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
-    //        binding_context = new BindingContext(new Client(), null, null, null);
-    //        binder = new DefaultResponseBinder();
-    //    };
-
-    //    Because of =
-    //        () => value = binder.Read(binding_context, mock_request.Object, typeof(VoidType));
-
-    //    It should_return_void_type =
-    //        () => value.ShouldEqual(VoidType.Value);
-
-    //    class Client : HttpClient<string, VoidType>
-    //    {
-    //        public Client()
-    //            : base(new Uri("http://foo.bar"))
-    //        {
-    //        }
-    //    }
-    //}
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_class_derived_from_stream_without_deserialization_attribute : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(MemoryStream), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => Task.WaitAll(binder.ReadAsync<MemoryStream>(binding_context, mock_request.Object)));
+
+        It should_throw_http_client_exception =
+            () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<HttpClientException>();
+
+        class Client : HttpClient<string, MemoryStream>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_derived_from_stream_and_with_deserialization_attributes_on_client : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static object data;
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(Model), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<Model>(binding_context, mock_request.Object).Result;
+
+        It should_return_data_deserialized_by_the_attribute =
+            () => data.ShouldBeOfType<Model>();
+
+        [TestResponseDeserialization(ReturnType = typeof(Model))]
+        class Client : HttpClient<string, Model>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class Model : MemoryStream
+        {
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_type_with_response_deserialization_attribute : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static Model data;
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(Model), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<Model>(binding_context, mock_request.Object).Result;
+
+        It should_return_expected_data_using_attribute_on_the_model =
+            () => data.ShouldBeOfType<Model>();
+
+        class Client : HttpClient<string, Model>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        [TestResponseDeserialization(ReturnType = typeof(Model))]
+        class Model
+        {
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_type_and_client_with_response_deserialization_attribute : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static Model data;
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(Model), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<Model>(binding_context, mock_request.Object).Result;
+
+        It should_return_expected_data_using_attribute_on_the_model =
+            () => data.ShouldNotBeNull();
+
+        [TestResponseDeserialization(ReturnType = typeof(object))]
+        class Client : HttpClient<string, Model>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        [TestResponseDeserialization(ReturnType = typeof(Model))]
+        class Model
+        {
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_client_with_response_deserialization_attribute : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static object data;
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(int), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<int>(binding_context, mock_request.Object).Result;
+
+        It should_return_expected_data_using_attribute_on_the_model =
+            () => data.ShouldBeOfType<int>();
+
+        [TestResponseDeserialization(ReturnType = typeof(int))]
+        class Client : HttpClient<string, int>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_from_json : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static Model data;
+
+        Establish context = () =>
+        {
+            Setup("application/json; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("{Value:\"Hello World!\"}")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(Model), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<Model>(binding_context, mock_request.Object).Result;
+
+        It should_return_expected_data_using_attribute_on_the_model =
+            () => data.ShouldNotBeNull();
+
+        It should_deserialize_properties =
+            () => data.Value.ShouldEqual("Hello World!");
+
+        class Client : HttpClient<string, Model>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_from_xml : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static Model data;
+
+        Establish context = () =>
+        {
+            Setup("text/xml; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("<Model><Value>Hello World!</Value></Model>")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(Model), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<Model>(binding_context, mock_request.Object).Result;
+
+        It should_return_expected_data_using_attribute_on_the_model =
+            () => data.ShouldNotBeNull();
+
+        It should_deserialize_properties =
+            () => data.Value.ShouldEqual("Hello World!");
+
+        class Client : HttpClient<string, Model>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_as_plain_text_when_content_type_is_unknown_but_the_return_type_is_string : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static string data;
+
+        Establish context = () =>
+        {
+            Setup("who-knows/what; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(string), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<string>(binding_context, mock_request.Object).Result;
+
+        It should_return_expected_data_using_attribute_on_the_model =
+            () => data.ShouldNotBeNull();
+
+        It should_deserialize_value =
+            () => data.ShouldEqual("Hello World!");
+
+        class Client : HttpClient<string, string>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_from_octet_stream : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static byte[] data;
+
+        Establish context = () =>
+        {
+            Setup("application/octet-stream", new MemoryStream(new byte[] { 1, 2, 3, 4 }));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(byte[]), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => data = binder.ReadAsync<byte[]>(binding_context, mock_request.Object).Result;
+
+        It should_return_expected_data_using_attribute_on_the_model =
+            () => data.ShouldNotBeNull();
+
+        It should_deserialize_value =
+            () => data.ShouldEqual(new byte[] { 1, 2, 3, 4 });
+
+        class Client : HttpClient<string, byte[]>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_from_unknwon_encoding_type : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            Setup("who-knows/what; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(Model), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => Task.WaitAll(binder.ReadAsync<Model>(binding_context, mock_request.Object)));
+
+        It should_throw_http_client_exceptionl =
+            () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<HttpClientException>();
+
+        class Client : HttpClient<string, Model>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_http_response_stream : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static HttpResponseStream stream;
+
+        Cleanup after =
+            () => stream.Dispose();
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(HttpResponseStream), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => stream = binder.ReadAsync<HttpResponseStream>(binding_context, mock_request.Object).Result;
+
+        It should_return_stream =
+            () => stream.ShouldBeOfType<HttpResponseStream>();
+
+        It should_return_stream_wiath_all_data =
+            () => stream.ReadAsString(Encoding.UTF8).ShouldEqual("Hello World!");
+
+        class Client : HttpClient<string, HttpResponseStream>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_stream : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static Stream stream;
+
+        Cleanup after =
+            () => stream.Dispose();
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(Stream), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => stream = binder.ReadAsync<Stream>(binding_context, mock_request.Object).Result;
+
+        It should_return_stream =
+            () => stream.ShouldBeOfType<Stream>();
+
+        It should_return_stream_wiath_all_data =
+            () => stream.ReadAsString(Encoding.UTF8).ShouldEqual("Hello World!");
+
+        class Client : HttpClient<string, Stream>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
+
+    [Subject(typeof(DefaultResponseBinder))]
+    class when_asynchronously_reading_for_void_type : default_response_binder_test_context
+    {
+        static DefaultResponseBinder binder;
+        static AsyncBindingContext binding_context;
+        static object value;
+
+        Establish context = () =>
+        {
+            Setup("text/plain; charset=utf-8", new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")));
+            binding_context = new AsyncBindingContext(new Client(), null, null, null, typeof(string), typeof(VoidType), CancellationToken.None);
+            binder = new DefaultResponseBinder();
+        };
+
+        Because of =
+            () => value = binder.ReadAsync<VoidType>(binding_context, mock_request.Object).Result;
+
+        It should_return_void_type =
+            () => value.ShouldEqual(VoidType.Value);
+
+        class Client : HttpClient<string, VoidType>
+        {
+            public Client()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+    }
 
     class default_response_binder_test_context
     {
