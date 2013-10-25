@@ -117,7 +117,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_with_impicit_and_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/path1/path2");
@@ -171,7 +171,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -227,7 +227,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -283,7 +283,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -343,7 +343,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -390,7 +390,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_with_impicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/path1/path2");
@@ -436,7 +436,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -481,7 +481,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -526,7 +526,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -579,7 +579,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -639,7 +639,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_with_all_suitable_values =
             () => client.RequestUrl.ShouldEqual("http://foo.bar/123?QueryKey=q2");
@@ -699,7 +699,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_create_url_with_all_suitable_values =
             () => client.RequestUrl.ShouldEqual("http://foo.bar/123?QueryKey=q2");
@@ -742,7 +742,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Execute(model));
+            () => client.Execute(model).Wait();
 
         It should_leave_original_url =
             () => client.RequestUrl.ShouldEqual("http://foo.bar/");

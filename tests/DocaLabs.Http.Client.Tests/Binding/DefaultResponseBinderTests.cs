@@ -731,7 +731,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => exception = Catch.Exception(() => Task.WaitAll(binder.ReadAsync<MemoryStream>(binding_context, mock_request.Object)));
+            () => exception = Catch.Exception(() => binder.ReadAsync<MemoryStream>(binding_context, mock_request.Object).Wait());
 
         It should_throw_http_client_exception =
             () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<HttpClientException>();
@@ -1021,7 +1021,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => exception = Catch.Exception(() => Task.WaitAll(binder.ReadAsync<Model>(binding_context, mock_request.Object)));
+            () => exception = Catch.Exception(() => binder.ReadAsync<Model>(binding_context, mock_request.Object).Wait());
 
         It should_throw_http_client_exceptionl =
             () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<HttpClientException>();

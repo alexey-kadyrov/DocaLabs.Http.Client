@@ -402,7 +402,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(request_binder.WriteAsync(binding_context, new Mock<WebRequest>().Object));
+            () => request_binder.WriteAsync(binding_context, new Mock<WebRequest>().Object).Wait();
 
         It should_use_model_level_serializer =
             () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("model");

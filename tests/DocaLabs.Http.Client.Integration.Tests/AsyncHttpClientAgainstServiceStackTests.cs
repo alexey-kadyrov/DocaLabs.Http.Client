@@ -35,7 +35,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -137,7 +137,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -200,7 +200,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -275,7 +275,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -350,7 +350,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -406,7 +406,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -462,7 +462,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -519,7 +519,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -573,7 +573,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -612,7 +612,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -651,7 +651,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -690,7 +690,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -753,7 +753,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            Task.WaitAll(allTask);
+            allTask.Wait();
 
             result1 = allTask.Result[0];
             result2 = allTask.Result[1];
@@ -826,7 +826,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(request), client.Get(request));
 
-            var aggregateException = (AggregateException)Catch.Exception(() => Task.WaitAll(allTask));
+            var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
             exception1 = aggregateException.InnerExceptions[0];
             exception2 = aggregateException.InnerExceptions[1];
@@ -899,7 +899,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(Guid.Empty), client.Get(Guid.Empty));
 
-            var aggregateException = (AggregateException)Catch.Exception(() => Task.WaitAll(allTask));
+            var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
             exception1 = aggregateException.InnerExceptions[0];
             exception2 = aggregateException.InnerExceptions[1];
@@ -956,7 +956,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             var allTask = Task.WhenAll(client.Get(Guid.Empty), client.Get(Guid.Empty));
 
-            var aggregateException = (AggregateException)Catch.Exception(() => Task.WaitAll(allTask));
+            var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
             exception1 = aggregateException.InnerExceptions[0];
             exception2 = aggregateException.InnerExceptions[1];
@@ -1004,7 +1004,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             };
             var allTask = Task.WhenAll(tasks);
 
-            var aggregateException = (AggregateException)Catch.Exception(() => Task.WaitAll(allTask));
+            var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
             result1 = tasks[0].Result;
             exception2 = aggregateException.InnerExceptions[0];
@@ -1064,8 +1064,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
             host = new TestServerHost();
         };
 
-        Because of = 
-            () => Task.WaitAll(client.Update(request));
+        Because of =
+            () => client.Update(request).Wait();
 
         It should_call_the_service =
             () => Users.Data[1].ShouldMatch(x => x.Id == request.Id && x.FirstName == "Updated FirstName" && x.LastName == "Updated LastName" && x.Email == "Updated Email");
@@ -1144,7 +1144,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Add(request));
+            () => client.Add(request).Wait();
 
         It should_call_the_service =
             () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
@@ -1220,7 +1220,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Add(request));
+            () => client.Add(request).Wait();
 
         It should_call_the_service =
             () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
@@ -1306,7 +1306,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => exception = ((AggregateException)Catch.Exception(() => Task.WaitAll(client.Add(request)))).InnerExceptions[0];
+            () => exception = ((AggregateException)Catch.Exception(() => client.Add(request).Wait())).InnerExceptions[0];
 
 
         It should_throw_http_client_web_exception_exception =
@@ -1356,7 +1356,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Add(request));
+            () => client.Add(request).Wait();
 
         It should_call_the_service =
             () => Users.Data.First(x => x.Id == request.User.Id).ShouldMatch(x => x.Id == request.User.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
@@ -1407,7 +1407,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Add(request));
+            () => client.Add(request).Wait();
 
         It should_call_the_service =
             () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
@@ -1454,7 +1454,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Add(request));
+            () => client.Add(request).Wait();
 
         It should_call_the_service =
             () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
@@ -1492,7 +1492,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Add(request));
+            () => client.Add(request).Wait();
 
         It should_call_the_service =
             () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
@@ -1521,7 +1521,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Delete(request));
+            () => client.Delete(request).Wait();
 
         It should_call_the_service =
             () => Users.Data.ShouldNotContain(x => x.Id == request.Id);
@@ -1550,7 +1550,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         };
 
         Because of =
-            () => Task.WaitAll(client.Delete());
+            () => client.Delete().Wait();
 
         It should_call_the_service =
             () => Users.Data.ShouldNotContain(x => x.Id == id);

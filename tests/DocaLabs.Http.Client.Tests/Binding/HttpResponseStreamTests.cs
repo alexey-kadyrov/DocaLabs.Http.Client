@@ -41,6 +41,27 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(HttpResponseStream))]
+    class when_asynchronous_http_response_is_initialized_but_not_used_and_then_disposed_it_releases_all_resources : response_deserialization_test_context
+    {
+        static Stream response_stream;
+
+        Establish context = () =>
+        {
+            response_stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
+            SetupAsync("text/plain; charset=utf-8", response_stream);
+        };
+
+        Because of =
+            () => http_response_stream.Dispose();
+
+        It should_close_the_underlying_web_response =
+            () => mock_response.Verify(x => x.Close(), Times.AtLeastOnce());
+
+        It should_dispose_the_response_stream =
+            () => (Catch.Exception(() => response_stream.ReadByte()) as ObjectDisposedException).ShouldNotBeNull();
+    }
+
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_initialized_and_used_and_then_disposed_it_releases_all_resources : response_deserialization_test_context
     {
         static Stream response_stream;
@@ -49,6 +70,28 @@ namespace DocaLabs.Http.Client.Tests.Binding
         {
             response_stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
             Setup("text/plain; charset=utf-8", response_stream);
+            http_response_stream.ReadByte();
+        };
+
+        Because of =
+            () => http_response_stream.Dispose();
+
+        It should_close_the_underlying_web_response =
+            () => mock_response.Verify(x => x.Close(), Times.AtLeastOnce());
+
+        It should_dispose_the_response_stream =
+            () => (Catch.Exception(() => response_stream.ReadByte()) as ObjectDisposedException).ShouldNotBeNull();
+    }
+
+    [Subject(typeof(HttpResponseStream))]
+    class when_asynchronous_http_response_is_initialized_and_used_and_then_disposed_it_releases_all_resources : response_deserialization_test_context
+    {
+        static Stream response_stream;
+
+        Establish context = () =>
+        {
+            response_stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!"));
+            SetupAsync("text/plain; charset=utf-8", response_stream);
             http_response_stream.ReadByte();
         };
 
@@ -78,6 +121,21 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(HttpResponseStream))]
+    class when_asynchronous_http_response_is_newed_with_null_request
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => HttpResponseStream.CreateAsyncResponseStream(null, CancellationToken.None).Wait());
+
+        It should_throw_argument_null_exception =
+            () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_that_the_request_argument =
+            () => ((ArgumentNullException)((AggregateException)exception).InnerExceptions[0]).ParamName.ShouldContain("request");
+    }
+
+    [Subject(typeof(HttpResponseStream))]
     class when_http_response_is_newed_and_the_stream_is_null
     {
         static Mock<WebRequest> mock_request;
@@ -104,6 +162,35 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_report_that_the_response_stream_is_null =
             () => exception.Message.ShouldContain("Response stream is null");
+    }
+
+    [Subject(typeof(HttpResponseStream))]
+    class when_asynchronous_http_response_is_newed_and_the_stream_is_null
+    {
+        static Mock<WebRequest> mock_request;
+        static Mock<WebResponse> mock_response;
+        static Exception exception;
+
+        Establish context = () =>
+        {
+            mock_response = new Mock<WebResponse>();
+            mock_response.SetupAllProperties();
+            mock_response.Setup(x => x.GetResponseStream()).Returns((Stream)null);
+            mock_response.Object.ContentType = "plain/text; charset=utf-8";
+            mock_response.Object.ContentLength = 0;
+
+            mock_request = new Mock<WebRequest>();
+            mock_request.Setup(x => x.GetResponseAsync()).Returns(Task.FromResult(mock_response.Object));
+        };
+
+        Because of =
+            () => exception = Catch.Exception(() => HttpResponseStream.CreateAsyncResponseStream(mock_request.Object, CancellationToken.None).Wait());
+
+        It should_throw_exception =
+            () => exception.ShouldBeOfType<Exception>();
+
+        It should_report_that_the_response_stream_is_null =
+            () => ((AggregateException)exception).InnerExceptions[0].Message.ShouldContain("Response stream is null");
     }
 
     [Subject(typeof(HttpResponseStream))]
@@ -353,6 +440,8 @@ namespace DocaLabs.Http.Client.Tests.Binding
             http_response_stream.WriteTimeout = 333;
 
             http_response_stream.Flush();
+            http_response_stream.WriteByte(1);
+            http_response_stream.ReadByte();
             http_response_stream.Seek(444, SeekOrigin.Current);
             http_response_stream.SetLength(555);
             http_response_stream.Read(buffer, 666, 777);
@@ -397,6 +486,12 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         It should_call_flush_on_the_undelying_stream =
             () => mock_underying_stream.Verify(x => x.Flush(), Times.AtLeastOnce());
+
+        It should_call_read_byte_on_the_undelying_stream =
+            () => mock_underying_stream.Verify(x => x.ReadByte(), Times.AtLeastOnce());
+
+        It should_call_write_byte_on_the_undelying_stream =
+            () => mock_underying_stream.Verify(x => x.WriteByte(1), Times.AtLeastOnce());
 
         It should_call_seek_on_the_undelying_stream =
             () => mock_underying_stream.Verify(x => x.Seek(444, SeekOrigin.Current), Times.AtLeastOnce());

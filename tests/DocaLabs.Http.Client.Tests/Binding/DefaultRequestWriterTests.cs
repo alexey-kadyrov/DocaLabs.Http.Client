@@ -836,7 +836,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
             () => writer = new DefaultRequestWriter();
 
         Because of =
-            () => exception = Catch.Exception(() => Task.WaitAll(writer.WriteAsync(null, new Model(), new Mock<WebRequest>().Object, CancellationToken.None)));
+            () => exception = Catch.Exception(() => writer.WriteAsync(null, new Model(), new Mock<WebRequest>().Object, CancellationToken.None).Wait());
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -872,7 +872,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model { Value = "Hello World!" }, new Mock<WebRequest>().Object, cancellation_token));
+            () => writer.WriteAsync(new Client(), new Model { Value = "Hello World!" }, new Mock<WebRequest>().Object, cancellation_token).Wait();
 
         It should_use_property_level_serializer =
             () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("property");
@@ -912,7 +912,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), web_request, CancellationToken.None));
+            () => writer.WriteAsync(new Client(), new Model(), web_request, CancellationToken.None).Wait();
 
         It should_set_content_length_to_zero =
             () => web_request.ContentLength.ShouldEqual(0);
@@ -956,7 +956,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+            () => writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token).Wait();
 
         It should_use_model_level_serializer =
             () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("model");
@@ -1002,7 +1002,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+            () => writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token).Wait();
 
         It should_use_client_level_serializer =
             () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("client");
@@ -1047,7 +1047,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model { Value = "Hello World!" }, new Mock<WebRequest>().Object, cancellation_token));
+            () => writer.WriteAsync(new Client(), new Model { Value = "Hello World!" }, new Mock<WebRequest>().Object, cancellation_token).Wait();
 
         It should_still_use_property_serializer =
             () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("property");
@@ -1092,7 +1092,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+            () => writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token).Wait();
 
         It should_still_use_model_serializer =
             () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("model");
@@ -1137,7 +1137,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token));
+            () => writer.WriteAsync(new Client(), new Model(), new Mock<WebRequest>().Object, cancellation_token).Wait();
 
         It should_still_use_client_serializer =
             () => TestRequestSerializationAttribute.UsedAsyncMarker.ShouldEqual("client");
@@ -1175,7 +1175,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new Client(), null, web_request, CancellationToken.None));
+            () => writer.WriteAsync(new Client(), null, web_request, CancellationToken.None).Wait();
 
         It should_set_content_length_to_zero =
             () => web_request.ContentLength.ShouldEqual(0);
@@ -1207,7 +1207,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object, CancellationToken.None));
+            () => writer.WriteAsync(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object, CancellationToken.None).Wait();
 
         It should_set_request_content_type_as_application_octet =
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
@@ -1235,7 +1235,7 @@ namespace DocaLabs.Http.Client.Tests.Binding
         };
 
         Because of =
-            () => Task.WaitAll(writer.WriteAsync(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object, CancellationToken.None));
+            () => writer.WriteAsync(new HttpClient<Model, string>(new Uri("http://foo.bar/")), model, mock_web_request.Object, CancellationToken.None).Wait();
 
         It should_set_request_content_type_as_application_octet =
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
