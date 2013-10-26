@@ -90,7 +90,7 @@ namespace DocaLabs.Http.Client.Binding
 
         static string GetBaseUrl(Uri baseUrl)
         {
-            return baseUrl.IsFile || baseUrl.IsUnc
+            return baseUrl.IsUnc || baseUrl.IsFile
                 ? baseUrl.AbsoluteUri
                 : baseUrl.GetLeftPart(UriPartial.Authority);
         }

@@ -737,6 +737,170 @@ namespace DocaLabs.Http.Client.Tests.Binding
         }
     }
 
+    [Subject(typeof(DefaultUrlComposer))]
+    class when_url_composer_is_used_for_file_url
+    {
+        static Uri base_url;
+        static TestModel model;
+        static DefaultUrlComposer composer;
+        static string url;
+
+        Establish context = () =>
+        {
+            composer = new DefaultUrlComposer();
+            base_url = new Uri("file:///c:/product/{pathValue1}/red/{pathValue2}.txt");
+            model = new TestModel
+            {
+                PathValue1 = "get this",
+                PathValue2 = "another path"
+            };
+        };
+
+        Because of =
+            () => url = composer.Compose(new TestClient(), model, base_url);
+
+        It should_add_model_values_to_appropariate_path_and_query_parts =
+            () => url.ShouldEqual("file:///c:/product/get%20this/red/another%20path.txt");
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestModel
+        {
+            public string PathValue1 { get; set; }
+            public string PathValue2 { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultUrlComposer))]
+    class when_url_composer_is_used_for_unc_url
+    {
+        static Uri base_url;
+        static TestModel model;
+        static DefaultUrlComposer composer;
+        static string url;
+
+        Establish context = () =>
+        {
+            composer = new DefaultUrlComposer();
+            base_url = new Uri("file://server/product/{pathValue1}/red/{pathValue2}.txt");
+            model = new TestModel
+            {
+                PathValue1 = "get this",
+                PathValue2 = "another path"
+            };
+        };
+
+        Because of =
+            () => url = composer.Compose(new TestClient(), model, base_url);
+
+        It should_add_model_values_to_appropariate_path_and_query_parts =
+            () => url.ShouldEqual("file://server/product/get%20this/red/another%20path.txt");
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestModel
+        {
+            public string PathValue1 { get; set; }
+            public string PathValue2 { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultUrlComposer))]
+    class when_url_composer_is_used_for_url_which_has_existing_paramaters_and_fragment
+    {
+        static Uri base_url;
+        static TestModel model;
+        static DefaultUrlComposer composer;
+        static string url;
+
+        Establish context = () =>
+        {
+            composer = new DefaultUrlComposer();
+            base_url = new Uri("http://foo.bar/product/{path}/red/{PathAndQueryValue}?c=en-IE#hello");
+            model = new TestModel
+            {
+                PathValue1 = "get this",
+                PathAndQueryValue = "Hello World!"
+            };
+        };
+
+        Because of =
+            () => url = composer.Compose(new TestClient(), model, base_url);
+
+        It should_add_model_values_to_appropariate_path_and_query_parts_and_keep_existing_parameters_and_fragment =
+            () => url.ShouldEqual("http://foo.bar/product/get%20this/red/Hello%20World!?c=en-IE&PathAndQueryValue=Hello+World!#hello");
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestModel
+        {
+            [PropertyOverrides(Name = "Path")]
+            public string PathValue1 { get; set; }
+            [RequestUse(RequestUseTargets.UrlPath | RequestUseTargets.UrlQuery)]
+            public string PathAndQueryValue { get; set; }
+        }
+    }
+
+    [Subject(typeof(DefaultUrlComposer))]
+    class when_url_composer_is_used_for_url_which_has_existing_fragment
+    {
+        static Uri base_url;
+        static TestModel model;
+        static DefaultUrlComposer composer;
+        static string url;
+
+        Establish context = () =>
+        {
+            composer = new DefaultUrlComposer();
+            base_url = new Uri("http://foo.bar/product/{path}/red/{PathAndQueryValue}#hello");
+            model = new TestModel
+            {
+                PathValue1 = "get this",
+                PathAndQueryValue = "Hello World!"
+            };
+        };
+
+        Because of =
+            () => url = composer.Compose(new TestClient(), model, base_url);
+
+        It should_add_model_values_to_appropariate_path_and_query_parts_and_keep_existing_fragment =
+            () => url.ShouldEqual("http://foo.bar/product/get%20this/red/Hello%20World!?PathAndQueryValue=Hello+World!#hello");
+
+        class TestClient : HttpClient<TestModel, string>
+        {
+            public TestClient()
+                : base(new Uri("http://foo.bar"))
+            {
+            }
+        }
+
+        class TestModel
+        {
+            [PropertyOverrides(Name = "Path")]
+            public string PathValue1 { get; set; }
+            [RequestUse(RequestUseTargets.UrlPath | RequestUseTargets.UrlQuery)]
+            public string PathAndQueryValue { get; set; }
+        }
+    }
+
     // ReSharper restore UnusedMember.Local
     // ReSharper restore UnusedAutoPropertyAccessor.Local
 }

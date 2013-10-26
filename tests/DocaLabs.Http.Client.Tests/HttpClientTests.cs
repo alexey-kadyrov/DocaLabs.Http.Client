@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 namespace DocaLabs.Http.Client.Tests
 {
     [Subject(typeof(HttpClient<,>))]
-    class when_instantiating_http_service_with_null_base_url_and_there_is_configuration_which_supplies_it
+    class when_instantiating_http_service_with_null_base_url_and_there_is_no_configuration_which_supplies_it
     {
         static Exception exception;
 
@@ -135,6 +135,33 @@ namespace DocaLabs.Http.Client.Tests
     }
 
     [Subject(typeof(HttpClient<,>))]
+    class when_calling_http_service_with_null_value_for_model_without_any_request_serialization_hints
+    {
+        static Client<InModel, string> client;
+
+        Cleanup after =
+            () => TestSerializerAttribute.SerializedObject = null;
+
+        Establish context = 
+            () => client = new Client<InModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
+
+        Because of =
+            () => client.Execute(null);
+
+        It should_not_modify_passed_url =
+            () => client.Request.RequestUri.OriginalString.ShouldEqual("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1");
+
+        It should_not_add_any_headers = 
+            () => client.Request.Headers.ShouldBeEmpty();
+
+        It should_set_implicit_credentials =
+            () => client.Request.Credentials.ShouldBeNull();
+
+        It should_set_content_length_to_zero =
+            () => client.Request.ContentLength.ShouldEqual(0);
+    }
+
+    [Subject(typeof(HttpClient<,>))]
     class when_calling_http_service_for_model_with_request_serialization_hints
     {
         static Client<RequestSerializableModel, string> client;
@@ -183,6 +210,38 @@ namespace DocaLabs.Http.Client.Tests
 
         It should_call_serialization =
             () => TestSerializerAttribute.SerializedObject.ShouldBeTheSameAs(model);
+
+        [TestSerializer]
+        class RequestSerializableModel : InModel
+        {
+        }
+    }
+
+    [Subject(typeof(HttpClient<,>))]
+    class when_calling_http_service_with_null_value_for_model_with_request_serialization_hints
+    {
+        static Client<RequestSerializableModel, string> client;
+
+        Cleanup after =
+            () => TestSerializerAttribute.SerializedObject = null;
+
+        Establish context = 
+            () => client = new Client<RequestSerializableModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
+
+        Because of =
+            () => client.Execute(null);
+
+        It should_not_modify_passed_url =
+            () => client.Request.RequestUri.OriginalString.ShouldEqual("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1");
+
+        It should_not_add_any_headers =
+            () => client.Request.Headers.ShouldBeEmpty();
+
+        It should_set_implicit_credentials =
+            () => client.Request.Credentials.ShouldBeNull();
+
+        It should_set_content_length_to_zero =
+            () => client.Request.ContentLength.ShouldEqual(0);
 
         [TestSerializer]
         class RequestSerializableModel : InModel

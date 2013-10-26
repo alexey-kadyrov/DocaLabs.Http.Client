@@ -140,6 +140,33 @@ namespace DocaLabs.Http.Client.Tests
     }
 
     [Subject(typeof(AsyncHttpClient<,>))]
+    class when_asynchronously_calling_http_service_with_null_value_for_model_without_any_request_serialization_hints
+    {
+        static AsyncClient<AsyncInModel, string> client;
+
+        Cleanup after =
+            () => AsyncTestSerializerAttribute.SerializedObject = null;
+
+        Establish context = 
+            () => client = new AsyncClient<AsyncInModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
+
+        Because of =
+            () => client.Execute(null).Wait();
+
+        It should_not_modify_passed_url =
+            () => client.Request.RequestUri.OriginalString.ShouldEqual("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1");
+
+        It should_not_add_any_headers =
+            () => client.Request.Headers.ShouldBeEmpty();
+
+        It should_set_implicit_credentials =
+            () => client.Request.Credentials.ShouldBeNull();
+
+        It should_set_content_length_to_zero =
+            () => client.Request.ContentLength.ShouldEqual(0);
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
     class when_asynchronously_calling_http_service_for_model_with_request_serialization_hints_using_attribute_which_does_not_support_asynch_serialization
     {
         static AsyncClient<RequestSerializableModel, string> client;
@@ -188,6 +215,38 @@ namespace DocaLabs.Http.Client.Tests
 
         It should_call_serialization =
             () => NoAsyncTestSerializerAttribute.SerializedObject.ShouldBeTheSameAs(model);
+
+        [NoAsyncTestSerializer]
+        class RequestSerializableModel : AsyncInModel
+        {
+        }
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
+    class when_asynchronously_calling_http_servicewith_null_value_for_model_with_request_serialization_hints_using_attribute_which_does_not_support_asynch_serialization
+    {
+        static AsyncClient<RequestSerializableModel, string> client;
+
+        Cleanup after =
+            () => NoAsyncTestSerializerAttribute.SerializedObject = null;
+
+        Establish context = 
+            () => client = new AsyncClient<RequestSerializableModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
+
+        Because of =
+            () => client.Execute(null).Wait();
+
+        It should_not_modify_passed_url =
+            () => client.Request.RequestUri.OriginalString.ShouldEqual("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1");
+
+        It should_not_add_any_headers =
+            () => client.Request.Headers.ShouldBeEmpty();
+
+        It should_set_implicit_credentials =
+            () => client.Request.Credentials.ShouldBeNull();
+
+        It should_set_content_length_to_zero =
+            () => client.Request.ContentLength.ShouldEqual(0);
 
         [NoAsyncTestSerializer]
         class RequestSerializableModel : AsyncInModel
@@ -248,6 +307,116 @@ namespace DocaLabs.Http.Client.Tests
         [AsyncTestSerializer]
         class RequestSerializableModel : AsyncInModel
         {
+        }
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
+    class when_asynchronously_calling_http_service_for_model_with_request_serialization_hints_using_binder_which_does_not_support_asynch_writing
+    {
+        static AsyncClient<RequestSerializableModel, string> client;
+        static RequestSerializableModel model;
+
+        Cleanup after =
+            () => AsyncTestSerializerAttribute.SerializedObject = null;
+
+        Establish context = () =>
+        {
+            ModelBinders.Add(typeof(RequestSerializableModel), new TestRequestBinder());
+            client = new AsyncClient<RequestSerializableModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
+            model = new RequestSerializableModel
+            {
+                ImplictPathValue = "path1",
+                ImpilicitQueryValue = "query1",
+                ImpilicitQueryValues = new Dictionary<string, string>
+                {
+                    { "k1", "v1"}
+                },
+                ExplicitPathValue = "path2",
+                ExplicitQueryValue = "query2",
+                ImplicitHeaders = new WebHeaderCollection
+                {
+                    {"xx-hh-1", "hh1"}
+                },
+                ExplicitHeader = "hh2",
+                ImplicitCredentials = new NetworkCredential()
+            };
+        };
+
+        Because of =
+            () => client.Execute(model).Wait();
+
+        It should_create_url_only_with_explicit_path_values =
+            () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
+
+        It should_create_url_only_with_explicit_query_values = () => HttpUtility.ParseQueryString(client.Request.RequestUri.Query).ShouldContainOnly(
+                new NameValue("p1", "v1"),
+                new NameValue("ExplicitQueryValue", "query2"));
+
+        It should_add_only_explicit_headers = () => client.Request.Headers.ShouldContainOnly(
+                new NameValue("ExplicitHeader", "hh2"));
+
+        It should_not_set_implicit_credentials =
+            () => client.Request.Credentials.ShouldBeNull();
+
+        It should_still_call_serialization =
+            () => AsyncTestSerializerAttribute.SerializedObject.ShouldBeTheSameAs(model);
+
+        [AsyncTestSerializer]
+        class RequestSerializableModel : AsyncInModel
+        {
+        }
+
+        class AsyncTestSerializerAttribute : RequestSerializationAttribute
+        {
+            public static object SerializedObject { get; set; }
+
+            public override void Serialize(object obj, WebRequest request)
+            {
+                SerializedObject = obj;
+                request.ContentLength = 0;
+            }
+
+            public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+            {
+                SerializedObject = obj;
+                request.ContentLength = 0;
+                return TaskUtils.CompletedTask();
+            }
+        }
+
+        class TestRequestBinder : IRequestBinder
+        {
+            readonly DefaultRequestBinder _binder = new DefaultRequestBinder();
+
+            public object TransformModel(BindingContext context)
+            {
+                return _binder.TransformModel(context);
+            }
+
+            public string ComposeUrl(BindingContext context)
+            {
+                return _binder.ComposeUrl(context);
+            }
+
+            public string InferRequestMethod(BindingContext context)
+            {
+                return _binder.InferRequestMethod(context);
+            }
+
+            public WebHeaderCollection GetHeaders(BindingContext context)
+            {
+                return _binder.GetHeaders(context);
+            }
+
+            public ICredentials GetCredentials(BindingContext context)
+            {
+                return _binder.GetCredentials(context);
+            }
+
+            public void Write(BindingContext context, WebRequest request)
+            {
+                _binder.Write(context, request);
+            }
         }
     }
 
