@@ -16,7 +16,8 @@ namespace DocaLabs.Http.Client.Utils
         {
             var task = new Task(action, cancellationToken);
 
-            task.RunSynchronously();
+            if(!task.IsCanceled)
+                task.RunSynchronously();
 
             return task;
         }

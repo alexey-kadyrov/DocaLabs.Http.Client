@@ -101,6 +101,24 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(ModelBinders))]
+    class when_getting_asynchronous_response_binder
+    {
+        static Mock<IAsyncResponseBinder> binder;
+
+        Establish context =
+            () => binder = new Mock<IAsyncResponseBinder>();
+
+        Because of =
+            () => ModelBinders.Add(typeof(string), binder.Object);
+
+        It should_return_instance_of_the_registered_binder_for_the_type =
+            () => ModelBinders.GetAsyncResponseBinder(typeof(string)).ShouldBeTheSameAs(binder.Object);
+
+        It should_return_instance_of_the_default_response_binder_class_for_non_registered_type =
+            () => ModelBinders.GetResponseBinder(typeof(int)).ShouldBeOfType<DefaultResponseBinder>();
+    }
+
+    [Subject(typeof(ModelBinders))]
     class when_setting_default_request_binder_to_null
     {
         static Exception exception;
@@ -125,6 +143,24 @@ namespace DocaLabs.Http.Client.Tests.Binding
 
         Because of =
             () => exception = Catch.Exception(() => { ModelBinders.DefaultResponseBinder = null; });
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_value_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("value");
+
+        It should_still_return_instance_of_the_default_response_binder_class_afterwards =
+            () => ModelBinders.DefaultResponseBinder.ShouldBeOfType<DefaultResponseBinder>();
+    }
+
+    [Subject(typeof(ModelBinders))]
+    class when_setting_default_asynchronous_response_binder_to_null
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => { ModelBinders.AsyncDefaultResponseBinder = null; });
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -182,12 +218,42 @@ namespace DocaLabs.Http.Client.Tests.Binding
     }
 
     [Subject(typeof(ModelBinders))]
+    class when_registering_asynchronous_response_binder_for_null_type
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => ModelBinders.Add(null, new Mock<IAsyncResponseBinder>().Object));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_type_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("type");
+    }
+
+    [Subject(typeof(ModelBinders))]
     class when_registering_null_response_binder
     {
         static Exception exception;
 
         Because of =
             () => exception = Catch.Exception(() => ModelBinders.Add(typeof(string), (IResponseBinder)null));
+
+        It should_throw_argument_null_exception =
+            () => exception.ShouldBeOfType<ArgumentNullException>();
+
+        It should_report_type_argument =
+            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("binder");
+    }
+
+    [Subject(typeof(ModelBinders))]
+    class when_registering_null_asynchronous_response_binder
+    {
+        static Exception exception;
+
+        Because of =
+            () => exception = Catch.Exception(() => ModelBinders.Add(typeof(string), (IAsyncResponseBinder)null));
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
