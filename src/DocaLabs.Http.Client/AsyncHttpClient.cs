@@ -69,9 +69,9 @@ namespace DocaLabs.Http.Client
         /// </summary>
         /// <param name="model">Input parameters.</param>
         /// <returns>Output data.</returns>
-        public Task<TOutputModel> Execute(TInputModel model)
+        public Task<TOutputModel> ExecuteAsync(TInputModel model)
         {
-            return Execute(model, CancellationToken.None);
+            return ExecuteAsync(model, CancellationToken.None);
         }
 
         /// <summary>
@@ -98,11 +98,15 @@ namespace DocaLabs.Http.Client
         /// <param name="model">Input parameters.</param>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>Output data.</returns>
-        public async Task<TOutputModel> Execute(TInputModel model, CancellationToken cancellationToken)
+        public async Task<TOutputModel> ExecuteAsync(TInputModel model, CancellationToken cancellationToken)
         {
             try
             {
                 return await ExecuteStrategy.Execute(model, x => ExecutePipeline(x, cancellationToken));
+            }
+            catch (TaskCanceledException)
+            {
+                throw;
             }
             catch (HttpClientException)
             {

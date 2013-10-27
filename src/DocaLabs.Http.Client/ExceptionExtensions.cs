@@ -24,10 +24,28 @@ namespace DocaLabs.Http.Client
 
         static WebException TryGetWebException(Exception exception)
         {
-            if (exception == null)
-                return null;
+            while (true)
+            {
+                if (exception == null)
+                    return null;
 
-            return (exception as WebException) ?? TryGetWebException(exception.InnerException);
+                var webException = exception as WebException;
+                if (webException != null)
+                    return webException;
+
+                var aggregateException = exception as AggregateException;
+                if (aggregateException != null)
+                {
+                    foreach (var wrappedException in aggregateException.Flatten().InnerExceptions)
+                    {
+                        var e = TryGetWebException(wrappedException);
+                        if (e != null)
+                            return e;
+                    }
+                }
+
+                exception = exception.InnerException;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,6 +52,14 @@ namespace DocaLabs.Http.Client
                     ++attempt;
                 }
             }
+        }
+
+        protected override bool CanRetry(Exception e)
+        {
+            var aggregateException = e as AggregateException;
+            return aggregateException != null 
+                ? aggregateException.Flatten().InnerExceptions.All(x => base.CanRetry(x)) 
+                : base.CanRetry(e);
         }
     }
 }

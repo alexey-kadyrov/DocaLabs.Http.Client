@@ -35,7 +35,7 @@ namespace DocaLabs.Http.Client.Tests
     }
 
     [Subject(typeof(AsyncHttpClient<,>))]
-    class when_asynchronously_executing_http_service_witch_throws_exception
+    class when_asynchronously_executing_http_service_which_throws_exception
     {
         static Exception original_exception;
         static Mock<IExecuteStrategy<AsyncInModel, Task<string>>> strategy;
@@ -52,7 +52,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => exception = Catch.Exception(() => { result = client.Execute(new AsyncInModel()).Result; });
+            () => exception = Catch.Exception(() => { result = client.ExecuteAsync(new AsyncInModel()).Result; });
 
         It should_throw_http_client_exception =
             () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<HttpClientException>();
@@ -62,7 +62,7 @@ namespace DocaLabs.Http.Client.Tests
     }
 
     [Subject(typeof(AsyncHttpClient<,>))]
-    class when_asynchronously_executing_http_service_witch_throws_htt_client_exception
+    class when_asynchronously_executing_http_service_which_throws_htt_client_exception
     {
         static HttpClientException original_exception;
         static Mock<IExecuteStrategy<AsyncInModel, Task<string>>> strategy;
@@ -79,7 +79,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => exception = Catch.Exception(() => { result = client.Execute(new AsyncInModel()).Result; });
+            () => exception = Catch.Exception(() => { result = client.ExecuteAsync(new AsyncInModel()).Result; });
 
         It should_throw_the_same_http_client_exception =
             () => ((AggregateException)exception).InnerExceptions[0].ShouldBeTheSameAs(original_exception);
@@ -117,7 +117,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_with_impicit_and_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/path1/path2");
@@ -140,6 +140,103 @@ namespace DocaLabs.Http.Client.Tests
     }
 
     [Subject(typeof(AsyncHttpClient<,>))]
+    class when_asynchronously_calling_http_service_with_non_cancelled_token
+    {
+        static AsyncClient<AsyncInModel, string> client;
+        static AsyncInModel model;
+
+        Cleanup after =
+            () => AsyncTestSerializerAttribute.SerializedObject = null;
+
+        Establish context = () =>
+        {
+            client = new AsyncClient<AsyncInModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
+            model = new AsyncInModel
+            {
+                ImplictPathValue = "path1",
+                ImpilicitQueryValue = "query1",
+                ImpilicitQueryValues = new Dictionary<string, string>
+                {
+                    { "k1", "v1"}
+                },
+                ExplicitPathValue = "path2",
+                ExplicitQueryValue = "query2",
+                ImplicitHeaders = new WebHeaderCollection
+                {
+                    {"xx-hh-1", "hh1"}
+                },
+                ExplicitHeader = "hh2",
+                ImplicitCredentials = new NetworkCredential()
+            };
+        };
+
+        Because of =
+            () => client.ExecuteAsync(model, CancellationToken.None).Wait();
+
+        It should_create_url_with_impicit_and_explicit_path_values =
+            () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/path1/path2");
+
+        It should_create_url_with_impicit_and_explicit_query_values = () => HttpUtility.ParseQueryString(client.Request.RequestUri.Query).ShouldContainOnly(
+                new NameValue("p1", "v1"),
+                new NameValue("ImpilicitQueryValue", "query1"),
+                new NameValue("ExplicitQueryValue", "query2"),
+                new NameValue("ImpilicitQueryValues.k1", "v1"));
+
+        It should_add_implicit_and_explicit_headers = () => client.Request.Headers.ShouldContainOnly(
+                new NameValue("ImplicitHeaders.xx-hh-1", "hh1"),
+                new NameValue("ExplicitHeader", "hh2"));
+
+        It should_set_implicit_credentials =
+            () => client.Request.Credentials.ShouldBeTheSameAs(model.ImplicitCredentials);
+
+        It should_set_content_length_to_zero =
+            () => client.Request.ContentLength.ShouldEqual(0);
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
+    class when_asynchronously_calling_http_service_with_cancelled_token
+    {
+        static AsyncClient<AsyncInModel, string> client;
+        static AsyncInModel model;
+        static Exception exception;
+
+        Cleanup after =
+            () => AsyncTestSerializerAttribute.SerializedObject = null;
+
+        Establish context = () =>
+        {
+            AsyncClient<AsyncInModel, string>.ParseResponseExecutionMarker = null;
+            client = new AsyncClient<AsyncInModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
+            model = new AsyncInModel
+            {
+                ImplictPathValue = "path1",
+                ImpilicitQueryValue = "query1",
+                ImpilicitQueryValues = new Dictionary<string, string>
+                {
+                    { "k1", "v1"}
+                },
+                ExplicitPathValue = "path2",
+                ExplicitQueryValue = "query2",
+                ImplicitHeaders = new WebHeaderCollection
+                {
+                    {"xx-hh-1", "hh1"}
+                },
+                ExplicitHeader = "hh2",
+                ImplicitCredentials = new NetworkCredential()
+            };
+        };
+
+        Because of = 
+            () => exception = Catch.Exception(() => client.ExecuteAsync(model, new CancellationToken(true)).Wait());
+
+        It should_throw_task_cancelled_exception =
+            () => ((AggregateException) exception).InnerExceptions[0].ShouldBeOfType<TaskCanceledException>();
+
+        It should_not_complete_execution_pipe_line =
+            () => AsyncClient<AsyncInModel, string>.ParseResponseExecutionMarker.ShouldBeNull();
+    }
+
+    [Subject(typeof(AsyncHttpClient<,>))]
     class when_asynchronously_calling_http_service_with_null_value_for_model_without_any_request_serialization_hints
     {
         static AsyncClient<AsyncInModel, string> client;
@@ -151,7 +248,7 @@ namespace DocaLabs.Http.Client.Tests
             () => client = new AsyncClient<AsyncInModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
 
         Because of =
-            () => client.Execute(null).Wait();
+            () => client.ExecuteAsync(null).Wait();
 
         It should_not_modify_passed_url =
             () => client.Request.RequestUri.OriginalString.ShouldEqual("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1");
@@ -198,7 +295,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -234,7 +331,7 @@ namespace DocaLabs.Http.Client.Tests
             () => client = new AsyncClient<RequestSerializableModel, string>(new Uri("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1"));
 
         Because of =
-            () => client.Execute(null).Wait();
+            () => client.ExecuteAsync(null).Wait();
 
         It should_not_modify_passed_url =
             () => client.Request.RequestUri.OriginalString.ShouldEqual("http://foo.bar/{ImplictPathValue}/{ExplicitPathValue}?p1=v1");
@@ -286,7 +383,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -343,7 +440,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -452,7 +549,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -512,7 +609,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_only_with_explicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue%7D/path2");
@@ -559,7 +656,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_with_impicit_path_values =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/path1/path2");
@@ -605,7 +702,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -650,7 +747,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -695,7 +792,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -748,7 +845,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_not_add_impicit_path_values_to_url =
             () => client.Request.RequestUri.GetLeftPart(UriPartial.Path).ShouldEqual("http://foo.bar/%7BImplictPathValue1%7D/%7BImplictPathValue2%7D");
@@ -808,7 +905,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_with_all_suitable_values =
             () => client.RequestUrl.ShouldEqual("http://foo.bar/123?QueryKey=q2");
@@ -868,7 +965,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_create_url_with_all_suitable_values =
             () => client.RequestUrl.ShouldEqual("http://foo.bar/123?QueryKey=q2");
@@ -911,7 +1008,7 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => client.Execute(model).Wait();
+            () => client.ExecuteAsync(model).Wait();
 
         It should_leave_original_url =
             () => client.RequestUrl.ShouldEqual("http://foo.bar/");
@@ -957,6 +1054,8 @@ namespace DocaLabs.Http.Client.Tests
         public BindingContext Context { get; private set; }
         public WebRequest Request { get; private set; }
 
+        public static string ParseResponseExecutionMarker { get; set; }
+
         public AsyncClient(Uri url)
             : base(url)
         {
@@ -978,6 +1077,7 @@ namespace DocaLabs.Http.Client.Tests
         {
             Request = request;
             Context = context;
+            ParseResponseExecutionMarker = "executed";
             return Task.FromResult(default(TOut));
         }
     }

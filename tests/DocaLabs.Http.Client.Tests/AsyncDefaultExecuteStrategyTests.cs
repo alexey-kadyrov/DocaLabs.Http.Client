@@ -69,6 +69,86 @@ namespace DocaLabs.Http.Client.Tests
     }
 
     [Subject(typeof(AsyncDefaultExecuteStrategy<,>))]
+    class when_asynchronously_executing_action_which_fails_all_retries_on_aggregate_exception_where_all_exceptions_are_retryable
+    {
+        static AsyncDefaultExecuteStrategy<string, string> strategy;
+        static TimeSpan duration;
+        static int attempts;
+        static Exception exception;
+        static string result;
+
+        Establish context =
+            () => strategy = new AsyncDefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
+
+        Because of = () =>
+        {
+            var started = DateTime.UtcNow;
+            exception = Catch.Exception(() =>
+            {
+                result = strategy.Execute("Hello World!", x =>
+                {
+                    ++attempts;
+                    throw new AggregateException(new TestException(), new AggregateException(new TestException(), new TestException()));
+                }).Result;
+            });
+            duration = DateTime.UtcNow - started;
+        };
+
+        It should_eventually_throw_original_exception =
+            () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<AggregateException>();
+
+        It should_run_all_retries =
+            () => attempts.ShouldEqual(3);
+
+        It should_run_use_all_timeout_retries =
+            () => duration.ShouldBeGreaterThanOrEqualTo(TimeSpan.FromMilliseconds(300)).ShouldBeLessThan(TimeSpan.FromSeconds(1));
+
+        class TestException : Exception
+        {
+        }
+    }
+
+    [Subject(typeof(AsyncDefaultExecuteStrategy<,>))]
+    class when_asynchronously_executing_which_throws_aggregate_exception_where_not_all_exceptions_are_retryable
+    {
+        static AsyncDefaultExecuteStrategy<string, string> strategy;
+        static TimeSpan duration;
+        static int attempts;
+        static Exception exception;
+        static string result;
+
+        Establish context =
+            () => strategy = new AsyncDefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+
+        Because of = () =>
+        {
+            var started = DateTime.UtcNow;
+            exception = Catch.Exception(() =>
+            {
+                result = strategy.Execute("Hello World!", x =>
+                {
+                    ++attempts;
+                    throw new AggregateException(new TestException(), new AggregateException(new ArgumentNullException(), new TestException()));
+                }).Result;
+            });
+            duration = DateTime.UtcNow - started;
+        };
+
+        It should_eventually_throw_original_exception =
+            () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<AggregateException>();
+
+        It should_not_run_retries =
+            () => attempts.ShouldEqual(1);
+
+        It should_not_use_timeout_retries =
+            () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
+
+        class TestException : Exception
+        {
+        }
+    }
+
+    [Subject(typeof(AsyncDefaultExecuteStrategy<,>))]
     class when_asynchronously_executing_action_which_succeeds_after_retry
     {
         static AsyncDefaultExecuteStrategy<string, string> strategy;
@@ -106,6 +186,42 @@ namespace DocaLabs.Http.Client.Tests
         class TestException : Exception
         {
         }
+    }
+
+    [Subject(typeof(AsyncDefaultExecuteStrategy<,>))]
+    class when_asynchronously_executing_action_throws_aggregate_exception_with_all_non_retryable_exceptions
+    {
+        static AsyncDefaultExecuteStrategy<string, string> strategy;
+        static TimeSpan duration;
+        static int attempts;
+        static Exception exception;
+        static string result;
+
+        Establish context =
+            () => strategy = new AsyncDefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1) });
+
+        Because of = () =>
+        {
+            var started = DateTime.UtcNow;
+            exception = Catch.Exception(() =>
+            {
+                result = strategy.Execute("Hello World!", x =>
+                {
+                    ++attempts;
+                    throw new AggregateException(new ArgumentException(), new AggregateException(new ArgumentNullException(), new ArgumentException()));
+                }).Result;
+            });
+            duration = DateTime.UtcNow - started;
+        };
+
+        It should_throw_original_exception =
+            () => ((AggregateException)exception).InnerExceptions[0].ShouldBeOfType<AggregateException>();
+
+        It should_not_run_retries =
+            () => attempts.ShouldEqual(1);
+
+        It should_not_use_timeout_retries =
+            () => duration.ShouldBeLessThan(TimeSpan.FromSeconds(1));
     }
 
     [Subject(typeof(AsyncDefaultExecuteStrategy<,>))]

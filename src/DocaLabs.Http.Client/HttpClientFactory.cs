@@ -181,13 +181,8 @@ namespace DocaLabs.Http.Client
 
         class ClientInterfaceInfo
         {
-            readonly MethodInfo _serviceExecuteMethod;
-            readonly InputModelInfo _inputModelInfo;
-            Type _executeStrategyType;
+            readonly ServiceCallMethodInfo _serviceExecuteMethodInfo;
             readonly CustomeAttributes _attributes;
-            Type _outputModelType;
-            Type _originalOutputModelType;
-            bool _asyncClient;
 
             public ClientInterfaceInfo(Type interfaceType)
             {
@@ -201,13 +196,7 @@ namespace DocaLabs.Http.Client
                 if (methods.Length != 1)
                     throw new ArgumentException(string.Format(Resources.Text.must_have_only_one_method, interfaceType.FullName), "interfaceType");
 
-                _serviceExecuteMethod = methods[0];
-
-                InitializeOutputModelType();
-
-                _inputModelInfo = new InputModelInfo(_serviceExecuteMethod);
-
-                InitializeExecuteStrategyType();
+                _serviceExecuteMethodInfo = new ServiceCallMethodInfo(methods[0]);
 
                 _attributes = new CustomeAttributes(interfaceType, AttributeTargets.Class);
             }
@@ -215,11 +204,7 @@ namespace DocaLabs.Http.Client
             public Type EnsureBaseType(Type baseType)
             {
                 if (baseType == null)
-                {
-                    return _asyncClient
-                        ? typeof (AsyncHttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType)
-                        : typeof(HttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
-                }
+                    return _serviceExecuteMethodInfo.MakeConcreteGenericType();
 
                 if (!baseType.IsGenericTypeDefinition)
                     return baseType;
@@ -227,7 +212,7 @@ namespace DocaLabs.Http.Client
                 if (baseType.GetGenericArguments().Length != 2)
                     throw new ArgumentException(string.Format(Resources.Text.if_base_class_generic_it_must_have_two_parameters, baseType.FullName), "baseType");
 
-                return baseType.MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+                return _serviceExecuteMethodInfo.MakeConcreteGenericType(baseType);
             }
 
             public void TransferCustomAttributes(TypeBuilder typeBuilder)
@@ -259,7 +244,150 @@ namespace DocaLabs.Http.Client
 
             public void BuildServiceCallMethod(Type baseType, TypeBuilder typeBuilder)
             {
-                var baseExecute = baseType.GetMethod("Execute", new[] { _inputModelInfo.ModelType });
+                _serviceExecuteMethodInfo.BuildServiceCallMethod(baseType, typeBuilder);
+            }
+
+            ConstructorInfo GetBaseConstructor(Type baseType, ref bool threeParamCtor)
+            {
+                var baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string), _serviceExecuteMethodInfo.ExecuteStrategyType });
+
+                if (baseCtor == null)
+                {
+                    threeParamCtor = false;
+
+                    baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string) });
+
+                    if (baseCtor == null)
+                        throw new ArgumentException(string.Format(Resources.Text.must_implement_constructor, baseType.FullName, _serviceExecuteMethodInfo.ExecuteStrategyType.FullName), "baseType");
+                }
+
+                return baseCtor;
+            }
+        }
+
+        class ServiceCallMethodInfo
+        {
+            readonly MethodInfo _methodInfo;
+
+            ParameterInfo[] _modelParameters;
+
+            bool _hasCancellationToken;
+
+            Type _outputModelType;
+
+            Type _originalOutputModelType;
+
+            bool _isAsyncClient;
+
+            readonly InputModelInfo _inputModelInfo;
+
+            public Type ExecuteStrategyType { get; private set; }
+
+            public ServiceCallMethodInfo(MethodInfo serviceCall)
+            {
+                _methodInfo = serviceCall;
+
+                InitializeOutputModelType();
+
+                InitializeMethodParameters(serviceCall);
+
+                _inputModelInfo = new InputModelInfo(_modelParameters, _methodInfo);
+
+                InitializeExecuteStrategyType();
+            }
+
+            public Type MakeConcreteGenericType()
+            {
+                return _isAsyncClient
+                    ? typeof(AsyncHttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType)
+                    : typeof(HttpClient<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+            }
+
+            public Type MakeConcreteGenericType(Type baseType)
+            {
+                return baseType.MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+            }
+
+            public void BuildServiceCallMethod(Type baseType, TypeBuilder typeBuilder)
+            {
+                if(_hasCancellationToken)
+                    BuildCancellableServiceCallMethod(baseType, typeBuilder);
+                else
+                    BuildOrdinaryServiceCallMethod(baseType, typeBuilder);
+            }
+
+            void InitializeOutputModelType()
+            {
+                _outputModelType = _originalOutputModelType = _methodInfo.ReturnType;
+
+                if (_outputModelType == typeof(void))
+                {
+                    _outputModelType = typeof(VoidType);
+                }
+                else if (_outputModelType == typeof(Task))
+                {
+                    _outputModelType = typeof(VoidType);
+                    _isAsyncClient = true;
+                }
+                else if (_outputModelType.IsGenericType)
+                {
+                    var outputGeneric = _outputModelType.GetGenericTypeDefinition();
+                    if (outputGeneric != typeof (Task<>))
+                        return;
+
+                    _outputModelType = _outputModelType.GetGenericArguments()[0];
+                    _isAsyncClient = true;
+                }
+            }
+
+            void InitializeMethodParameters(MethodInfo serviceCall)
+            {
+                var parameters = serviceCall.GetParameters();
+
+                if (!_isAsyncClient)
+                {
+                    _modelParameters = parameters;
+                    return;
+                }
+
+                var count = parameters.Length;
+                if (count == 0)
+                {
+                    _modelParameters = new ParameterInfo[0];
+                    return;
+                }
+
+                if (parameters[count - 1].ParameterType == typeof(CancellationToken))
+                {
+                    --count;
+                    _modelParameters = new ParameterInfo[count];
+                    for (var i = 0; i < count; i++)
+                        _modelParameters[i] = parameters[i];
+                    _hasCancellationToken = true;
+                    return;
+                }
+
+                _modelParameters = parameters;
+            }
+
+            void InitializeExecuteStrategyType()
+            {
+                if (_isAsyncClient)
+                {
+                    if (_originalOutputModelType == typeof(Task))
+                        ExecuteStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, typeof(Task<VoidType>));
+                    else
+                        ExecuteStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _originalOutputModelType);
+                }
+                else
+                {
+                    ExecuteStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
+                }
+            }
+
+            void BuildOrdinaryServiceCallMethod(Type baseType, TypeBuilder typeBuilder)
+            {
+                var baseExecute = baseType.GetMethod(_isAsyncClient ? "ExecuteAsync" : "Execute", new[] { _inputModelInfo.ModelType });
                 if (baseExecute == null)
                     throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method,
                                                 baseType.FullName, _outputModelType.FullName, _inputModelInfo.ModelType.FullName), "baseType");
@@ -277,114 +405,75 @@ namespace DocaLabs.Http.Client
 
                 executeGenerator.Emit(OpCodes.Ret);
 
-                typeBuilder.DefineMethodOverride(newExecute, _serviceExecuteMethod);
+                typeBuilder.DefineMethodOverride(newExecute, _methodInfo);
             }
 
-            void InitializeOutputModelType()
+            void BuildCancellableServiceCallMethod(Type baseType, TypeBuilder typeBuilder)
             {
-                _outputModelType = _originalOutputModelType = _serviceExecuteMethod.ReturnType;
+                var baseExecute = baseType.GetMethod("ExecuteAsync", new[] { _inputModelInfo.ModelType, typeof(CancellationToken) });
+                if (baseExecute == null)
+                    throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method,
+                                                baseType.FullName, _outputModelType.FullName, _inputModelInfo.ModelType.FullName), "baseType");
 
-                if (_outputModelType == typeof(void))
-                {
-                    _outputModelType = typeof(VoidType);
-                }
-                else if (_outputModelType == typeof(Task))
-                {
-                    _outputModelType = typeof(VoidType);
-                    _asyncClient = true;
-                }
-                else if (_outputModelType.IsGenericType)
-                {
-                    var outputGeneric = _outputModelType.GetGenericTypeDefinition();
-                    if (outputGeneric == typeof(Task<>))
-                    {
-                        _outputModelType = _outputModelType.GetGenericArguments()[0];
-                        _asyncClient = true;
-                    }
-                }
-            }
+                var newExecute = DefineServiceCallMethod(typeBuilder);
 
-            void InitializeExecuteStrategyType()
-            {
-                if (_asyncClient)
-                {
-                    if (_originalOutputModelType == typeof(Task))
-                        _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, typeof(Task<VoidType>));
-                    else
-                        _executeStrategyType = typeof(IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _originalOutputModelType);
-                }
-                else
-                {
-                    _executeStrategyType = typeof (IExecuteStrategy<,>).MakeGenericType(_inputModelInfo.ModelType, _outputModelType);
-                }
-            }
+                var executeGenerator = newExecute.GetILGenerator();
 
-            ConstructorInfo GetBaseConstructor(Type baseType, ref bool threeParamCtor)
-            {
-                var baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string), _executeStrategyType });
+                _inputModelInfo.EmitLoadModel(executeGenerator);
 
-                if (baseCtor == null)
-                {
-                    threeParamCtor = false;
+                // load cancellation token
+                executeGenerator.Emit(OpCodes.Ldarg, _methodInfo.GetParameters().Length);
 
-                    baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string) });
+                executeGenerator.Emit(OpCodes.Call, baseExecute);
 
-                    if (baseCtor == null)
-                        throw new ArgumentException(string.Format(Resources.Text.must_implement_constructor, baseType.FullName, _executeStrategyType.FullName), "baseType");
-                }
+                if (_originalOutputModelType == typeof(void))
+                    executeGenerator.Emit(OpCodes.Pop);
 
-                return baseCtor;
+                executeGenerator.Emit(OpCodes.Ret);
+
+                typeBuilder.DefineMethodOverride(newExecute, _methodInfo);
             }
 
             MethodBuilder DefineServiceCallMethod(TypeBuilder typeBuilder)
             {
                 return typeBuilder.DefineMethod(
-                    _serviceExecuteMethod.Name,
+                    _methodInfo.Name,
                     MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
                     CallingConventions.Standard | CallingConventions.HasThis,
                     _originalOutputModelType,
-                    _inputModelInfo.GetServiceCallArgTypes());
+                    _methodInfo.GetParameters().Select(x => x.ParameterType).ToArray());
             }
         }
 
         class InputModelInfo
         {
-            bool _isCreated;
-            Type[] _serviceCallArgTypes;
+            bool _isModelAutogenerated;
  
             public Type ModelType { get; private set; }
 
-            public InputModelInfo(MethodBase serviceCall)
+            public InputModelInfo(IList<ParameterInfo> parameters, MethodBase methodInfo)
             {
-                var parameters = serviceCall.GetParameters();
-
-                if (parameters.Length > 1)
+                if (parameters.Count > 1)
                 {
-                    CreateInputModel(serviceCall);
+                    CreateInputModel(parameters, methodInfo);
                 }
-                else if (parameters.Length == 1 && parameters[0].ParameterType.IsSimpleType())
+                else if (parameters.Count == 1 && parameters[0].ParameterType.IsSimpleType())
                 {
-                    CreateInputModel(serviceCall);
+                    CreateInputModel(parameters, methodInfo);
                 }
-                else if (parameters.Length == 0)
+                else if (parameters.Count == 0)
                 {
                     ModelType = typeof (VoidType);
                 }
                 else
                 {
                     ModelType = parameters[0].ParameterType;
-                    _serviceCallArgTypes = new[] { ModelType };
                 }
-            }
-
-            public Type[] GetServiceCallArgTypes()
-            {
-                return _serviceCallArgTypes;
             }
 
             public void EmitLoadModel(ILGenerator executeGenerator)
             {
-                if (!_isCreated)
+                if (!_isModelAutogenerated)
                 {
                     executeGenerator.Emit(OpCodes.Ldarg_0);
                     executeGenerator.Emit(ModelType != typeof(VoidType)
@@ -421,16 +510,13 @@ namespace DocaLabs.Http.Client
                 executeGenerator.Emit(OpCodes.Ldloc, model);
             }
 
-            void CreateInputModel(MethodBase serviceCall)
+            void CreateInputModel(IEnumerable<ParameterInfo> parameters, MemberInfo methodInfo)
             {
-                var parameters = serviceCall.GetParameters();
+                _isModelAutogenerated = true;
 
-                _isCreated = true;
-                _serviceCallArgTypes = parameters.Select(x => x.ParameterType).ToArray();
-
-                var methodNameBase = serviceCall.DeclaringType != null
-                    ? serviceCall.DeclaringType.FullName + "_" + serviceCall.Name
-                    : serviceCall.Name;
+                var methodNameBase = methodInfo.DeclaringType != null
+                    ? methodInfo.DeclaringType.FullName + "_" + methodInfo.Name
+                    : methodInfo.Name;
 
                 var typeBuilder = ModuleBuilder.DefineType(
                     string.Format("{0}{1}{2}{3}", methodNameBase, Interlocked.Increment(ref _typeCount), Random.Next(), ModelSuffix),
@@ -439,7 +525,7 @@ namespace DocaLabs.Http.Client
                 foreach (var parameter in parameters)
                     CreateProperty(typeBuilder, parameter);
 
-                new CustomeAttributes(serviceCall, AttributeTargets.Property).Transfer(typeBuilder);
+                new CustomeAttributes(methodInfo, AttributeTargets.Property).Transfer(typeBuilder);
 
                 ModelType = typeBuilder.CreateType();
             }
