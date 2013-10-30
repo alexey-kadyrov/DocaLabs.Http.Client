@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding
@@ -18,11 +18,6 @@ namespace DocaLabs.Http.Client.Binding
 
         internal WebResponse Response { get; set; }
 
-        /// <summary>
-        /// Gets or sets the raw response stream.
-        /// </summary>
-        Stream RawResponseStream { get; set; }
-
         Stream _dataStream;
 
         /// <summary>
@@ -35,11 +30,11 @@ namespace DocaLabs.Http.Client.Binding
                 if (_dataStream != null)
                     return _dataStream;
 
-                var httpResponse = Response as HttpWebResponse;
-                if (httpResponse == null || string.IsNullOrWhiteSpace(httpResponse.ContentEncoding))
+                var contentEncoding = Response.GetContentEncoding();
+                if (string.IsNullOrWhiteSpace(contentEncoding))
                     return (_dataStream = RawResponseStream);
 
-                return (_dataStream = ContentDecoderFactory.Get(httpResponse.ContentEncoding).GetDecompressionStream(RawResponseStream));
+                return (_dataStream = ContentDecoderFactory.Get(contentEncoding).GetDecompressionStream(RawResponseStream));
             }
         }
 
