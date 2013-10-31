@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils;
+using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -15,20 +16,38 @@ namespace DocaLabs.Http.Client.Binding
     {
         static protected readonly Encoding DefaultTextEncoding = Encoding.GetEncoding(CharSets.Iso88591);
 
-        internal WebResponse Response { get; set; }
+        Stream _dataStream;
+        HttpContentType _contentType;
+
+        protected WebResponse Response { get; set; }
 
         /// <summary>
         /// Gets or sets the raw response stream.
         /// </summary>
-        protected Stream RawResponseStream { get; set; }
+        protected Stream RawResponseStream { get; private set; }
 
         /// <summary>
         /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by ContentDecoderFactory.
         /// </summary>
-        protected abstract Stream DataStream
+        protected Stream DataStream
         {
-            get;
+            get
+            {
+                if (_dataStream != null)
+                    return _dataStream;
+
+                var contentEncoding = Response.GetContentEncoding();
+                if (string.IsNullOrWhiteSpace(contentEncoding))
+                    return (_dataStream = RawResponseStream);
+
+                return (_dataStream = ContentDecoderFactory.Get(contentEncoding).GetDecompressionStream(RawResponseStream));
+            }
         }
+
+        /// <summary>
+        /// Gets the content type of the data being received.
+        /// </summary>
+        public HttpContentType ContentType { get { return _contentType ?? InitializeContentType(); } }
 
         /// <summary>
         /// Gets the content length of data being received.
@@ -49,6 +68,49 @@ namespace DocaLabs.Http.Client.Binding
         /// Returns whenever the request supports headers.
         /// </returns>
         public bool SupportsHeaders { get { return Response.SupportsHeaders; } }
+
+        /// <summary>
+        /// Releases the response and the streams.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_dataStream != null)
+                    _dataStream.Dispose();
+
+                if (RawResponseStream != null)
+                    RawResponseStream.Dispose();
+
+                if (Response != null)
+                    Response.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Tries to figure out the response stream encoding. If it cannot then CharSets.Iso88591 is returned.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Encoding GetEncoding()
+        {
+            try
+            {
+                var charSet = new HttpContentType(Response.ContentType).CharSet;
+
+                if (!string.IsNullOrWhiteSpace(charSet))
+                    return Encoding.GetEncoding(charSet);
+
+                return string.IsNullOrWhiteSpace(ContentType.CharSet)
+                    ? DefaultTextEncoding
+                    : Encoding.GetEncoding(ContentType.CharSet);
+            }
+            catch
+            {
+                return DefaultTextEncoding;
+            }
+        }
 
         /// <summary>
         /// Returns the content of the response stream as a byte array.
@@ -109,29 +171,6 @@ namespace DocaLabs.Http.Client.Binding
                 return reader.ReadToEndAsync();
             }
         }
-
-        /// <summary>
-        /// Releases the response and the streams.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (RawResponseStream != null)
-                    RawResponseStream.Dispose();
-
-                if (Response != null)
-                    Response.Dispose();
-            }
-
-            base.Dispose(disposing);
-        }
-
-        /// <summary>
-        /// Tries to figure out the response stream encoding. If it cannot then CharSets.Iso88591 is returned.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Encoding GetEncoding();
 
         /// <summary>
         /// Gets a value indicating whether the current stream supports reading.
@@ -314,6 +353,31 @@ namespace DocaLabs.Http.Client.Binding
         public override Task FlushAsync(CancellationToken cancellationToken)
         {
             return DataStream.FlushAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Initializes the "raw" response stream.
+        /// </summary>
+        protected void InitializeResponseStream()
+        {
+            RawResponseStream = Response.GetResponseStream();
+            if (RawResponseStream == null)
+                throw new Exception(Resources.Text.null_response_stream);
+        }
+
+        HttpContentType InitializeContentType()
+        {
+            // ReSharper disable EmptyGeneralCatchClause
+            try
+            {
+                return _contentType = new HttpContentType(Response.ContentType);
+            }
+            catch
+            {
+            }
+
+            return _contentType = new HttpContentType(HttpContentType.Default);
+            // ReSharper restore EmptyGeneralCatchClause
         }
     }
 }

@@ -152,6 +152,8 @@
     <Compile Include="Utils\ContentEncoding\KnownContentEncodings.cs" />
     <Compile Include="Utils\CustomConverter.cs" />
     <Compile Include="Utils\CustomConverterFactory.cs" />
+    <Compile Include="Utils\HeaderParser.cs" />
+    <Compile Include="Utils\HttpContentType.cs" />
     <Compile Include="Utils\ICustomConverterFactory.cs" />
     <Compile Include="Utils\JsonSerialization\DefaultJsonDeserializer.cs" />
     <Compile Include="Utils\JsonSerialization\DefaultJsonSerializer.cs" />
@@ -164,6 +166,7 @@
     <Compile Include="Utils\ReflectionExtensions.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Utils\TaskUtils.cs" />
+    <Compile Include="Utils\WebResponseExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -150,6 +150,15 @@
   <data name="interface_cannot_be_generic_type_definition" xml:space="preserve">
     <value>Interface {0} cannot be generic type definition.</value>
   </data>
+  <data name="invalid_header_character" xml:space="preserve">
+    <value>"Invalid character '{0}' in {1}.</value>
+  </data>
+  <data name="malformed_content_type" xml:space="preserve">
+    <value>Malformed content type {0}.</value>
+  </data>
+  <data name="malformed_header" xml:space="preserve">
+    <value>Malformed header {0}.</value>
+  </data>
   <data name="must_be_interface" xml:space="preserve">
     <value>The type {0} must be interface.</value>
   </data>

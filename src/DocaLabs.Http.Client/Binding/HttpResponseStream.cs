@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Net.Mime;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -14,39 +10,10 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class HttpResponseStream : HttpResponseStreamCore
     {
-        ContentType _contentType;
-
-        internal WebResponse Response { get; set; }
-
-        Stream _dataStream;
-
-        /// <summary>
-        /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by ContentDecoderFactory.
-        /// </summary>
-        protected override Stream DataStream
-        {
-            get
-            {
-                if (_dataStream != null)
-                    return _dataStream;
-
-                var httpResponse = Response as HttpWebResponse;
-                if (httpResponse == null || string.IsNullOrWhiteSpace(httpResponse.ContentEncoding))
-                    return (_dataStream = RawResponseStream);
-
-                return (_dataStream = ContentDecoderFactory.Get(httpResponse.ContentEncoding).GetDecompressionStream(RawResponseStream));
-            }
-        }
-
         /// <summary>
         /// Gets a value that indicates whether mutual authentication occurred.
         /// </summary>
         public bool IsMutuallyAuthenticated { get { return Response.IsMutuallyAuthenticated; } }
-
-        /// <summary>
-        /// Gets the content type of the data being received.
-        /// </summary>
-        public ContentType ContentType { get { return _contentType ?? InitializeContentType(); } }
 
         HttpResponseStream()
         {
@@ -82,61 +49,6 @@ namespace DocaLabs.Http.Client.Binding
             stream.InitializeResponseStream();
 
             return stream;
-        }
-
-        /// <summary>
-        /// Releases the response and the streams.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if(_dataStream != null)
-                    _dataStream.Dispose();
-            }
-
-            base.Dispose(disposing);
-        }
-
-        ContentType InitializeContentType()
-        {
-            // ReSharper disable EmptyGeneralCatchClause
-            var contentType = Response.ContentType;
-
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(contentType))
-                    return (_contentType = new ContentType(Response.ContentType));
-            }
-            catch
-            {
-            }
-
-            return (_contentType = new ContentType());
-            // ReSharper restore EmptyGeneralCatchClause
-        }
-
-        /// <summary>
-        /// Tries to figure out the response stream encoding. If it cannot then CharSets.Iso88591 is returned.
-        /// </summary>
-        /// <returns></returns>
-        protected override Encoding GetEncoding()
-        {
-            try
-            {
-                var httpResponse = Response as HttpWebResponse;
-
-                if (httpResponse != null && (!string.IsNullOrWhiteSpace(httpResponse.CharacterSet)))
-                    return Encoding.GetEncoding(httpResponse.CharacterSet);
-
-                return string.IsNullOrWhiteSpace(ContentType.CharSet)
-                    ? DefaultTextEncoding
-                    : Encoding.GetEncoding(ContentType.CharSet);
-            }
-            catch
-            {
-                return DefaultTextEncoding;
-            }
         }
 
         /// <summary>
@@ -184,13 +96,6 @@ namespace DocaLabs.Http.Client.Binding
         public override void EndWrite(IAsyncResult asyncResult)
         {
             DataStream.EndWrite(asyncResult);
-        }
-
-        void InitializeResponseStream()
-        {
-            RawResponseStream = Response.GetResponseStream();
-            if (RawResponseStream == null)
-                throw new Exception(Resources.Text.null_response_stream);
         }
     }
 }
