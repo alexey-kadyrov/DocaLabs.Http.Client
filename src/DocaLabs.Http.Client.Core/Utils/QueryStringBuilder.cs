@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Specialized;
 using System.Text;
-using System.Web;
 
 namespace DocaLabs.Http.Client.Utils
 {
@@ -34,8 +32,8 @@ namespace DocaLabs.Http.Client.Utils
             if (value == null)
                 return this;
 
-            key = HttpUtility.UrlEncode(key);
-            value = HttpUtility.UrlEncode(value);
+            key = Uri.EscapeUriString(key);
+            value = Uri.EscapeUriString(value);
 
             if (_builder.Length == 0)
                 _builder.Append(key).Append("=").Append(value);

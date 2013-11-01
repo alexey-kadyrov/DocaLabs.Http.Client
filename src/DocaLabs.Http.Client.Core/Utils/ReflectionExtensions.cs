@@ -30,8 +30,10 @@ namespace DocaLabs.Http.Client.Utils
             if(type == null)
                 throw new ArgumentNullException("type");
 
-            var isSimple = (type.IsPrimitive ||
-                    type.IsEnum ||
+            var typeInfo = type.GetTypeInfo();
+
+            var isSimple = (typeInfo.IsPrimitive ||
+                    typeInfo.IsEnum ||
                     type == typeof(string) ||
                     type == typeof(decimal) ||
                     type == typeof(Guid) ||
@@ -41,7 +43,7 @@ namespace DocaLabs.Http.Client.Utils
                     type == typeof(byte[]));
 
             return isSimple ||
-                   (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (Nullable<>) && Nullable.GetUnderlyingType(type).IsSimpleType());
+                   (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) && Nullable.GetUnderlyingType(type).IsSimpleType());
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace DocaLabs.Http.Client.Utils
             if(type == null)
                 throw new ArgumentNullException("type");
 
-            return type.IsValueType
+            return type.GetTypeInfo().IsValueType
                 ? Activator.CreateInstance(type)
                 : null;
         }
@@ -65,7 +67,7 @@ namespace DocaLabs.Http.Client.Utils
             if(attribute == null)
                 throw new ArgumentNullException("attribute");
 
-            var attributes = attribute.AttributeType.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
+            var attributes = attribute.AttributeType.GetTypeInfo().GetCustomAttributes(typeof(AttributeUsageAttribute), true).ToArray();
 
             return attributes.Length == 0 || attributes.Any(x => ((AttributeUsageAttribute)x).ValidOn.HasFlag(flags));
         }
@@ -77,7 +79,33 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public static IList<PropertyInfo> GetAllPublicInstanceProperties(this Type type)
         {
-            return type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance);
+            //return type.GetAllProperties(BindingFlags.Public | BindingFlags.Instance);
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            var typeInfo = type.GetTypeInfo();
+
+            var list = type.GetRuntimeProperties().Where(x => x.IsInstanceAndPublic()).ToList();
+
+            if (!typeInfo.IsInterface)
+                return list;
+
+            foreach (var @interface in type.GetTypeInfo().ImplementedInterfaces)
+            {
+                var properties = @interface.GetRuntimeProperties().Where(x => x.IsInstanceAndPublic()).ToList();
+
+                list.AddRange(properties);
+            }
+
+            return list;
+
+        }
+
+        static bool IsInstanceAndPublic(this PropertyInfo property)
+        {
+            var method = property.GetMethod ?? property.SetMethod;
+
+            return method != null && !method.IsStatic && method.IsPublic;
         }
 
         /// <summary>
@@ -91,7 +119,7 @@ namespace DocaLabs.Http.Client.Utils
             if (type == typeof(string) || type == typeof(byte[]))
                 return false;
 
-            return type == typeof(IEnumerable) || type.GetInterfaces().Any(x => x == typeof(IEnumerable));
+            return type == typeof(IEnumerable) || type.GetTypeInfo().ImplementedInterfaces.Any(x => x == typeof(IEnumerable));
         }
 
         /// <summary>
@@ -103,7 +131,9 @@ namespace DocaLabs.Http.Client.Utils
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            if (type.IsGenericTypeDefinition || (!type.IsEnumerable()))
+            var typeInfo = type.GetTypeInfo();
+
+            if (typeInfo.IsGenericTypeDefinition || (!type.IsEnumerable()))
                 return null;
 
             if (type.IsArray)
@@ -112,13 +142,13 @@ namespace DocaLabs.Http.Client.Utils
             if (type == typeof(IEnumerable))
                 return typeof(object);
 
-            if (type.IsInterface && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-                return type.GetGenericArguments()[0];
+            if (typeInfo.IsInterface && typeInfo.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                return type.GenericTypeArguments[0];
 
-            var genericEnumerable = type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            var genericEnumerable = typeInfo.ImplementedInterfaces.FirstOrDefault(x => x.GetTypeInfo().IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
             return genericEnumerable != null
-                ? genericEnumerable.GetGenericArguments()[0]
+                ? genericEnumerable.GenericTypeArguments[0]
                 : typeof(object);
         }
 
@@ -127,35 +157,15 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public static Type TryGetWrappedResponseModelType(this Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(RichResponse<>))
-                return type.GetGenericArguments()[0];
+            var typeInfo = type.GetTypeInfo();
 
-            if (type.BaseType == null || type.BaseType == typeof(object))
+            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == typeof(RichResponse<>))
+                return type.GenericTypeArguments[0];
+
+            if (typeInfo.BaseType == null || typeInfo.BaseType == typeof(object))
                 return null;
 
-            return TryGetWrappedResponseModelType(type.BaseType);
-        }
-
-        static IList<PropertyInfo> GetAllProperties(this Type type, BindingFlags flags)
-        {
-            if (type == null)
-                throw new ArgumentNullException("type");
-
-            flags |= BindingFlags.FlattenHierarchy;
-
-            var list = type.GetProperties(flags).ToList();
-
-            if (!type.IsInterface)
-                return list;
-
-            foreach (var @interface in type.GetInterfaces())
-            {
-                var properties = @interface.GetProperties(flags);
-
-                list.AddRange(properties);
-            }
-
-            return list;
+            return TryGetWrappedResponseModelType(typeInfo.BaseType);
         }
     }
 }

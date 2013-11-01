@@ -127,11 +127,9 @@
     <Compile Include="Binding\Serialization\ContentTypeExtensions.cs" />
     <Compile Include="Utils\JsonSerialization\SerializationSettings.cs" />
     <Compile Include="Utils\LibraryExtensionsComposer.cs" />
-    <Compile Include="Utils\ReflectionExtensions.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromPlainTextAttribute.cs" />
     <Compile Include="Binding\Serialization\IResponseDeserializationProvider.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromJsonAttribute.cs" />
-    <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Binding\VoidType.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactory.cs" />
     <Compile Include="Utils\ContentEncoding\ContentEncoderFactory.cs" />
@@ -172,7 +170,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utils\TaskUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Text.resx">
