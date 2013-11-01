@@ -15,6 +15,7 @@ In order to use the library in most cases you would need to define:
 
 That's it. The implementation is unit test friendly because the only thing you need to worry is interface and input/output models.
 
+Starting from v3 the library supports asynchronous execution. For details see below.
 
 For example for Google's street view you would need to define something like:
 
@@ -94,6 +95,24 @@ If you want to get additional information about the response you can wrap you ou
 		RichResponse<User> Get(Guid id);
 	}
 
+Asynchronous execution support
+------------
+In order to execute the service class asynchronously you will only need to define the return type of the service call in the interface as Task<YourModel> (or just Task if don't expect any data). That's it.
+
+	public interface IGetUserService
+	{
+		Task<User> Get(Guid id);
+	}
+
+
+or if you want to support cancellation:
+
+
+	public interface IGetUserService
+	{
+		Task<User> Get(Guid id, CancellationToken token);
+	}
+
 More details
 ------------
 HttpClient is the class which maintains the request pipeline and utilizes WebRequest/WebResponse classes from the .Net. One notable difference in behaviour is that when you wrap your output model into the RichResponse<> and the service returns one of the 3XX instead of throwing the exception (the default behaviour of the HttpWebResponse class) it will return the rich response with the value set to null (or rather the default value of the output model).
@@ -114,6 +133,15 @@ The service behaviour can be configured using an application configuration file 
 
 
 <a href='http://www.pledgie.com/campaigns/19326'><img alt='Click here to lend your support to: DocaLabs.Http.Client and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/19326.png?skin_name=chrome' border='0' /></a>
+
+v3.0.0.0 Release Notes
+----------------------
+* Added support for asynchronous execution
+
+v2.0.1.2 Release Notes
+----------------------
+* Fixed problem when a property marked for serialization but the input model is serialized instead
+* Added full support for stream as input model
 
 v2.0.0.1 Release Notes
 ----------------------
