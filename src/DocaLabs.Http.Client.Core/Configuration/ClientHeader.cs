@@ -1,11 +1,9 @@
-﻿using System.Configuration;
-
-namespace DocaLabs.Http.Client.Configuration
+﻿namespace DocaLabs.Http.Client.Configuration
 {
     /// <summary>
     /// Represents a configuration element that defines a header.
     /// </summary>
-    public class ClientHeaderElement : ConfigurationElement, IClientHeader
+    public class ClientHeader : IClientHeader
     {
         const string NameProperty = "name";
         const string ValueProperty = "value";

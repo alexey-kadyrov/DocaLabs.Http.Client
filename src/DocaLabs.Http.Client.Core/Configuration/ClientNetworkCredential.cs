@@ -1,11 +1,9 @@
-﻿using System.Configuration;
-
-namespace DocaLabs.Http.Client.Configuration
+﻿namespace DocaLabs.Http.Client.Configuration
 {
     /// <summary>
     /// Represents a configuration element that defines the network credentials. 
     /// </summary>
-    public class ClientNetworkCredentialElement : ConfigurationElement, IClientNetworkCredential
+    public class ClientNetworkCredential : IClientNetworkCredential
     {
         const string CredentialTypeProperty = "credentialType";
         const string UserProperty = "user";
