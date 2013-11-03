@@ -35,8 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -57,9 +56,9 @@
     <Compile Include="SerializationSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
+    <ProjectReference Include="..\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
       <Project>{b3ee3b7a-05e3-4b0e-9c56-476be4354eeb}</Project>
-      <Name>DocaLabs.Http.Client</Name>
+      <Name>DocaLabs.Http.Client.DotNet</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

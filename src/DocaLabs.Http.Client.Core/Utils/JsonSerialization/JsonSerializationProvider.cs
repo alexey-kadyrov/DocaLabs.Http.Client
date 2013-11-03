@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 
 namespace DocaLabs.Http.Client.Utils.JsonSerialization
 {
@@ -70,38 +69,19 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
         {
             Locker = new object();
 
-            ReloadSerializationExtensions();
-        }
+            var serializerFactory = PlatformAdapter.Resolve<IJasonSerializerFactory>(false);
 
-        /// <summary>
-        /// Scans the base folder using MEF for exports of IJsonSerializer and IJsonDeserializer in assemblies with 
-        /// pattern "DocaLabs.Http.Client.Extension.*" if there is nothing found then it will use DefaultJsonSerializer and DefaultJsonDeserializer.
-        /// Normally there is no need to call the method, call it if you want to force the scan early as it can be quite
-        /// expensive operation if done during first serialization/deserialization.
-        /// </summary>
-        public static void ReloadSerializationExtensions()
-        {
-            var loader = new ExtensionLoader();
-
-            using (var composer = new LibraryExtensionsComposer())
+            if (serializerFactory != null)
             {
-                composer.ComposePartsFor(loader);
+                _serializer = serializerFactory.CreateSerializer();
+                _deserializer = serializerFactory.CreateDeserializer();
             }
 
-            lock (Locker)
-            {
-                _serializer = loader.SerializerExtension ?? new DefaultJsonSerializer();
-                _deserializer = loader.DeserializerExtension ?? new DefaultJsonDeserializer();
-            }
-        }
+            if (_serializer == null)
+                _serializer = new DefaultJsonSerializer();
 
-        class ExtensionLoader
-        {
-            [Import(AllowDefault = true)]
-            public IJsonSerializer SerializerExtension { get; set; }
-
-            [Import(AllowDefault = true)]
-            public IJsonDeserializer DeserializerExtension { get; set; }
+            if (_deserializer == null)
+                _deserializer = new DefaultJsonDeserializer();
         }
     }
 }

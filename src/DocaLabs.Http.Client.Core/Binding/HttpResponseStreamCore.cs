@@ -12,19 +12,20 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Wraps around the response stream.
     /// </summary>
-    public abstract class HttpResponseStreamCore : Stream
+    public abstract class HttpResponseStreamCore : Stream, IHttpResponseStream
     {
         static protected readonly Encoding DefaultTextEncoding = Encoding.GetEncoding(CharSets.Iso88591);
 
         Stream _dataStream;
         HttpContentType _contentType;
+        Stream _rawResponseStream;
 
         protected WebResponse Response { get; set; }
 
         /// <summary>
         /// Gets or sets the raw response stream.
         /// </summary>
-        protected Stream RawResponseStream { get; private set; }
+        protected Stream RawResponseStream { get { return _rawResponseStream ?? (_rawResponseStream = InitializeResponseStream()); } }
 
         /// <summary>
         /// Returns the response stream, if the content is encoded (compressed) then it will be decoded using decoder provided by ContentDecoderFactory.
@@ -355,14 +356,14 @@ namespace DocaLabs.Http.Client.Binding
             return DataStream.FlushAsync(cancellationToken);
         }
 
-        /// <summary>
-        /// Initializes the "raw" response stream.
-        /// </summary>
-        protected void InitializeResponseStream()
+        Stream InitializeResponseStream()
         {
-            RawResponseStream = Response.GetResponseStream();
+            var stream = Response.GetResponseStream();
+
             if (RawResponseStream == null)
                 throw new Exception(Resources.Text.null_response_stream);
+
+            return stream;
         }
 
         HttpContentType InitializeContentType()

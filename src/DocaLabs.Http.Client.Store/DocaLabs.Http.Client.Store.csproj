@@ -9,7 +9,7 @@
     <ProjectGuid>{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocaLabs.Http.Client.Store</RootNamespace>
+    <RootNamespace>DocaLabs.Http.Client</RootNamespace>
     <AssemblyName>DocaLabs.Http.Client.Store</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
@@ -111,6 +111,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Binding\HttpResponseStream.cs" />
+    <Compile Include="Binding\HttpResponseStreamFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

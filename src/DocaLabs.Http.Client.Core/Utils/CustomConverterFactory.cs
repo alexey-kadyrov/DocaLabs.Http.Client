@@ -1,12 +1,13 @@
 using System;
-using System.Collections.Concurrent;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Xml;
 
 namespace DocaLabs.Http.Client.Utils
 {
     /// <summary>
-    /// The converter factory. The behaviour can be customised by updating the factory.
+    /// The converter factory. The behaviour can be customized by updating the factory.
     /// </summary>
     public class CustomConverterFactory : ICustomConverterFactory
     {
@@ -15,14 +16,21 @@ namespace DocaLabs.Http.Client.Utils
         /// </summary>
         public const string Iso8601DateTimePattern = @"yyyy-MM-ddTHH:mm:ss.fffK";
 
-        ConcurrentDictionary<Type, Func<object, object>> Converters { get; set; }
+        public static INullComparer NullComparer { get; private set; }
+
+        ICustomConcurrentDictionary<Type, Func<object, object>> Converters { get; set; }
+
+        static CustomConverterFactory()
+        {
+            NullComparer = PlatformAdapter.Resolve<INullComparer>(false) ?? new NullComparer();
+        }
 
         /// <summary>
         /// Initialize an instance of the CustomConverterFactory with default set of converters
         /// </summary>
         public CustomConverterFactory()
         {
-            Converters = new ConcurrentDictionary<Type, Func<object, object>>();
+            Converters = new CustomConcurrentDictionary<Type, Func<object, object>>();
 
             RegisterConverter(typeof(bool), ToBooleanConverter);
             RegisterConverter(typeof(bool?), ToNullableBooleanConverter);
@@ -68,22 +76,20 @@ namespace DocaLabs.Http.Client.Utils
             if(converter == null)
                 throw new ArgumentNullException("converter");
 
-            Converters.AddOrUpdate(type, converter, (k, v) => converter);
+            Converters[type] = converter;
         }
 
         /// <summary>
         /// Attempts to remove converter with the specified key. 
         /// </summary>
         /// <param name="type">A type which converter can change type to.</param>
-        /// <returns>Removed converter or null if it wasn't found.</returns>
-        public Func<object, object> RemoveConverter(Type type)
+        /// <returns>True if the converter was removed or false otherwise.</returns>
+        public bool RemoveConverter(Type type)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            Func<object, object> converter;
-
-            return Converters.TryRemove(type, out converter) ? converter : null;
+            return Converters.Remove(type);
         }
 
         /// <summary>
@@ -99,11 +105,13 @@ namespace DocaLabs.Http.Client.Utils
 
             if (converter == null)
             {
+                var typeInfo = type.GetTypeInfo();
+
                 var nullable = false;
-                if(type.IsEnum == false)
+                if (typeInfo.IsEnum == false)
                 {
                     type = Nullable.GetUnderlyingType(type);
-                    if (type == null || type.IsEnum == false)
+                    if (type == null || typeInfo.IsEnum == false)
                         return null;
 
                     nullable = true;
@@ -123,10 +131,10 @@ namespace DocaLabs.Http.Client.Utils
         /// Checks whenever the object is null or DBNull
         /// </summary>
         /// <param name="value">Value to be checked.</param>
-        /// <returns>True if the value is null or DBNull otherwise false.</returns>
+        /// <returns>True if the value is null otherwise false.</returns>
         public static bool IsNull(object value)
         {
-            return value == null || value == DBNull.Value;
+            return NullComparer.IsNull(value);
         }
 
         static object ToBooleanConverter(object value)
@@ -137,7 +145,7 @@ namespace DocaLabs.Http.Client.Utils
             var valueAsString = value as string;
 
             if(valueAsString != null)
-                return XmlConvert.ToBoolean(valueAsString.ToLower(CultureInfo.InvariantCulture));
+                return XmlConvert.ToBoolean(valueAsString.ToLowerInvariant());
 
             var valueAsByteArray = value as byte[];
 
@@ -178,7 +186,7 @@ namespace DocaLabs.Http.Client.Utils
 
             return valueAsString.Length == 0
                        ? (object) null
-                       : XmlConvert.ToBoolean(valueAsString.ToLower(CultureInfo.InvariantCulture));
+                       : XmlConvert.ToBoolean(valueAsString.ToLowerInvariant());
         }
 
         static object ToDateTimeConverter(object value)
@@ -620,7 +628,7 @@ namespace DocaLabs.Http.Client.Utils
 
             var inArray = value as byte[];
             return inArray != null 
-                ? Convert.ToBase64String(inArray, Base64FormattingOptions.None) 
+                ? Convert.ToBase64String(inArray) 
                 : Convert.ToString(value, CultureInfo.InvariantCulture);
         }
 
@@ -704,8 +712,17 @@ namespace DocaLabs.Http.Client.Utils
             {
                 CustomConverterFactory = customConverterFactory;
                 EnumType = enumType;
-                UnderlyingType = EnumType.GetEnumUnderlyingType();
+                UnderlyingType = GetEnumUnderlyingType(EnumType);
                 IsNullable = isNullable;
+            }
+
+            static Type GetEnumUnderlyingType(Type enumType)
+            {
+                var fields = enumType.GetRuntimeFields().Where(x => !x.IsStatic).ToArray();
+                if (fields == null || fields.Length != 1)
+                    throw new ArgumentException("enumType");
+
+                return fields[0].FieldType;
             }
 
             public object Convert(object value)

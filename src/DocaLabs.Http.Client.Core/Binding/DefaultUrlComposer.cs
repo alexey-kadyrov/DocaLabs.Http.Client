@@ -149,7 +149,7 @@ namespace DocaLabs.Http.Client.Binding
                 var values = path.GetValues(key);
                 if (values != null)
                 {
-                    var value = string.Join("/", values.Where(x => !string.IsNullOrWhiteSpace(x)).Select(HttpUtility.UrlPathEncode));
+                    var value = string.Join("/", values.Where(x => !string.IsNullOrWhiteSpace(x)).Select(Uri.EscapeUriString()));
 
                     existingPath = existingPath.Replace(
                         "{" + key + "}", string.IsNullOrWhiteSpace(value) ? "" : value, StringComparison.OrdinalIgnoreCase);

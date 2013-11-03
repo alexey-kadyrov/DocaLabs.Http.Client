@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace DocaLabs.Http.Client.Utils
@@ -19,7 +20,7 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
-        /// Adds a new pair key/value to the query string. The key and value are encoded using HttpUtility.UrlEncode.
+        /// Adds a new pair key/value to the query string. The key and value are encoded using Uri.EscapeDataString.
         /// </summary>
         /// <param name="key">Query parameter name.</param>
         /// <param name="value">Parameter's value.</param>
@@ -32,8 +33,8 @@ namespace DocaLabs.Http.Client.Utils
             if (value == null)
                 return this;
 
-            key = Uri.EscapeUriString(key);
-            value = Uri.EscapeUriString(value);
+            key = Uri.EscapeDataString(key);
+            value = Uri.EscapeDataString(value);
 
             if (_builder.Length == 0)
                 _builder.Append(key).Append("=").Append(value);
@@ -44,23 +45,16 @@ namespace DocaLabs.Http.Client.Utils
         }
 
         /// <summary>
-        /// Adds a new pairs of key/value from collection to the query string. The key and value are encoded using HttpUtility.UrlEncode.
+        /// Adds a new pairs of key/value from collection to the query string. The key and value are encoded using Uri.EscapeDataString.
         /// </summary>
         /// <returns>Self reference.</returns>
-        public QueryStringBuilder Add(NameValueCollection collection)
+        public QueryStringBuilder Add(ICustomKeyValueCollection collection)
         {
             if (collection == null)
                 return this;
 
             foreach (var key in collection.AllKeys)
-            {
-                var values = collection.GetValues(key);
-                if (values != null)
-                {
-                    foreach (var value in values)
-                        Add(key, value);
-                }
-            }
+                CopyValues(key, collection.GetValues(key));
 
             return this;
         }
@@ -71,6 +65,15 @@ namespace DocaLabs.Http.Client.Utils
         public override string ToString()
         {
             return _builder.ToString();
+        }
+
+        void CopyValues(string key, IEnumerable<string> values)
+        {
+            if (values == null)
+                return;
+
+            foreach (var value in values)
+                Add(key, value);
         }
     }
 }

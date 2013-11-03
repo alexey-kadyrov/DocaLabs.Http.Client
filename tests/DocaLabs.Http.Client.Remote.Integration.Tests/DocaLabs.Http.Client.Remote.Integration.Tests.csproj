@@ -81,9 +81,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
       <Project>{b3ee3b7a-05e3-4b0e-9c56-476be4354eeb}</Project>
-      <Name>DocaLabs.Http.Client</Name>
+      <Name>DocaLabs.Http.Client.DotNet</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

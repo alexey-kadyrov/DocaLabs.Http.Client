@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace DocaLabs.Http.Client.Utils
 {
@@ -10,12 +9,12 @@ namespace DocaLabs.Http.Client.Utils
     public static class CollectionExtensions
     {
         /// <summary>
-        /// Adds values with the specified key to the NameValueCollection.
+        /// Adds values with the specified key to the ICustomKeyValueCollection.
         /// </summary>
         /// <param name="collection">The target collection where value should be added.</param>
         /// <param name="key">The key value to be used for all values.</param>
         /// <param name="values">Collection of values to be added.</param>
-        public static void Add(this NameValueCollection collection, string key, IEnumerable<string> values)
+        public static void Add(this ICustomKeyValueCollection collection, string key, IEnumerable<string> values)
         {
             if(collection == null)
                 throw new ArgumentNullException("collection");

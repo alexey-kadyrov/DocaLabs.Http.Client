@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{457F5521
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Testing.Common", "tests\DocaLabs.Testing.Common\DocaLabs.Testing.Common.csproj", "{40A96AE2-C931-4AC1-A38E-5FBB3045216C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client", "src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj", "{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.DotNet", "src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj", "{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Tests", "tests\DocaLabs.Http.Client.Tests\DocaLabs.Http.Client.Tests.csproj", "{39AD9FB5-C1CE-4D32-9253-79F795DC6426}"
 EndProject
@@ -50,6 +50,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Phone", "src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj", "{41DF1459-0344-4A4C-859F-8185540E3D30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Store", "src\DocaLabs.Http.Client.Store\DocaLabs.Http.Client.Store.csproj", "{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.MSJavaScriptSerializer", "src\DocaLabs.Http.Client.Extension.MSJavaScriptSerializer\DocaLabs.Http.Client.Extension.MSJavaScriptSerializer.csproj", "{ABF34F55-0FC0-479B-8512-588F0680EB0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -203,16 +205,27 @@ Global
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}.Release|x64.Build.0 = Release|x64
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}.Release|x86.ActiveCfg = Release|x86
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}.Release|x86.Build.0 = Release|x86
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|x64.ActiveCfg = Release|Any CPU
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{BFC334E3-25E4-4973-89B8-6B25276859B2} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
+		{BFC334E3-25E4-4973-89B8-6B25276859B2} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{82F9423E-89AD-46EF-A347-6549097B8758} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{41DF1459-0344-4A4C-859F-8185540E3D30} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
+		{ABF34F55-0FC0-479B-8512-588F0680EB0F} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{40A96AE2-C931-4AC1-A38E-5FBB3045216C} = {457F5521-CCCD-44FC-9654-CF39747614A4}
 		{6684DB84-8528-4089-837C-C75247A7FB4B} = {457F5521-CCCD-44FC-9654-CF39747614A4}
 		{E3B53EEF-D455-4AE4-B1AA-286CA572C279} = {457F5521-CCCD-44FC-9654-CF39747614A4}

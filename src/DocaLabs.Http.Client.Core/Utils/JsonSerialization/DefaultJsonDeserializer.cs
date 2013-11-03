@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Web.Script.Serialization;
+using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace DocaLabs.Http.Client.Utils.JsonSerialization
 {
     /// <summary>
-    /// Implements IJsonDeserializer using JavaScriptSerializer.
+    /// Implements IJsonDeserializer using DataContractJsonSerializer.
     /// All members are thread safe.
     /// </summary>
     public class DefaultJsonDeserializer : IJsonDeserializer
     {
-        static readonly ConcurrentDictionary<Type, SerializationSettings> Settings = new ConcurrentDictionary<Type, SerializationSettings>();
+        static readonly ICustomConcurrentDictionary<Type, DataContractJsonSerializerSettings> Settings = new CustomConcurrentDictionary<Type, DataContractJsonSerializerSettings>();
 
         /// <summary>
         /// Deserializes an object from string in JSON notation.
@@ -20,18 +21,26 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
             if(resultType == null)
                 throw new ArgumentNullException("resultType");
 
-            SerializationSettings settings;
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
 
-            return Settings.TryGetValue(resultType, out settings)
-                ? new JavaScriptSerializer(settings.TypeResolver) { MaxJsonLength = settings.MaxJsonLength, RecursionLimit = settings.RecursionLimit }.Deserialize(value, resultType)
-                : new JavaScriptSerializer().Deserialize(value, resultType);
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
+            {
+                DataContractJsonSerializerSettings settings;
+
+                var serializer = Settings.TryGetValue(resultType, out settings)
+                    ? new DataContractJsonSerializer(resultType, settings)
+                    : new DataContractJsonSerializer(resultType);
+
+                return serializer.ReadObject(stream);
+            }
         }
 
         /// <summary>
         /// Updates/adds settings information which will be used when the specified type is being deserialized.
         /// Use that to customize behaviour of the JsonConvert.
         /// </summary>
-        static public void UpdateSettings(Type type, SerializationSettings settings)
+        static public void UpdateSettings(Type type, DataContractJsonSerializerSettings settings)
         {
             if (type == null)
                 throw new ArgumentNullException("type");

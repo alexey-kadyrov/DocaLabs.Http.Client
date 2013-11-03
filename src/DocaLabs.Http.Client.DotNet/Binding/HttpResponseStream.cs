@@ -8,6 +8,11 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class HttpResponseStream : HttpResponseStreamCore
     {
+        /// <summary>
+        /// Gets a value that indicates whether mutual authentication occurred.
+        /// </summary>
+        public bool IsMutuallyAuthenticated { get { return Response.IsMutuallyAuthenticated; } }
+
         internal HttpResponseStream(WebResponse response)
         {
             Response = response;

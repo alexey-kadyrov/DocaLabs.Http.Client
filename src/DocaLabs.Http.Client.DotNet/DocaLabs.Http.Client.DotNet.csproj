@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DocaLabs.Http.Client</RootNamespace>
+    <AssemblyName>DocaLabs.Http.Client.DotNet</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\DocaLabs.Http.Client.DotNet.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\DocaLabs.Http.Client.DotNet.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AsyncDefaultExecuteStrategy.cs" />
+    <Compile Include="AsyncHttpClient.cs" />
+    <Compile Include="Binding\AsyncBindingContext.cs" />
+    <Compile Include="Binding\BindingContext.cs" />
+    <Compile Include="Binding\HttpResponseStreamFactory.cs" />
+    <Compile Include="Binding\IAsyncRequestWriter.cs" />
+    <Compile Include="Binding\IAsyncResponseBinder.cs" />
+    <Compile Include="Binding\IResponseBinder.cs" />
+    <Compile Include="Binding\PropertyConverting\ClientPropertyMaps.cs" />
+    <Compile Include="Binding\PropertyConverting\CustomPropertyConverterBase.cs" />
+    <Compile Include="Binding\PropertyConverting\FormatCulture.cs" />
+    <Compile Include="Binding\PropertyConverting\ICustomValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\IValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\PropertyOverridesAttribute.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleCollectionValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleDictionaryPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleDictionaryValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleValueConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\PropertyMaps.cs" />
+    <Compile Include="Binding\PropertyConverting\RequestUseTargets.cs" />
+    <Compile Include="Binding\PropertyConverting\RequestUseAttribute.cs" />
+    <Compile Include="Binding\RequestUsageExtensions.cs" />
+    <Compile Include="Binding\DefaultCredentialsMapper.cs" />
+    <Compile Include="Binding\DefaultHeaderMapper.cs" />
+    <Compile Include="Binding\DefaultRequestBinder.cs" />
+    <Compile Include="Binding\DefaultUrlComposer.cs" />
+    <Compile Include="Binding\IRequestBinder.cs" />
+    <Compile Include="Binding\ModelBinders.cs" />
+    <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
+    <Compile Include="Binding\DefaultRequestWriter.cs" />
+    <Compile Include="Binding\RequestExtensions.cs" />
+    <Compile Include="Binding\HttpResponseStream.cs" />
+    <Compile Include="Binding\Serialization\IAsyncRequestSerialization.cs" />
+    <Compile Include="Binding\Serialization\IAsyncResponseDeserialization.cs" />
+    <Compile Include="Binding\Serialization\SerializeStreamAttribute.cs" />
+    <Compile Include="Binding\Serialization\SerializeAsTextAttribute.cs" />
+    <Compile Include="DefaultExecuteStrategy.cs" />
+    <Compile Include="DefaultExecuteStrategyBase.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
+    <Compile Include="HttpClientBase.cs" />
+    <Compile Include="HttpClientWebException.cs" />
+    <Compile Include="IExecuteStrategy.cs" />
+    <Compile Include="RichRequest.cs" />
+    <Compile Include="RichResponse.cs" />
+    <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
+    <Compile Include="Configuration\ConfigurationExtenstions.cs" />
+    <Compile Include="Configuration\CredentialType.cs" />
+    <Compile Include="Configuration\ClientHeaderCollection.cs" />
+    <Compile Include="Configuration\ClientHeaderElement.cs" />
+    <Compile Include="Configuration\DefaultEndpointConfigurationProvider.cs" />
+    <Compile Include="Configuration\EndpointConfiguration.cs" />
+    <Compile Include="Configuration\IClientCertificateReferenceCollection.cs" />
+    <Compile Include="Configuration\IClientCertificateReference.cs" />
+    <Compile Include="Configuration\IClientEndpoint.cs" />
+    <Compile Include="Configuration\IClientHeader.cs" />
+    <Compile Include="Configuration\IClientHeaderCollection.cs" />
+    <Compile Include="Configuration\IClientNetworkCredential.cs" />
+    <Compile Include="Configuration\IClientProxy.cs" />
+    <Compile Include="Configuration\ClientNetworkCredentialElement.cs" />
+    <Compile Include="Configuration\IEndpointConfigurationProvider.cs" />
+    <Compile Include="HttpClientFactory.cs" />
+    <Compile Include="Binding\Serialization\ContentTypeExtensions.cs" />
+    <Compile Include="Utils\JsonSerialization\JasonSerializerFactory.cs" />
+    <Compile Include="Utils\LibraryExtensionsComposer.cs" />
+    <Compile Include="Binding\Serialization\DeserializeFromPlainTextAttribute.cs" />
+    <Compile Include="Binding\Serialization\IResponseDeserializationProvider.cs" />
+    <Compile Include="Binding\Serialization\DeserializeFromJsonAttribute.cs" />
+    <Compile Include="Binding\VoidType.cs" />
+    <Compile Include="Utils\ContentEncoding\ContentDecoderFactory.cs" />
+    <Compile Include="Utils\ContentEncoding\ContentEncoderFactory.cs" />
+    <Compile Include="Utils\ContentEncoding\GZipContentDecoder.cs" />
+    <Compile Include="Utils\ContentEncoding\GZipContentEncoder.cs" />
+    <Compile Include="Utils\ContentEncoding\DeflateContentDecoder.cs" />
+    <Compile Include="Utils\ContentEncoding\DeflateContentEncoder.cs" />
+    <Compile Include="Configuration\ClientCertificateReferenceCollection.cs" />
+    <Compile Include="Configuration\ClientCertificateReferenceElement.cs" />
+    <Compile Include="Configuration\ClientEndpointCollection.cs" />
+    <Compile Include="Configuration\ClientEndpointElement.cs" />
+    <Compile Include="Configuration\HttpClientEndpointSection.cs" />
+    <Compile Include="Configuration\ClientProxyElement.cs" />
+    <Compile Include="Binding\Serialization\IRequestSerialization.cs" />
+    <Compile Include="Binding\Serialization\IResponseDeserialization.cs" />
+    <Compile Include="Binding\DefaultResponseBinder.cs" />
+    <Compile Include="Binding\Serialization\SerializeAsFormAttribute.cs" />
+    <Compile Include="Binding\PropertyConverting\CustomPropertyConverterAttribute.cs" />
+    <Compile Include="Binding\Serialization\RequestSerializationAttribute.cs" />
+    <Compile Include="Binding\Serialization\ResponseDeserializationAttribute.cs" />
+    <Compile Include="Binding\Serialization\SerializeAsJsonAttribute.cs" />
+    <Compile Include="Binding\Serialization\SerializeAsXmlAttribute.cs" />
+    <Compile Include="Binding\Serialization\DeserializeFromXmlAttribute.cs" />
+    <Compile Include="HttpClient.cs" />
+    <Compile Include="HttpClientException.cs" />
+    <Compile Include="Binding\PropertyConverting\SimpleCollectionPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SimplePropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\IPropertyConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverter.cs" />
+    <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterAttribute.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Text.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Text.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\NullComparerOverride.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Text.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Text.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
+      <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
+      <Name>DocaLabs.Http.Client.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

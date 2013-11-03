@@ -42,8 +42,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,9 +67,9 @@
       <Project>{bfc334e3-25e4-4973-89b8-6b25276859b2}</Project>
       <Name>DocaLabs.Http.Client.Extension.NewtonSoft</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
       <Project>{b3ee3b7a-05e3-4b0e-9c56-476be4354eeb}</Project>
-      <Name>DocaLabs.Http.Client</Name>
+      <Name>DocaLabs.Http.Client.DotNet</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

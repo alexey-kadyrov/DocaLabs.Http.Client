@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}</ProjectGuid>
+    <ProjectGuid>{ABF34F55-0FC0-479B-8512-588F0680EB0F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocaLabs.Http.Client.Extension.Test.Example</RootNamespace>
-    <AssemblyName>DocaLabs.Http.Client.Extension.Test.Example</AssemblyName>
+    <RootNamespace>DocaLabs.Http.Client.Extension.MSJavaScriptSerializer</RootNamespace>
+    <AssemblyName>DocaLabs.Http.Client.Extension.MSJavaScriptSerializer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,25 +31,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="MSJsonDeserializer.cs" />
+    <Compile Include="MSJsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestIJsonSerializer.cs" />
+    <Compile Include="SerializationSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
-      <Project>{b3ee3b7a-05e3-4b0e-9c56-476be4354eeb}</Project>
-      <Name>DocaLabs.Http.Client.DotNet</Name>
+    <ProjectReference Include="..\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
+      <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
+      <Name>DocaLabs.Http.Client.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
