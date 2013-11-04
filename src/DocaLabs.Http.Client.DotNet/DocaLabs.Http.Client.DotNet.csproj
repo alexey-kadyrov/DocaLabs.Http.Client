@@ -90,6 +90,8 @@
     <Compile Include="Binding\Serialization\IAsyncResponseDeserialization.cs" />
     <Compile Include="Binding\Serialization\SerializeStreamAttribute.cs" />
     <Compile Include="Binding\Serialization\SerializeAsTextAttribute.cs" />
+    <Compile Include="Configuration\IClientCertificateReference.cs" />
+    <Compile Include="Configuration\IClientCertificateReferenceCollection.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
     <Compile Include="DefaultExecuteStrategyBase.cs" />
     <Compile Include="ExceptionExtensions.cs" />
@@ -105,15 +107,7 @@
     <Compile Include="Configuration\ClientHeaderElement.cs" />
     <Compile Include="Configuration\DefaultEndpointConfigurationProvider.cs" />
     <Compile Include="Configuration\EndpointConfiguration.cs" />
-    <Compile Include="Configuration\IClientCertificateReferenceCollection.cs" />
-    <Compile Include="Configuration\IClientCertificateReference.cs" />
-    <Compile Include="Configuration\IClientEndpoint.cs" />
-    <Compile Include="Configuration\IClientHeader.cs" />
-    <Compile Include="Configuration\IClientHeaderCollection.cs" />
-    <Compile Include="Configuration\IClientNetworkCredential.cs" />
-    <Compile Include="Configuration\IClientProxy.cs" />
     <Compile Include="Configuration\ClientNetworkCredentialElement.cs" />
-    <Compile Include="Configuration\IEndpointConfigurationProvider.cs" />
     <Compile Include="HttpClientFactory.cs" />
     <Compile Include="Binding\Serialization\ContentTypeExtensions.cs" />
     <Compile Include="Utils\JsonSerialization\JasonSerializerFactory.cs" />

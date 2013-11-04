@@ -54,19 +54,13 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets the headers collection.
         /// </summary>
-        [XmlElement("headers")]
+        [XmlElement("headers", typeof(ClientHeaderCollection))]
         public IClientHeaderCollection Headers { get; set; }
-
-        /// <summary>
-        /// Gets the client certificate collection.
-        /// </summary>
-        [XmlElement("clientCertificates")]
-        public IClientCertificateReferenceCollection ClientCertificates { get; set; }
 
         /// <summary>
         /// Gets the proxy.
         /// </summary>
-        [XmlElement("proxy")]
+        [XmlElement("proxy", typeof(ClientProxy))]
         public IClientProxy Proxy { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Configuration;
-using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace DocaLabs.Http.Client.Configuration
 {
@@ -12,43 +13,37 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Default name for the configuration section.
         /// </summary>
-        public const string DefaultSectionName = "httpClientEndpoints";
+        public const string DefaultFileName = "httpClientEndpoints.xml";
 
-        System.Configuration.Configuration _configuration;
-        string _sectionName = DefaultSectionName;
+        string _fileName = DefaultFileName;
+        IHttpClientEndpointConfiguration _configuration;
+        readonly object _locker = new object();
 
         /// <summary>
         /// Defines a section name the root element with endpoint configurations.
         /// The default name is 'httpClientEndpoints'.
         /// </summary>
-        public string SectionName
+        public string FileName
         {
-            get { return _sectionName; }
+            get { return _fileName; }
             set
             {
                 if(string.IsNullOrWhiteSpace(value))
                     throw new ArgumentNullException("value");
 
-                _sectionName = value;
+                _fileName = value;
             }
         }
 
-        /// <summary>
-        /// Sets a specified file as a source for the configuration.
-        /// </summary>
-        public void SetSource(string fileName)
+        IHttpClientEndpointConfiguration Configuration
         {
-            if (fileName == null)
+            get
             {
-                _configuration = null;
-                return;
+                lock (_locker)
+                {
+                    return _configuration ?? (_configuration = Load(_fileName));
+                }
             }
-
-            if (!File.Exists(fileName))
-                throw new FileNotFoundException(string.Format(Resources.Text.configuration_file_0_not_found, fileName), fileName);
-
-            _configuration = ConfigurationManager.OpenMappedExeConfiguration(
-                new ExeConfigurationFileMap { ExeConfigFilename = fileName }, ConfigurationUserLevel.None);
         }
 
         /// <summary>
@@ -56,18 +51,15 @@ namespace DocaLabs.Http.Client.Configuration
         /// </summary>
         public IClientEndpoint GetEndpoint(string configurationName)
         {
-            var section = GetSection();
-
-            return section == null
-               ? null
-               : section.Endpoints[configurationName];
+            return Configuration.Endpoints.FirstOrDefault(x => x.Name == configurationName);
         }
 
-        HttpClientEndpointSection GetSection()
+        static IHttpClientEndpointConfiguration Load(string file)
         {
-            return _configuration == null
-                ? ConfigurationManager.GetSection(_sectionName) as HttpClientEndpointSection
-                : _configuration.GetSection(_sectionName) as HttpClientEndpointSection;
+            using (var reader = XmlReader.Create(file))
+            {
+                return new XmlSerializer(typeof(HttpClientEndpointConfiguration)).Deserialize(reader) as IHttpClientEndpointConfiguration;
+            }
         }
     }
 }

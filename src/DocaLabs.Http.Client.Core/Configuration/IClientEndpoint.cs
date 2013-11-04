@@ -49,11 +49,6 @@ namespace DocaLabs.Http.Client.Configuration
         IClientHeaderCollection Headers { get; }
 
         /// <summary>
-        /// Gets the client certificate collection.
-        /// </summary>
-        IClientCertificateReferenceCollection ClientCertificates { get; }
-
-        /// <summary>
         /// Gets the proxy.
         /// </summary>
         IClientProxy Proxy { get; }

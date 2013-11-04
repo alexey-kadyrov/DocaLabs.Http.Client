@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
-using System.Net.Security;
 
 namespace DocaLabs.Http.Client.Configuration
 {
@@ -70,7 +69,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets values indicating the level of authentication and impersonation used for this request.
         /// </summary>
-        public AuthenticationLevel? AuthenticationLevel
+        public RequestAuthenticationLevel? AuthenticationLevel
         {
             get { return AuthenticationLevelElement; }
             set { AuthenticationLevelElement = value; }
@@ -144,9 +143,9 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         [ConfigurationProperty(AuthenticationLevelProperty, IsRequired = false, DefaultValue = null)]
-        AuthenticationLevel? AuthenticationLevelElement
+        RequestAuthenticationLevel? AuthenticationLevelElement
         {
-            get { return ((AuthenticationLevel?)base[AuthenticationLevelProperty]); }
+            get { return ((RequestAuthenticationLevel?)base[AuthenticationLevelProperty]); }
             set { base[AuthenticationLevelProperty] = value; }
         }
 

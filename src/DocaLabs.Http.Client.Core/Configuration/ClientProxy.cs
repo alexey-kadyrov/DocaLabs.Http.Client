@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace DocaLabs.Http.Client.Configuration
 {
     /// <summary>
     /// Represents a configuration element that defines the proxy for http client endpoint. 
     /// </summary>
-    public interface IClientProxy
+    public class ClientProxy : IClientProxy
     {
         /// <summary>
         /// Gets or sets the proxy address.
         /// </summary>
-        Uri Address { get; set; }
+        [XmlAttribute("address")]
+        public Uri Address { get; set; }
 
         /// <summary>
         /// Gets or sets the proxy's credentials.
         /// </summary>
-        IClientNetworkCredential Credential { get; }
+        [XmlElement("credential", typeof(ClientNetworkCredential))]
+        public IClientNetworkCredential Credential { get; set; }
     }
 }
