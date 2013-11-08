@@ -2,8 +2,9 @@
 {
     public enum RequestAuthenticationLevel
     {
-        None = 0,
-        MutualAuthRequested = 1,
-        MutualAuthRequired = 2,
+        Undefined = 0,
+        None = 1,
+        MutualAuthRequested = 2,
+        MutualAuthRequired = 3,
     }
 }

@@ -8,21 +8,21 @@
         /// <summary>
         /// Gets or sets the type of credentials. If it's DefaultCredentials or DefaultNetworkCredentials other properties will be ignored.
         /// </summary>
-        CredentialType CredentialType { get; set; }
+        CredentialType CredentialType { get; }
 
         /// <summary>
         /// Gets or sets the user name if the CredentialType is NetworkCredential.
         /// </summary>
-        string User { get; set; }
+        string User { get; }
 
         /// <summary>
         /// Gets or sets the password if the CredentialType is NetworkCredential.
         /// </summary>
-        string Password { get; set; }
+        string Password { get; }
 
         /// <summary>
         /// Gets or sets the domain if the CredentialType is NetworkCredential.
         /// </summary>
-        string Domain { get; set; }
+        string Domain { get; }
     }
 }

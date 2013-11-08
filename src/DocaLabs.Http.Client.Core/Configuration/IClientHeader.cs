@@ -8,11 +8,11 @@
         /// <summary>
         /// Gets or sets the header's name.
         /// </summary>
-        string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// Gets or sets the headers's value.
         /// </summary>
-        string Value { get; set; }
+        string Value { get; }
     }
 }

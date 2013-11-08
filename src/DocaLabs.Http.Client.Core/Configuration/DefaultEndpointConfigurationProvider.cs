@@ -13,10 +13,10 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Default name for the configuration section.
         /// </summary>
-        public const string DefaultFileName = "httpClientEndpoints.xml";
+        public const string DefaultFileName = "HttpClientEndpoints.xml";
 
         string _fileName = DefaultFileName;
-        IHttpClientEndpointConfiguration _configuration;
+        IClientEndpointConfiguration _configuration;
         readonly object _locker = new object();
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace DocaLabs.Http.Client.Configuration
             }
         }
 
-        IHttpClientEndpointConfiguration Configuration
+        public IClientEndpointConfiguration Configuration
         {
             get
             {
@@ -54,11 +54,11 @@ namespace DocaLabs.Http.Client.Configuration
             return Configuration.Endpoints.FirstOrDefault(x => x.Name == configurationName);
         }
 
-        static IHttpClientEndpointConfiguration Load(string file)
+        static IClientEndpointConfiguration Load(string file)
         {
             using (var reader = XmlReader.Create(file))
             {
-                return new XmlSerializer(typeof(HttpClientEndpointConfiguration)).Deserialize(reader) as IHttpClientEndpointConfiguration;
+                return new XmlSerializer(typeof(ClientEndpointConfiguration)).Deserialize(reader) as IClientEndpointConfiguration;
             }
         }
     }

@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the proxy address.
         /// </summary>
-        Uri Address { get; set; }
+        Uri Address { get; }
 
         /// <summary>
         /// Gets or sets the proxy's credentials.

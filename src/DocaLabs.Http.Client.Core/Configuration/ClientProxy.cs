@@ -8,16 +8,46 @@ namespace DocaLabs.Http.Client.Configuration
     /// </summary>
     public class ClientProxy : IClientProxy
     {
+        ClientNetworkCredential _credentialXmlData;
+
         /// <summary>
         /// Gets or sets the proxy address.
         /// </summary>
+        [XmlIgnore]
+        public Uri Address { get; private set; }
+
         [XmlAttribute("address")]
-        public Uri Address { get; set; }
+        public string AddressXmlData
+        {
+            get
+            {
+                var address = Address;
+                return address != null ? address.OriginalString : null;
+            }
+            set { Address = string.IsNullOrWhiteSpace(value) ? null : new Uri(value); }
+        }
 
         /// <summary>
         /// Gets or sets the proxy's credentials.
         /// </summary>
-        [XmlElement("credential", typeof(ClientNetworkCredential))]
-        public IClientNetworkCredential Credential { get; set; }
+        [XmlIgnore]
+        public IClientNetworkCredential Credential { get { return CredentialXmlData; } }
+
+        [XmlElement("credential")]
+        public ClientNetworkCredential CredentialXmlData
+        {
+            get { return _credentialXmlData; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+                _credentialXmlData = value;
+            }
+        }
+
+        public ClientProxy()
+        {
+            _credentialXmlData = new ClientNetworkCredential();
+        }
     }
 }
