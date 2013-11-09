@@ -155,7 +155,7 @@ namespace DocaLabs.Http.Client
             if (string.IsNullOrWhiteSpace(configurationName))
                 configurationName = GetType().FullName;
 
-            return EndpointConfiguration.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
+            return EndpointConfigurationFactory.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
         }
 
         /// <summary>

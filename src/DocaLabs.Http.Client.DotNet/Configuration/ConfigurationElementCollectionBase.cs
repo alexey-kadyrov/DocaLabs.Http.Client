@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace DocaLabs.Http.Client.Configuration
@@ -8,9 +9,10 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Defines a base collection type to implement configuration collections.
     /// </summary>
-    public abstract class ConfigurationElementCollectionBase<TKey, TElement> : ConfigurationElementCollection
-        where TKey : class
-        where TElement : class 
+    public abstract class ConfigurationElementCollectionBase<TKey, TElement> 
+        : ConfigurationElementCollection, IReadOnlyList<TElement> 
+            where TKey : class
+            where TElement : class
     {
         readonly ConfigurationElementCollectionType _collectionType;
         readonly string _elementName;
@@ -166,6 +168,15 @@ namespace DocaLabs.Http.Client.Configuration
         public void RemoveAt(int index)
         {
             BaseRemoveAt(index);
+        }
+
+        public IEnumerator<TElement> GetEnumerator()
+        {
+            var enumerator = base.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                yield return (TElement)enumerator.Current;
+            }
         }
     }
 

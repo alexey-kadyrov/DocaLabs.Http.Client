@@ -7,7 +7,7 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Represents the section of a configuration file, which defines a collection of endpoints that a http client can connect to. 
     /// </summary>
-    [XmlRoot(ElementName = "httpClientEndpointConfiguration")]
+    [XmlRoot(ElementName = "httpClientEndpoints")]
     public class ClientEndpointConfiguration : IClientEndpointConfiguration
     {
         [XmlIgnore]

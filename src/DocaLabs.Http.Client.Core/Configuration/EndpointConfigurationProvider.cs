@@ -8,7 +8,7 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Defines methods to get an endpoint configuration using the application/web configuration file.
     /// </summary>
-    public class DefaultEndpointConfigurationProvider : IEndpointConfigurationProvider
+    public class EndpointConfigurationProvider : IEndpointConfigurationProvider
     {
         /// <summary>
         /// Default name for the configuration section.

@@ -13,30 +13,18 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the header's name.
         /// </summary>
-        public string Name
-        {
-            get { return NameElement; }
-            set { NameElement = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the headers's value.
-        /// </summary>
-        public string Value
-        {
-            get { return ValueElement; }
-            set { ValueElement = value; }
-        }
-
         [ConfigurationProperty(NameProperty, IsKey = true, IsRequired = true)]
-        string NameElement
+        public string Name
         {
             get { return ((string)base[NameProperty]); }
             set { base[NameProperty] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the headers's value.
+        /// </summary>
         [ConfigurationProperty(ValueProperty, IsRequired = true)]
-        string ValueElement
+        public string Value
         {
             get { return ((string)base[ValueProperty]); }
             set { base[ValueProperty] = value; }

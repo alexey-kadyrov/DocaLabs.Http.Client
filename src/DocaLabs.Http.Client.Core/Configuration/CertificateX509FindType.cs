@@ -17,5 +17,8 @@
         FindByExtension,
         FindByKeyUsage,
         FindBySubjectKeyIdentifier,
+
+        FindByFileName,
+        DefinedInValue
     }
 }

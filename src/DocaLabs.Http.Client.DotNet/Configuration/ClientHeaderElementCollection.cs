@@ -6,12 +6,12 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Contains a collection of IClientHeader objects.
     /// </summary>
-    public class ClientHeaderCollection : ConfigurationElementCollectionBase<string, IClientHeader>, IClientHeaderCollection
+    public class ClientHeaderElementCollection : ConfigurationElementCollectionBase<string, IClientHeader>
     {
         /// <summary>
         /// Initializes a new instance of the ClientHeaderCollection class.
         /// </summary>
-        public ClientHeaderCollection()
+        public ClientHeaderElementCollection()
             : base("add")
         {
         }

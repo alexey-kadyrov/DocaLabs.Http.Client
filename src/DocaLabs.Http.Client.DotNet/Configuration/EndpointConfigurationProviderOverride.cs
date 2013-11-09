@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 
 namespace DocaLabs.Http.Client.Configuration
 {
     /// <summary>
     /// Defines methods to get an endpoint configuration using the application/web configuration file.
     /// </summary>
-    public class DefaultEndpointConfigurationProvider : IEndpointConfigurationProvider
+    public class EndpointConfigurationProviderOverride : IEndpointConfigurationProvider
     {
         /// <summary>
         /// Default name for the configuration section.
@@ -44,8 +45,8 @@ namespace DocaLabs.Http.Client.Configuration
                 return;
             }
 
-            if (!File.Exists(fileName))
-                throw new FileNotFoundException(string.Format(Resources.Text.configuration_file_0_not_found, fileName), fileName);
+            //if (!File.Exists(fileName))
+            //    throw new FileNotFoundException(string.Format(Resources.Text.configuration_file_0_not_found, fileName), fileName);
 
             _configuration = ConfigurationManager.OpenMappedExeConfiguration(
                 new ExeConfigurationFileMap { ExeConfigFilename = fileName }, ConfigurationUserLevel.None);
@@ -59,15 +60,15 @@ namespace DocaLabs.Http.Client.Configuration
             var section = GetSection();
 
             return section == null
-               ? null
-               : section.Endpoints[configurationName];
+                ? null
+                : section.Endpoints.FirstOrDefault(x => x.Name == configurationName);
         }
 
-        HttpClientEndpointSection GetSection()
+        ClientEndpointConfigurationSection GetSection()
         {
             return _configuration == null
-                ? ConfigurationManager.GetSection(_sectionName) as HttpClientEndpointSection
-                : _configuration.GetSection(_sectionName) as HttpClientEndpointSection;
+                ? ConfigurationManager.GetSection(_sectionName) as ClientEndpointConfigurationSection
+                : _configuration.GetSection(_sectionName) as ClientEndpointConfigurationSection;
         }
     }
 }

@@ -114,8 +114,8 @@
     <Compile Include="Configuration\ClientNetworkCredential.cs" />
     <Compile Include="Configuration\ClientProxy.cs" />
     <Compile Include="Configuration\CredentialType.cs" />
-    <Compile Include="Configuration\DefaultEndpointConfigurationProvider.cs" />
-    <Compile Include="Configuration\EndpointConfiguration.cs" />
+    <Compile Include="Configuration\EndpointConfigurationProvider.cs" />
+    <Compile Include="Configuration\EndpointConfigurationFactory.cs" />
     <Compile Include="Configuration\IClientCertificateReference.cs" />
     <Compile Include="Configuration\IClientEndpoint.cs" />
     <Compile Include="Configuration\IClientEndpointConfiguration.cs" />

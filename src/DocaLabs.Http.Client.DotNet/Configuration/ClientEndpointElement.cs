@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 
@@ -23,56 +24,62 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the endpoint name.
         /// </summary>
+        [ConfigurationProperty(NameProperty, IsKey = true, IsRequired = true)]
         public string Name
         {
-            get { return NameElement; }
-            set { NameElement = value; }
+            get { return ((string)base[NameProperty]); }
+            set { base[NameProperty] = value; }
         }
 
         /// <summary>
         /// Gets or sets the BaseUrl.
         /// </summary>
+        [ConfigurationProperty(BaseUrlProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
         public Uri BaseUrl
         {
-            get { return BaseUrlElement; }
-            set { BaseUrlElement = value; }
+            get { return ((Uri)base[BaseUrlProperty]); }
+            set { base[BaseUrlProperty] = value; }
         }
 
         /// <summary>
         /// Gets or sets the request's method, e.g. GET,POST,PUT,DELETE. Default value is empty which means that HttpClient will try to figure out the method.
         /// </summary>
+        [ConfigurationProperty(MethodProperty, IsRequired = false, DefaultValue = "")]
         public string Method
         {
-            get { return MethodElement; }
-            set { MethodElement = value; }
+            get { return ((string)base[MethodProperty]); }
+            set { base[MethodProperty] = value; }
         }
 
         /// <summary>
         /// Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
         /// </summary>
+        [ConfigurationProperty(TimeoutProperty, IsRequired = false, DefaultValue = 90000)]
         public int Timeout
         {
-            get { return TimeoutElement; }
-            set { TimeoutElement = value; }
+            get { return ((int)base[TimeoutProperty]); }
+            set { base[TimeoutProperty] = value; }
         }
 
         /// <summary>
         /// Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.
         /// The default value is true.
         /// </summary>
+        [ConfigurationProperty(AutoSetAcceptEncodingProperty, IsRequired = false, DefaultValue = true)]
         public bool AutoSetAcceptEncoding
         {
-            get { return AutoSetAcceptEncodingElement; }
-            set { AutoSetAcceptEncodingElement= value; }
+            get { return ((bool)base[AutoSetAcceptEncodingProperty]); }
+            set { base[AutoSetAcceptEncodingProperty] = value; }
         }
 
         /// <summary>
         /// Gets or sets values indicating the level of authentication and impersonation used for this request.
         /// </summary>
-        public RequestAuthenticationLevel? AuthenticationLevel
+        [ConfigurationProperty(AuthenticationLevelProperty, IsRequired = false, DefaultValue = RequestAuthenticationLevel.Undefined)]
+        public RequestAuthenticationLevel AuthenticationLevel
         {
-            get { return AuthenticationLevelElement; }
-            set { AuthenticationLevelElement = value; }
+            get { return ((RequestAuthenticationLevel)base[AuthenticationLevelProperty]); }
+            set { base[AuthenticationLevelProperty] = value; }
         }
 
         /// <summary>
@@ -86,7 +93,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets the headers collection.
         /// </summary>
-        public IClientHeaderCollection Headers
+        public IReadOnlyList<IClientHeader> Headers
         {
             get { return HeadersElement; }
         }
@@ -94,7 +101,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets the client certificate collection.
         /// </summary>
-        public IClientCertificateReferenceCollection ClientCertificates
+        public IReadOnlyList<IClientCertificateReference> ClientCertificates
         {
             get { return ClientCertificatesElement; }
         }
@@ -107,48 +114,6 @@ namespace DocaLabs.Http.Client.Configuration
             get { return ProxyElement; }
         }
 
-        [ConfigurationProperty(NameProperty, IsKey = true, IsRequired = true)]
-        string NameElement
-        {
-            get { return ((string)base[NameProperty]); }
-            set { base[NameProperty] = value; }
-        }
-
-        [ConfigurationProperty(BaseUrlProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
-        Uri BaseUrlElement
-        {
-            get { return ((Uri)base[BaseUrlProperty]); }
-            set { base[BaseUrlProperty] = value; }
-        }
-
-        [ConfigurationProperty(MethodProperty, IsRequired = false, DefaultValue = "")]
-        string MethodElement
-        {
-            get { return ((string)base[MethodProperty]); }
-            set { base[MethodProperty] = value; }
-        }
-
-        [ConfigurationProperty(TimeoutProperty, IsRequired = false, DefaultValue = 90000)]
-        int TimeoutElement
-        {
-            get { return ((int)base[TimeoutProperty]); }
-            set { base[TimeoutProperty] = value; }
-        }
-
-        [ConfigurationProperty(AutoSetAcceptEncodingProperty, IsRequired = false, DefaultValue = true)]
-        bool AutoSetAcceptEncodingElement
-        {
-            get { return ((bool)base[AutoSetAcceptEncodingProperty]); }
-            set { base[AutoSetAcceptEncodingProperty] = value; }
-        }
-
-        [ConfigurationProperty(AuthenticationLevelProperty, IsRequired = false, DefaultValue = null)]
-        RequestAuthenticationLevel? AuthenticationLevelElement
-        {
-            get { return ((RequestAuthenticationLevel?)base[AuthenticationLevelProperty]); }
-            set { base[AuthenticationLevelProperty] = value; }
-        }
-
         [ConfigurationProperty(CredentialProperty, IsRequired = false)]
         ClientNetworkCredentialElement CredentialElement
         {
@@ -156,15 +121,15 @@ namespace DocaLabs.Http.Client.Configuration
         }
 
         [ConfigurationProperty(HeadersProperty, IsRequired = false)]
-        ClientHeaderCollection HeadersElement
+        ClientHeaderElementCollection HeadersElement
         {
-            get { return ((ClientHeaderCollection)base[HeadersProperty]); }
+            get { return ((ClientHeaderElementCollection)base[HeadersProperty]); }
         }
 
         [ConfigurationProperty(ClientCertificatesProperty, IsRequired = false)]
-        ClientCertificateReferenceCollection ClientCertificatesElement
+        ClientCertificateReferenceElementCollection ClientCertificatesElement
         {
-            get { return ((ClientCertificateReferenceCollection)base[ClientCertificatesProperty]); }
+            get { return ((ClientCertificateReferenceElementCollection)base[ClientCertificatesProperty]); }
         }
 
         [ConfigurationProperty(ProxyProperty, IsRequired = false)]

@@ -7,14 +7,14 @@ using Machine.Specifications;
 
 namespace DocaLabs.Http.Client.Tests.Configuration
 {
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_loading_from_app_config_file_service_where_all_data_is_defined
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
         Establish context =
-            () => provider = new DefaultEndpointConfigurationProvider();
+            () => provider = new EndpointConfigurationProviderOverride();
 
         Because of =
             () => endpoint = provider.GetEndpoint("service1");
@@ -22,14 +22,14 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Behaves_like<SectionFromAppConfigFileWhereAllDataIsDefined> a_section_from_app_config_file_where_all_data_is_defined;
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_loading_from_app_config_file_service_where_only_some_data_is_defined
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
         Establish context =
-            () => provider = new DefaultEndpointConfigurationProvider();
+            () => provider = new EndpointConfigurationProviderOverride();
 
         Because of =
             () => endpoint = provider.GetEndpoint("service2");
@@ -37,15 +37,15 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Behaves_like<SectionFromAppConfigFileServiceWhereOnlySomeDataIsDefined> a_section_from_app_config_file_service_where_only_some_data_is_defined;
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_loading_from_external_config_file_service_where_all_data_is_defined
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
         Establish context = () =>
         {
-            provider = new DefaultEndpointConfigurationProvider();
+            provider = new EndpointConfigurationProviderOverride();
             provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
         };
 
@@ -55,15 +55,15 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Behaves_like<SectionFromExternalConfigFileWhereAllDataIsDefined> a_section_from_external_config_file_where_all_data_is_defined;
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_loading_from_external_config_file_service_where_only_some_data_is_defined
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
         Establish context = () =>
         {
-            provider = new DefaultEndpointConfigurationProvider();
+            provider = new EndpointConfigurationProviderOverride();
             provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
         };
 
@@ -73,15 +73,15 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Behaves_like<SectionFromExternalConfigFileServiceWhereOnlySomeDataIsDefined> a_section_from_external_config_file_service_where_only_some_data_is_defined;
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_setting_source_to_null_before_loading_service_where_all_data_is_defined
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
         Establish context = () =>
         {
-            provider = new DefaultEndpointConfigurationProvider();
+            provider = new EndpointConfigurationProviderOverride();
             provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
             provider.SetSource(null);
         };
@@ -92,15 +92,15 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Behaves_like<SectionFromAppConfigFileWhereAllDataIsDefined> a_section_from_app_config_file_where_all_data_is_defined;
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_setting_source_to_null_before_loading_service_where_only_some_data_is_defined
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
         Establish context = () =>
         {
-            provider = new DefaultEndpointConfigurationProvider();
+            provider = new EndpointConfigurationProviderOverride();
             provider.SetSource(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExternalEndpointConfiguration.config"));
             provider.SetSource(null);
         };
@@ -111,13 +111,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
         Behaves_like<SectionFromAppConfigFileServiceWhereOnlySomeDataIsDefined> a_section_from_app_config_file_service_where_only_some_data_is_defined;
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_setting_source_to_non_esistent_file
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => new DefaultEndpointConfigurationProvider().SetSource("wrong-file-name.config"));
+            () => exception = Catch.Exception(() => new EndpointConfigurationProviderOverride().SetSource("wrong-file-name.config"));
 
         It should_throw_file_not_found_exception =
             () => exception.ShouldBeOfType<FileNotFoundException>();
@@ -126,13 +126,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => exception.Message.ShouldContain("wrong-file-name.config");
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_setting_source_using_invalid_file_name
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => new DefaultEndpointConfigurationProvider().SetSource("invalid:file:name?config"));
+            () => exception = Catch.Exception(() => new EndpointConfigurationProviderOverride().SetSource("invalid:file:name?config"));
 
         It should_throw_file_not_found_exception =
             () => exception.ShouldBeOfType<FileNotFoundException>();
@@ -141,13 +141,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => exception.Message.ShouldContain("invalid:file:name?config");
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_loading_from_non_default_section
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
-        Establish context = () => provider = new DefaultEndpointConfigurationProvider
+        Establish context = () => provider = new EndpointConfigurationProviderOverride
         {
             SectionName = "customSectionName"
         };
@@ -181,13 +181,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
                                         x.Password == "password42" && x.Domain == "domain42");
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_setting_section_name_to_null
     {
         static Exception exception;
 
         Because of =
-            () => exception = Catch.Exception(() => { new DefaultEndpointConfigurationProvider().SectionName = null; });
+            () => exception = Catch.Exception(() => { new EndpointConfigurationProviderOverride().SectionName = null; });
 
         It should_throw_argument_null_exception =
             () => exception.ShouldBeOfType<ArgumentNullException>();
@@ -196,13 +196,13 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("value");
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_loading_from_non_existent_section
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
-        Establish context = () => provider = new DefaultEndpointConfigurationProvider
+        Establish context = () => provider = new EndpointConfigurationProviderOverride
         {
             SectionName = "unknownSectionName"
         };
@@ -217,14 +217,14 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => endpoint.ShouldBeNull();
     }
 
-    [Subject(typeof(DefaultEndpointConfigurationProvider))]
+    [Subject(typeof(EndpointConfigurationProviderOverride))]
     class when_loading_from_non_existent_endpoint_configuration
     {
-        static DefaultEndpointConfigurationProvider provider;
+        static EndpointConfigurationProviderOverride provider;
         protected static IClientEndpoint endpoint;
 
         Establish context = () => 
-            provider = new DefaultEndpointConfigurationProvider();
+            provider = new EndpointConfigurationProviderOverride();
 
         Because of =
             () => endpoint = provider.GetEndpoint("unknownService");

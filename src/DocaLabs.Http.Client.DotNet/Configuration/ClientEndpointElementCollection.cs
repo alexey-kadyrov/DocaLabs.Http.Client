@@ -6,12 +6,12 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Contains a collection of ClientEndpointElement objects.
     /// </summary>
-    public class ClientEndpointCollection : ConfigurationElementCollectionBase<string, ClientEndpointElement>
+    public class ClientEndpointElementCollection : ConfigurationElementCollectionBase<string, ClientEndpointElement>
     {
         /// <summary>
         /// Initializes a new instance of the ClientEndpointCollection class.
         /// </summary>
-        public ClientEndpointCollection()
+        public ClientEndpointElementCollection()
             : base("endpoint")
         {
         }

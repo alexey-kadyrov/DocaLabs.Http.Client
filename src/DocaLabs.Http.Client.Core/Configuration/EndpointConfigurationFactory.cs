@@ -1,13 +1,14 @@
 ﻿using System;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Configuration
 {
     /// <summary>
     /// Holds current endpoint configuration provider.
     /// </summary>
-    public static class EndpointConfiguration
+    public static class EndpointConfigurationFactory
     {
-        static IEndpointConfigurationProvider _current = new DefaultEndpointConfigurationProvider();
+        static IEndpointConfigurationProvider _current = PlatformAdapter.Resolve<IEndpointConfigurationProvider>();
 
         /// <summary>
         /// Current endpoint configuration provider.

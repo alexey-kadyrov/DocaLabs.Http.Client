@@ -6,12 +6,12 @@ namespace DocaLabs.Http.Client.Configuration
     /// <summary>
     /// Contains a collection of ClientCertificateReferenceElement objects.
     /// </summary>
-    public class ClientCertificateReferenceCollection : ConfigurationElementCollectionBase<string, IClientCertificateReference>, IClientCertificateReferenceCollection
+    public class ClientCertificateReferenceElementCollection : ConfigurationElementCollectionBase<string, IClientCertificateReference>
     {
         /// <summary>
         /// Initializes a new instance of the ClientCertificateReferenceCollection class.
         /// </summary>
-        public ClientCertificateReferenceCollection()
+        public ClientCertificateReferenceElementCollection()
             : base("certificateReference")
         {
         }

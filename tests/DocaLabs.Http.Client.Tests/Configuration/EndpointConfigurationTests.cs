@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
     class when_checking_current_in_default_configuration
     {
         It should_return_default_endpoint_configuration_provider =
-            () => EndpointConfiguration.Current.ShouldBeOfType<DefaultEndpointConfigurationProvider>();
+            () => EndpointConfiguration.Current.ShouldBeOfType<EndpointConfigurationProviderOverride>();
     }
 
     [Subject(typeof(EndpointConfiguration))]

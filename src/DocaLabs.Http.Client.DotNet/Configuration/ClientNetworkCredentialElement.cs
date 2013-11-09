@@ -16,62 +16,38 @@ namespace DocaLabs.Http.Client.Configuration
         /// Gets or sets the type of credentials. If it's DefaultCredentials or DefaultNetworkCredentials other properties will be ignored.
         /// The default value is CredentialType.None.
         /// </summary>
-        public CredentialType CredentialType
-        {
-            get { return CredentialTypeElement; }
-            set { CredentialTypeElement = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the user name if the CredentialType is NetworkCredential.
-        /// </summary>
-        public string User
-        {
-            get { return UserElement; }
-            set { UserElement = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the password if the CredentialType is NetworkCredential.
-        /// </summary>
-        public string Password
-        {
-            get { return PasswordElement; }
-            set { PasswordElement = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the domain if the CredentialType is NetworkCredential.
-        /// </summary>
-        public string Domain
-        {
-            get { return DomainElement; }
-            set { DomainElement = value; }
-        }
-
         [ConfigurationProperty(CredentialTypeProperty, IsRequired = false, DefaultValue = CredentialType.None)]
-        CredentialType CredentialTypeElement
+        public CredentialType CredentialType
         {
             get { return ((CredentialType)base[CredentialTypeProperty]); }
             set { base[CredentialTypeProperty] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the user name if the CredentialType is NetworkCredential.
+        /// </summary>
         [ConfigurationProperty(UserProperty, IsRequired = false, DefaultValue = "")]
-        string UserElement
+        public string User
         {
             get { return ((string)base[UserProperty]); }
             set { base[UserProperty] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the password if the CredentialType is NetworkCredential.
+        /// </summary>
         [ConfigurationProperty(PasswordProperty, IsRequired = false, DefaultValue = "")]
-        string PasswordElement
+        public string Password
         {
             get { return ((string)base[PasswordProperty]); }
             set { base[PasswordProperty] = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the domain if the CredentialType is NetworkCredential.
+        /// </summary>
         [ConfigurationProperty(DomainProperty, IsRequired = false, DefaultValue = "")]
-        string DomainElement
+        public string Domain
         {
             get { return ((string)base[DomainProperty]); }
             set { base[DomainProperty] = value; }

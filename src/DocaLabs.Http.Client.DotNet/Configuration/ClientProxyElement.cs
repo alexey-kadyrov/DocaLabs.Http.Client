@@ -15,10 +15,11 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the proxy address.
         /// </summary>
+        [ConfigurationProperty(AddressProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
         public Uri Address
         {
-            get { return AddressElement; }
-            set { AddressElement = value; }
+            get { return ((Uri)base[AddressProperty]); }
+            set { base[AddressProperty] = value; }
         }
 
         /// <summary>
@@ -27,13 +28,6 @@ namespace DocaLabs.Http.Client.Configuration
         public IClientNetworkCredential Credential
         {
             get { return CredentialElement; }
-        }
-
-        [ConfigurationProperty(AddressProperty, IsRequired = false), TypeConverter(typeof(UriTypeConverter))]
-        Uri AddressElement
-        {
-            get { return ((Uri)base[AddressProperty]); }
-            set { base[AddressProperty] = value; }
         }
 
         [ConfigurationProperty(CredentialProperty, IsRequired = false)]
