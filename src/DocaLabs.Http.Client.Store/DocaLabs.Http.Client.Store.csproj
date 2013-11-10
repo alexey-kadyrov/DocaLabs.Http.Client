@@ -114,6 +114,7 @@
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="Binding\HttpResponseStreamFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RichResponse.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

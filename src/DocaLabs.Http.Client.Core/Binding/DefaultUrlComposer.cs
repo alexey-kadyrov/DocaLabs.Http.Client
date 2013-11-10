@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 
@@ -49,15 +47,15 @@ namespace DocaLabs.Http.Client.Binding
             if (model == null)
                 return true;
 
-            var useAttribute = model.GetType().GetCustomAttribute<RequestUseAttribute>(true);
+            var useAttribute = model.GetType().GetTypeInfo().GetCustomAttribute<RequestUseAttribute>(true);
 
             return useAttribute != null && useAttribute.Targets == RequestUseTargets.Ignore;
         }
 
         Uri CreateUrlFrom(object client, object model, Uri baseUrl)
         {
-            var path = new NameValueCollection();
-            var query = new NameValueCollection();
+            var path = new CustomKeyValueCollection();
+            var query = new CustomKeyValueCollection();
 
             var existingPath = GetExistingPath(baseUrl);
             var exstingQuery = GetExistingQuery(baseUrl);
@@ -92,7 +90,7 @@ namespace DocaLabs.Http.Client.Binding
         {
             return baseUrl.IsUnc || baseUrl.IsFile
                 ? baseUrl.AbsoluteUri
-                : baseUrl.GetLeftPart(UriPartial.Authority);
+                : baseUrl.GetAuthorityPart();
         }
 
         static string GetExistingPath(Uri baseUrl)
@@ -118,7 +116,7 @@ namespace DocaLabs.Http.Client.Binding
                 : fragment;
         }
 
-        static void ProcessImplicitPathOrQuery(string existingPath, NameValueCollection implicitValues, NameValueCollection path, NameValueCollection query)
+        static void ProcessImplicitPathOrQuery(string existingPath, ICustomKeyValueCollection implicitValues, ICustomKeyValueCollection path, ICustomKeyValueCollection query)
         {
             foreach (var key in implicitValues.AllKeys)
             {
@@ -129,17 +127,17 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        void ProcessExplicitQuery(object client, object model, NameValueCollection query)
+        static void ProcessExplicitQuery(object client, object model, ICustomKeyValueCollection query)
         {
             query.Add(ExplicitQueryMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlQuery));
         }
 
-        void ProcessExplicitPath(object client, object model, NameValueCollection path)
+        static void ProcessExplicitPath(object client, object model, ICustomKeyValueCollection path)
         {
             path.Add(ExplicitPathMaps.Convert(client, model, RequestUsageExtensions.IsExplicitUrlPath));
         }
 
-        static string ComposePath(NameValueCollection path, string existingPath)
+        static string ComposePath(ICustomKeyValueCollection path, string existingPath)
         {
             if (string.IsNullOrWhiteSpace(existingPath))
                 return "";
@@ -149,7 +147,7 @@ namespace DocaLabs.Http.Client.Binding
                 var values = path.GetValues(key);
                 if (values != null)
                 {
-                    var value = string.Join("/", values.Where(x => !string.IsNullOrWhiteSpace(x)).Select(Uri.EscapeUriString()));
+                    var value = string.Join("/", values.Where(x => !string.IsNullOrWhiteSpace(x)).Select(Uri.EscapeUriString));
 
                     existingPath = existingPath.Replace(
                         "{" + key + "}", string.IsNullOrWhiteSpace(value) ? "" : value, StringComparison.OrdinalIgnoreCase);
@@ -159,7 +157,7 @@ namespace DocaLabs.Http.Client.Binding
             return existingPath;
         }
 
-        static string ComposeQuery(NameValueCollection query, string existingQuery)
+        static string ComposeQuery(ICustomKeyValueCollection query, string existingQuery)
         {
             var modelQuery = new QueryStringBuilder().Add(query).ToString();
 

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace DocaLabs.Http.Client
 {
     /// <summary>
     /// The exception that is thrown when errors occur during request execution.
     /// </summary>
-    [Serializable]
     public class HttpClientException : Exception
     {
         /// <summary>
@@ -29,14 +27,6 @@ namespace DocaLabs.Http.Client
         /// </summary>
         public HttpClientException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the HttpClientException class with serialized data. 
-        /// </summary>
-        protected HttpClientException(SerializationInfo info, StreamingContext context) 
-            : base(info, context)
         {
         }
     }

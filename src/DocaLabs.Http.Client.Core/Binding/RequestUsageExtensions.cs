@@ -71,7 +71,7 @@ namespace DocaLabs.Http.Client.Binding
                 return false;
 
             return 
-                typeof (WebHeaderCollection).IsAssignableFrom(info.PropertyType) && 
+                typeof (WebHeaderCollection).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()) && 
                 info.GetCustomAttribute<RequestSerializationAttribute>(true) == null;
         }
 
@@ -81,7 +81,7 @@ namespace DocaLabs.Http.Client.Binding
         public static bool IsCredentials(this PropertyInfo info)
         {
             return CanPropertyBeUsedInRequest(info) &&
-                (typeof(ICredentials).IsAssignableFrom(info.PropertyType) && 
+                (typeof(ICredentials).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()) && 
                 info.GetCustomAttribute<RequestUseAttribute>(true) == null &&
                 info.GetCustomAttribute<RequestSerializationAttribute>(true) == null);
         }
@@ -103,7 +103,7 @@ namespace DocaLabs.Http.Client.Binding
             if(serializer != null)
                 return serializer;
 
-            return typeof(Stream).IsAssignableFrom(info.PropertyType) 
+            return typeof(Stream).GetTypeInfo().IsAssignableFrom(info.PropertyType.GetTypeInfo()) 
                 ? new SerializeStreamAttribute() 
                 : null;
         }
@@ -113,13 +113,16 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public static bool IsSerializableToRequestBody(this Type type)
         {
-            return type.GetCustomAttribute<RequestSerializationAttribute>(true) != null || typeof(Stream).IsAssignableFrom(type);
+            var typeInfo = type.GetTypeInfo();
+
+            return typeInfo.GetCustomAttribute<RequestSerializationAttribute>(true) != null 
+                || typeof(Stream).GetTypeInfo().IsAssignableFrom(typeInfo);
         }
 
         static bool CanPropertyBeUsedInRequest(PropertyInfo info)
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
-            if (info.IsIndexer() || info.GetGetMethod() == null)
+            if (info.IsIndexer() || info.GetMethod == null)
                 return false;
 
             var useAttribute = info.GetCustomAttribute<RequestUseAttribute>(true);

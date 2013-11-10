@@ -20,7 +20,7 @@ namespace DocaLabs.Http.Client.Binding
         HttpContentType _contentType;
         Stream _rawResponseStream;
 
-        protected WebResponse Response { get; set; }
+        public WebResponse Response { get; protected set; }
 
         /// <summary>
         /// Gets or sets the raw response stream.

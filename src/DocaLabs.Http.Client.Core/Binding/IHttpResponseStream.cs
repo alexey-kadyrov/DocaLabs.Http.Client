@@ -10,6 +10,8 @@ namespace DocaLabs.Http.Client.Binding
 {
     public interface IHttpResponseStream : IDisposable
     {
+        WebResponse Response { get; }
+
         /// <summary>
         /// Gets the content type of the data being received.
         /// </summary>

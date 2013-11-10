@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +15,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultResponseBinder : IResponseBinder, IAsyncResponseBinder
     {
-        readonly ConcurrentDictionary<Type, Type> _responseTypes;
+        static readonly IHttpResponseStreamFactory StreamFactory = PlatformAdapter.Resolve<IHttpResponseStreamFactory>();
+
+        readonly CustomConcurrentDictionary<Type, Type> _responseTypes;
         IList<IResponseDeserializationProvider> _providers;
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public DefaultResponseBinder()
         {
-            _responseTypes = new ConcurrentDictionary<Type, Type>();
+            _responseTypes = new CustomConcurrentDictionary<Type, Type>();
             _providers = new List<IResponseDeserializationProvider>
             {
                 new DeserializeFromJsonAttribute(),
@@ -76,11 +77,11 @@ namespace DocaLabs.Http.Client.Binding
         {
             var responseType = GetResponseType(context);
 
-            HttpResponseStream stream = null;
+            IHttpResponseStream stream = null;
 
             try
             {
-                stream = HttpResponseStream.CreateResponseStream(request);
+                stream = StreamFactory.CreateStream(request);
 
                 var value = ReadStream(context, stream, responseType);
 
@@ -120,16 +121,16 @@ namespace DocaLabs.Http.Client.Binding
 
             var responseType = GetResponseType(context);
 
-            HttpResponseStream stream = null;
+            IHttpResponseStream stream = null;
 
             try
             {
-                stream = await HttpResponseStream.CreateAsyncResponseStream(request, context.CancellationToken);
+                stream = await StreamFactory.CreateAsyncStream(request, context.CancellationToken);
 
                 var deserializer = GetUserSpecifiedDeserializer(context, responseType);
                 if (deserializer == null)
                 {
-                    if (responseType == typeof(Stream) || responseType == typeof(HttpResponseStream))
+                    if (responseType == typeof(Stream) || responseType == typeof(IHttpResponseStream))
                     {
                         var retVal = stream;
                         stream = null;
@@ -175,7 +176,7 @@ namespace DocaLabs.Http.Client.Binding
             }
         }
 
-        static object MakeReturnValue(HttpResponseStream stream, object value, Type responseType, Type resultType)
+        static object MakeReturnValue(IHttpResponseStream stream, object value, Type responseType, Type resultType)
         {
             object richResponse = null;
 
@@ -199,20 +200,20 @@ namespace DocaLabs.Http.Client.Binding
             return (httpResponse != null && ((int)httpResponse.StatusCode) >= 300 && ((int)httpResponse.StatusCode) < 400);
         }
 
-        object ReadStream(BindingContext context, HttpResponseStream responseStream, Type resultType)
+        object ReadStream(BindingContext context, IHttpResponseStream responseStream, Type resultType)
         {
-            var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
+            var deserializer = resultType.GetTypeInfo().GetCustomAttribute<ResponseDeserializationAttribute>(true);
             if (deserializer != null)
                 return deserializer.Deserialize(responseStream, resultType);
 
             if (context.HttpClient != null)
             {
-                deserializer = context.HttpClient.GetType().GetCustomAttribute<ResponseDeserializationAttribute>(true);
+                deserializer = context.HttpClient.GetType().GetTypeInfo().GetCustomAttribute<ResponseDeserializationAttribute>(true);
                 if (deserializer != null)
                     return deserializer.Deserialize(responseStream, resultType);
             }
 
-            if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStream))
+            if (resultType == typeof(Stream) || resultType == typeof(IHttpResponseStream))
                 return responseStream;
 
             if (resultType == typeof(VoidType))
@@ -231,18 +232,18 @@ namespace DocaLabs.Http.Client.Binding
             throw new HttpClientException(Resources.Text.cannot_figure_out_how_to_deserialize);
         }
 
-        static IResponseDeserialization GetUserSpecifiedDeserializer(BindingContext context, MemberInfo resultType)
+        static IResponseDeserialization GetUserSpecifiedDeserializer(BindingContext context, Type resultType)
         {
-            var deserializer = resultType.GetCustomAttribute<ResponseDeserializationAttribute>(true);
+            var deserializer = resultType.GetTypeInfo().GetCustomAttribute<ResponseDeserializationAttribute>(true);
             if (deserializer != null)
                 return deserializer;
 
             return context.HttpClient != null 
-                ? context.HttpClient.GetType().GetCustomAttribute<ResponseDeserializationAttribute>(true) 
+                ? context.HttpClient.GetType().GetTypeInfo().GetCustomAttribute<ResponseDeserializationAttribute>(true) 
                 : null;
         }
 
-        IResponseDeserialization FindProvider(HttpResponseStream responseStream, Type resultType)
+        IResponseDeserialization FindProvider(IHttpResponseStream responseStream, Type resultType)
         {
             // reference assignment is thread safe
 

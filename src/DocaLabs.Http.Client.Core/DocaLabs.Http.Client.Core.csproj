@@ -123,6 +123,8 @@
     <Compile Include="Configuration\IClientNetworkCredential.cs" />
     <Compile Include="Configuration\IClientProxy.cs" />
     <Compile Include="Configuration\IEndpointConfigurationProvider.cs" />
+    <Compile Include="Utils\CustomKeyValueCollection.cs" />
+    <Compile Include="Utils\ITraceLog.cs" />
     <Compile Include="Utils\ReadOnlyList.cs" />
     <Compile Include="Configuration\RequestAuthenticationLevel.cs" />
     <Compile Include="DefaultExecuteStrategy.cs" />
@@ -131,7 +133,6 @@
     <Compile Include="HttpClient.cs" />
     <Compile Include="HttpClientBase.cs" />
     <Compile Include="HttpClientException.cs" />
-    <Compile Include="HttpClientFactory.cs" />
     <Compile Include="HttpClientWebException.cs" />
     <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -141,7 +142,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="RichRequest.cs" />
-    <Compile Include="RichResponse.cs" />
+    <Compile Include="RichResponseCore.cs" />
     <Compile Include="Utils\CharSets.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\ContentEncoding\IContentDecoderFactory.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Utils\ReflectionExtensions.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="Utils\TaskUtils.cs" />
+    <Compile Include="Utils\UriExtensions.cs" />
     <Compile Include="Utils\WebResponseExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

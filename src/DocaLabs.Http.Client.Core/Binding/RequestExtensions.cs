@@ -28,8 +28,8 @@ namespace DocaLabs.Http.Client.Binding
                     request is HttpWebRequest || request is FileWebRequest
                 ) &&
                 (
-                    string.Compare(request.Method, WebRequestMethods.Http.Post, StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                    string.Compare(request.Method, WebRequestMethods.Http.Put, StringComparison.InvariantCultureIgnoreCase) == 0
+                    string.Compare(request.Method, "POST", StringComparison.OrdinalIgnoreCase) == 0 ||
+                    string.Compare(request.Method, "PUT", StringComparison.OrdinalIgnoreCase) == 0
                 );
         }
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -20,14 +18,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// </summary>
     public class PropertyMaps
     {
-        readonly ConcurrentDictionary<Type, PropertyMap> _maps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly CustomConcurrentDictionary<Type, PropertyMap> _maps = new CustomConcurrentDictionary<Type, PropertyMap>();
 
         /// <summary>
         /// Converts instance into NameValueCollection where keys/values correspond to property names/values.
         /// </summary>
         /// <param name="instance">Value to be converted.</param>
         /// <param name="acceptPropertyCheck">Delegate which is used to check whenever the passed property should be parsed.</param>
-        public NameValueCollection Convert(object instance, Func<PropertyInfo, bool> acceptPropertyCheck)
+        public ICustomKeyValueCollection Convert(object instance, Func<PropertyInfo, bool> acceptPropertyCheck)
         {
             if (acceptPropertyCheck == null)
                 throw new ArgumentNullException("acceptPropertyCheck");
@@ -61,10 +59,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return type != null && (NameValueCollectionValueConverter.CanConvert(type) || SimpleDictionaryValueConverter.CanConvert(type));
         }
 
-        internal NameValueCollection Convert(object instance, ISet<object> processed, Func<PropertyInfo, bool> acceptPropertyCheck)
+        internal ICustomKeyValueCollection Convert(object instance, ISet<object> processed, Func<PropertyInfo, bool> acceptPropertyCheck)
         {
             if (instance == null)
-                return new NameValueCollection();
+                return new CustomKeyValueCollection();
 
             var type = instance.GetType();
 
@@ -75,7 +73,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
             map = new PropertyMap(this);
 
-            _maps.TryAdd(type, map);
+            _maps[type] = map;
 
             map.Parse(instance, acceptPropertyCheck);
 
@@ -104,13 +102,13 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                             .ToList();
             }
 
-            internal NameValueCollection Convert(object instance, ISet<object> processed)
+            internal ICustomKeyValueCollection Convert(object instance, ISet<object> processed)
             {
                 var modelConverter = TryGetDictionaryModelValueConverter(instance);
                 if (modelConverter != null)
                     return modelConverter.Convert(instance);
 
-                var values = new NameValueCollection();
+                var values = new CustomKeyValueCollection();
 
                 if (_converters == null || _converters.Count == 0)
                     return values;
@@ -188,7 +186,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         : null;
                 }
 
-                public NameValueCollection Convert(object instance, ISet<object> processed)
+                public ICustomKeyValueCollection Convert(object instance, ISet<object> processed)
                 {
                     if (instance != null)
                     {
@@ -202,14 +200,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                             if(string.IsNullOrWhiteSpace(_format))
                                 return ConvertObject(value, processed);
 
-                            return new NameValueCollection
+                            return new CustomKeyValueCollection
                             {
                                 { GetNonEmptyPropertyName(), string.Format(_format, value) }
                             };
                         }
                     }
 
-                    return new NameValueCollection();
+                    return new CustomKeyValueCollection();
                 }
 
                 IValueConverter TryGetNonObjectConverter(object value)
@@ -235,10 +233,10 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                     return string.IsNullOrWhiteSpace(_name) ? _property.Name : _name;
                 }
 
-                NameValueCollection ConvertObject(object value, ISet<object> processed)
+                ICustomKeyValueCollection ConvertObject(object value, ISet<object> processed)
                 {
                     if (processed.Contains(value))
-                        return new NameValueCollection();
+                        return new CustomKeyValueCollection();
 
                     processed.Add(value);
 
@@ -247,7 +245,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                         ? customValueConverter.ConvertProperties()
                         : _maps.Convert(value, processed, _acceptPropertyCheck);
 
-                    var values = new NameValueCollection();
+                    var values = new CustomKeyValueCollection();
 
                     var baseName = _name ?? _property.Name;
 
@@ -276,7 +274,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
                 static bool CanConvert(PropertyInfo property)
                 {
-                    return !property.IsIndexer() && property.GetGetMethod() != null;
+                    return !property.IsIndexer() && property.GetMethod != null;
                 }
             }
         }

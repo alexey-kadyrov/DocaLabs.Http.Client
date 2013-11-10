@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Net;
 using System.Threading.Tasks;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -10,7 +10,7 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultRequestBinder : IRequestBinder, IAsyncRequestWriter
     {
-        static readonly ConcurrentDictionary<Type, Func<BindingContext, object>> Transformers;
+        static readonly CustomConcurrentDictionary<Type, Func<BindingContext, object>> Transformers;
         readonly DefaultUrlComposer _urlComposer;
         readonly DefaultRequestWriter _requestWriter;
         readonly DefaultHeaderMapper _headerMapper;
@@ -18,7 +18,7 @@ namespace DocaLabs.Http.Client.Binding
 
         static DefaultRequestBinder()
         {
-            Transformers = new ConcurrentDictionary<Type, Func<BindingContext, object>>();
+            Transformers = new CustomConcurrentDictionary<Type, Func<BindingContext, object>>();
         }
 
         /// <summary>

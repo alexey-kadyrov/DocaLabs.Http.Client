@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
@@ -14,6 +14,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <param name="instance">Instance of the object on which the property is defined.</param>
         /// <param name="processed">List of object (values which are not int, string, etc.) that were processed in order to prevent circular references.</param>
         /// <returns>One key-value pairs where the key would normally be the property name.</returns>
-        NameValueCollection Convert(object instance, ISet<object> processed);
+        ICustomKeyValueCollection Convert(object instance, ISet<object> processed);
     }
 }

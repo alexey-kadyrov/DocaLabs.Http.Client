@@ -1,9 +1,12 @@
-﻿namespace DocaLabs.Http.Client.Utils
+﻿using System.Collections.Generic;
+
+namespace DocaLabs.Http.Client.Utils
 {
-    public interface ICustomKeyValueCollection
+    public interface ICustomKeyValueCollection : IEnumerable<string>
     {
-        string[] AllKeys { get; }
-        string[] GetValues(string key);
+        IReadOnlyCollection<string> AllKeys { get; }
+        IReadOnlyList<string> GetValues(string key);
         void Add(string key, string value);
+        void Add(ICustomKeyValueCollection collection);
     }
 }

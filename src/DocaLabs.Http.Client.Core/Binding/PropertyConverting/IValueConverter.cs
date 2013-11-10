@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+﻿using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
@@ -12,6 +12,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="value">Value to be converted.</param>
         /// <returns>One key-value pairs where the key would normally be the property name.</returns>
-        NameValueCollection Convert(object value);
+        ICustomKeyValueCollection Convert(object value);
     }
 }

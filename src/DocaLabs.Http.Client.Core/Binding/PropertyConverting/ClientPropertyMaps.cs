@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Reflection;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
@@ -12,7 +11,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
     /// </summary>
     public class ClientPropertyMaps
     {
-        readonly ConcurrentDictionary<Type, PropertyMaps> _maps = new ConcurrentDictionary<Type, PropertyMaps>();
+        readonly CustomConcurrentDictionary<Type, PropertyMaps> _maps = new CustomConcurrentDictionary<Type, PropertyMaps>();
 
         /// <summary>
         /// Converts instance into NameValueCollection where keys/values correspond to property names/values.
@@ -21,7 +20,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <param name="client">Http client.</param>
         /// <param name="model">Value to be converted.</param>
         /// <param name="acceptPropertyCheck">Delegate which is used to check whenever the passed property should be parsed.</param>
-        public NameValueCollection Convert(object client, object model, Func<PropertyInfo, bool> acceptPropertyCheck)
+        public ICustomKeyValueCollection Convert(object client, object model, Func<PropertyInfo, bool> acceptPropertyCheck)
         {
             if(client == null)
                 throw new ArgumentNullException("client");

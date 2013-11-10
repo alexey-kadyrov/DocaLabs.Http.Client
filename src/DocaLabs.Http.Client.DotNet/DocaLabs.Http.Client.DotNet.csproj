@@ -53,14 +53,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AsyncDefaultExecuteStrategy.cs" />
     <Compile Include="AsyncHttpClient.cs" />
-    <Compile Include="Binding\AsyncBindingContext.cs" />
-    <Compile Include="Binding\BindingContext.cs" />
     <Compile Include="Binding\HttpResponseStreamFactory.cs" />
-    <Compile Include="Binding\IAsyncRequestWriter.cs" />
-    <Compile Include="Binding\IAsyncResponseBinder.cs" />
-    <Compile Include="Binding\IResponseBinder.cs" />
     <Compile Include="Binding\PropertyConverting\ClientPropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\CustomPropertyConverterBase.cs" />
     <Compile Include="Binding\PropertyConverting\FormatCulture.cs" />
@@ -75,15 +69,10 @@
     <Compile Include="Binding\PropertyConverting\PropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseTargets.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseAttribute.cs" />
-    <Compile Include="Binding\RequestUsageExtensions.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
-    <Compile Include="Binding\DefaultRequestBinder.cs" />
-    <Compile Include="Binding\DefaultUrlComposer.cs" />
-    <Compile Include="Binding\IRequestBinder.cs" />
     <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
-    <Compile Include="Binding\DefaultRequestWriter.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="Binding\Serialization\IAsyncRequestSerialization.cs" />
@@ -101,13 +90,7 @@
     <Compile Include="Configuration\ClientProxyElement.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\EndpointConfigurationProviderOverride.cs" />
-    <Compile Include="DefaultExecuteStrategy.cs" />
-    <Compile Include="DefaultExecuteStrategyBase.cs" />
-    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="HttpClientBase.cs" />
-    <Compile Include="HttpClientWebException.cs" />
-    <Compile Include="IExecuteStrategy.cs" />
-    <Compile Include="RichRequest.cs" />
     <Compile Include="RichResponse.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
     <Compile Include="HttpClientFactory.cs" />
@@ -117,7 +100,6 @@
     <Compile Include="Binding\Serialization\DeserializeFromPlainTextAttribute.cs" />
     <Compile Include="Binding\Serialization\IResponseDeserializationProvider.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromJsonAttribute.cs" />
-    <Compile Include="Binding\VoidType.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactory.cs" />
     <Compile Include="Utils\ContentEncoding\ContentEncoderFactory.cs" />
     <Compile Include="Utils\ContentEncoding\GZipContentDecoder.cs" />
@@ -126,7 +108,6 @@
     <Compile Include="Utils\ContentEncoding\DeflateContentEncoder.cs" />
     <Compile Include="Binding\Serialization\IRequestSerialization.cs" />
     <Compile Include="Binding\Serialization\IResponseDeserialization.cs" />
-    <Compile Include="Binding\DefaultResponseBinder.cs" />
     <Compile Include="Binding\Serialization\SerializeAsFormAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\CustomPropertyConverterAttribute.cs" />
     <Compile Include="Binding\Serialization\RequestSerializationAttribute.cs" />
@@ -135,7 +116,6 @@
     <Compile Include="Binding\Serialization\SerializeAsXmlAttribute.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromXmlAttribute.cs" />
     <Compile Include="HttpClient.cs" />
-    <Compile Include="HttpClientException.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleCollectionPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimplePropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\IPropertyConverter.cs" />
@@ -148,6 +128,7 @@
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\NullComparerOverride.cs" />
+    <Compile Include="Utils\TraceLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Text.resx">

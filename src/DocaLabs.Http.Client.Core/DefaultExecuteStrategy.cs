@@ -9,6 +9,7 @@ namespace DocaLabs.Http.Client
     public class DefaultExecuteStrategy<TInputModel, TOutputModel> : DefaultExecuteStrategyBase, IExecuteStrategy<TInputModel, TOutputModel>
     {
         readonly TimeSpan[] _retryTimeouts;
+        readonly ManualResetEvent _sleeper = new ManualResetEvent(false);
 
         /// <summary>
         /// Initializes a new instance of the DefaultExecuteStrategy class with specified retry timeouts.
@@ -45,7 +46,7 @@ namespace DocaLabs.Http.Client
 
                     OnRetrying(attempt, _retryTimeouts.Length, e);
 
-                    Thread.Sleep(_retryTimeouts[attempt]);
+                    _sleeper.WaitOne(_retryTimeouts[attempt]);
 
                     ++attempt;
                 }

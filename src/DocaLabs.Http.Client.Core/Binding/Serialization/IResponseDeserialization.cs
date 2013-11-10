@@ -10,6 +10,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// When is overridden in derived class it deserializes an object from the web response stream.
         /// </summary>
-        object Deserialize(HttpResponseStream responseStream, Type resultType);
+        object Deserialize(IHttpResponseStream responseStream, Type resultType);
     }
 }

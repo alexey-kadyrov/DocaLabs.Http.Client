@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace DocaLabs.Http.Client
@@ -8,7 +7,6 @@ namespace DocaLabs.Http.Client
     /// <summary>
     /// The exception that is thrown when WebExceotion occurs during request execution.
     /// </summary>
-    [Serializable]
     public class HttpClientWebException : HttpClientException
     {
         /// <summary>
@@ -42,11 +40,6 @@ namespace DocaLabs.Http.Client
         public string ETag { get { return Response != null ? Response.ETag : ""; } }
 
         /// <summary>
-        /// Gets the value of the 'HttpWebResponse.LastModified or FtpWebResponse.LastModified and converts it to UTC.
-        /// </summary>
-        public DateTime LastModified { get { return Response != null ? Response.LastModified : DateTime.MinValue; } }
-
-        /// <summary>
         /// Gets a collection of header name-value pairs associated with the response.
         /// If the response doesn't support headers the collection will be empty.
         /// </summary>
@@ -74,33 +67,9 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// This protected constructor is used for deserialization.
-        /// </summary>
-        protected HttpClientWebException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Status = (WebExceptionStatus)info.GetInt32("Status");
-            Response = info.GetValue("Response", typeof(ResponseInfo)) as ResponseInfo;
-        }
-
-        /// <summary>
-        /// Sets the SerializationInfo with information about the exception
-        /// </summary>
-        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            info.AddValue("Status", (int)Status);
-            info.AddValue("Response", Response);
-        }
-
-        /// <summary>
         /// COntains additional information about the response.
         /// </summary>
-        [Serializable]
-        public class ResponseInfo : RichResponse
+        public class ResponseInfo : RichResponseCore
         {
             /// <summary>
             /// Initializes an instance of the ResponseInfo class.
@@ -125,7 +94,6 @@ namespace DocaLabs.Http.Client
                        .Append("StatusCode: ").Append(Response.StatusCode).AppendLine()
                        .Append("StatusDescription: ").AppendLine(Response.StatusDescription)
                        .Append("ETag: ").AppendLine(Response.ETag)
-                       .Append("LastModified: ").Append(Response.LastModified).AppendLine()
                        .AppendLine("Headers:");
 
                 foreach (var key in Response.Headers.AllKeys)

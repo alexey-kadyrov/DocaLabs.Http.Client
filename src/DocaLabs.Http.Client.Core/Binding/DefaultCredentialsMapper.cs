@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,7 +12,7 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultCredentialsMapper
     {
-        static readonly ConcurrentDictionary<Type, PropertyMap> PropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        static readonly CustomConcurrentDictionary<Type, PropertyMap> PropertyMaps = new CustomConcurrentDictionary<Type, PropertyMap>();
 
         /// <summary>
         /// Maps the model to credentials by checking whenever any of its properties returns non null object implementing ICredentials.

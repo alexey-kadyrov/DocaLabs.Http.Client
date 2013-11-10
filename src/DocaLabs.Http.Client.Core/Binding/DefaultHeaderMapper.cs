@@ -34,7 +34,7 @@ namespace DocaLabs.Http.Client.Binding
             if (model == null || PropertyMaps.IsDictionaryModel(model.GetType()))
                 return true;
 
-            var useAttribute = model.GetType().GetCustomAttribute<RequestUseAttribute>(true);
+            var useAttribute = model.GetType().GetTypeInfo().GetCustomAttribute<RequestUseAttribute>(true);
 
             return useAttribute != null && useAttribute.Targets == RequestUseTargets.Ignore;
         }

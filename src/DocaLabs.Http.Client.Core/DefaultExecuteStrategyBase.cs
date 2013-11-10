@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client
 {
@@ -9,6 +9,8 @@ namespace DocaLabs.Http.Client
     /// </summary>
     public abstract class DefaultExecuteStrategyBase
     {
+        static readonly ITraceLog TraceLog = PlatformAdapter.Resolve<ITraceLog>(false);
+
         /// <summary>
         /// Returns true if it's practical to retry the action after an exception.
         /// The method returns false if the exception is or derived from: 
@@ -60,7 +62,8 @@ namespace DocaLabs.Http.Client
             
             try
             {
-                Trace.TraceError(string.Format(Resources.Text.will_try_again, attempt, maxRetries, e));
+                if (TraceLog != null)
+                    TraceLog.TraceError(Resources.Text.will_try_again, attempt, maxRetries, e);
             }
             catch
             {

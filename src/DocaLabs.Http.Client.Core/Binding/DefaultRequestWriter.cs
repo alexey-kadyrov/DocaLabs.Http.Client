@@ -66,8 +66,8 @@ namespace DocaLabs.Http.Client.Binding
                 throw new ArgumentNullException("client");
 
             return ShouldWrite(client, model)
-                ? WebRequestMethods.Http.Post
-                : WebRequestMethods.Http.Get;
+                ? "POST"
+                : "GET";
         }
 
         static bool ShouldWrite(object client, object model)
@@ -88,7 +88,7 @@ namespace DocaLabs.Http.Client.Binding
 
         static SerializerInfo TryModelClassLevel(object model)
         {
-            var serializer = model.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
+            var serializer = model.GetType().GetTypeInfo().GetCustomAttribute<RequestSerializationAttribute>(true);
             return serializer == null 
                 ? null 
                 : new SerializerInfo(serializer, model);
@@ -97,7 +97,7 @@ namespace DocaLabs.Http.Client.Binding
         static SerializerInfo TryModelPropertyLevel(object model)
         {
             // ReSharper disable LoopCanBeConvertedToQuery
-            foreach (var property in model.GetType().GetProperties())
+            foreach (var property in model.GetType().GetRuntimeProperties())
             {
                 var serializer = property.TryGetRequestSerializer();
                 if (serializer != null)
@@ -110,7 +110,7 @@ namespace DocaLabs.Http.Client.Binding
 
         static SerializerInfo TryHttpClientClassLevel(object client, object model)
         {
-            var serializer = client.GetType().GetCustomAttribute<RequestSerializationAttribute>(true);
+            var serializer = client.GetType().GetTypeInfo().GetCustomAttribute<RequestSerializationAttribute>(true);
 
             return serializer == null
                 ? null
