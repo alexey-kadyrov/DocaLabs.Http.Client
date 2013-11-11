@@ -57,7 +57,6 @@
     <Compile Include="Binding\HttpResponseStreamCore.cs" />
     <Compile Include="Binding\IAsyncRequestWriter.cs" />
     <Compile Include="Binding\IAsyncResponseBinder.cs" />
-    <Compile Include="Binding\IHttpResponseStream.cs" />
     <Compile Include="Binding\IHttpResponseStreamFactory.cs" />
     <Compile Include="Binding\IRequestBinder.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
@@ -122,6 +121,7 @@
     <Compile Include="Configuration\IClientProxy.cs" />
     <Compile Include="Configuration\IEndpointConfigurationProvider.cs" />
     <Compile Include="Utils\CustomKeyValueCollection.cs" />
+    <Compile Include="Utils\IRequestStreamFactory.cs" />
     <Compile Include="Utils\ITraceLog.cs" />
     <Compile Include="Utils\ReadOnlyList.cs" />
     <Compile Include="Configuration\RequestAuthenticationLevel.cs" />

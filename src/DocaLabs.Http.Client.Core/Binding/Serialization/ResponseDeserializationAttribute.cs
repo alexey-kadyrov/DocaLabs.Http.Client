@@ -13,13 +13,13 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// When is overridden in derived class it deserializes an object from the web response stream.
         /// </summary>
-        public abstract object Deserialize(IHttpResponseStream responseStream, Type resultType);
+        public abstract object Deserialize(HttpResponseStreamCore responseStream, Type resultType);
 
         /// <summary>
         /// When is overridden in derived class it asynchronously deserializes an object from the web response stream.
         /// The default implementation creates a Task using Task.FromResult that's completed successfully with the result of the Deserialize.
         /// </summary>
-        public virtual Task<object> DeserializeAsync(IHttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        public virtual Task<object> DeserializeAsync(HttpResponseStreamCore responseStream, Type resultType, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

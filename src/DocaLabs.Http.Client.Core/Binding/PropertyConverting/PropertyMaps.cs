@@ -34,19 +34,14 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         }
 
         /// <summary>
-        /// Return IValueConverter if the model can be converted by NameValueCollectionValueConverter or SimpleDictionaryValueConverter.
+        /// Return IValueConverter if the model can be converted by SimpleDictionaryValueConverter.
         /// </summary>
         public static IValueConverter TryGetDictionaryModelValueConverter(object model)
         {
             if (model == null)
                 return null;
 
-            var type = model.GetType();
-
-            if (NameValueCollectionValueConverter.CanConvert(type))
-                return new NameValueCollectionValueConverter(null);
-
-            return SimpleDictionaryValueConverter.CanConvert(type)
+            return SimpleDictionaryValueConverter.CanConvert(model.GetType())
                 ? new SimpleDictionaryValueConverter(null, null, null)
                 : null;
         }
@@ -56,7 +51,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         public static bool IsDictionaryModel(Type type)
         {
-            return type != null && (NameValueCollectionValueConverter.CanConvert(type) || SimpleDictionaryValueConverter.CanConvert(type));
+            return type != null && SimpleDictionaryValueConverter.CanConvert(type);
         }
 
         internal ICustomKeyValueCollection Convert(object instance, ISet<object> processed, Func<PropertyInfo, bool> acceptPropertyCheck)
@@ -131,7 +126,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             IPropertyConverter GetConverter(PropertyInfo property, Func<PropertyInfo, bool> acceptPropertyCheck)
             {
                 return TryGetCustomPropertyParser(property)
-                    ?? NameValueCollectionPropertyConverter.TryCreate(property)
                     ?? SimpleDictionaryPropertyConverter.TryCreate(property)
                     ?? SimpleCollectionPropertyConverter.TryCreate(property)
                     ?? SimplePropertyConverter.TryCreate(property)
@@ -213,9 +207,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                 IValueConverter TryGetNonObjectConverter(object value)
                 {
                     var type = value.GetType();
-
-                    if (NameValueCollectionValueConverter.CanConvert(type))
-                        return new NameValueCollectionValueConverter(_name);
 
                     if (SimpleDictionaryValueConverter.CanConvert(type))
                         return new SimpleDictionaryValueConverter(_name, _format, _culture);

@@ -90,6 +90,7 @@
     <Compile Include="Binding\HttpResponseStreamFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RichResponse.cs" />
+    <Compile Include="Utils\RequestStreamFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">

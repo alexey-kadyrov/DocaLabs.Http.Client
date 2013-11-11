@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -8,9 +8,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     static public class ModelBinders
     {
-        static readonly ConcurrentDictionary<Type, IRequestBinder> RequestBinders;
-        static readonly ConcurrentDictionary<Type, IResponseBinder> ResponseBinders;
-        static readonly ConcurrentDictionary<Type, IAsyncResponseBinder> AsyncResponseBinders;
+        static readonly CustomConcurrentDictionary<Type, IRequestBinder> RequestBinders;
+        static readonly CustomConcurrentDictionary<Type, IResponseBinder> ResponseBinders;
+        static readonly CustomConcurrentDictionary<Type, IAsyncResponseBinder> AsyncResponseBinders;
         static volatile IRequestBinder _defaultRequestBinder;
         static volatile IResponseBinder _defaultResponseBinder;
         static volatile IAsyncResponseBinder _asyncDefaultResponseBinder;
@@ -65,9 +65,9 @@ namespace DocaLabs.Http.Client.Binding
 
         static ModelBinders()
         {
-            RequestBinders = new ConcurrentDictionary<Type, IRequestBinder>();
-            ResponseBinders = new ConcurrentDictionary<Type, IResponseBinder>();
-            AsyncResponseBinders = new ConcurrentDictionary<Type, IAsyncResponseBinder>();
+            RequestBinders = new CustomConcurrentDictionary<Type, IRequestBinder>();
+            ResponseBinders = new CustomConcurrentDictionary<Type, IResponseBinder>();
+            AsyncResponseBinders = new CustomConcurrentDictionary<Type, IAsyncResponseBinder>();
             _defaultRequestBinder = new DefaultRequestBinder();
             _defaultResponseBinder = new DefaultResponseBinder();
             _asyncDefaultResponseBinder = (IAsyncResponseBinder)_defaultResponseBinder;

@@ -12,8 +12,10 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Wraps around the response stream.
     /// </summary>
-    public abstract class HttpResponseStreamCore : Stream, IHttpResponseStream
+    public abstract class HttpResponseStreamCore : Stream
     {
+        static readonly IContentDecoderFactory ContentDecoderFactory = PlatformAdapter.Resolve<IContentDecoderFactory>(false);
+ 
         static protected readonly Encoding DefaultTextEncoding = Encoding.GetEncoding(CharSets.Iso88591);
 
         Stream _dataStream;
@@ -41,7 +43,9 @@ namespace DocaLabs.Http.Client.Binding
                 if (string.IsNullOrWhiteSpace(contentEncoding))
                     return (_dataStream = RawResponseStream);
 
-                return (_dataStream = ContentDecoderFactory.Get(contentEncoding).GetDecompressionStream(RawResponseStream));
+                return ContentDecoderFactory == null
+                    ? (_dataStream = RawResponseStream)
+                    : (_dataStream = ContentDecoderFactory.Get(contentEncoding).GetDecompressionStream(RawResponseStream));
             }
         }
 

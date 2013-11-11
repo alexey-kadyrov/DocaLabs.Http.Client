@@ -13,6 +13,9 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeStreamAttribute : RequestSerializationAttribute
     {
+        readonly static IRequestStreamFactory RequestStreamFactory = PlatformAdapter.Resolve<IRequestStreamFactory>();
+        readonly static IContentEncoderFactory ContentEncoderFactory = PlatformAdapter.Resolve<IContentEncoderFactory>(false);
+
         string _contentType;
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         static void Write(Stream stream, WebRequest request)
         {
-            using (var requestStream = request.GetRequestStream())
+            using (var requestStream = RequestStreamFactory.Get(request))
             {
                 stream.CopyTo(requestStream);
             }
@@ -102,7 +105,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         static async Task WriteAsync(Stream stream, WebRequest request, CancellationToken cancellationToken)
         {
-            using (var requestStream = await request.GetRequestStreamAsync())
+            using (var requestStream = await RequestStreamFactory.GetAsync(request))
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 await stream.CopyToAsync(requestStream);
@@ -111,9 +114,12 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         void CompressAndWrite(Stream stream, WebRequest request)
         {
-            request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
+            if (ContentEncoderFactory == null)
+                throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            using (var requestStream = request.GetRequestStream())
+            request.Headers["content-encoding"] = RequestContentEncoding;
+
+            using (var requestStream = RequestStreamFactory.Get(request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             {
                 stream.CopyTo(compressionStream);
@@ -122,9 +128,12 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         async Task CompressAndWriteAsync(Stream stream, WebRequest request, CancellationToken cancellationToken)
         {
-            request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
+            if (ContentEncoderFactory == null)
+                throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            using (var requestStream = await request.GetRequestStreamAsync())
+            request.Headers["content-encoding"] = RequestContentEncoding;
+
+            using (var requestStream = await RequestStreamFactory.GetAsync(request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             {
                 cancellationToken.ThrowIfCancellationRequested();

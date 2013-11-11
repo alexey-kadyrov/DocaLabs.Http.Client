@@ -20,7 +20,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Deserializes the response stream as plain string and then converts to the resulting type.
         /// </summary>
-        public override object Deserialize(IHttpResponseStream responseStream, Type resultType)
+        public override object Deserialize(HttpResponseStreamCore responseStream, Type resultType)
         {
             if (responseStream == null)
                 throw new ArgumentNullException("responseStream");
@@ -38,7 +38,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Asynchronously deserializes the response stream as plain string and then converts to the resulting type.
         /// </summary>
-        public override async Task<object> DeserializeAsync(IHttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        public override async Task<object> DeserializeAsync(HttpResponseStreamCore responseStream, Type resultType, CancellationToken cancellationToken)
         {
             if (responseStream == null)
                 throw new ArgumentNullException("responseStream");
@@ -59,7 +59,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// Returns true if the content type is 'text/plain' and the TResult is "simple type", like int, string, Guid, double, etc.
         /// or if the content type is one of 'text/html', 'text/xml', 'application/xml', 'application/json' and the TResult is string.
         /// </summary>
-        public bool CanDeserialize(IHttpResponseStream responseStream, Type resultType)
+        public bool CanDeserialize(HttpResponseStreamCore responseStream, Type resultType)
         {
             if (responseStream == null)
                 throw new ArgumentNullException("responseStream");

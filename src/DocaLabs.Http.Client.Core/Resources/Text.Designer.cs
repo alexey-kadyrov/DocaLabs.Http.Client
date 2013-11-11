@@ -116,6 +116,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The content encoding is not supported by the platform..
+        /// </summary>
+        internal static string content_encoding_is_not_supported {
+            get {
+                return ResourceManager.GetString("content_encoding_is_not_supported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create Url {0}..
         /// </summary>
         internal static string failed_create_url {

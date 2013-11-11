@@ -10,6 +10,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Checks whenever the response can be deserialized for TReult type by the instance of that class.
         /// </summary>
-        bool CanDeserialize(IHttpResponseStream responseStream, Type resultType);
+        bool CanDeserialize(HttpResponseStreamCore responseStream, Type resultType);
     }
 }

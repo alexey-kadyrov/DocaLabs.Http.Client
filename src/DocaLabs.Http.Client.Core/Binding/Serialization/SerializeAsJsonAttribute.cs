@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 
@@ -14,6 +15,9 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     /// </summary>
     public class SerializeAsJsonAttribute : RequestSerializationAttribute
     {
+        readonly static IRequestStreamFactory RequestStreamFactory = PlatformAdapter.Resolve<IRequestStreamFactory>();
+        readonly static IContentEncoderFactory ContentEncoderFactory = PlatformAdapter.Resolve<IContentEncoderFactory>(false);
+
         /// <summary>
         /// Gets or sets the content encoding, if ContentEncoding blank or null no encoding is done.
         /// The encoder is supplied by ContentEncoderFactory.
@@ -53,7 +57,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         static void Write(object obj, WebRequest request)
         {
-            using (var requestStream = request.GetRequestStream())
+            using (var requestStream = RequestStreamFactory.Get(request))
             {
                 var s = obj as Stream;
                 if (s != null)
@@ -70,7 +74,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         static async Task WriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
         {
-            using (var requestStream = await request.GetRequestStreamAsync())
+            using (var requestStream = await RequestStreamFactory.GetAsync(request))
             {
                 var s = obj as Stream;
                 if (s != null)
@@ -88,9 +92,12 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         void CompressAndWrite(object obj, WebRequest request)
         {
-            request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
+            if (ContentEncoderFactory == null)
+                throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            using (var requestStream = request.GetRequestStream())
+            request.Headers["content-encoding"] = RequestContentEncoding;
+
+            using (var requestStream = RequestStreamFactory.Get(request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             {
                 var s = obj as Stream;
@@ -110,9 +117,12 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         async Task CompressAndWriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
         {
-            request.Headers.Add(string.Format("content-encoding: {0}", RequestContentEncoding));
+            if (ContentEncoderFactory == null)
+                throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            using (var requestStream = await request.GetRequestStreamAsync())
+            request.Headers["content-encoding"] = RequestContentEncoding;
+
+            using (var requestStream = await RequestStreamFactory.GetAsync(request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             {
                 cancellationToken.ThrowIfCancellationRequested();

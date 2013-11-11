@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes an instance of the HttpResponseStream class from the provided WebRequest instance.
         /// </summary>
-        public IHttpResponseStream CreateStream(WebRequest request)
+        public HttpResponseStreamCore CreateStream(WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -24,7 +24,7 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes an asynchronous instance of the HttpResponseStream class from the provided WebRequest instance.
         /// </summary>
-        public async Task<IHttpResponseStream> CreateAsyncStream(WebRequest request, CancellationToken cancellationToken)
+        public async Task<HttpResponseStreamCore> CreateAsyncStream(WebRequest request, CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new ArgumentNullException("request");

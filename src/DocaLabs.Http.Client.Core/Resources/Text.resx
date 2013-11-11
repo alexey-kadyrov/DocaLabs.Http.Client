@@ -135,6 +135,9 @@
   <data name="configuration_file_0_not_found" xml:space="preserve">
     <value>Configuration file {0} is not found.</value>
   </data>
+  <data name="content_encoding_is_not_supported" xml:space="preserve">
+    <value>The content encoding is not supported by the platform.</value>
+  </data>
   <data name="failed_create_url" xml:space="preserve">
     <value>Failed to create Url {0}.</value>
   </data>

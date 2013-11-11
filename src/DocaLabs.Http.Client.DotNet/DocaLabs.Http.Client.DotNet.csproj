@@ -55,11 +55,9 @@
     </Compile>
     <Compile Include="AsyncHttpClient.cs" />
     <Compile Include="Binding\HttpResponseStreamFactory.cs" />
-    <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />
     <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\ModelBinders.cs" />
-    <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElement.cs" />
@@ -93,6 +91,7 @@
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\NullComparerOverride.cs" />
+    <Compile Include="Utils\RequestStreamFactory.cs" />
     <Compile Include="Utils\TraceLog.cs" />
   </ItemGroup>
   <ItemGroup>

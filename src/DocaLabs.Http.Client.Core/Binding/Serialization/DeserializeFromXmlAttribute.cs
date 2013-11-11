@@ -68,7 +68,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Deserializes xml object from the web response.
         /// </summary>
-        public override object Deserialize(IHttpResponseStream responseStream, Type resultType)
+        public override object Deserialize(HttpResponseStreamCore responseStream, Type resultType)
         {
             if (responseStream == null)
                 throw new ArgumentNullException("responseStream");
@@ -85,7 +85,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Asynchronously Deserializes xml object from the web response.
         /// </summary>
-        public override async Task<object> DeserializeAsync(IHttpResponseStream responseStream, Type resultType, CancellationToken cancellationToken)
+        public override async Task<object> DeserializeAsync(HttpResponseStreamCore responseStream, Type resultType, CancellationToken cancellationToken)
         {
             if (responseStream == null)
                 throw new ArgumentNullException("responseStream");
@@ -110,7 +110,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Returns true if the content type is 'text/xml' and the TResult is not "simple type", like int, string, Guid, double, etc.
         /// </summary>
-        public bool CanDeserialize(IHttpResponseStream responseStream, Type resultType)
+        public bool CanDeserialize(HttpResponseStreamCore responseStream, Type resultType)
         {
             if (responseStream == null)
                 throw new ArgumentNullException("responseStream");
@@ -132,7 +132,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             return new XmlReaderSettings
             {
                 DtdProcessing = DtdProcessing,
-                ValidationType = DtdProcessing == DtdProcessing.Parse ? ValidationType.DTD : ValidationType.None,
                 CloseInput = false
             };
         }
