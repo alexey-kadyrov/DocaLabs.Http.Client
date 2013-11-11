@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding.PropertyConverting
 {
@@ -30,9 +31,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="value">The NameValueCollection.</param>
         /// <returns>Key-value pairs.</returns>
-        public NameValueCollection Convert(object value)
+        public ICustomKeyValueCollection Convert(object value)
         {
-            var values = new NameValueCollection();
+            var values = new CustomKeyValueCollection();
 
             var collection = value as NameValueCollection;
 

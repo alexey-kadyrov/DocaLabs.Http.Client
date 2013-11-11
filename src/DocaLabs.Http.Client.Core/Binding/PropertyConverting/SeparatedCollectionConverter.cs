@@ -66,9 +66,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <param name="instance">Instance of the object on which the property is defined.</param>
         /// <param name="processed">Ignored.</param>
         /// <returns>One key-value pair with single string as value which contains all items separated by the provided separator.</returns>
-        public NameValueCollection Convert(object instance, ISet<object> processed)
+        public ICustomKeyValueCollection Convert(object instance, ISet<object> processed)
         {
-            var values = new NameValueCollection();
+            var values = new CustomKeyValueCollection();
 
             if (instance != null)
             {
@@ -80,7 +80,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             return values;
         }
 
-        void TryBuildString(NameValueCollection values, IEnumerable collection)
+        void TryBuildString(ICustomKeyValueCollection values, IEnumerable collection)
         {
             var stringBuilder = new StringBuilder();
 
@@ -105,7 +105,7 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
 
         static bool CanConvert(PropertyInfo property, Type type)
         {
-            if (property.IsIndexer() || property.GetGetMethod() == null)
+            if (property.IsIndexer() || property.GetMethod == null)
                 return false;
 
             if (!type.IsEnumerable())

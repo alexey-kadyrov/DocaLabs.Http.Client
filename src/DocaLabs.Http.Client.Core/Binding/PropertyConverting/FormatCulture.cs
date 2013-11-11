@@ -18,11 +18,6 @@
         /// <summary>
         /// CultureInfo.CurrentUICulture
         /// </summary>
-        UseCurrentUI = 2,
-
-        /// <summary>
-        /// Use CultureInfo.InstalledUICulture
-        /// </summary>
-        UseInstalledUICulture = 3
+        UseCurrentUI = 2
     }
 }

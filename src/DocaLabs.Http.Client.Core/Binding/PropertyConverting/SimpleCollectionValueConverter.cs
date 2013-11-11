@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Globalization;
 using DocaLabs.Http.Client.Utils;
 
@@ -36,9 +35,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="value">The collection.</param>
         /// <returns>One key-values pair.</returns>
-        public NameValueCollection Convert(object value)
+        public ICustomKeyValueCollection Convert(object value)
         {
-            var values = new NameValueCollection();
+            var values = new CustomKeyValueCollection();
 
             var collection = value as IEnumerable;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -42,9 +41,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="value">The IDictionary.</param>
         /// <returns>Key-value pairs.</returns>
-        public NameValueCollection Convert(object value)
+        public ICustomKeyValueCollection Convert(object value)
         {
-            var values = new NameValueCollection();
+            var values = new CustomKeyValueCollection();
 
             var collection = GetWrapper(value);
 
@@ -88,15 +87,16 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// <returns>True if the type is or implements IDictionary or IDictionary{,}.</returns>
         public static bool CanConvert(Type type)
         {
-            return typeof (IDictionary).IsAssignableFrom(type) || GetGenericDictionaryInterfaceDefinition(type) != null;
+            return typeof (IDictionary).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()) || GetGenericDictionaryInterfaceDefinition(type) != null;
         }
 
         static Type GetGenericDictionaryInterfaceDefinition(Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+            var typeInfo = type.GetTypeInfo();
+            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
                 return type;
 
-            return type.GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>));
+            return typeInfo.ImplementedInterfaces.FirstOrDefault(x => x.GetTypeInfo().IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>));
         }
 
         Func<string, string> GetNameMaker()
@@ -165,8 +165,8 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
             public GenericDictionaryWrapper(object dictionary, Type dictionaryInterfaceDefinition)
             {
                 _dictionary = dictionary;
-                _keysProperty = dictionaryInterfaceDefinition.GetProperty("Keys");
-                _thisProperty = dictionaryInterfaceDefinition.GetProperty("Item");
+                _keysProperty = dictionaryInterfaceDefinition.GetRuntimeProperty("Keys");
+                _thisProperty = dictionaryInterfaceDefinition.GetRuntimeProperty("Item");
             }
 
             public IEnumerable Keys { get { return _keysProperty.GetValue(_dictionary) as IEnumerable; } }

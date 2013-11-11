@@ -38,8 +38,6 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
                     return CultureInfo.CurrentCulture;
                 case FormatCulture.UseCurrentUI:
                     return CultureInfo.CurrentUICulture;
-                case FormatCulture.UseInstalledUICulture:
-                    return CultureInfo.InstalledUICulture;
                 default:
                     return CultureInfo.InvariantCulture;
             }

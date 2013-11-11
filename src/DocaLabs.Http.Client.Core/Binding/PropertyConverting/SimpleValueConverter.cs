@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Globalization;
 using DocaLabs.Http.Client.Utils;
 
@@ -37,9 +36,9 @@ namespace DocaLabs.Http.Client.Binding.PropertyConverting
         /// </summary>
         /// <param name="value">Value which should be converted.</param>
         /// <returns>One key-value pair.</returns>
-        public NameValueCollection Convert(object value)
+        public ICustomKeyValueCollection Convert(object value)
         {
-            var values = new NameValueCollection();
+            var values = new CustomKeyValueCollection();
 
             if (value != null)
                 values.Add(_name, CustomConverter.ChangeToString(_format, _culture, value));

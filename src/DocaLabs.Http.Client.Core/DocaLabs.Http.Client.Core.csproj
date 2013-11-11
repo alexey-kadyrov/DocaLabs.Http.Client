@@ -69,8 +69,6 @@
     <Compile Include="Binding\PropertyConverting\ICustomValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\IPropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\IValueConverter.cs" />
-    <Compile Include="Binding\PropertyConverting\NameValueCollectionPropertyConverter.cs" />
-    <Compile Include="Binding\PropertyConverting\NameValueCollectionValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\PropertyOverridesAttribute.cs" />
     <Compile Include="Binding\PropertyConverting\RequestUseAttribute.cs" />
@@ -85,7 +83,7 @@
     <Compile Include="Binding\PropertyConverting\SimpleValueConverter.cs" />
     <Compile Include="Binding\RequestExtensions.cs" />
     <Compile Include="Binding\RequestUsageExtensions.cs" />
-    <Compile Include="Binding\Serialization\ContentTypeExtensions.cs" />
+    <Compile Include="Binding\Serialization\HttpContentTypeExtensions.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromJsonAttribute.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromPlainTextAttribute.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromXmlAttribute.cs" />

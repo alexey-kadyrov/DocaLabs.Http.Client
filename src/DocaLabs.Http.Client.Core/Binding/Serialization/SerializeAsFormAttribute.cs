@@ -98,7 +98,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         {
             // We don't do indexers, as in general it's impossible to guess what would be the required index parameters
             return info.GetIndexParameters().Length == 0 &&
-                info.GetGetMethod() != null &&
+                info.GetMethod != null &&
                 info.PropertyType.IsSimpleType();
         }
 
