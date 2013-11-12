@@ -2,6 +2,7 @@
 using System.Net;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Configuration;
+using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client
@@ -11,6 +12,8 @@ namespace DocaLabs.Http.Client
     /// </summary>
     public abstract class HttpClientBase
     {
+        static readonly IRequestSetup RequestSetup = PlatformAdapter.Resolve<IRequestSetup>();
+
         /// <summary>
         /// Gets a service Url
         /// </summary>
@@ -74,13 +77,13 @@ namespace DocaLabs.Http.Client
             if (ShouldSetAcceptEncoding(context))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
-            request.CopyCredentialsFrom(binder, context);
+            RequestSetup.CopyCredentialsFrom(request, binder, context);
 
-            request.CopyHeadersFrom(binder, context);
+            RequestSetup.CopyHeadersFrom(request, binder, context);
 
-            request.CopyClientCertificatesFrom(Configuration);
+            RequestSetup.CopyClientCertificatesFrom(request, Configuration);
 
-            request.CopyWebProxyFrom(Configuration);
+            RequestSetup.CopyWebProxyFrom(request, Configuration);
         }
 
         /// <summary>

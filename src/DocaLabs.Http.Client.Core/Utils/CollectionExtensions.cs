@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Text;
 
 namespace DocaLabs.Http.Client.Utils
 {
@@ -24,6 +26,30 @@ namespace DocaLabs.Http.Client.Utils
 
             foreach (var value in values)
                 collection.Add(key, value);
+        }
+
+        public static void Add(this WebHeaderCollection collection, ICustomKeyValueCollection values)
+        {
+            if (collection == null)
+                throw new ArgumentNullException("collection");
+
+            if (values == null)
+                return;
+
+            foreach (var key in values)
+            {
+                var headerValue = new StringBuilder();
+
+                foreach (var value in values.GetValues(key))
+                {
+                    if (headerValue.Length > 0)
+                        headerValue.Append(", ");
+
+                    headerValue.Append(value);
+                }
+
+                collection[key] = headerValue.ToString();
+            }
         }
     }
 }

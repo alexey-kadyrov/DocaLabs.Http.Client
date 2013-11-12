@@ -59,6 +59,7 @@
     <Compile Include="Binding\IAsyncResponseBinder.cs" />
     <Compile Include="Binding\IHttpResponseStreamFactory.cs" />
     <Compile Include="Binding\IRequestBinder.cs" />
+    <Compile Include="Binding\IRequestSetup.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
     <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\PropertyConverting\ClientPropertyMaps.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Binding\PropertyConverting\SimpleDictionaryValueConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimplePropertyConverter.cs" />
     <Compile Include="Binding\PropertyConverting\SimpleValueConverter.cs" />
-    <Compile Include="Binding\RequestExtensions.cs" />
+    <Compile Include="Binding\RequestSetup.cs" />
     <Compile Include="Binding\RequestUsageExtensions.cs" />
     <Compile Include="Binding\Serialization\HttpContentTypeExtensions.cs" />
     <Compile Include="Binding\Serialization\DeserializeFromJsonAttribute.cs" />

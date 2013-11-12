@@ -14,6 +14,8 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultRequestWriter
     {
+        static readonly IRequestSetup RequestSetup = PlatformAdapter.Resolve<IRequestSetup>();
+
         /// <summary>
         /// Writes data to the request's body or sets the content length to zero if the model cannot be serialized.
         /// Looks for RequestSerializationAttribute descendants defined on:
@@ -30,7 +32,7 @@ namespace DocaLabs.Http.Client.Binding
             if (info != null && info.ValueToBeSerialized != null)
                 info.Serializer.Serialize(info.ValueToBeSerialized, request);
             else
-                request.SetContentLengthToZeroIfBodyIsRequired();
+                RequestSetup.SetContentLengthToZeroIfBodyIsRequired(request);
         }
 
         /// <summary>
@@ -48,7 +50,10 @@ namespace DocaLabs.Http.Client.Binding
             var info = GetSerializer(client, model);
 
             if (info == null || info.ValueToBeSerialized == null)
-                return TaskUtils.RunSynchronously(request.SetContentLengthToZeroIfBodyIsRequired, cancellationToken);
+            {
+                RequestSetup.SetContentLengthToZeroIfBodyIsRequired(request);
+                return TaskUtils.CompletedTask();
+            }
 
             var asyncSerializer = info.Serializer as IAsyncRequestSerialization;
             return asyncSerializer != null 

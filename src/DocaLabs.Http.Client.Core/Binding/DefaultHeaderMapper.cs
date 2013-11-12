@@ -2,6 +2,7 @@
 using System.Net;
 using System.Reflection;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -26,7 +27,11 @@ namespace DocaLabs.Http.Client.Binding
             var checkImplicitConditions = !model.GetType().IsSerializableToRequestBody() &&
                                           !client.GetType().IsSerializableToRequestBody();
 
-            return new WebHeaderCollection { Maps.Convert(client, model, x => x.IsHeader(checkImplicitConditions)) };
+            var collection = new WebHeaderCollection();
+
+            collection.Add(Maps.Convert(client, model, x => x.IsHeader(checkImplicitConditions)));
+
+            return collection;
         }
 
         static bool Ignore(object model)

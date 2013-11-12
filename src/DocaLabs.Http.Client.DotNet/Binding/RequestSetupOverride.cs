@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Security;
 using DocaLabs.Http.Client.Configuration;
 
 namespace DocaLabs.Http.Client.Binding
@@ -7,12 +8,12 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Defines additional operations on web request.
     /// </summary>
-    public static class RequestExtensions
+    public class RequestSetupOverride : RequestSetup
     {
         /// <summary>
         /// Sets the ContentLength to zero if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.
         /// </summary>
-        public static void SetContentLengthToZeroIfBodyIsRequired(this WebRequest request)
+        public override void SetContentLengthToZeroIfBodyIsRequired(WebRequest request)
         {
             if (IsBodyRequired(request))
                 request.ContentLength = 0;
@@ -21,7 +22,7 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Returns true if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.
         /// </summary>
-        public static bool IsBodyRequired(this WebRequest request)
+        public override bool IsBodyRequired(WebRequest request)
         {
             return
                 (
@@ -34,24 +35,9 @@ namespace DocaLabs.Http.Client.Binding
         }
 
         /// <summary>
-        /// If headers are defined in the endpoint configuration then the methods adds them to the request.
-        /// </summary>
-        static public void CopyHeadersFrom(this WebRequest request, IRequestBinder binder, BindingContext context)
-        {
-            if (request == null)
-                throw new ArgumentNullException("request");
-
-            if(context.Configuration != null)
-                CopeHeadersFromConfiguration(context.Configuration, request);
-
-            if(context.Model != null)
-                MapHeadersFromModel(binder, context, request);
-        }
-
-        /// <summary>
         /// If client certificates are defined in the endpoint configuration then the methods adds them to the request.
         /// </summary>
-        static public void CopyClientCertificatesFrom(this WebRequest request, IClientEndpoint endpoint)
+        public override void CopyClientCertificatesFrom(WebRequest request, IClientEndpoint endpoint)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -70,17 +56,17 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// If the AuthenticationLevel and Credential are defined then the method copies them into the request.
         /// </summary>
-        static public void CopyCredentialsFrom(this WebRequest request, IRequestBinder binder, BindingContext context)
+        public override void CopyCredentialsFrom(WebRequest request, IRequestBinder binder, BindingContext context)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
             if (context.Configuration != null)
             {
-                if (context.Configuration.AuthenticationLevel != null)
-                    request.AuthenticationLevel = context.Configuration.AuthenticationLevel.GetValueOrDefault();
+                if (context.Configuration.AuthenticationLevel != RequestAuthenticationLevel.Undefined)
+                    request.AuthenticationLevel = ToAuthenticationLevel(context.Configuration.AuthenticationLevel);
 
-                request.Credentials = GetCredentialsFromModel(binder, context) ?? context.Configuration.Credential.GetCredential();
+                request.Credentials = GetCredentialsFromModel(binder, context) ?? GetCredential(context.Configuration.Credential);
             }
             else
             {
@@ -91,7 +77,7 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// If web proxy are defined in the endpoint configuration then the methods adds it to the request.
         /// </summary>
-        static public void CopyWebProxyFrom(this WebRequest request, IClientEndpoint endpoint)
+        public override void CopyWebProxyFrom(WebRequest request, IClientEndpoint endpoint)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -100,27 +86,41 @@ namespace DocaLabs.Http.Client.Binding
                 return;
 
             if (endpoint.Proxy != null && endpoint.Proxy.Address != null)
-                request.Proxy = new WebProxy(endpoint.Proxy.Address) { Credentials = endpoint.Proxy.Credential.GetCredential() };
+                request.Proxy = new WebProxy(endpoint.Proxy.Address) { Credentials = GetCredential(endpoint.Proxy.Credential) };
         }
 
-        static void CopeHeadersFromConfiguration(IClientEndpoint endpoint, WebRequest request)
+        static AuthenticationLevel ToAuthenticationLevel(RequestAuthenticationLevel level)
         {
-            foreach (var name in endpoint.Headers.AllKeys)
-                request.Headers.Add(name, endpoint.Headers[name].Value);
+            switch (level)
+            {
+                case RequestAuthenticationLevel.MutualAuthRequested:
+                    return AuthenticationLevel.MutualAuthRequested;
+                case RequestAuthenticationLevel.MutualAuthRequired:
+                    return AuthenticationLevel.MutualAuthRequired;
+                default:
+                    return AuthenticationLevel.None;
+            }
         }
 
-        static void MapHeadersFromModel(IRequestBinder binder, BindingContext context, WebRequest request)
+        ICredentials GetCredential(IClientNetworkCredential credential)
         {
-            var headers = binder.GetHeaders(context);
-            if (headers != null)
-                request.Headers.Add(headers);
-        }
+            if (credential == null)
+                throw new ArgumentNullException("credential");
 
-        static ICredentials GetCredentialsFromModel(IRequestBinder binder, BindingContext context)
-        {
-            return context.Model == null
-                ? null
-                : binder.GetCredentials(context);
+            switch (credential.CredentialType)
+            {
+                case CredentialType.DefaultCredentials:
+                    return CredentialCache.DefaultCredentials;
+
+                case CredentialType.DefaultNetworkCredentials:
+                    return CredentialCache.DefaultNetworkCredentials;
+
+                case CredentialType.NetworkCredential:
+                    return GetNetworkCredential(credential);
+
+                default:
+                    return null;
+            }
         }
     }
 }

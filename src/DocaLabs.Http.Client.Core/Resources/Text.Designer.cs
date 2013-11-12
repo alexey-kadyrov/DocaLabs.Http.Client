@@ -125,6 +125,24 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CredentialType.DefaultCredentials is not supported in the platform..
+        /// </summary>
+        internal static string default_credentials_are_not_supported {
+            get {
+                return ResourceManager.GetString("default_credentials_are_not_supported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CredentialType.DefaultNetworkCredentials is not supported in the platform..
+        /// </summary>
+        internal static string default_network_credentials_are_not_supported1 {
+            get {
+                return ResourceManager.GetString("default_network_credentials_are_not_supported1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create Url {0}..
         /// </summary>
         internal static string failed_create_url {

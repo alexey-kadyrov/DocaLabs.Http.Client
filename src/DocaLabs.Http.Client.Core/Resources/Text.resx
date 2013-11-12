@@ -138,6 +138,12 @@
   <data name="content_encoding_is_not_supported" xml:space="preserve">
     <value>The content encoding is not supported by the platform.</value>
   </data>
+  <data name="default_credentials_are_not_supported" xml:space="preserve">
+    <value>CredentialType.DefaultCredentials is not supported in the platform.</value>
+  </data>
+  <data name="default_network_credentials_are_not_supported1" xml:space="preserve">
+    <value>CredentialType.DefaultNetworkCredentials is not supported in the platform.</value>
+  </data>
   <data name="failed_create_url" xml:space="preserve">
     <value>Failed to create Url {0}.</value>
   </data>
