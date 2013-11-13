@@ -215,6 +215,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The platform does not support more than one ICredentials property in the input model..
+        /// </summary>
+        internal static string more_than_one_icredntials_property {
+            get {
+                return ResourceManager.GetString("more_than_one_icredntials_property", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type {0} must be interface..
         /// </summary>
         internal static string must_be_interface {

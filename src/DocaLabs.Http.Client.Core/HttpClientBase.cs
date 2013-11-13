@@ -13,6 +13,7 @@ namespace DocaLabs.Http.Client
     public abstract class HttpClientBase
     {
         static readonly IRequestSetup RequestSetup = PlatformAdapter.Resolve<IRequestSetup>();
+        static readonly IContentDecoderFactory ContentDecoderFactory = PlatformAdapter.Resolve<IContentDecoderFactory>(false);
 
         /// <summary>
         /// Gets a service Url
@@ -70,11 +71,9 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual void InitializeRequest(IRequestBinder binder, BindingContext context, WebRequest request)
         {
-            request.Timeout = Configuration.Timeout;
-
             request.Method = GetRequestMethod(binder, context);
 
-            if (ShouldSetAcceptEncoding(context))
+            if (ContentDecoderFactory != null && ShouldSetAcceptEncoding(context))
                 ContentDecoderFactory.AddAcceptEncodings(request);
 
             RequestSetup.CopyCredentialsFrom(request, binder, context);
@@ -158,7 +157,7 @@ namespace DocaLabs.Http.Client
             if (string.IsNullOrWhiteSpace(configurationName))
                 configurationName = GetType().FullName;
 
-            return EndpointConfigurationFactory.Current.GetEndpoint(configurationName) ?? new ClientEndpointElement();
+            return EndpointConfigurationFactory.Current.GetEndpoint(configurationName) ?? new ClientEndpoint();
         }
 
         /// <summary>

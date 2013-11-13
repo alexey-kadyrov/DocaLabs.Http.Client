@@ -10,11 +10,13 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class DefaultRequestBinder : IRequestBinder, IAsyncRequestWriter
     {
+        readonly static ICredentialsMapper DefaultCredentialsMapper = PlatformAdapter.Resolve<ICredentialsMapper>();
         static readonly CustomConcurrentDictionary<Type, Func<BindingContext, object>> Transformers;
+
         readonly DefaultUrlComposer _urlComposer;
         readonly DefaultRequestWriter _requestWriter;
         readonly DefaultHeaderMapper _headerMapper;
-        readonly DefaultCredentialsMapper _credentialsMapper;
+        readonly ICredentialsMapper _credentialsMapper;
 
         static DefaultRequestBinder()
         {
@@ -29,7 +31,7 @@ namespace DocaLabs.Http.Client.Binding
             _urlComposer = new DefaultUrlComposer();
             _requestWriter = new DefaultRequestWriter();
             _headerMapper = new DefaultHeaderMapper();
-            _credentialsMapper = new DefaultCredentialsMapper();
+            _credentialsMapper = DefaultCredentialsMapper;
         }
 
         /// <summary>

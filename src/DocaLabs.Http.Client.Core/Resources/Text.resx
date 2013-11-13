@@ -168,6 +168,9 @@
   <data name="malformed_header" xml:space="preserve">
     <value>Malformed header {0}.</value>
   </data>
+  <data name="more_than_one_icredntials_property" xml:space="preserve">
+    <value>The platform does not support more than one ICredentials property in the input model.</value>
+  </data>
   <data name="must_be_interface" xml:space="preserve">
     <value>The type {0} must be interface.</value>
   </data>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Net;
 using DocaLabs.Http.Client.Resources;
 
 namespace DocaLabs.Http.Client.Utils.ContentEncoding
@@ -44,6 +45,18 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
         public ICollection<string> GetSupportedEncodings()
         {
             return Decoders.Keys;
+        }
+
+        /// <summary>
+        /// Adds supported decoders into accept-encoding header of the request.
+        /// </summary>
+        public void AddAcceptEncodings(WebRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            foreach (var decoder in GetSupportedEncodings())
+                request.Headers.Add("Accept-Encoding", decoder);
         }
 
         /// <summary>

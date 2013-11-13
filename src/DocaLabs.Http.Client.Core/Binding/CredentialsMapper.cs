@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,9 +10,9 @@ namespace DocaLabs.Http.Client.Binding
     /// <summary>
     /// Default credentials mapper.
     /// </summary>
-    public class DefaultCredentialsMapper
+    public class CredentialsMapper : ICredentialsMapper
     {
-        static readonly ConcurrentDictionary<Type, PropertyMap> PropertyMaps = new ConcurrentDictionary<Type, PropertyMap>();
+        readonly CustomConcurrentDictionary<Type, PropertyMap> _propertyMaps = new CustomConcurrentDictionary<Type, PropertyMap>();
 
         /// <summary>
         /// Maps the model to credentials by checking whenever any of its properties returns non null object implementing ICredentials.
@@ -27,7 +26,7 @@ namespace DocaLabs.Http.Client.Binding
 
             return Ignore(client, model) 
                 ? null 
-                : GetCredentials(model, url, PropertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
+                : GetCredentials(model, url, _propertyMaps.GetOrAdd(model.GetType(), x => new PropertyMap(x)));
         }
 
         static bool Ignore(object client, object model)
@@ -35,7 +34,7 @@ namespace DocaLabs.Http.Client.Binding
             return model == null || model.GetType().IsSerializableToRequestBody() || client.GetType().IsSerializableToRequestBody();
         }
 
-        static ICredentials GetCredentials(object model, Uri url, PropertyMap map)
+        ICredentials GetCredentials(object model, Uri url, PropertyMap map)
         {
             var credentials = GetAllCredentialValues(model, map);
 
@@ -66,14 +65,9 @@ namespace DocaLabs.Http.Client.Binding
             return credentials;
         }
 
-        static ICredentials GetAsCredentialCache(Uri url, IEnumerable<KeyValuePair<string, ICredentials>> credentials)
+        protected virtual ICredentials GetAsCredentialCache(Uri url, IEnumerable<KeyValuePair<string, ICredentials>> credentials)
         {
-            var builder = new CredentialCacheBuilder(url);
-
-            foreach (var credential in credentials)
-                builder.AddNetworkCredential(credential.Key, credential.Value);
-
-            return builder.CredentialCache;
+            throw new PlatformNotSupportedException(Resources.Text.more_than_one_icredntials_property);
         }
 
         class PropertyMap
@@ -92,27 +86,6 @@ namespace DocaLabs.Http.Client.Binding
                     : type.GetAllPublicInstanceProperties()
                         .Where(x => x.IsCredentials())
                         .ToList();
-            }
-        }
-    
-        class CredentialCacheBuilder
-        {
-            readonly Uri _prefix;
-            public CredentialCache CredentialCache { get; private set; }
-
-            public CredentialCacheBuilder(Uri url)
-            {
-                CredentialCache = new CredentialCache();
-                _prefix = new Uri(url.GetLeftPart(UriPartial.Authority));
-            }
-
-            public void AddNetworkCredential(string authenticationType, ICredentials credential)
-            {
-                var value = credential as NetworkCredential;
-                if (value == null)
-                    throw new ArgumentException(string.Format(Resources.Text.cannot_mix_network_credential_with_other, credential), "credential");
-
-                CredentialCache.Add(_prefix, authenticationType, value);
             }
         }
     }

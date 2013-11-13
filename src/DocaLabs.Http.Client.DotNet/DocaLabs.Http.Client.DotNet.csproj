@@ -53,9 +53,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AsyncHttpClient.cs" />
+    <Compile Include="Binding\CredentialsMapperOverride.cs" />
     <Compile Include="Binding\HttpResponseStreamFactory.cs" />
-    <Compile Include="Binding\DefaultCredentialsMapper.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="Binding\RequestSetupOverride.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElement.cs" />
@@ -69,7 +68,6 @@
     <Compile Include="Configuration\ClientProxyElement.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\EndpointConfigurationProviderOverride.cs" />
-    <Compile Include="HttpClientBase.cs" />
     <Compile Include="RichResponse.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
     <Compile Include="HttpClientFactory.cs" />
@@ -81,7 +79,6 @@
     <Compile Include="Utils\ContentEncoding\GZipContentEncoder.cs" />
     <Compile Include="Utils\ContentEncoding\DeflateContentDecoder.cs" />
     <Compile Include="Utils\ContentEncoding\DeflateContentEncoder.cs" />
-    <Compile Include="HttpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Text.Designer.cs">
       <AutoGen>True</AutoGen>

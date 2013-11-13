@@ -18,6 +18,8 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
+[assembly: CLSCompliant(false)]
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
@@ -30,5 +32,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.0.0")]
 [assembly: AssemblyFileVersion("3.0.0.0")]
-[assembly: CLSCompliant(false)]
-[assembly: NeutralResourcesLanguageAttribute("en")]

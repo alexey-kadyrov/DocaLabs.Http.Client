@@ -48,7 +48,7 @@
     <Compile Include="AsyncHttpClient.cs" />
     <Compile Include="Binding\AsyncBindingContext.cs" />
     <Compile Include="Binding\BindingContext.cs" />
-    <Compile Include="Binding\DefaultCredentialsMapper.cs" />
+    <Compile Include="Binding\CredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultRequestBinder.cs" />
     <Compile Include="Binding\DefaultRequestWriter.cs" />
@@ -57,6 +57,7 @@
     <Compile Include="Binding\HttpResponseStreamCore.cs" />
     <Compile Include="Binding\IAsyncRequestWriter.cs" />
     <Compile Include="Binding\IAsyncResponseBinder.cs" />
+    <Compile Include="Binding\ICredentialsMapper.cs" />
     <Compile Include="Binding\IHttpResponseStreamFactory.cs" />
     <Compile Include="Binding\IRequestBinder.cs" />
     <Compile Include="Binding\IRequestSetup.cs" />
