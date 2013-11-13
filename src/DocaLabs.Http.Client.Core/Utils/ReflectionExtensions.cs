@@ -151,21 +151,5 @@ namespace DocaLabs.Http.Client.Utils
                 ? genericEnumerable.GenericTypeArguments[0]
                 : typeof(object);
         }
-
-        /// <summary>
-        /// Returns the wrapped model type if the type is subclass of Response{} or null if it's not.
-        /// </summary>
-        public static Type TryGetWrappedResponseModelType(this Type type)
-        {
-            var typeInfo = type.GetTypeInfo();
-
-            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == typeof(RichResponse<>))
-                return type.GenericTypeArguments[0];
-
-            if (typeInfo.BaseType == null || typeInfo.BaseType == typeof(object))
-                return null;
-
-            return TryGetWrappedResponseModelType(typeInfo.BaseType);
-        }
     }
 }

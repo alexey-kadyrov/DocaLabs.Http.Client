@@ -191,7 +191,7 @@ namespace DocaLabs.Http.Client.Binding
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            return _responseTypes.GetOrAdd(context.OutputModelType, t => t.TryGetWrappedResponseModelType() ?? t);
+            return _responseTypes.GetOrAdd(context.OutputModelType, t => TryGetWrappedResponseModelType(t) ?? t);
         }
 
         static bool Is3XX(WebException e)
@@ -250,6 +250,26 @@ namespace DocaLabs.Http.Client.Binding
             var providers = _providers;
 
             return providers.FirstOrDefault(x => x.CanDeserialize(responseStream, resultType));
+        }
+
+        static Type TryGetWrappedResponseModelType(Type type)
+        {
+            while (true)
+            {
+                var typeInfo = type.GetTypeInfo();
+
+                if (typeof (RichResponseCore).GetTypeInfo().IsAssignableFrom(typeInfo))
+                {
+                    var valueProperty = typeInfo.GetDeclaredProperty("Value");
+                    if (valueProperty != null && !valueProperty.IsIndexer())
+                        return valueProperty.PropertyType;
+                }
+
+                if (typeInfo.BaseType == null || typeInfo.BaseType == typeof (object))
+                    return null;
+
+                type = typeInfo.BaseType;
+            }
         }
     }
 }
