@@ -24,7 +24,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.Method.ShouldBeEmpty();
 
         It should_have_timeout_set_to_90_seconds =
-            () => element.Timeout.ShouldEqual(90000);
+            () => element.RequestTimeout.ShouldEqual(90000);
 
         It should_have_auto_set_accept_encoding =
             () => element.AutoSetAcceptEncoding.ShouldBeTrue();
@@ -62,7 +62,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             element.Name = "name1";
             element.BaseUrl = base_url;
             element.Method = "PUT";
-            element.Timeout = 1;
+            element.RequestTimeout = 1;
             element.AutoSetAcceptEncoding = false;
             element.AuthenticationLevel = AuthenticationLevel.MutualAuthRequired;
         };
@@ -77,7 +77,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => element.BaseUrl.ShouldBeTheSameAs(base_url);
 
         It should_change_timeout =
-            () => element.Timeout.ShouldEqual(1);
+            () => element.RequestTimeout.ShouldEqual(1);
 
         It should_change_auto_set_accept_encoding =
             () => element.AutoSetAcceptEncoding.ShouldBeFalse();

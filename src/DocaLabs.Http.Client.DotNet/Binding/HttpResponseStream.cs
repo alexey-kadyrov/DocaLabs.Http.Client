@@ -13,9 +13,9 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public bool IsMutuallyAuthenticated { get { return Response.IsMutuallyAuthenticated; } }
 
-        internal HttpResponseStream(WebResponse response)
+        internal HttpResponseStream(WebResponse response, int readTimeout)
+            : base(response, readTimeout)
         {
-            Response = response;
         }
 
         /// <summary>

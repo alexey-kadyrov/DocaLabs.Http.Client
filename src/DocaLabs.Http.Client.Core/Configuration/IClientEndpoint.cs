@@ -26,7 +26,17 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
         /// </summary>
-        int Timeout { get; }
+        int RequestTimeout { get; }
+
+        /// <summary>
+        /// Gets or sets the response stream reading timeout in milliseconds. Default value is 300 seconds.
+        /// </summary>
+        int ReadTimeout { get; }
+
+        /// <summary>
+        /// Gets or sets the request stream writing timeout in milliseconds. Default value is 300 seconds.
+        /// </summary>
+        int WriteTimeout { get; }
 
         /// <summary>
         /// Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.

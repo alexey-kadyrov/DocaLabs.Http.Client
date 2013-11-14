@@ -21,8 +21,9 @@ namespace DocaLabs.Http.Client.Binding
         Stream _dataStream;
         HttpContentType _contentType;
         Stream _rawResponseStream;
+        int _initialReadTimeout;
 
-        public WebResponse Response { get; protected set; }
+        public WebResponse Response { get; private set; }
 
         /// <summary>
         /// Gets or sets the raw response stream.
@@ -73,6 +74,12 @@ namespace DocaLabs.Http.Client.Binding
         /// Returns whenever the request supports headers.
         /// </returns>
         public bool SupportsHeaders { get { return Response.SupportsHeaders; } }
+
+        protected HttpResponseStreamCore(WebResponse response, int readTimeout)
+        {
+            Response = response;
+            _initialReadTimeout = readTimeout;
+        }
 
         /// <summary>
         /// Releases the response and the streams.
@@ -364,9 +371,12 @@ namespace DocaLabs.Http.Client.Binding
         {
             var stream = Response.GetResponseStream();
 
-            if (RawResponseStream == null)
+            if (stream == null)
                 throw new Exception(Resources.Text.null_response_stream);
 
+            if (stream.CanTimeout)
+                stream.ReadTimeout = _initialReadTimeout;
+ 
             return stream;
         }
 

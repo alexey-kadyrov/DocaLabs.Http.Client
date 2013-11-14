@@ -13,7 +13,9 @@ namespace DocaLabs.Http.Client.Configuration
         const string NameProperty = "name";
         const string BaseUrlProperty = "baseUrl";
         const string MethodProperty = "method";
-        const string TimeoutProperty = "timeout";
+        const string RequestTimeoutProperty = "requestTimeout";
+        const string ReadTimeoutProperty = "readTimeout";
+        const string WriteTimeoutProperty = "writeTimeout";
         const string AutoSetAcceptEncodingProperty = "autoSetAcceptEncoding";
         const string AuthenticationLevelProperty = "authenticationLevel";
         const string CredentialProperty = "credential";
@@ -54,11 +56,31 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
         /// </summary>
-        [ConfigurationProperty(TimeoutProperty, IsRequired = false, DefaultValue = 90000)]
-        public int Timeout
+        [ConfigurationProperty(RequestTimeoutProperty, IsRequired = false, DefaultValue = 90000)]
+        public int RequestTimeout
         {
-            get { return ((int)base[TimeoutProperty]); }
-            set { base[TimeoutProperty] = value; }
+            get { return ((int)base[RequestTimeoutProperty]); }
+            set { base[RequestTimeoutProperty] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the response stream reading timeout in milliseconds. Default value is 300 seconds.
+        /// </summary>
+        [ConfigurationProperty(ReadTimeoutProperty, IsRequired = false, DefaultValue = 300000)]
+        public int ReadTimeout
+        {
+            get { return ((int)base[ReadTimeoutProperty]); }
+            set { base[ReadTimeoutProperty] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the request stream writing timeout in milliseconds. Default value is 300 seconds.
+        /// </summary>
+        [ConfigurationProperty(WriteTimeoutProperty, IsRequired = false, DefaultValue = 300000)]
+        public int WriteTimeout
+        {
+            get { return ((int)base[WriteTimeoutProperty]); }
+            set { base[WriteTimeoutProperty] = value; }
         }
 
         /// <summary>

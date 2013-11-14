@@ -46,8 +46,20 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
         /// </summary>
-        [XmlAttribute("timeout")]
-        public int Timeout { get; set; }
+        [XmlAttribute("requestTimeout")]
+        public int RequestTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the response stream reading timeout in milliseconds. Default value is 300 seconds.
+        /// </summary>
+        [XmlAttribute("readTimeout")]
+        public int ReadTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the request stream writing timeout in milliseconds. Default value is 300 seconds.
+        /// </summary>
+        [XmlAttribute("writeTimeout")]
+        public int WriteTimeout { get; set; }
 
         /// <summary>
         /// Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.
@@ -139,7 +151,9 @@ namespace DocaLabs.Http.Client.Configuration
             _clientCertificatesXmlData = new ClientCertificateReferenceCollection();
 
             Method = string.Empty;
-            Timeout = 90000;
+            RequestTimeout = 90000;
+            ReadTimeout = 300000;
+            WriteTimeout = 300000;
             AutoSetAcceptEncoding = true;
             AuthenticationLevel = RequestAuthenticationLevel.Undefined;
         }

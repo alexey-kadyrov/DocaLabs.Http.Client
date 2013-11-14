@@ -8,9 +8,9 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class HttpResponseStream : HttpResponseStreamCore
     {
-        internal HttpResponseStream(WebResponse response)
+        internal HttpResponseStream(WebResponse response, int readTimeout)
+            : base(response, readTimeout)
         {
-            Response = response;
         }
 
         /// <summary>

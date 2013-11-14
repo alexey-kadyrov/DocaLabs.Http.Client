@@ -17,9 +17,9 @@ namespace DocaLabs.Http.Client.Binding
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            var response = GetResponseAsync(request, context.Configuration.Timeout).Result;
+            var response = GetResponseAsync(request, context.Configuration.RequestTimeout).Result;
 
-            return new HttpResponseStream(response);
+            return new HttpResponseStream(response, context.Configuration.ReadTimeout);
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace DocaLabs.Http.Client.Binding
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            var response = await GetResponseAsync(request, context.Configuration.Timeout);
+            var response = await GetResponseAsync(request, context.Configuration.RequestTimeout);
 
-            return new HttpResponseStream(response);
+            return new HttpResponseStream(response, context.Configuration.ReadTimeout);
         }
 
         static async Task<WebResponse> GetResponseAsync(WebRequest request, int timeout)
