@@ -16,9 +16,6 @@
         FindByCertificatePolicy,
         FindByExtension,
         FindByKeyUsage,
-        FindBySubjectKeyIdentifier,
-
-        FindByFileName,
-        DefinedInValue
+        FindBySubjectKeyIdentifier
     }
 }

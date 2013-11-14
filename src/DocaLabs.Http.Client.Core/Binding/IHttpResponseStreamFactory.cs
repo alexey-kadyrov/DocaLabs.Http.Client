@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
@@ -12,11 +11,11 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes the response stream from the provided WebRequest instance.
         /// </summary>
-        HttpResponseStreamCore CreateStream(WebRequest request);
+        HttpResponseStreamCore CreateStream(BindingContext context, WebRequest request);
 
         /// <summary>
         /// Initializes an asynchronous instance of the response stream from the provided WebRequest instance.
         /// </summary>
-        Task<HttpResponseStreamCore> CreateAsyncStream(WebRequest request, CancellationToken cancellationToken);
+        Task<HttpResponseStreamCore> CreateAsyncStream(AsyncBindingContext context, WebRequest request);
     }
 }

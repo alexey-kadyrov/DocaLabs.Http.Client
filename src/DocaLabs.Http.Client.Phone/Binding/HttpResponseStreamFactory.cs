@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
@@ -13,12 +12,12 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes an instance of the HttpResponseStream class from the provided WebRequest instance.
         /// </summary>
-        public HttpResponseStreamCore CreateStream(WebRequest request)
+        public HttpResponseStreamCore CreateStream(BindingContext context, WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            var response = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null).Result;
+            var response = GetResponseAsync(request, context.Configuration.Timeout).Result;
 
             return new HttpResponseStream(response);
         }
@@ -26,14 +25,25 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes an asynchronous instance of the HttpResponseStream class from the provided WebRequest instance.
         /// </summary>
-        public async Task<HttpResponseStreamCore> CreateAsyncStream(WebRequest request, CancellationToken cancellationToken)
+        public async Task<HttpResponseStreamCore> CreateAsyncStream(AsyncBindingContext context, WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            var response = await Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
+            var response = await GetResponseAsync(request, context.Configuration.Timeout);
 
             return new HttpResponseStream(response);
+        }
+
+        static async Task<WebResponse> GetResponseAsync(WebRequest request, int timeout)
+        {
+            var getResponseTask = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
+
+            var completeTask = await Task.WhenAny(getResponseTask, Task.Delay(timeout));
+            if (completeTask != getResponseTask)
+                throw new WebException(string.Format(Resources.Text.timeout_executing_request_to_0, request.RequestUri), WebExceptionStatus.Timeout);
+
+            return await getResponseTask;
         }
     }
 }

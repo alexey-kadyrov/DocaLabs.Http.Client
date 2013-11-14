@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Net;
 using System.Security.Cryptography.X509Certificates;
 
 namespace DocaLabs.Http.Client.Configuration
@@ -25,7 +24,7 @@ namespace DocaLabs.Http.Client.Configuration
             {
                 certStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
 
-                return certStore.Certificates.Find(reference.X509FindType, reference.FindValue, true);
+                return certStore.Certificates.Find(ToX509FindType(reference.X509FindType), reference.FindValue, true);
             }
             finally
             {
@@ -42,7 +41,7 @@ namespace DocaLabs.Http.Client.Configuration
                 case CertificateStoreLocation.LocalMachine:
                     return StoreLocation.LocalMachine;
                 default:
-                    throw new InvalidEnumArgumentException("value", (int)value, typeof(StoreLocation));
+                    throw new InvalidEnumArgumentException("value", (int)value, typeof(CertificateStoreLocation));
             }
         }
 
@@ -68,6 +67,45 @@ namespace DocaLabs.Http.Client.Configuration
                     return StoreName.TrustedPublisher;
                 default:
                     throw new InvalidEnumArgumentException("value", (int) value, typeof (CertificateStoreName));
+            }
+        }
+
+        public static X509FindType ToX509FindType(this CertificateX509FindType value)
+        {
+            switch (value)
+            {
+                case CertificateX509FindType.FindByThumbprint:
+                    return X509FindType.FindByThumbprint;
+                case CertificateX509FindType.FindBySubjectName:
+                    return X509FindType.FindBySubjectName;
+                case CertificateX509FindType.FindBySubjectDistinguishedName:
+                    return X509FindType.FindBySubjectDistinguishedName;
+                case CertificateX509FindType.FindByIssuerName:
+                    return X509FindType.FindByIssuerName;
+                case CertificateX509FindType.FindByIssuerDistinguishedName:
+                    return X509FindType.FindByIssuerDistinguishedName;
+                case CertificateX509FindType.FindBySerialNumber:
+                    return X509FindType.FindBySerialNumber;
+                case CertificateX509FindType.FindByTimeValid:
+                    return X509FindType.FindByTimeValid;
+                case CertificateX509FindType.FindByTimeNotYetValid:
+                    return X509FindType.FindByTimeNotYetValid;
+                case CertificateX509FindType.FindByTimeExpired:
+                    return X509FindType.FindByTimeExpired;
+                case CertificateX509FindType.FindByTemplateName:
+                    return X509FindType.FindByTemplateName;
+                case CertificateX509FindType.FindByApplicationPolicy:
+                    return X509FindType.FindByApplicationPolicy;
+                case CertificateX509FindType.FindByCertificatePolicy:
+                    return X509FindType.FindByCertificatePolicy;
+                case CertificateX509FindType.FindByExtension:
+                    return X509FindType.FindByExtension;
+                case CertificateX509FindType.FindByKeyUsage:
+                    return X509FindType.FindByKeyUsage;
+                case CertificateX509FindType.FindBySubjectKeyIdentifier:
+                    return X509FindType.FindBySubjectKeyIdentifier;
+                default:
+                    throw new InvalidEnumArgumentException("value", (int)value, typeof(CertificateX509FindType));
             }
         }
     }

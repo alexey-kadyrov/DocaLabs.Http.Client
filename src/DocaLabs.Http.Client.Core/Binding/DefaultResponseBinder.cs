@@ -81,7 +81,7 @@ namespace DocaLabs.Http.Client.Binding
 
             try
             {
-                stream = StreamFactory.CreateStream(request);
+                stream = StreamFactory.CreateStream(context, request);
 
                 var value = ReadStream(context, stream, responseType);
 
@@ -125,7 +125,7 @@ namespace DocaLabs.Http.Client.Binding
 
             try
             {
-                stream = await StreamFactory.CreateAsyncStream(request, context.CancellationToken);
+                stream = await StreamFactory.CreateAsyncStream(context, request);
 
                 var deserializer = GetUserSpecifiedDeserializer(context, responseType);
                 if (deserializer == null)

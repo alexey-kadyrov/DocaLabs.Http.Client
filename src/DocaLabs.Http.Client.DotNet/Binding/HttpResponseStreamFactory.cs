@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding
@@ -13,10 +12,12 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes an instance of the HttpResponseStream class from the provided WebRequest instance.
         /// </summary>
-        public HttpResponseStreamCore CreateStream(WebRequest request)
+        public HttpResponseStreamCore CreateStream(BindingContext context, WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
+
+            request.Timeout = context.Configuration.Timeout;
 
             return new HttpResponseStream(request.GetResponse());
         }
@@ -24,10 +25,12 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Initializes an asynchronous instance of the HttpResponseStream class from the provided WebRequest instance.
         /// </summary>
-        public async Task<HttpResponseStreamCore> CreateAsyncStream(WebRequest request, CancellationToken cancellationToken)
+        public async Task<HttpResponseStreamCore> CreateAsyncStream(AsyncBindingContext context, WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
+
+            request.Timeout = context.Configuration.Timeout;
 
             var response = await request.GetResponseAsync();
 
