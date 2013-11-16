@@ -97,10 +97,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
             () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded; charset=utf-8");
 
         It should_add_content_encoding_request_header =
-            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+            () => mock_web_request.Object.Headers.ShouldContain(StandardHeaders.ContentEncoding);
 
         It should_add_gzip_content_encoding =
-            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+            () => mock_web_request.Object.Headers[StandardHeaders.ContentEncoding].ShouldEqual(KnownContentEncodings.Gzip);
 
         It should_serialize_all_properties = () => HttpUtility.ParseQueryString(GetDecodedRequestData()).ShouldContainOnly(
                 new NameValue("Value1", "2012"),
@@ -134,10 +134,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
             () => mock_web_request.Object.ContentType.ShouldEqual("application/x-www-form-urlencoded; charset=utf-8");
 
         It should_add_content_encoding_request_header =
-            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+            () => mock_web_request.Object.Headers.ShouldContain(StandardHeaders.ContentEncoding);
 
         It should_add_gzip_content_encoding =
-            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+            () => mock_web_request.Object.Headers[StandardHeaders.ContentEncoding].ShouldEqual(KnownContentEncodings.Gzip);
 
         It should_serialize_all_properties = () => HttpUtility.ParseQueryString(GetDecodedRequestData()).ShouldContainOnly(
                 new NameValue("Value1", "2012"),

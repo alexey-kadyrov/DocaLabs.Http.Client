@@ -223,10 +223,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
 
         It should_add_content_encoding_request_header =
-            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+            () => mock_web_request.Object.Headers.ShouldContain(StandardHeaders.ContentEncoding);
 
         It should_add_gzip_content_encoding =
-            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+            () => mock_web_request.Object.Headers[StandardHeaders.ContentEncoding].ShouldEqual(KnownContentEncodings.Gzip);
 
         It should_serialize_object = () => GetDecodedRequestData().ShouldEqual("Hello World!");
     }
@@ -246,10 +246,10 @@ namespace DocaLabs.Http.Client.Tests.Binding.Serialization
             () => mock_web_request.Object.ContentType.ShouldBeEqualIgnoringCase("application/octet-stream");
 
         It should_add_content_encoding_request_header =
-            () => mock_web_request.Object.Headers.ShouldContain("content-encoding");
+            () => mock_web_request.Object.Headers.ShouldContain(StandardHeaders.ContentEncoding);
 
         It should_add_gzip_content_encoding =
-            () => mock_web_request.Object.Headers["content-encoding"].ShouldEqual(KnownContentEncodings.Gzip);
+            () => mock_web_request.Object.Headers[StandardHeaders.ContentEncoding].ShouldEqual(KnownContentEncodings.Gzip);
 
         It should_serialize_object = () => GetDecodedRequestData().ShouldEqual("Hello World!");
     }

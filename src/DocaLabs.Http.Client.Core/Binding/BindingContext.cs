@@ -54,6 +54,21 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public BindingContext(object httpClient, object originalModel, IClientEndpoint configuration, Uri baseUrl, Type inputModelType, Type outputModelType)
         {
+            if (httpClient == null)
+                throw new ArgumentNullException("httpClient");
+
+            if(configuration == null)
+                throw new ArgumentNullException("configuration");
+
+            if(baseUrl == null)
+                throw new ArgumentNullException("baseUrl");
+
+            if(inputModelType == null)
+                throw new ArgumentNullException("inputModelType");
+
+            if(outputModelType == null)
+                throw new ArgumentNullException("outputModelType");
+
             BaseUrl = baseUrl;
             InputModelType = inputModelType;
             OutputModelType = outputModelType;

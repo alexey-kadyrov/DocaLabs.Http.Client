@@ -10,8 +10,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// When is overridden in derived class it serializes a given object into the web request.
         /// </summary>
-        /// <param name="obj">Object to be serialized.</param>
-        /// <param name="request">Web request where to serialize to.</param>
-        void Serialize(object obj, WebRequest request);
+        void Serialize(BindingContext context, WebRequest request, object value);
     }
 }

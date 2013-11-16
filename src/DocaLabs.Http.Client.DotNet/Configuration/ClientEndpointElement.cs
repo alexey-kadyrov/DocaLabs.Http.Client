@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Configuration
         const string NameProperty = "name";
         const string BaseUrlProperty = "baseUrl";
         const string MethodProperty = "method";
-        const string RequestTimeoutProperty = "requestTimeout";
+        const string RequestTimeoutProperty = "timeout";
         const string ReadTimeoutProperty = "readTimeout";
         const string WriteTimeoutProperty = "writeTimeout";
         const string AutoSetAcceptEncodingProperty = "autoSetAcceptEncoding";
@@ -57,7 +57,7 @@ namespace DocaLabs.Http.Client.Configuration
         /// Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
         /// </summary>
         [ConfigurationProperty(RequestTimeoutProperty, IsRequired = false, DefaultValue = 90000)]
-        public int RequestTimeout
+        public int Timeout
         {
             get { return ((int)base[RequestTimeoutProperty]); }
             set { base[RequestTimeoutProperty] = value; }

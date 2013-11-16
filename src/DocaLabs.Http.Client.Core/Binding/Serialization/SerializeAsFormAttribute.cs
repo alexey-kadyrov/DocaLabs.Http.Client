@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
@@ -54,12 +53,18 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
         /// </summary>
-        public override void Serialize(object model, WebRequest request)
+        public override void Serialize(BindingContext context, WebRequest request, object value)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            var form = ToForm(model);
+            if(value == null)
+                return;
+
+            var form = ToForm(value);
 
             var encoding = GetEncoding();
 
@@ -68,20 +73,26 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
 
             if (string.IsNullOrWhiteSpace(RequestContentEncoding))
-                Write(data, request);
+                Write(context, request, data);
             else
-                CompressAndWrite(data, request);
+                CompressAndWrite(context, request, data);
         }
 
         /// <summary>
         /// Asynchronously serializes a given object into the web request as Url encoded form (the content type is: application/x-www-form-urlencoded).
         /// </summary>
-        public override Task SerializeAsync(object model, WebRequest request, CancellationToken cancellationToken)
+        public override Task SerializeAsync(AsyncBindingContext context, WebRequest request, object value)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            var form = ToForm(model);
+            if (value == null)
+                return TaskUtils.CompletedTask();
+
+            var form = ToForm(value);
 
             var encoding = GetEncoding();
 
@@ -89,9 +100,9 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
             request.ContentType = string.Format("application/x-www-form-urlencoded; charset={0}", CharSet);
 
-            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
-                ? WriteAsync(data, request, cancellationToken) 
-                : CompressAndWriteAsync(data, request, cancellationToken);
+            return string.IsNullOrWhiteSpace(RequestContentEncoding)
+                ? WriteAsync(context, request, data)
+                : CompressAndWriteAsync(context, request, data);
         }
 
         /// <summary>
@@ -127,30 +138,30 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
-        static void Write(byte[] data, WebRequest request)
+        static void Write(BindingContext context, WebRequest request, byte[] data)
         {
-            using (var stream = RequestStreamFactory.Get(request))
+            using (var stream = RequestStreamFactory.Get(context, request))
             {
                 stream.Write(data, 0, data.Length);
             }
         }
 
-        static async Task WriteAsync(byte[] data, WebRequest request, CancellationToken cancellationToken)
+        static async Task WriteAsync(AsyncBindingContext context, WebRequest request, byte[] data)
         {
-            using (var stream = await RequestStreamFactory.GetAsync(request))
+            using (var stream = await RequestStreamFactory.GetAsync(context, request))
             {
-                await stream.WriteAsync(data, 0, data.Length, cancellationToken);
+                await stream.WriteAsync(data, 0, data.Length, context.CancellationToken);
             }
         }
 
-        void CompressAndWrite(byte[] data, WebRequest request)
+        void CompressAndWrite(BindingContext context, WebRequest request, byte[] data)
         {
             if (ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            request.Headers["content-encoding"] = RequestContentEncoding;
+            request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
-            using (var requestStream = RequestStreamFactory.Get(request))
+            using (var requestStream = RequestStreamFactory.Get(context, request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             using (var dataStream = new MemoryStream(data))
             {
@@ -158,18 +169,18 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
-        async Task CompressAndWriteAsync(byte[] data, WebRequest request, CancellationToken cancellationToken)
+        async Task CompressAndWriteAsync(AsyncBindingContext context, WebRequest request, byte[] data)
         {
             if (ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            request.Headers["content-encoding"] = RequestContentEncoding;
+            request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
-            using (var requestStream = await RequestStreamFactory.GetAsync(request))
+            using (var requestStream = await RequestStreamFactory.GetAsync(context, request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             using (var dataStream = new MemoryStream(data))
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                context.CancellationToken.ThrowIfCancellationRequested();
                 await dataStream.CopyToAsync(compressionStream);
             }
         }

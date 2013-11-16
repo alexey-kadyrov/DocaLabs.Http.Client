@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DocaLabs.Http.Client.Binding.Serialization
@@ -12,6 +11,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// When is overridden in derived class it asynchronously serializes a given object into the web request.
         /// </summary>
-        Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken);
+        Task SerializeAsync(AsyncBindingContext context, WebRequest request, object value);
     }
 }

@@ -72,7 +72,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public virtual string InferRequestMethod(BindingContext context)
         {
-            return _requestWriter.InferRequestMethod(context.HttpClient, context.Model);
+            return _requestWriter.InferRequestMethod(context);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public virtual void Write(BindingContext context, WebRequest request)
         {
-            _requestWriter.Write(context.HttpClient, context.Model, request);
+            _requestWriter.Write(context, request);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace DocaLabs.Http.Client.Binding
         /// </summary>
         public Task WriteAsync(AsyncBindingContext context, WebRequest request)
         {
-            return _requestWriter.WriteAsync(context.HttpClient, context.Model, request, context.CancellationToken);
+            return _requestWriter.WriteAsync(context, request);
         }
     }
 }

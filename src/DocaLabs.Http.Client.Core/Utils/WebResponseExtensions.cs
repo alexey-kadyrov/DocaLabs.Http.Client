@@ -4,7 +4,7 @@ namespace DocaLabs.Http.Client.Utils
 {
     public static class WebResponseExtensions
     {
-        const string ContentEncodingHeader = "Content-Encoding";
+        const string ContentEncodingHeader = StandardHeaders.ContentEncoding;
 
         public static string GetContentEncoding(this WebResponse response)
         {

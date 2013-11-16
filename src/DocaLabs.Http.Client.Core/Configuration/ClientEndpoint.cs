@@ -46,8 +46,8 @@ namespace DocaLabs.Http.Client.Configuration
         /// <summary>
         /// Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
         /// </summary>
-        [XmlAttribute("requestTimeout")]
-        public int RequestTimeout { get; set; }
+        [XmlAttribute("timeout")]
+        public int Timeout { get; set; }
 
         /// <summary>
         /// Gets or sets the response stream reading timeout in milliseconds. Default value is 300 seconds.
@@ -151,7 +151,7 @@ namespace DocaLabs.Http.Client.Configuration
             _clientCertificatesXmlData = new ClientCertificateReferenceCollection();
 
             Method = string.Empty;
-            RequestTimeout = 90000;
+            Timeout = 90000;
             ReadTimeout = 300000;
             WriteTimeout = 300000;
             AutoSetAcceptEncoding = true;

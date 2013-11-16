@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Utils;
@@ -23,14 +22,14 @@ namespace DocaLabs.Http.Client.Binding
         ///     2. One of it's properties
         ///     3. HttpClient level
         /// </summary>
-        public void Write(object client, object model, WebRequest request)
+        public void Write(BindingContext context, WebRequest request)
         {
-            if (client == null)
-                throw new ArgumentNullException("client");
+            if (context == null)
+                throw new ArgumentNullException("context");
 
-            var info = GetSerializer(client, model);
+            var info = GetSerializer(context);
             if (info != null && info.ValueToBeSerialized != null)
-                info.Serializer.Serialize(info.ValueToBeSerialized, request);
+                info.Serializer.Serialize(context, request, info.ValueToBeSerialized);
             else
                 RequestSetup.SetContentLengthToZeroIfBodyIsRequired(request);
         }
@@ -42,12 +41,12 @@ namespace DocaLabs.Http.Client.Binding
         ///     2. One of it's properties
         ///     3. HttpClient level
         /// </summary>
-        public Task WriteAsync(object client, object model, WebRequest request, CancellationToken cancellationToken)
+        public Task WriteAsync(AsyncBindingContext context, WebRequest request)
         {
-            if (client == null)
-                throw new ArgumentNullException("client");
+            if (context == null)
+                throw new ArgumentNullException("context");
 
-            var info = GetSerializer(client, model);
+            var info = GetSerializer(context);
 
             if (info == null || info.ValueToBeSerialized == null)
             {
@@ -56,38 +55,40 @@ namespace DocaLabs.Http.Client.Binding
             }
 
             var asyncSerializer = info.Serializer as IAsyncRequestSerialization;
-            return asyncSerializer != null 
-                ? asyncSerializer.SerializeAsync(info.ValueToBeSerialized, request, cancellationToken) 
-                : TaskUtils.RunSynchronously(() => info.Serializer.Serialize(info.ValueToBeSerialized, request), cancellationToken);
+            return asyncSerializer != null
+                ? asyncSerializer.SerializeAsync(context, request, info.ValueToBeSerialized)
+                : TaskUtils.RunSynchronously(() => info.Serializer.Serialize(context, request, info.ValueToBeSerialized), context.CancellationToken);
         }
 
         /// <summary>
         /// Tries to figure out what HTTP verb should be used based on http client and model information.
         /// It checks for RequestSerializationAttribute on the model or client types or on any property of the model.
         /// </summary>
-        public string InferRequestMethod(object client, object model)
+        public string InferRequestMethod(BindingContext context)
         {
-            if (client == null)
-                throw new ArgumentNullException("client");
+            if (context == null)
+                throw new ArgumentNullException("context");
 
-            return ShouldWrite(client, model)
+            return ShouldWrite(context)
                 ? "POST"
                 : "GET";
         }
 
-        static bool ShouldWrite(object client, object model)
+        static bool ShouldWrite(BindingContext context)
         {
-            return GetSerializer(client, model) != null;
+            return GetSerializer(context) != null;
         }
 
-        static SerializerInfo GetSerializer(object client, object model)
+        static SerializerInfo GetSerializer(BindingContext context)
         {
+            var model = context.Model;
+
             if (model == null)
                 return null;
 
             return TryModelPropertyLevel(model) 
                 ?? TryModelClassLevel(model) 
-                ?? TryHttpClientClassLevel(client, model)
+                ?? TryHttpClientClassLevel(context.HttpClient, model)
                 ?? TryAsStream(model);
         }
 

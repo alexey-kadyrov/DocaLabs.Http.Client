@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -93,58 +92,64 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// <summary>
         /// Serializes the specified object into the request stream.
         /// </summary>
-        public override void Serialize(object obj, WebRequest request)
+        public override void Serialize(BindingContext context, WebRequest request, object value)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            if(obj == null)
-                throw new ArgumentNullException("obj");
+            if(value == null)
+                return;
 
             request.ContentType = string.Format("{0}; charset={1}", MediaType, Encoding);
 
             if (string.IsNullOrWhiteSpace(RequestContentEncoding))
-                Write(obj, request);
+                Write(context, request, value);
             else
-                CompressAndWrite(obj, request);
+                CompressAndWrite(context, request, value);
         }
 
         /// <summary>
         /// Asynchronously serializes the specified object into the request stream.
         /// </summary>
-        public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        public override Task SerializeAsync(AsyncBindingContext context, WebRequest request, object value)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            if (obj == null)
-                throw new ArgumentNullException("obj");
+            if (value == null)
+                return TaskUtils.CompletedTask();
 
             request.ContentType = string.Format("{0}; charset={1}", MediaType, Encoding);
 
-            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
-                ? WriteAsync(obj, request, cancellationToken) 
-                : CompressAndWriteAsync(obj, request, cancellationToken);
+            return string.IsNullOrWhiteSpace(RequestContentEncoding)
+                ? WriteAsync(context, request, value)
+                : CompressAndWriteAsync(context, request, value);
         }
 
-        void Write(object obj, WebRequest request)
+        void Write(BindingContext context, WebRequest request, object value)
         {
             // stream is disposed by the reader
-            using (var writer = XmlWriter.Create(RequestStreamFactory.Get(request), GetSettings()))
+            using (var writer = XmlWriter.Create(RequestStreamFactory.Get(context, request), GetSettings()))
             {
                 TryWriteDocType(writer);
 
-                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+                new XmlSerializer(value.GetType()).Serialize(writer, value, GetNamespaces());
             }
         }
 
-        async Task WriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        async Task WriteAsync(AsyncBindingContext context, WebRequest request, object value)
         {
             // stream is disposed by the reader
-            using (var stream = await RequestStreamFactory.GetAsync(request))
+            using (var stream = await RequestStreamFactory.GetAsync(context, request))
             using (var writer = XmlWriter.Create(stream, GetSettings(true)))
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                context.CancellationToken.ThrowIfCancellationRequested();
 
                 if (!string.IsNullOrWhiteSpace(DocTypeName) || !string.IsNullOrWhiteSpace(DocTypeName) ||
                     !string.IsNullOrWhiteSpace(DocTypeName) || !string.IsNullOrWhiteSpace(DocTypeName))
@@ -152,16 +157,16 @@ namespace DocaLabs.Http.Client.Binding.Serialization
                     await writer.WriteDocTypeAsync(DocTypeName, Pubid, Sysid, Subset);
                 }
 
-                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+                new XmlSerializer(value.GetType()).Serialize(writer, value, GetNamespaces());
             }
         }
 
-        void CompressAndWrite(object obj, WebRequest request)
+        void CompressAndWrite(BindingContext context, WebRequest request, object value)
         {
             if (ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            request.Headers["content-encoding"] = RequestContentEncoding;
+            request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
             // stream is disposed by the reader
             var dataStream = new MemoryStream();
@@ -170,11 +175,11 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             {
                 TryWriteDocType(writer);
 
-                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+                new XmlSerializer(value.GetType()).Serialize(writer, value, GetNamespaces());
 
                 dataStream.Seek(0, SeekOrigin.Begin);
 
-                using (var requestStream = RequestStreamFactory.Get(request))
+                using (var requestStream = RequestStreamFactory.Get(context, request))
                 using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
                 {
                     dataStream.CopyTo(compressionStream);
@@ -182,12 +187,12 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             }
         }
 
-        async Task CompressAndWriteAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        async Task CompressAndWriteAsync(AsyncBindingContext context, WebRequest request, object value)
         {
             if (ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            request.Headers["content-encoding"] = RequestContentEncoding;
+            request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
             // stream is disposed by the reader
             var dataStream = new MemoryStream();
@@ -196,14 +201,14 @@ namespace DocaLabs.Http.Client.Binding.Serialization
             {
                 TryWriteDocType(writer);
 
-                new XmlSerializer(obj.GetType()).Serialize(writer, obj, GetNamespaces());
+                new XmlSerializer(value.GetType()).Serialize(writer, value, GetNamespaces());
 
                 dataStream.Seek(0, SeekOrigin.Begin);
 
-                using (var requestStream = await RequestStreamFactory.GetAsync(request))
+                using (var requestStream = await RequestStreamFactory.GetAsync(context, request))
                 using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    context.CancellationToken.ThrowIfCancellationRequested();
 
                     await dataStream.CopyToAsync(compressionStream);
                 }

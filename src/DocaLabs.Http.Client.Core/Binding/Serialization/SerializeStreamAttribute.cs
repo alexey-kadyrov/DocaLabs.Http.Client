@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
@@ -52,91 +51,97 @@ namespace DocaLabs.Http.Client.Binding.Serialization
         /// Serializes a given object into the web request.
         /// What actually will be serialized depends on which constructor was used - if the default then obj itself otherwise the property's value.
         /// </summary>
-        public override void Serialize(object obj, WebRequest request)
+        public override void Serialize(BindingContext context, WebRequest request, object value)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            request.ContentType = ContentType;
-            
-            if (obj == null)
+            if (value == null)
                 return;
 
-            var stream = obj as Stream;
+            var stream = value as Stream;
             if (stream == null)
-                throw new ArgumentException(string.Format(Resources.Text.the_value_must_be_of_stream_type, obj.GetType()), "obj");
+                throw new ArgumentException(string.Format(Resources.Text.the_value_must_be_of_stream_type, value.GetType()), "value");
+
+            request.ContentType = ContentType;
             
             if(string.IsNullOrWhiteSpace(RequestContentEncoding))
-                Write(stream, request);
+                Write(context, request, stream);
             else
-                CompressAndWrite(stream, request);
+                CompressAndWrite(context, request, stream);
         }
 
         /// <summary>
         /// Asynchronously serializes a given object into the web request.
         /// What actually will be serialized depends on which constructor was used - if the default then obj itself otherwise the property's value.
         /// </summary>
-        public override Task SerializeAsync(object obj, WebRequest request, CancellationToken cancellationToken)
+        public override Task SerializeAsync(AsyncBindingContext context, WebRequest request, object value)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            request.ContentType = ContentType;
-
-            if (obj == null)
+            if (value == null)
                 return TaskUtils.CompletedTask();
 
-            var stream = obj as Stream;
+            var stream = value as Stream;
             if (stream == null)
-                throw new ArgumentException(string.Format(Resources.Text.the_value_must_be_of_stream_type, obj.GetType()), "obj");
+                throw new ArgumentException(string.Format(Resources.Text.the_value_must_be_of_stream_type, value.GetType()), "value");
 
-            return string.IsNullOrWhiteSpace(RequestContentEncoding) 
-                ? WriteAsync(stream, request, cancellationToken) 
-                : CompressAndWriteAsync(stream, request, cancellationToken);
+            request.ContentType = ContentType;
+
+            return string.IsNullOrWhiteSpace(RequestContentEncoding)
+                ? WriteAsync(context, request, stream)
+                : CompressAndWriteAsync(context, request, stream);
         }
 
-        static void Write(Stream stream, WebRequest request)
+        static void Write(BindingContext context, WebRequest request, Stream stream)
         {
-            using (var requestStream = RequestStreamFactory.Get(request))
+            using (var requestStream = RequestStreamFactory.Get(context, request))
             {
                 stream.CopyTo(requestStream);
             }
         }
 
-        static async Task WriteAsync(Stream stream, WebRequest request, CancellationToken cancellationToken)
+        static async Task WriteAsync(AsyncBindingContext context, WebRequest request, Stream stream)
         {
-            using (var requestStream = await RequestStreamFactory.GetAsync(request))
+            using (var requestStream = await RequestStreamFactory.GetAsync(context, request))
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                context.CancellationToken.ThrowIfCancellationRequested();
                 await stream.CopyToAsync(requestStream);
             }
         }
 
-        void CompressAndWrite(Stream stream, WebRequest request)
+        void CompressAndWrite(BindingContext context, WebRequest request, Stream stream)
         {
             if (ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            request.Headers["content-encoding"] = RequestContentEncoding;
+            request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
-            using (var requestStream = RequestStreamFactory.Get(request))
+            using (var requestStream = RequestStreamFactory.Get(context, request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             {
                 stream.CopyTo(compressionStream);
             }
         }
 
-        async Task CompressAndWriteAsync(Stream stream, WebRequest request, CancellationToken cancellationToken)
+        async Task CompressAndWriteAsync(AsyncBindingContext context, WebRequest request, Stream stream)
         {
             if (ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
-            request.Headers["content-encoding"] = RequestContentEncoding;
+            request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
-            using (var requestStream = await RequestStreamFactory.GetAsync(request))
+            using (var requestStream = await RequestStreamFactory.GetAsync(context, request))
             using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                context.CancellationToken.ThrowIfCancellationRequested();
                 await stream.CopyToAsync(compressionStream);
             }
         }
