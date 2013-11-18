@@ -87,10 +87,14 @@ namespace DocaLabs.Http.Client.Utils
         {
             var typeName = MakeAdapterTypeName(interfaceType);
 
-            var assembly = PlatformSpecificAssimebly.Value ?? 
-                typeof (PlatformAdapter).GetTypeInfo().Assembly;
+            var thisAssembly = typeof (PlatformAdapter).GetTypeInfo().Assembly;
 
-            return assembly.GetType(typeName + "Override") ?? assembly.GetType(typeName);
+            var assembly = PlatformSpecificAssimebly.Value ?? 
+                thisAssembly;
+
+            return assembly.GetType(typeName + "Override") 
+                ?? assembly.GetType(typeName)
+                ?? thisAssembly.GetType(typeName);
         }
 
         static string MakeAdapterTypeName(Type interfaceType)
