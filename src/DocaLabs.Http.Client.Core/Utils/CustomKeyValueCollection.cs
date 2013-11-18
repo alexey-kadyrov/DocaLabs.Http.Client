@@ -8,6 +8,8 @@ namespace DocaLabs.Http.Client.Utils
     {
         readonly Dictionary<string, List<string>> _data = new Dictionary<string, List<string>>();
 
+        public int Count { get { return _data.Count; } }
+
         public IReadOnlyCollection<string> AllKeys { get { return new ReadOlnyKeys(_data.Keys); } }
 
         public IReadOnlyList<string> GetValues(string key)

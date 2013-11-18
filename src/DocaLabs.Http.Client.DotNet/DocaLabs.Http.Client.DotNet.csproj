@@ -59,7 +59,7 @@
     <Compile Include="Binding\RequestSetupOverride.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElement.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementCollection.cs" />
-    <Compile Include="Configuration\ClientEndpointConfigurationSection.cs" />
+    <Compile Include="Configuration\HttpClientEndpointSection.cs" />
     <Compile Include="Configuration\ClientEndpointElement.cs" />
     <Compile Include="Configuration\ClientEndpointElementCollection.cs" />
     <Compile Include="Configuration\ClientHeaderElement.cs" />

@@ -64,11 +64,11 @@ namespace DocaLabs.Http.Client.Configuration
                 : section.Endpoints.FirstOrDefault(x => x.Name == configurationName);
         }
 
-        ClientEndpointConfigurationSection GetSection()
+        HttpClientEndpointSection GetSection()
         {
             return _configuration == null
-                ? ConfigurationManager.GetSection(_sectionName) as ClientEndpointConfigurationSection
-                : _configuration.GetSection(_sectionName) as ClientEndpointConfigurationSection;
+                ? ConfigurationManager.GetSection(_sectionName) as HttpClientEndpointSection
+                : _configuration.GetSection(_sectionName) as HttpClientEndpointSection;
         }
     }
 }
