@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
@@ -56,9 +57,16 @@ namespace DocaLabs.Http.Client.Configuration
 
         static IClientEndpointConfiguration Load(string file)
         {
-            using (var reader = XmlReader.Create(file))
+            try
             {
-                return new XmlSerializer(typeof(ClientEndpointConfiguration)).Deserialize(reader) as IClientEndpointConfiguration;
+                using (var reader = XmlReader.Create(file))
+                {
+                    return (IClientEndpointConfiguration)(new XmlSerializer(typeof(ClientEndpointConfiguration)).Deserialize(reader));
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                return new ClientEndpointConfiguration();
             }
         }
     }
