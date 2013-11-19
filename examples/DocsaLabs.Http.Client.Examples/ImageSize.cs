@@ -1,7 +1,7 @@
 ﻿using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocsaLabs.Http.Client.Examples.Core
+namespace DocsaLabs.Http.Client.Examples
 {
     public class ImageSize : ICustomValueConverter
     {

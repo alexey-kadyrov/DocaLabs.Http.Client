@@ -142,9 +142,7 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="HttpClientEndpoints.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Content Include="HttpClientEndpoints.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">
@@ -153,17 +151,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82F9423E-89AD-46EF-A347-6549097B8758}</Project>
-      <Name>DocaLabs.Http.Client.Core</Name>
+      <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj">
       <Project>{41DF1459-0344-4A4C-859F-8185540E3D30}</Project>
       <Name>DocaLabs.Http.Client.Phone</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DocsaLabs.Http.Client.Examples.Core\DocsaLabs.Http.Client.Examples.Core.csproj">
+    <ProjectReference Include="..\DocsaLabs.Http.Client.Examples\DocsaLabs.Http.Client.Examples.csproj">
       <Project>{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}</Project>
-      <Name>DocsaLabs.Http.Client.Examples.Core</Name>
+      <Name>DocsaLabs.Http.Client.Examples</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

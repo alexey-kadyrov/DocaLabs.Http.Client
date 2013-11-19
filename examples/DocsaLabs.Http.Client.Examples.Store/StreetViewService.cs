@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using DocaLabs.Http.Client;
-using DocsaLabs.Http.Client.Examples.Core;
 
 namespace DocsaLabs.Http.Client.Examples.Store
 {

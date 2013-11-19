@@ -3,7 +3,7 @@ using System.Globalization;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
 
-namespace DocsaLabs.Http.Client.Examples.Core.GeoTypes
+namespace DocsaLabs.Http.Client.Examples.GeoTypes
 {
     public struct GeoLocation : IEquatable<GeoLocation>, ICustomValueConverter
     {

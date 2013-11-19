@@ -43,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Core", "src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj", "{82F9423E-89AD-46EF-A347-6549097B8758}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client", "src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj", "{82F9423E-89AD-46EF-A347-6549097B8758}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Phone", "src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj", "{41DF1459-0344-4A4C-859F-8185540E3D30}"
 EndProject
@@ -55,7 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extensions", "extensions", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Utils", "tests\DocaLabs.Test.Utils\DocaLabs.Test.Utils.csproj", "{0FDA939D-D0EB-4BAE-9B6A-3B68379B7838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Examples.Core", "examples\DocsaLabs.Http.Client.Examples.Core\DocsaLabs.Http.Client.Examples.Core.csproj", "{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Examples", "examples\DocsaLabs.Http.Client.Examples\DocsaLabs.Http.Client.Examples.csproj", "{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Examples.DotNet", "examples\DocsaLabs.Http.Client.Examples.DotNet\DocsaLabs.Http.Client.Examples.DotNet.csproj", "{2CF77FD4-D4AC-4705-9C01-F04EDD5B64B9}"
 EndProject

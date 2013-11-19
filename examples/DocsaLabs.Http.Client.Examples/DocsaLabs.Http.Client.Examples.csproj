@@ -8,8 +8,8 @@
     <ProjectGuid>{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocsaLabs.Http.Client.Examples.Core</RootNamespace>
-    <AssemblyName>DocsaLabs.Http.Client.Examples.Core</AssemblyName>
+    <RootNamespace>DocsaLabs.Http.Client.Examples</RootNamespace>
+    <AssemblyName>DocsaLabs.Http.Client.Examples</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -34,9 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
-      <Name>DocaLabs.Http.Client.Core</Name>
+      <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

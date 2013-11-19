@@ -2,8 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using DocsaLabs.Http.Client.Examples.Core;
-using DocsaLabs.Http.Client.Examples.Core.GeoTypes;
+using DocsaLabs.Http.Client.Examples.GeoTypes;
 
 namespace DocsaLabs.Http.Client.Examples.Phone
 {

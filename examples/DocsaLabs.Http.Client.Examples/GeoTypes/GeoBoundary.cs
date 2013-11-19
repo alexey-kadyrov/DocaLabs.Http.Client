@@ -1,6 +1,6 @@
 using System;
 
-namespace DocsaLabs.Http.Client.Examples.Core.GeoTypes
+namespace DocsaLabs.Http.Client.Examples.GeoTypes
 {
     public struct GeoBoundary : IEquatable<GeoBoundary>
     {

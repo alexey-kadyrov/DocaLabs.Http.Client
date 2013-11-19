@@ -1,6 +1,6 @@
-﻿using DocsaLabs.Http.Client.Examples.Core.GeoTypes;
+﻿using DocsaLabs.Http.Client.Examples.GeoTypes;
 
-namespace DocsaLabs.Http.Client.Examples.Core
+namespace DocsaLabs.Http.Client.Examples
 {
     public class StreetViewRequest
     {

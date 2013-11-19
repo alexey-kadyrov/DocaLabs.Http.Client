@@ -3,8 +3,7 @@ using System.IO;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using DocsaLabs.Http.Client.Examples.Core;
-using DocsaLabs.Http.Client.Examples.Core.GeoTypes;
+using DocsaLabs.Http.Client.Examples.GeoTypes;
 
 namespace DocsaLabs.Http.Client.Examples.Store
 {
