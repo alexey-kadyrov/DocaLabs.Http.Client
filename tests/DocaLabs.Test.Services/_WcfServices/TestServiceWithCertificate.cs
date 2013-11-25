@@ -2,10 +2,10 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 
-namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
+namespace DocaLabs.Test.Services._WcfServices
 {
     [ServiceBehavior(AddressFilterMode = AddressFilterMode.Any)]
-    public class TestServiceWithBasicCredentials : ITestService2
+    public class TestServiceWithCertificate : ITestService2
     {
         public DataResponse Get(int value1, string value2)
         {

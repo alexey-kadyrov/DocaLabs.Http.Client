@@ -2,7 +2,7 @@
 using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens;
 
-namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
+namespace DocaLabs.Test.Services._WcfServices
 {
     public class CustomUserNameValidator : UserNamePasswordValidator
     {
@@ -13,7 +13,7 @@ namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
 
             if (!(userName == "testUser" && password == "testPassword"))
             {
-                throw new SecurityTokenException("Unknown Username or Incorrect Password");
+                throw new SecurityTokenException("Unknown User name or Incorrect Password");
             }
         }
     }

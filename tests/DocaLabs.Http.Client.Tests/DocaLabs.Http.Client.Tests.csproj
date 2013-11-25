@@ -157,7 +157,7 @@
       <Project>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</Project>
       <Name>DocaLabs.Http.Client.DotNet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DocaLabs.Testing.Common\DocaLabs.Testing.Common.csproj">
+    <ProjectReference Include="..\DocaLabs.Test.Common\DocaLabs.Testing.Common.csproj">
       <Project>{40A96AE2-C931-4AC1-A38E-5FBB3045216C}</Project>
       <Name>DocaLabs.Testing.Common</Name>
     </ProjectReference>

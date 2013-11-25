@@ -6,7 +6,7 @@ using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.Text;
 
-namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
+namespace DocaLabs.Test.Services._ServiceStackServices
 {
     public class GetUser : IReturn<User>
     {

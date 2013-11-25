@@ -3,15 +3,15 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DocaLabs.Http.Client.Integration.Tests._WcfServices
+namespace DocaLabs.Test.Services._WcfServices
 {
-    class TestServerHost<TService> : IDisposable
+    class WcfServerHost<TService> : IDisposable
     {
         ManualResetEvent ServerReady { get; set; }
         ManualResetEvent StopServer { get; set; }
         ManualResetEvent ServerStopped { get; set; }
 
-        public TestServerHost()
+        public WcfServerHost()
         {
             ServerReady = new ManualResetEvent(false);
             StopServer = new ManualResetEvent(false);

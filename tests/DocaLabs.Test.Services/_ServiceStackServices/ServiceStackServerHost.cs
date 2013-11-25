@@ -4,27 +4,27 @@ using System.Threading.Tasks;
 using Funq;
 using ServiceStack.WebHost.Endpoints;
 
-namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
+namespace DocaLabs.Test.Services._ServiceStackServices
 {
-    class TestServerHost : IDisposable
+    class ServiceStackServerHost : IDisposable
     {
         ManualResetEvent ServerReady { get; set; }
         ManualResetEvent StopServer { get; set; }
         ManualResetEvent ServerStopped { get; set; }
 
-        public TestServerHost()
+        public ServiceStackServerHost()
         {
             ServerReady = new ManualResetEvent(false);
             StopServer = new ManualResetEvent(false);
             ServerStopped = new ManualResetEvent(true);
 
-            Console.WriteLine(@"Starting TestServerHost.");
+            Console.WriteLine(@"Starting ServiceStackServerHost.");
 
             Task.Factory.StartNew(Worker);
 
             ServerReady.WaitOne();
 
-            Console.WriteLine(@"TestServerHost started.");
+            Console.WriteLine(@"ServiceStackServerHost started.");
         }
 
         public void Dispose()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace DocaLabs.Http.Client.Integration.Tests._ServiceStackServices
+namespace DocaLabs.Test.Services._ServiceStackServices
 {
     static class Users
     {
