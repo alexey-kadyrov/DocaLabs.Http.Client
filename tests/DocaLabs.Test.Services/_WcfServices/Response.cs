@@ -2,13 +2,16 @@
 
 namespace DocaLabs.Test.Services._WcfServices
 {
-    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/DocaLabs.Http.Client.Integration.Tests._Service")]
-    public class DataRequest
+    [DataContract(Namespace = "http://docalabshttpclient.codeplex.com/test/data")]
+    public class Response
     {
         [DataMember]
         public int Value1 { get; set; }
 
         [DataMember]
         public string Value2 { get; set; }
+
+        [DataMember]
+        public string[] Headers { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace DocaLabs.Test.Services._ServiceStackServices
 {
-    [XmlRoot(Namespace = "http://schemas.datacontract.org/2004/07/DocaLabs.Http.Client.Integration.Tests._ServiceStackServices")]
+    [XmlRoot(Namespace = "http://docalabshttpclient.codeplex.com/test/data")]
     public class User
     {
         public Guid Id { get; set; }

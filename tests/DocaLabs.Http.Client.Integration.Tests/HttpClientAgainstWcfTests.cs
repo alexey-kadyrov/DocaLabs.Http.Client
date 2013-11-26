@@ -181,6 +181,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             public string Value2 { get; set; }
         }
 
+        [XmlRoot(Namespace = "http://docalabshttpclient.codeplex.com/test/data")]
         public class Response
         {
             public int Value1 { get; set; }
@@ -227,6 +228,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             public string Value2 { get; set; }
         }
 
+        [XmlRoot(Namespace = "http://docalabshttpclient.codeplex.com/test/data")]
         public class Response
         {
             public int Value1 { get; set; }

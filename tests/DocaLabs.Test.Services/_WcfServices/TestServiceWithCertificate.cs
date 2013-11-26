@@ -7,9 +7,9 @@ namespace DocaLabs.Test.Services._WcfServices
     [ServiceBehavior(AddressFilterMode = AddressFilterMode.Any)]
     public class TestServiceWithCertificate : ITestService2
     {
-        public DataResponse Get(int value1, string value2)
+        public Response Get(int value1, string value2)
         {
-            return new DataResponse
+            return new Response
             {
                 Value1 = value1,
                 Value2 = "GET JSON: " + value2,
@@ -17,9 +17,9 @@ namespace DocaLabs.Test.Services._WcfServices
             };
         }
 
-        public DataResponse Post(DataRequest data)
+        public Response Post(Request data)
         {
-            return new DataResponse
+            return new Response
             {
                 Value1 = data.Value1,
                 Value2 = "POST JSON: " + data.Value2,

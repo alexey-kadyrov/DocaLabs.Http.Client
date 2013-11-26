@@ -98,9 +98,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\.certificates\client.pfx">
+    <None Include="..\.certificates\client.pfx">
       <Link>client.pfx</Link>
-    </Content>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="..\.certificates\test-certificate.cer">
       <Link>test-certificate.cer</Link>
     </Content>

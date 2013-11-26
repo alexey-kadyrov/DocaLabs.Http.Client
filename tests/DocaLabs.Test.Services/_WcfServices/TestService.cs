@@ -7,9 +7,9 @@ namespace DocaLabs.Test.Services._WcfServices
     [ServiceBehavior(AddressFilterMode = AddressFilterMode.Any)]
     public class TestService : ITestService
     {
-        public DataResponse GetAsJson(int value1, string value2)
+        public Response GetAsJson(int value1, string value2)
         {
-            return new DataResponse
+            return new Response
             {
                 Value1 = value1,
                 Value2 = "GET JSON: " + value2,
@@ -17,9 +17,9 @@ namespace DocaLabs.Test.Services._WcfServices
             };
         }
 
-        public DataResponse PostAsJson(DataRequest data)
+        public Response PostAsJson(Request data)
         {
-            return new DataResponse
+            return new Response
             {
                 Value1 = data.Value1,
                 Value2 = "POST JSON: " + data.Value2,
@@ -27,9 +27,9 @@ namespace DocaLabs.Test.Services._WcfServices
             };
         }
 
-        public DataResponse EmptyPost(int value1, string value2)
+        public Response EmptyPost(int value1, string value2)
         {
-            return new DataResponse
+            return new Response
             {
                 Value1 = value1,
                 Value2 = "POST EMPTY: " + value2,
@@ -37,9 +37,9 @@ namespace DocaLabs.Test.Services._WcfServices
             };
         }
 
-        public DataResponse GetAsXml(int value1, string value2)
+        public Response GetAsXml(int value1, string value2)
         {
-            return new DataResponse
+            return new Response
             {
                 Value1 = value1,
                 Value2 = "GET XML: " + value2,
@@ -47,9 +47,9 @@ namespace DocaLabs.Test.Services._WcfServices
             };
         }
 
-        public DataResponse PostAsXml(DataRequest data)
+        public Response PostAsXml(Request data)
         {
-            return new DataResponse
+            return new Response
             {
                 Value1 = data.Value1,
                 Value2 = "POST XML: " + data.Value2,
