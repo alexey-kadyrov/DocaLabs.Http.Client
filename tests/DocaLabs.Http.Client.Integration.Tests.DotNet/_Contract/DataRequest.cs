@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Contract
+namespace DocaLabs.Http.Client.Integration.Tests.DotNet._Contract
 {
     [XmlRoot(Namespace = "http://docalabshttpclient.codeplex.com/test/data")]
     public class DataRequest

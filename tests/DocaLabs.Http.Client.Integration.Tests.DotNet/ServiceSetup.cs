@@ -2,7 +2,7 @@
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocaLabs.Http.Client.Integration.Tests
+namespace DocaLabs.Http.Client.Integration.Tests.DotNet
 {
     [TestClass]
     public class ServiceSetup

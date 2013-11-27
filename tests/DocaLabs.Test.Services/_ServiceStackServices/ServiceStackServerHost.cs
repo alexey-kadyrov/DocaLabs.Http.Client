@@ -72,8 +72,8 @@ namespace DocaLabs.Test.Services._ServiceStackServices
             public override void Configure(Container container)
             {
                 Routes
-                    .Add<GetUser>("/v1/users/{id}", "GET")
-                    .Add<GetUser>("/v2/users/{id}", "GET")
+                    .Add<GetUserRequest>("/v1/users/{id}", "GET")
+                    .Add<GetUserRequest>("/v2/users/{id}", "GET")
                     .Add<UpdateUserRequest>("/v2/users", "PUT")
                     .Add<AddUserRequest>("/v2/users", "POST")
                     .Add<AddUserAndReturnDataRequest>("/v2/users-and-return-data", "POST")

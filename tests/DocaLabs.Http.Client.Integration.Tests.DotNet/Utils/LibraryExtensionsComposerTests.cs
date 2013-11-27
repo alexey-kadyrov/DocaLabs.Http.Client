@@ -2,10 +2,8 @@
 using System.ComponentModel.Composition;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
-using Machine.Specifications;
-using Machine.Specifications.Annotations;
 
-namespace DocaLabs.Http.Client.Integration.Tests.Utils
+namespace DocaLabs.Http.Client.Integration.Tests.DotNet.Utils
 {
     [Subject(typeof(LibraryExtensionsComposer))]
     class when_composing_using_default_search_pattern

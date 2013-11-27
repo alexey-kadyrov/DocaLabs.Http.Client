@@ -2,13 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
-using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Configuration;
-using Machine.Specifications;
-using Moq;
-using It = Machine.Specifications.It;
 
-namespace DocaLabs.Http.Client.Integration.Tests.Configuration
+namespace DocaLabs.Http.Client.Integration.Tests.DotNet.Configuration
 {
     /// <summary>
     /// The test installs and then remove the test certificate to Trusted People, verify that the certificate was actually removed after the test

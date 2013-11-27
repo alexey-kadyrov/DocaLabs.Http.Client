@@ -8,8 +8,8 @@
     <ProjectGuid>{A10951A1-8B5D-4518-93D5-C43476A52B41}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocaLabs.Http.Client.Integration.Tests</RootNamespace>
-    <AssemblyName>DocaLabs.Http.Client.Integration.Tests</AssemblyName>
+    <RootNamespace>DocaLabs.Http.Client.Integration.Tests.DotNet</RootNamespace>
+    <AssemblyName>DocaLabs.Http.Client.Integration.Tests.DotNet</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -63,10 +63,11 @@
     <None Include="AsyncHttpClientAgainstServiceStackTests.cs" />
     <None Include="Configuration\ConfigurationExtensionsTests.cs" />
     <None Include="Configuration\RequestExtensionsTests.cs" />
-    <None Include="HttpClientAgainstServiceStackTests.cs" />
+    <Compile Include="HttpClientAgainstServiceStackTests.cs" />
     <Compile Include="HttpClientAgainstWcfTests.cs" />
     <Compile Include="ServiceSetup.cs" />
     <None Include="Utils\LibraryExtensionsComposerTests.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="_Contract\DataRequest.cs" />
     <Compile Include="_Contract\ITestEmptyPostService1.cs" />
     <Compile Include="_Contract\ITestGetService1.cs" />
@@ -102,9 +103,10 @@
       <Link>client.pfx</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\.certificates\test-certificate.cer">
+    <None Include="..\.certificates\test-certificate.cer">
       <Link>test-certificate.cer</Link>
-    </Content>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>

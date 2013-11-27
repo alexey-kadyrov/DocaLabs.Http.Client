@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
-using DocaLabs.Http.Client.Integration.Tests._Utils;
+using DocaLabs.Test.Utils.DotNet;
 
 namespace DocaLabs.Test.Services
 {

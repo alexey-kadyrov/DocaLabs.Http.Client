@@ -1,16 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.Serialization;
-using DocaLabs.Http.Client.Integration.Tests._ServiceStackServices;
-using Machine.Specifications;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Integration.Tests
+namespace DocaLabs.Http.Client.Integration.Tests.DotNet
 {
     [Subject(typeof(AsyncHttpClient<,>))]
     public class when_asynchronously_getting_a_json_object

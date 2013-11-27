@@ -1,21 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using ServiceStack.Common.Web;
-using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.Text;
 
 namespace DocaLabs.Test.Services._ServiceStackServices
 {
-    public class GetUser : IReturn<User>
-    {
-        public Guid Id  { get; set; }
-    }
-
     public class GetUserService : Service
     {
-        public object Get(GetUser request)
+        public object Get(GetUserRequest request)
         {
             if (Request.RawUrl.Contains("/v1/"))
             {

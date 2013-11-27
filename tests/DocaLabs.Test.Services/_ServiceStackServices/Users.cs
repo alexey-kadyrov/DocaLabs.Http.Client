@@ -1,54 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 
 namespace DocaLabs.Test.Services._ServiceStackServices
 {
     static class Users
     {
-        readonly static Random Random;
         public static List<User> Data { get; private set; }
-        public static Dictionary<Guid, string> ETags { get; private set; }
+        public static Dictionary<long, string> ETags { get; private set; }
 
         static Users()
         {
-            Random = new Random();
-
             Data = new List<User>
             {
                 new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 1,
                     FirstName = "John",
                     LastName = "Smith",
                     Email = "john.smith@foo.bar"
                 },
                 new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 2,
                     FirstName = "Michael",
                     LastName = "Goodwill",
                     Email = "michael.goodwill@foo.bar"
                 },
                 new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 3,
                     FirstName = "Daniel",
                     LastName = "Banbury",
                     Email = "daniel.bunbury@foo.bar"
                 }
             };
 
-            ETags = new Dictionary<Guid, string>
+            ETags = new Dictionary<long, string>
             {
-                { Data[0].Id, FakeETag() },
-                { Data[1].Id, FakeETag() }
+                { Data[0].Id, "i1" },
+                { Data[1].Id, "i2" },
+                { Data[2].Id, "i3" }
             };
-        }
-
-        public static string FakeETag()
-        {
-            return DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture) + Random.Next();
         }
     }
 }

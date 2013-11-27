@@ -1,4 +1,4 @@
-﻿namespace DocaLabs.Http.Client.Integration.Tests._Contract
+﻿namespace DocaLabs.Http.Client.Integration.Tests.DotNet._Contract
 {
     public interface ITestEmptyPostService1
     {

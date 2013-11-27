@@ -3,14 +3,12 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Binding.Serialization;
-using DocaLabs.Http.Client.Integration.Tests._Utils;
+using DocaLabs.Http.Client.Integration.Tests.DotNet._Contract;
 using DocaLabs.Test.Utils;
+using DocaLabs.Test.Utils.DotNet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Catch = DocaLabs.Test.Utils.Catch;
-using DataRequest = DocaLabs.Http.Client.Integration.Tests._Contract.DataRequest;
-using DataResponse = DocaLabs.Http.Client.Integration.Tests._Contract.DataResponse;
 
-namespace DocaLabs.Http.Client.Integration.Tests
+namespace DocaLabs.Http.Client.Integration.Tests.DotNet
 {
     [TestClass]
     public class when_getting_http_service_without_any_authentication_which_returns_json_object

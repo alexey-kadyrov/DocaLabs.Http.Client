@@ -1,42 +1,46 @@
 ﻿using System;
-using System.Linq;
+using System.IO;
 using System.Net;
 using System.Text;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.Serialization;
-using DocaLabs.Http.Client.Integration.Tests._ServiceStackServices;
-using Machine.Specifications;
-using System.IO;
+using DocaLabs.Test.Utils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Integration.Tests
+namespace DocaLabs.Http.Client.Integration.Tests.DotNet
 {
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_getting_a_json_object
     {
-        static TestServerHost host;
-        static GetUserRequest request;
-        static IGetUserService client;
-        static User result;
+        static GetUserRequest _request;
+        static IGetUserService _client;
+        static User _result;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new GetUserRequest { Id = Users.Data[0].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new GetUserRequest { Id = 1 };
 
-        Because of =
-            () => result = client.Get(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service_and_return_data =
-            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
-
-        public class GetUserRequest : GetUser
+        static void BecauseOf()
         {
+            _result = _client.Get(_request);
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data()
+        {
+            _result.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
+
+        public class GetUserRequest
+        {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -51,36 +55,42 @@ namespace DocaLabs.Http.Client.Integration.Tests
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_getting_a_json_object_using_canonnical_domain_model_for_input
     {
-        static TestServerHost host;
-        static CanonicalGetUserRequest request;
-        static IGetUserService client;
-        static User result;
+        static CanonicalGetUserRequest _request;
+        static IGetUserService _client;
+        static User _result;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            DefaultRequestBinder.SetModelTransformer(typeof(CanonicalGetUserRequest), c => new GetUserRequest(((CanonicalGetUserRequest)c.OriginalModel).Id));
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new CanonicalGetUserRequest { Id = Users.Data[0].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new CanonicalGetUserRequest { UserId = 1 };
 
-        Because of =
-            () => result = client.Get(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service_and_return_data =
-            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
-
-        public class GetUserRequest : GetUser
+        static void BecauseOf()
         {
+            DefaultRequestBinder.SetModelTransformer(typeof(CanonicalGetUserRequest), c => new GetUserRequest(((CanonicalGetUserRequest)c.OriginalModel).UserId));
+
+            _result = _client.Get(_request);
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data()
+        {
+            _result.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
+
+        public class GetUserRequest
+        {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
-            public GetUserRequest(Guid id)
+            public GetUserRequest(long id)
             {
                 Id = id;
                 Format = "json";
@@ -89,7 +99,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         public class CanonicalGetUserRequest
         {
-            public Guid Id { get; set; }
+            public long UserId { get; set; }
         }
 
         public interface IGetUserService
@@ -98,34 +108,40 @@ namespace DocaLabs.Http.Client.Integration.Tests
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_getting_a_json_object_as_stream
     {
-        static TestServerHost host;
-        static GetUserRequest request;
-        static IGetUserService client;
-        static Stream stream;
+        static GetUserRequest _request;
+        static IGetUserService _client;
+        static Stream _stream;
 
-        Cleanup after_each = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            host.Dispose();
-            stream.Dispose();
-        };
+            _stream.Dispose();
+        }
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new GetUserRequest { Id = Users.Data[0].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new GetUserRequest { Id = 1 };
 
-        Because of =
-            () => stream = client.Get(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service_and_return_data =
-            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        static void BecauseOf()
+        {
+            _stream = _client.Get(_request);
+        }
 
-        static User ToUser()
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data()
+        {
+            StreamToUser(_stream).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
+
+        static User StreamToUser(Stream stream)
         {
             using (var reader = new StreamReader(stream, Encoding.UTF8, true, 4096, true))
             {
@@ -133,8 +149,10 @@ namespace DocaLabs.Http.Client.Integration.Tests
             }
         }
 
-        public class GetUserRequest : GetUser
+        public class GetUserRequest
         {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -149,49 +167,63 @@ namespace DocaLabs.Http.Client.Integration.Tests
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_getting_a_json_object_as_stream_wrapped_in_rich_response
     {
-        static TestServerHost host;
-        static GetUserRequest request;
-        static IGetUserService client;
-        static RichResponse<Stream> result;
+        static GetUserRequest _request;
+        static IGetUserService _client;
+        static RichResponse<Stream> _result;
 
-        Cleanup after_each = () =>
+        [ClassCleanup]
+        public void Cleanup()
         {
-            host.Dispose();
-            result.Value.Dispose();
-        };
+            _result.Value.Dispose();
+        }
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new GetUserRequest { Id = Users.Data[0].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new GetUserRequest { Id = 1 };
 
-        Because of =
-            () => result = client.Get(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service_and_return_data =
-            () => ToUser().ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
-
-        It should_return_etag =
-            () => result.ETag.ShouldEqual(Users.ETags[request.Id]);
-
-        It should_return_200_status_code =
-            () => result.Is(HttpStatusCode.OK);
-
-        static User ToUser()
+        static void BecauseOf()
         {
-            using (var reader = new StreamReader(result.Value, Encoding.UTF8, true, 4096, true))
+            _result = _client.Get(_request);
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data()
+        {
+            StreamToUser(_result.Value).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
+
+        [TestMethod]
+        public void it_should_return_etag()
+        {
+            _result.ETag.ShouldEqual("i1");
+        }
+
+        [TestMethod]
+        public void it_should_return_200_status_code()
+        {
+            _result.Is(HttpStatusCode.OK);
+        }
+
+        static User StreamToUser(Stream stream)
+        {
+            using (var reader = new StreamReader(stream, Encoding.UTF8, true, 4096, true))
             {
                 return JsonConvert.DeserializeObject<User>(reader.ReadToEnd());
             }
         }
 
-        public class GetUserRequest : GetUser
+        public class GetUserRequest
         {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()

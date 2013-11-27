@@ -4,7 +4,7 @@ using System.IO;
 using System.Security;
 using System.Security.Cryptography.X509Certificates;
 
-namespace DocaLabs.Http.Client.Integration.Tests._Utils
+namespace DocaLabs.Test.Utils.DotNet
 {
     public static class CertificateUtils
     {

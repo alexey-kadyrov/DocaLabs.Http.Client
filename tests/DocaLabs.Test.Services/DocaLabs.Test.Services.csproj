@@ -80,7 +80,8 @@
     <Compile Include="_ServiceStackServices\AddUser.cs" />
     <Compile Include="_ServiceStackServices\AddUserAndReturnData.cs" />
     <Compile Include="_ServiceStackServices\DeleteUser.cs" />
-    <Compile Include="_ServiceStackServices\GetUser.cs" />
+    <Compile Include="_ServiceStackServices\GetUserRequest.cs" />
+    <Compile Include="_ServiceStackServices\GetUserService.cs" />
     <Compile Include="_ServiceStackServices\ServiceStackServerHost.cs" />
     <Compile Include="_ServiceStackServices\UpdateUser.cs" />
     <Compile Include="_ServiceStackServices\User.cs" />

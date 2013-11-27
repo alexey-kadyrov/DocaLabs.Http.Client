@@ -51,5 +51,10 @@ namespace DocaLabs.Test.Utils
         {
             CollectionAssert.IsSubsetOf(expected, actual);
         }
+
+        public static void ShouldEqual<T>(this T actual, T expected)
+        {
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

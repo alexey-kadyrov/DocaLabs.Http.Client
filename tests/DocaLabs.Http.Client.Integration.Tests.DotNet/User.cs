@@ -1,4 +1,4 @@
-﻿namespace DocaLabs.Test.Services._ServiceStackServices
+﻿namespace DocaLabs.Http.Client.Integration.Tests.DotNet
 {
     public class User
     {
