@@ -79,11 +79,14 @@
     <Compile Include="ServerCertificateInstaller.cs" />
     <Compile Include="_ServiceStackServices\AddUser.cs" />
     <Compile Include="_ServiceStackServices\AddUserAndReturnData.cs" />
+    <Compile Include="_ServiceStackServices\AddUserAndReturnDataRequest.cs" />
+    <Compile Include="_ServiceStackServices\AddUserRequest.cs" />
     <Compile Include="_ServiceStackServices\DeleteUser.cs" />
     <Compile Include="_ServiceStackServices\GetUserRequest.cs" />
     <Compile Include="_ServiceStackServices\GetUserService.cs" />
     <Compile Include="_ServiceStackServices\ServiceStackServerHost.cs" />
     <Compile Include="_ServiceStackServices\UpdateUser.cs" />
+    <Compile Include="_ServiceStackServices\UpdateUserRequest.cs" />
     <Compile Include="_ServiceStackServices\User.cs" />
     <Compile Include="_ServiceStackServices\Users.cs" />
     <Compile Include="_WcfServices\CustomUserNameValidator.cs" />

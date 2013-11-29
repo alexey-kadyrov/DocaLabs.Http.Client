@@ -5,10 +5,6 @@ using ServiceStack.Text;
 
 namespace DocaLabs.Test.Services._ServiceStackServices
 {
-    public class UpdateUserRequest : User
-    {
-    }
-
     public class UpdateUserService : Service
     {
         public object Put(UpdateUserRequest request)
@@ -21,11 +17,11 @@ namespace DocaLabs.Test.Services._ServiceStackServices
             user.LastName = request.LastName;
             user.Email = request.Email;
 
-            Users.ETags[user.Id] = Users.FakeETag();
+            Users.ETags[user.Id] = "u" + user.Id;
 
             return new HttpResult
             {
-                Headers = { { "ETag", Users.ETags[user.Id] } }
+                Headers = { { "ETag", "u" + user.Id } }
             };
         }
     }

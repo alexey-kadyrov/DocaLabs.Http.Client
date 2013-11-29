@@ -47,6 +47,11 @@ namespace DocaLabs.Test.Utils
             Assert.IsTrue(value);
         }
 
+        public static void ShouldBeFalse(this bool value)
+        {
+            Assert.IsFalse(value);
+        }
+
         public static void ShouldContain<T>(this IEnumerable<T> actual, params T[] expected)
         {
             CollectionAssert.IsSubsetOf(expected, actual);
@@ -55,6 +60,21 @@ namespace DocaLabs.Test.Utils
         public static void ShouldEqual<T>(this T actual, T expected)
         {
             Assert.AreEqual(expected, actual);
+        }
+
+        public static void ShouldBeNull(this object actual)
+        {
+            Assert.IsNull(actual);
+        }
+
+        public static void ShouldNotBeNull(this object actual)
+        {
+            Assert.IsNotNull(actual);
+        }
+
+        public static void ShouldBeEqualIgnoringCase(this string actual, string expected)
+        {
+            StringAssert.AreEqualIgnoringCase(expected, actual);
         }
     }
 }
