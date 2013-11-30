@@ -62,6 +62,7 @@
     <Compile Include="Binding\IRequestBinder.cs" />
     <Compile Include="Binding\IRequestSetup.cs" />
     <Compile Include="Binding\IResponseBinder.cs" />
+    <Compile Include="Binding\IStreamTypeChecker.cs" />
     <Compile Include="Binding\ModelBinders.cs" />
     <Compile Include="Binding\PropertyConverting\ClientPropertyMaps.cs" />
     <Compile Include="Binding\PropertyConverting\CustomPropertyConverterAttribute.cs" />

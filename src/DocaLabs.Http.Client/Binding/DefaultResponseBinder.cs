@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -16,6 +15,7 @@ namespace DocaLabs.Http.Client.Binding
     public class DefaultResponseBinder : IResponseBinder, IAsyncResponseBinder
     {
         static readonly IHttpResponseStreamFactory StreamFactory = PlatformAdapter.Resolve<IHttpResponseStreamFactory>();
+        static readonly IStreamTypeChecker StreamTypeChecker = PlatformAdapter.Resolve<IStreamTypeChecker>();
 
         readonly CustomConcurrentDictionary<Type, Type> _responseTypes;
         IList<IResponseDeserializationProvider> _providers;
@@ -130,7 +130,7 @@ namespace DocaLabs.Http.Client.Binding
                 var deserializer = GetUserSpecifiedDeserializer(context, responseType);
                 if (deserializer == null)
                 {
-                    if (responseType == typeof(Stream) || responseType == typeof(HttpResponseStreamCore))
+                    if (StreamTypeChecker.IsStream(responseType))
                     {
                         var retVal = stream;
                         stream = null;
@@ -213,7 +213,7 @@ namespace DocaLabs.Http.Client.Binding
                     return deserializer.Deserialize(responseStream, resultType);
             }
 
-            if (resultType == typeof(Stream) || resultType == typeof(HttpResponseStreamCore))
+            if (StreamTypeChecker.IsStream(resultType))
                 return responseStream;
 
             if (resultType == typeof(VoidType))

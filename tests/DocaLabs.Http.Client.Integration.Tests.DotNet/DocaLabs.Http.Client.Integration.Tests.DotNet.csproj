@@ -60,7 +60,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <None Include="AsyncHttpClientAgainstServiceStackTests.cs" />
+    <Compile Include="AsyncHttpClientAgainstServiceStackTests.cs" />
     <None Include="Configuration\ConfigurationExtensionsTests.cs" />
     <None Include="Configuration\RequestExtensionsTests.cs" />
     <Compile Include="HttpClientAgainstServiceStackTests.cs" />
@@ -80,6 +80,10 @@
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
       <Project>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</Project>
       <Name>DocaLabs.Http.Client.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Extension.NewtonSoft\DocaLabs.Http.Client.Extension.NewtonSoft.csproj">
+      <Project>{bfc334e3-25e4-4973-89b8-6b25276859b2}</Project>
+      <Name>DocaLabs.Http.Client.Extension.NewtonSoft</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>

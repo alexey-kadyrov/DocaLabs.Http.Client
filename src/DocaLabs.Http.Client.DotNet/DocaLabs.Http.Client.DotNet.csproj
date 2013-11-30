@@ -57,6 +57,7 @@
     <Compile Include="Binding\HttpResponseStreamFactory.cs" />
     <Compile Include="Binding\HttpResponseStream.cs" />
     <Compile Include="Binding\RequestSetupOverride.cs" />
+    <Compile Include="Binding\StreamTypeChecker.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElement.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementCollection.cs" />
     <Compile Include="Configuration\HttpClientEndpointSection.cs" />

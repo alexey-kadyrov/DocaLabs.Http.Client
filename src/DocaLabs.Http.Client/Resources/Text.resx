@@ -148,7 +148,7 @@
     <value>Failed to create Url {0}.</value>
   </data>
   <data name="failed_execute_request" xml:space="preserve">
-    <value>Failed to execute request to {0} ({1})</value>
+    <value>Failed to execute request with base URL {0} for type ({1})</value>
   </data>
   <data name="if_base_class_generic_it_must_have_two_parameters" xml:space="preserve">
     <value>If the base class {0} is generic it must have two generic arguments.</value>

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceInterface;
 using ServiceStack.Text;
 
 namespace DocaLabs.Test.Services._ServiceStackServices
 {
-    public class DeleteUserRequest
-    {
-        public Guid Id { get; set; }
-    }
-
     public class DeleteUserService : Service
     {
         public object Delete(DeleteUserRequest request)

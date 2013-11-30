@@ -31,6 +31,13 @@ namespace DocaLabs.Test.Services._ServiceStackServices
                     FirstName = "Daniel",
                     LastName = "Banbury",
                     Email = "daniel.bunbury@foo.bar"
+                },
+                new User
+                {
+                    Id = 4,
+                    FirstName = "Paul",
+                    LastName = "Joseph",
+                    Email = "paul.joseph@foo.bar"
                 }
             };
 

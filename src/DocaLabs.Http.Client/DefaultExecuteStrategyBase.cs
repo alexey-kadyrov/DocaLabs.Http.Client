@@ -19,23 +19,8 @@ namespace DocaLabs.Http.Client
         /// </summary>
         protected virtual bool CanRetry(Exception e)
         {
-            if(e is ArgumentException)
-                return false;
-
-            if(e is NullReferenceException)
-                return false;
-
-            if(e is NotSupportedException)
-                return false;
-
-            if(e is NotImplementedException)
-                return false;
-
             var webException = e as WebException;
-            if (webException != null)
-                return CanRetry(webException);
-
-            return !(e is HttpClientException);
+            return webException != null && CanRetry(webException);
         }
 
         /// <summary>

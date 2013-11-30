@@ -152,7 +152,7 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to execute request to {0} ({1}).
+        ///   Looks up a localized string similar to Failed to execute request with base URL {0} for type ({1}).
         /// </summary>
         internal static string failed_execute_request {
             get {

@@ -175,7 +175,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         static RichResponse<Stream> _result;
 
         [ClassCleanup]
-        public void Cleanup()
+        public static void Cleanup()
         {
             _result.Value.Dispose();
         }
@@ -271,7 +271,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
             StreamToUser(_stream).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
         }
 
-        static User StreamToUser(HttpResponseStream stream)
+        static User StreamToUser(HttpResponseStreamCore stream)
         {
             return JsonConvert.DeserializeObject<User>(stream.AsString());
         }
@@ -308,7 +308,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
 
         [ClassInitialize]
-        public static void EstablishContext()
+        public static void EstablishContext(TestContext context)
         {
             _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
             _request = new GetUserRequest { Id = 1 };
@@ -1181,136 +1181,161 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_posting_a_conflicting_json_object
     {
-        static TestServerHost host;
-        static AddUserRequest request;
-        static IAddUserService client;
-        static Exception exception;
+        static User _request;
+        static IAddUserService _client;
+        static Exception _exception;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
-            request = new AddUserRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            _request = new User
             {
-                Id = Users.Data[1].Id,
+                Id = 2,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => exception = Catch.Exception(() => client.Add(request));
+            BecauseOf();
+        }
 
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => _client.Add(_request));
+        }
 
-        It should_throw_http_client_web_exception_exception =
-            () => exception.ShouldBeOfType<HttpClientWebException>();
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception()
+        {
+            _exception.ShouldBeOfType<HttpClientWebException>();
+        }
 
-        It should_return_additional_information_about_the_response =
-            () => ((HttpClientWebException)exception).Response.ShouldNotBeNull();
+        [TestMethod]
+        public void it_should_return_additional_information_about_the_response()
+        {
+            ((HttpClientWebException) _exception).Response.ShouldNotBeNull();
+        }
 
-        It should_return_409_status_code =
-            () => ((HttpClientWebException)exception).Response.StatusCode.ShouldEqual(409);
+        [TestMethod]
+        public void it_should_return_409_status_code()
+        {
+            ((HttpClientWebException) _exception).Response.StatusCode.ShouldEqual(409);
+        }
 
-        It should_return_status_description =
-            () => ((HttpClientWebException)exception).Response.StatusDescription.ShouldEqual(string.Format("User {0} already exist.", request.Id));
+        [TestMethod]
+        public void it_should_return_status_description()
+        {
+            ((HttpClientWebException)_exception).Response.StatusDescription.ShouldEqual(string.Format("User {0} already exist.", _request.Id));
+        }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
-            void Add(AddUserRequest request);
+            void Add(User request);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_posting_a_json_object_using_user_object_as_property
     {
-        static TestServerHost host;
-        static AddUserRequestEx request;
-        static IAddUserService client;
+        static AddUserRequest _request;
+        static IAddUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
-            request = new AddUserRequestEx
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
+            _request = new AddUserRequest
             {
                 PathPart = "users",
-                User = new AddUserRequest
+                User = new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 77,
                     FirstName = "New FirstName",
                     LastName = "New LastName",
                     Email = "New Email"
                 }
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == request.User.Id).ShouldMatch(x => x.Id == request.User.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request);
+        }
 
-        public class AddUserRequestEx
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(77);
+            addedUser.ShouldMatch(x => x.Id == 77 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
+
+        public class AddUserRequest
         {
             public string PathPart { get; set; }
             [SerializeAsJson]
-            public AddUserRequest User { get; set; }
+            public User User { get; set; }
         }
 
         public interface IAddUserService
         {
-            void Add(AddUserRequestEx request);
+            void Add(AddUserRequest request);
+        }
+
+        public interface IGetUserService
+        {
+            User Get(long id, string format = "json");
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_posting_a_json_object_using_user_object_as_stream_property
     {
-        static TestServerHost host;
-        static Guid id;
-        static AddUserRequestEx request;
-        static IAddUserService client;
+        static AddUserRequestEx _request;
+        static IAddUserService _client;
 
-        Cleanup after_each = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            request.User.Dispose();
-            host.Dispose();
-        };
+            _request.User.Dispose();
+        }
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Guid.NewGuid();
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
-            request = new AddUserRequestEx
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
+            _request = new AddUserRequestEx
             {
                 PathPart = "users",
-                User = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new AddUserRequest
+                User = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new User
                 {
-                    Id = id,
+                    Id = 78,
                     FirstName = "New FirstName",
                     LastName = "New LastName",
                     Email = "New Email"
                 })))
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request);
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(78);
+            addedUser.ShouldMatch(x => x.Id == 78 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         public class AddUserRequestEx
         {
@@ -1323,141 +1348,179 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         {
             void Add(AddUserRequestEx request);
         }
+
+        public interface IGetUserService
+        {
+            User Get(long id, string format = "json");
+        }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_posting_a_json_object_using_user_object_as_stream
     {
-        static TestServerHost host;
-        static Guid id;
-        static Stream request;
-        static IAddUserService client;
+        static Stream _request;
+        static IAddUserService _client;
 
-        Cleanup after_each = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            request.Dispose();
-            host.Dispose();
-        };
+            _request.Dispose();
+        }
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Guid.NewGuid();
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
-            request = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new AddUserRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            _request = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new User
             {
-                Id = id,
+                Id = 79,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             })));
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request);
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(79);
+            addedUser.ShouldMatch(x => x.Id == 79 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         [SerializeStream(ContentType = "application/json")]
         public interface IAddUserService
         {
             void Add(Stream request);
         }
+
+        public interface IGetUserService
+        {
+            User Get(long id, string format = "json");
+        }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_posting_a_json_object_using_user_object_as_string
     {
-        static TestServerHost host;
-        static Guid id;
-        static string request;
-        static IAddUserService client;
+        static string _request;
+        static IAddUserService _client;
 
-        Cleanup after_each = 
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Guid.NewGuid();
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
-            request = JsonConvert.SerializeObject(new AddUserRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            _request = JsonConvert.SerializeObject(new User
             {
-                Id = id,
+                Id = 80,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             });
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request);
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request);
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(80);
+            addedUser.ShouldMatch(x => x.Id == 80 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         public interface IAddUserService
         {
             void Add([SerializeAsText(ContentType = "application/json")] string request);
         }
-    }
 
-    [Subject(typeof(HttpClient<,>))]
-    public class when_deleting
-    {
-        static TestServerHost host;
-        static DeleteUserRequest request;
-        static IDeleteUserService client;
-
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        public interface IGetUserService
         {
-            client = HttpClientFactory.CreateInstance<IDeleteUserService>("deleteUser");
-            request = new DeleteUserRequest { Id = Users.Data[2].Id };
-            host = new TestServerHost();
-        };
-
-        Because of =
-            () => client.Delete(request);
-
-        It should_call_the_service =
-            () => Users.Data.ShouldNotContain(x => x.Id == request.Id);
-
-        public interface IDeleteUserService
-        {
-            void Delete(DeleteUserRequest request);
+            User Get(long id, string format = "json");
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
-    public class when_executing_request_without_any_parameters_and_return_data
+    [TestClass]
+    public class when_deleting
     {
-        static TestServerHost host;
-        static IDeleteUserService client;
-        static Guid id;
+        static IDeleteUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Users.Data[2].Id;
-            client = HttpClientFactory.CreateInstance<IDeleteUserService>(new Uri(string.Format("http://localhost:1337/v2/users/{0}", id)), "noParametersRequest");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IDeleteUserService>("deleteUser");
 
-        Because of =
-            () => client.Delete();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.ShouldNotContain(x => x.Id == id);
+        static void BecauseOf()
+        {
+            _client.Delete(3);
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(3));
+            exception.ShouldBeOfType<HttpClientException>();
+            exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
+        }
+
+        public interface IDeleteUserService
+        {
+            void Delete(long id);
+        }
+
+        public interface IGetUserService
+        {
+            User Get(long id, string format = "json");
+        }
+    }
+
+    [TestClass]
+    public class when_executing_request_without_any_parameters_and_return_data_relying_on_provided_url
+    {
+        static IDeleteUserService _client;
+
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            _client = HttpClientFactory.CreateInstance<IDeleteUserService>(new Uri(string.Format("http://localhost:1337/v2/users/{0}", 4)), "noParametersRequest");
+
+            BecauseOf();
+        }
+
+        static void BecauseOf()
+        {
+            _client.Delete();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(4));
+            exception.ShouldBeOfType<HttpClientException>();
+            exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
+        }
 
         public interface IDeleteUserService
         {
             void Delete();
+        }
+
+        public interface IGetUserService
+        {
+            User Get(long id, string format = "json");
         }
     }
 }
