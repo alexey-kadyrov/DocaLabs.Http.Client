@@ -906,19 +906,13 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var updatedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(2);
-            updatedUser.ShouldMatch(x => x.Id == _request.Id && x.FirstName == "Updated FirstName" && x.LastName == "Updated LastName" && x.Email == "Updated Email");
+            User.GetExpected(2).ShouldMatch(x => x.Id == _request.Id && x.FirstName == "Updated FirstName" && x.LastName == "Updated LastName" && x.Email == "Updated Email");
         }
 
         [SerializeAsJson]
         public interface IUpdateUserService
         {
             void Update(User request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -952,9 +946,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var updatedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(2);
-
-            updatedUser.ShouldMatch(x => x.Id == _request.Id && x.FirstName == "Updated FirstName 2" && x.LastName == "Updated LastName 2" && x.Email == "Updated Email 2");
+            User.GetExpected(2).ShouldMatch(x => x.Id == _request.Id && x.FirstName == "Updated FirstName 2" && x.LastName == "Updated LastName 2" && x.Email == "Updated Email 2");
         }
 
         [TestMethod]
@@ -973,11 +965,6 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         public interface IUpdateUserService
         {
             RichResponse<VoidType> Update(User request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1010,19 +997,13 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(11);
-            addedUser.ShouldMatch(x => x.Id == 11 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(11).ShouldMatch(x => x.Id == 11 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
             void Add(User request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1095,19 +1076,13 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(13);
-            addedUser.ShouldMatch(x => x.Id == 13 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(13).ShouldMatch(x => x.Id == 13 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
             void Add(User request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1141,8 +1116,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(14);
-            addedUser.ShouldMatch(x => x.Id == 14 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(14).ShouldMatch(x => x.Id == 14 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         [TestMethod]
@@ -1173,11 +1147,6 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         public interface IAddUserService
         {
             RichResponse<VoidType> Add(User request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1272,8 +1241,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(77);
-            addedUser.ShouldMatch(x => x.Id == 77 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(77).ShouldMatch(x => x.Id == 77 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public class AddUserRequest
@@ -1286,11 +1254,6 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         public interface IAddUserService
         {
             void Add(AddUserRequest request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1333,8 +1296,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(78);
-            addedUser.ShouldMatch(x => x.Id == 78 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(78).ShouldMatch(x => x.Id == 78 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public class AddUserRequestEx
@@ -1347,11 +1309,6 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         public interface IAddUserService
         {
             void Add(AddUserRequestEx request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1390,19 +1347,13 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(79);
-            addedUser.ShouldMatch(x => x.Id == 79 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(79).ShouldMatch(x => x.Id == 79 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         [SerializeStream(ContentType = "application/json")]
         public interface IAddUserService
         {
             void Add(Stream request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1435,18 +1386,12 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var addedUser = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(80);
-            addedUser.ShouldMatch(x => x.Id == 80 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(80).ShouldMatch(x => x.Id == 80 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public interface IAddUserService
         {
             void Add([SerializeAsText(ContentType = "application/json")] string request);
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 
@@ -1471,7 +1416,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(3));
+            var exception = Catch.Exception(() => User.GetExpected(3));
             exception.ShouldBeOfType<HttpClientException>();
             exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
         }
@@ -1480,22 +1425,17 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         {
             void Delete(long id);
         }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
-        }
     }
 
     [TestClass]
-    public class when_executing_request_without_any_parameters_and_return_data_relying_on_provided_url
+    public class when_executing_request_without_any_parameters_and_return_data_relying_on_provided_url_alone
     {
         static IDeleteUserService _client;
 
         [ClassInitialize]
         public static void EstablishContext(TestContext context)
         {
-            _client = HttpClientFactory.CreateInstance<IDeleteUserService>(new Uri(string.Format("http://localhost:1337/v2/users/{0}", 4)), "noParametersRequest");
+            _client = HttpClientFactory.CreateInstance<IDeleteUserService>(new Uri("http://localhost:1337/v2/users/4"), "noParametersRequest");
 
             BecauseOf();
         }
@@ -1508,7 +1448,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(4));
+            var exception = Catch.Exception(() => User.GetExpected(4));
             exception.ShouldBeOfType<HttpClientException>();
             exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
         }
@@ -1516,11 +1456,6 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         public interface IDeleteUserService
         {
             void Delete();
-        }
-
-        public interface IGetUserService
-        {
-            User Get(long id, string format = "json");
         }
     }
 }

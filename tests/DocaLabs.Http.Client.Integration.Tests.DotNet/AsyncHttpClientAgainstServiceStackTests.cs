@@ -453,48 +453,54 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(AsyncHttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_getting_a_json_object_as_string
     {
-        static TestServerHost host;
-        static GetUserRequest request;
-        static IGetUserService client;
-        static string result1;
-        static string result2;
+        static GetUserRequest _request;
+        static IGetUserService _client;
+        static string _result1;
+        static string _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new GetUserRequest { Id = Users.Data[0].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new GetUserRequest { Id = 1 };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
+            var allTask = Task.WhenAll(_client.Get(_request), _client.Get(_request));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_data_for_the_first_task =
-            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_first_task()
+        {
+            ToUser(_result1).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
-        It should_call_the_service_and_return_data_for_the_second_task =
-            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_second_task()
+        {
+            ToUser(_result2).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
         static User ToUser(string result)
         {
             return JsonConvert.DeserializeObject<User>(result);
         }
 
-        public class GetUserRequest : GetUser
+        public class GetUserRequest
         {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -509,48 +515,54 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(AsyncHttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_getting_a_json_object_as_string_using_palin_text_deserializer
     {
-        static TestServerHost host;
-        static GetUserRequest request;
-        static IGetUserService client;
-        static string result1;
-        static string result2;
+        static GetUserRequest _request;
+        static IGetUserService _client;
+        static string _result1;
+        static string _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new GetUserRequest { Id = Users.Data[0].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new GetUserRequest { Id = 1 };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
+            var allTask = Task.WhenAll(_client.Get(_request), _client.Get(_request));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_data_for_the_first_task =
-            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_first_task()
+        {
+            ToUser(_result1).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
-        It should_call_the_service_and_return_data_for_the_second_task =
-            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_second_task()
+        {
+            ToUser(_result2).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
         static User ToUser(string result)
         {
             return JsonConvert.DeserializeObject<User>(result);
         }
 
-        public class GetUserRequest : GetUser
+        public class GetUserRequest
         {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -566,48 +578,54 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(AsyncHttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_getting_a_json_object_as_byte_array
     {
-        static TestServerHost host;
-        static GetUserRequest request;
-        static IGetUserService client;
-        static byte[] result1;
-        static byte[] result2;
+        static GetUserRequest _request;
+        static IGetUserService _client;
+        static byte[] _result1;
+        static byte[] _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new GetUserRequest { Id = Users.Data[0].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new GetUserRequest { Id = 1 };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
+            var allTask = Task.WhenAll(_client.Get(_request), _client.Get(_request));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_data_for_the_first_task =
-            () => ToUser(result1).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_first_task()
+        {
+            ToUser(_result1).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
-        It should_call_the_service_and_return_data_for_the_second_task =
-            () => ToUser(result2).ShouldMatch(x => x.Id == request.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_second_task()
+        {
+            ToUser(_result2).ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
         static User ToUser(byte[] result)
         {
             return JsonConvert.DeserializeObject<User>(Encoding.UTF8.GetString(result));
         }
 
-        public class GetUserRequest : GetUser
+        public class GetUserRequest
         {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -622,239 +640,296 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_getting_a_json_object_using_autogenerated_model
     {
-        static TestServerHost host;
-        static IGetUserService client;
-        static User result1;
-        static User result2;
+        static IGetUserService _client;
+        static User _result1;
+        static User _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
+            var allTask = Task.WhenAll(_client.Get(1), _client.Get(1));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_data_for_the_first_task =
-            () => result1.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_first_task()
+        {
+            _result1.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
-        It should_call_the_service_and_return_data_for_the_second_task =
-            () => result2.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_second_task()
+        {
+            _result2.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
         public interface IGetUserService
         {
-            Task<User> Get(Guid id, string format = "json");
+            Task<User> Get(long id, string format = "json");
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_redirected
     {
-        static TestServerHost host;
-        static IGetUserService client;
-        static User result1;
-        static User result2;
+        static IGetUserService _client;
+        static User _result1;
+        static User _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV1");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV1");
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
+            var allTask = Task.WhenAll(_client.Get(1), _client.Get(1));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_data_for_the_first_task =
-            () => result1.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_first_task()
+        {
+            _result1.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
-        It should_call_the_service_and_return_data_for_the_second_task =
-            () => result2.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_second_task()
+        {
+            _result2.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
         public interface IGetUserService
         {
-            Task<User> Get(Guid id, string format = "json");
+            Task<User> Get(long id, string format = "json");
         }
     }
 
-    [Subject(typeof(AsyncHttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_getting_an_xml_object
     {
-        static TestServerHost host;
-        static IGetUserService client;
-        static User result1;
-        static User result2;
+        static IGetUserService _client;
+        static User _result1;
+        static User _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
+            var allTask = Task.WhenAll(_client.Get(1), _client.Get(1));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_data_for_the_first_task =
-            () => result1.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_first_task()
+        {
+            _result1.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
-        It should_call_the_service_and_return_data_for_the_second_task =
-            () => result2.ShouldMatch(x => x.Id == Users.Data[0].Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_second_task()
+        {
+            _result2.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
 
         public interface IGetUserService
         {
-            Task<User> Get(Guid id, string format = "xml");
+            Task<User> Get(long id, string format = "xml");
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_getting_a_json_object_and_rich_response_information
     {
-        static TestServerHost host;
-        static IGetUserService client;
-        static RichResponse<User> result1;
-        static RichResponse<User> result2;
+        static IGetUserService _client;
+        static RichResponse<User> _result1;
+        static RichResponse<User> _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(Users.Data[0].Id), client.Get(Users.Data[0].Id));
+            var allTask = Task.WhenAll(_client.Get(1), _client.Get(1));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_data_for_the_first_task =
-            () => result1.ShouldMatch(x => x.Value.Id == Users.Data[0].Id && x.Value.FirstName == "John" && x.Value.LastName == "Smith" && x.Value.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_first_task()
+        {
+            _result1.ShouldMatch(x => x.Value.Id == 1 && x.Value.FirstName == "John" && x.Value.LastName == "Smith" && x.Value.Email == "john.smith@foo.bar");
+        }
 
-        It should_return_etag_for_the_first_task =
-            () => result1.ETag.ShouldEqual(Users.ETags[Users.Data[0].Id]);
+        [TestMethod]
+        public void it_should_return_etag_for_the_first_task()
+        {
+            _result1.ETag.ShouldEqual("i1");
+        }
 
-        It should_return_custom_header_for_the_first_task =
-            () => result1.Headers["Hello"].ShouldEqual("World!");
+        [TestMethod]
+        public void it_should_return_custom_header_for_the_first_task()
+        {
+            _result1.Headers["Hello"].ShouldEqual("World!");
+        }
 
-        It should_return_200_status_code_for_the_first_task =
-            () => result1.Is(HttpStatusCode.OK);
+        [TestMethod]
+        public void it_should_return_200_status_code_for_the_first_task()
+        {
+            _result1.Is(HttpStatusCode.OK);
+        }
 
-        It should_call_the_service_and_return_data_for_the_second_task =
-            () => result2.ShouldMatch(x => x.Value.Id == Users.Data[0].Id && x.Value.FirstName == "John" && x.Value.LastName == "Smith" && x.Value.Email == "john.smith@foo.bar");
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_the_second_task()
+        {
+            _result2.ShouldMatch(x => x.Value.Id == 1 && x.Value.FirstName == "John" && x.Value.LastName == "Smith" && x.Value.Email == "john.smith@foo.bar");
+        }
 
-        It should_return_etag_for_the_secons_task =
-            () => result2.ETag.ShouldEqual(Users.ETags[Users.Data[0].Id]);
+        [TestMethod]
+        public void it_should_return_etag_for_the_secons_task()
+        {
+            _result2.ETag.ShouldEqual("i1");
+        }
 
-        It should_return_custom_header_for_the_second_task =
-            () => result2.Headers["Hello"].ShouldEqual("World!");
+        [TestMethod]
+        public void it_should_return_custom_header_for_the_second_task()
+        {
+            _result2.Headers["Hello"].ShouldEqual("World!");
+        }
 
-        It should_return_200_status_code_for_the_second_task =
-            () => result2.Is(HttpStatusCode.OK);
+        [TestMethod]
+        public void it_should_return_200_status_code_for_the_second_task()
+        {
+            _result2.Is(HttpStatusCode.OK);
+        }
 
         public interface IGetUserService
         {
-            Task<RichResponse<User>> Get(Guid id, string format = "json");
+            Task<RichResponse<User>> Get(long id, string format = "json");
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_conditionally_getting_a_json_object_using_rich_response
     {
-        static TestServerHost host;
-        static RichRequest<GetUserRequest> request;
-        static IGetUserService client;
-        static RichResponse<User> result1;
-        static RichResponse<User> result2;
+        static RichRequest<GetUserRequest> _request;
+        static IGetUserService _client;
+        static RichResponse<User> _result1;
+        static RichResponse<User> _result2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new RichRequest<GetUserRequest>
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new RichRequest<GetUserRequest>
             {
-                Value = new GetUserRequest { Id = Users.Data[0].Id },
-                IfNoneMatch = Users.ETags[Users.Data[0].Id]
+                Value = new GetUserRequest { Id = 1 },
+                IfNoneMatch = "i1"
             };
-            host = new TestServerHost();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
+            var allTask = Task.WhenAll(_client.Get(_request), _client.Get(_request));
 
             allTask.Wait();
 
-            result1 = allTask.Result[0];
-            result2 = allTask.Result[1];
-        };
+            _result1 = allTask.Result[0];
+            _result2 = allTask.Result[1];
+        }
 
-        It should_call_the_service_and_return_null_data_for_the_first_task =
-            () => result1.Value.ShouldBeNull();
-
-        It should_return_304_status_code_for_the_first_task =
-            () => result1.StatusCode.ShouldEqual(304);
-
-        It should_return_status_description_for_the_first_task =
-            () => result1.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", request.Value.Id));
-
-        It should_return_custom_header_for_the_first_task =
-            () => result1.Headers["Hello"].ShouldEqual("World!");
-
-        It should_call_the_service_and_return_null_data_for_the_second_task =
-            () => result2.Value.ShouldBeNull();
-
-        It should_return_304_status_code_for_the_second_task =
-            () => result2.StatusCode.ShouldEqual(304);
-
-        It should_return_status_description_for_the_second_task =
-            () => result2.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", request.Value.Id));
-
-        It should_return_custom_header_for_the_second_task =
-            () => result2.Headers["Hello"].ShouldEqual("World!");
-
-        public class GetUserRequest : GetUser
+        [TestMethod]
+        public void it_should_call_the_service_and_return_null_data_for_the_first_task()
         {
+            _result1.Value.ShouldBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_return_304_status_code_for_the_first_task()
+        {
+            _result1.StatusCode.ShouldEqual(304);
+        }
+
+        [TestMethod]
+        public void it_should_return_status_description_for_the_first_task()
+        {
+            _result1.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", 1));
+        }
+
+        [TestMethod]
+        public void it_should_return_custom_header_for_the_first_task()
+        {
+            _result1.Headers["Hello"].ShouldEqual("World!");
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service_and_return_null_data_for_the_second_task()
+        {
+            _result2.Value.ShouldBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_return_304_status_code_for_the_second_task()
+        {
+            _result2.StatusCode.ShouldEqual(304);
+        }
+
+        [TestMethod]
+        public void it_should_return_status_description_for_the_second_task()
+        {
+            _result2.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", 1));
+        }
+
+        [TestMethod]
+        public void it_should_return_custom_header_for_the_second_task()
+        {
+            _result2.Headers["Hello"].ShouldEqual("World!");
+        }
+
+        public class GetUserRequest
+        {
+            public long Id { get; set; }
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -869,71 +944,101 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_conditionally_getting_a_json_object_and_not_using_rich_response
     {
-        static TestServerHost host;
-        static RichRequest<GetUserRequest> request;
-        static IGetUserService client;
-        static Exception exception1;
-        static Exception exception2;
+        static RichRequest<GetUserRequest> _request;
+        static IGetUserService _client;
+        static Exception _exception1;
+        static Exception _exception2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request = new RichRequest<GetUserRequest>
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request = new RichRequest<GetUserRequest>
             {
-                Value = new GetUserRequest { Id = Users.Data[0].Id },
-                IfNoneMatch = Users.ETags[Users.Data[0].Id]
+                Value = new GetUserRequest { Id = 1 },
+                IfNoneMatch = "i1"
             };
-            host = new TestServerHost();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(request), client.Get(request));
+            var allTask = Task.WhenAll(_client.Get(_request), _client.Get(_request));
 
             var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
-            exception1 = aggregateException.InnerExceptions[0];
-            exception2 = aggregateException.InnerExceptions[1];
-        };
+            _exception1 = aggregateException.InnerExceptions[0];
+            _exception2 = aggregateException.InnerExceptions[1];
+        }
 
-        It should_throw_http_client_web_exception_exception_for_the_first_task =
-            () => exception1.ShouldBeOfType<HttpClientWebException>();
-
-        It should_return_additional_information_about_the_response_for_the_first_task =
-            () => ((HttpClientWebException)exception1).Response.ShouldNotBeNull();
-
-        It should_return_304_status_code_for_the_first_task =
-            () => ((HttpClientWebException)exception1).Response.StatusCode.ShouldEqual(304);
-
-        It should_return_status_description_for_the_first_task =
-            () => ((HttpClientWebException)exception1).Response.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", request.Value.Id));
-
-        It should_return_custom_header_for_the_first_task =
-            () => ((HttpClientWebException)exception1).Response.Headers["Hello"].ShouldEqual("World!");
-
-        It should_throw_http_client_web_exception_exception_for_the_second_task =
-            () => exception2.ShouldBeOfType<HttpClientWebException>();
-
-        It should_return_additional_information_about_the_response_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.ShouldNotBeNull();
-
-        It should_return_304_status_code_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.StatusCode.ShouldEqual(304);
-
-        It should_return_status_description_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", request.Value.Id));
-
-        It should_return_custom_header_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.Headers["Hello"].ShouldEqual("World!");
-
-        public class GetUserRequest : GetUser
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception_for_the_first_task()
         {
+            _exception1.ShouldBeOfType<HttpClientWebException>();
+        }
+
+        [TestMethod]
+        public void it_should_return_additional_information_about_the_response_for_the_first_task()
+        {
+            ((HttpClientWebException) _exception1).Response.ShouldNotBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_return_304_status_code_for_the_first_task()
+        {
+            ((HttpClientWebException) _exception1).Response.StatusCode.ShouldEqual(304);
+        }
+
+        [TestMethod]
+        public void it_should_return_status_description_for_the_first_task()
+        {
+            ((HttpClientWebException)_exception1).Response.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", 1));
+        }
+
+        [TestMethod]
+        public void it_should_return_custom_header_for_the_first_task()
+        {
+            ((HttpClientWebException) _exception1).Response.Headers["Hello"].ShouldEqual("World!");
+        }
+
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception_for_the_second_task()
+        {
+            _exception2.ShouldBeOfType<HttpClientWebException>();
+        }
+
+        [TestMethod]
+        public void it_should_return_additional_information_about_the_response_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.ShouldNotBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_return_304_status_code_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.StatusCode.ShouldEqual(304);
+        }
+
+        [TestMethod]
+        public void it_should_return_status_description_for_the_second_task()
+        {
+            ((HttpClientWebException)_exception2).Response.StatusDescription.ShouldEqual(string.Format("{0} Not Modified", 1));
+        }
+
+        [TestMethod]
+        public void it_should_return_custom_header_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.Headers["Hello"].ShouldEqual("World!");
+        }
+
+        public class GetUserRequest
+        {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -948,155 +1053,196 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_receiving_404_for_get_request
     {
-        static TestServerHost host;
-        static IGetUserService client;
-        static Exception exception1;
-        static Exception exception2;
+        static IGetUserService _client;
+        static Exception _exception1;
+        static Exception _exception2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(Guid.Empty), client.Get(Guid.Empty));
+            var allTask = Task.WhenAll(_client.Get(-1), _client.Get(-1));
 
             var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
-            exception1 = aggregateException.InnerExceptions[0];
-            exception2 = aggregateException.InnerExceptions[1];
-        };
+            _exception1 = aggregateException.InnerExceptions[0];
+            _exception2 = aggregateException.InnerExceptions[1];
+        }
 
-        It should_throw_http_client_web_exception_exception_for_the_first_task =
-            () => exception1.ShouldBeOfType<HttpClientWebException>();
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception_for_the_first_task()
+        {
+            _exception1.ShouldBeOfType<HttpClientWebException>();
+        }
 
-        It should_return_additional_information_about_the_response_for_the_first_task =
-            () => ((HttpClientWebException)exception1).Response.ShouldNotBeNull();
+        [TestMethod]
+        public void it_should_return_additional_information_about_the_response_for_the_first_task()
+        {
+            ((HttpClientWebException) _exception1).Response.ShouldNotBeNull();
+        }
 
-        It should_return_404_status_code_for_the_first_task =
-            () => ((HttpClientWebException)exception1).Response.StatusCode.ShouldEqual(404);
+        [TestMethod]
+        public void it_should_return_404_status_code_for_the_first_task()
+        {
+            ((HttpClientWebException) _exception1).Response.StatusCode.ShouldEqual(404);
+        }
 
-        It should_return_status_description_for_the_first_task =
-            () => ((HttpClientWebException)exception1).Response.StatusDescription.ShouldEqual("User 00000000-0000-0000-0000-000000000000 does not exist.");
+        [TestMethod]
+        public void it_should_return_status_description_for_the_first_task()
+        {
+            ((HttpClientWebException)_exception1).Response.StatusDescription.ShouldEqual("User -1 does not exist.");
+        }
 
-        It should_throw_http_client_web_exception_exception_for_the_seconds_task =
-            () => exception2.ShouldBeOfType<HttpClientWebException>();
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception_for_the_seconds_task()
+        {
+            _exception2.ShouldBeOfType<HttpClientWebException>();
+        }
 
-        It should_return_additional_information_about_the_response_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.ShouldNotBeNull();
+        [TestMethod]
+        public void it_should_return_additional_information_about_the_response_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.ShouldNotBeNull();
+        }
 
-        It should_return_404_status_code_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.StatusCode.ShouldEqual(404);
+        [TestMethod]
+        public void it_should_return_404_status_code_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.StatusCode.ShouldEqual(404);
+        }
 
-        It should_return_status_description_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.StatusDescription.ShouldEqual("User 00000000-0000-0000-0000-000000000000 does not exist.");
+        [TestMethod]
+        public void it_should_return_status_description_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.StatusDescription.ShouldEqual("User -1 does not exist.");
+        }
 
         public interface IGetUserService
         {
-            Task<User> Get(Guid id, string format = "json");
+            Task<User> Get(long id, string format = "json");
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_querying_wrong_address
     {
-        static TestServerHost host;
-        static IGetUserService client;
-        static Exception exception1;
-        static Exception exception2;
+        static IGetUserService _client;
+        static Exception _exception1;
+        static Exception _exception2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("badGetUserrequest");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("badGetUserrequest");
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var allTask = Task.WhenAll(client.Get(Guid.Empty), client.Get(Guid.Empty));
+            var allTask = Task.WhenAll(_client.Get(-1), _client.Get(-1));
 
             var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
-            exception1 = aggregateException.InnerExceptions[0];
-            exception2 = aggregateException.InnerExceptions[1];
-        };
+            _exception1 = aggregateException.InnerExceptions[0];
+            _exception2 = aggregateException.InnerExceptions[1];
+        }
 
-        It should_throw_http_client_web_exception_exception_for_the_first_task =
-            () => exception1.ShouldBeOfType<HttpClientWebException>();
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception_for_the_first_task()
+        {
+            _exception1.ShouldBeOfType<HttpClientWebException>();
+        }
 
-        It should_throw_http_client_web_exception_exception_for_the_second_task =
-            () => exception2.ShouldBeOfType<HttpClientWebException>();
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception_for_the_second_task()
+        {
+            _exception2.ShouldBeOfType<HttpClientWebException>();
+        }
 
         public interface IGetUserService
         {
-            Task<User> Get(Guid id, string format = "json");
+            Task<User> Get(long id, string format = "json");
         }
     }
 
-    [Subject(typeof(AsyncHttpClient<,>))]
+    [TestClass]
     public class when_one_asynchronous_task_gets_a_json_object_and_another_receives_404
     {
-        static TestServerHost host;
-        static GetUserRequest request1;
-        static GetUserRequest request2;
-        static IGetUserService client;
-        static User result1;
-        static Exception exception2;
+        static GetUserRequest _request1;
+        static GetUserRequest _request2;
+        static IGetUserService _client;
+        static User _result1;
+        static Exception _exception2;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
-            request1 = new GetUserRequest { Id = Users.Data[0].Id };
-            request2 = new GetUserRequest { Id = Guid.Empty };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IGetUserService>("getUserV2");
+            _request1 = new GetUserRequest { Id = 1 };
+            _request2 = new GetUserRequest { Id = -1 };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
             var tasks = new[]
             {
-                client.Get(request1), 
-                client.Get(request2)
+                _client.Get(_request1), 
+                _client.Get(_request2)
             };
             var allTask = Task.WhenAll(tasks);
 
             var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
-            result1 = tasks[0].Result;
-            exception2 = aggregateException.InnerExceptions[0];
-        };
+            _result1 = tasks[0].Result;
+            _exception2 = aggregateException.InnerExceptions[0];
+        }
 
-        It should_call_the_service_and_return_data_for_first_task =
-            () => result1.ShouldMatch(x => x.Id == request1.Id && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
-
-        It should_throw_http_client_web_exception_exception_for_the_seconds_task =
-            () => exception2.ShouldBeOfType<HttpClientWebException>();
-
-        It should_return_additional_information_about_the_response_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.ShouldNotBeNull();
-
-        It should_return_404_status_code_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.StatusCode.ShouldEqual(404);
-
-        It should_return_status_description_for_the_second_task =
-            () => ((HttpClientWebException)exception2).Response.StatusDescription.ShouldEqual("User 00000000-0000-0000-0000-000000000000 does not exist.");
-
-        public class GetUserRequest : GetUser
+        [TestMethod]
+        public void it_should_call_the_service_and_return_data_for_first_task()
         {
+            _result1.ShouldMatch(x => x.Id == 1 && x.FirstName == "John" && x.LastName == "Smith" && x.Email == "john.smith@foo.bar");
+        }
+
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception_for_the_seconds_task()
+        {
+            _exception2.ShouldBeOfType<HttpClientWebException>();
+        }
+
+        [TestMethod]
+        public void it_should_return_additional_information_about_the_response_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.ShouldNotBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_return_404_status_code_for_the_second_task()
+        {
+            ((HttpClientWebException) _exception2).Response.StatusCode.ShouldEqual(404);
+        }
+
+        [TestMethod]
+        public void it_should_return_status_description_for_the_second_task()
+        {
+            ((HttpClientWebException)_exception2).Response.StatusDescription.ShouldEqual("User -1 does not exist.");
+        }
+
+        public class GetUserRequest
+        {
+            public long Id { get; set; }
+
             public string Format { get; set; }
 
             public GetUserRequest()
@@ -1111,331 +1257,385 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_putting_a_json_object
     {
-        static TestServerHost host;
-        static UpdateUserRequest request;
-        static IUpdateUserService client;
+        static User _request;
+        static IUpdateUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IUpdateUserService>("updateUser");
-            request = new UpdateUserRequest
+            _client = HttpClientFactory.CreateInstance<IUpdateUserService>("updateUser");
+            _request = new User
             {
-                Id = Users.Data[1].Id,
-                FirstName = "Updated FirstName",
-                LastName = "Updated LastName",
-                Email = "Updated Email"
+                Id = 2,
+                FirstName = "Asynchronously Updated FirstName",
+                LastName = "Asynchronously Updated LastName",
+                Email = "Asynchronously Updated Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Update(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data[1].ShouldMatch(x => x.Id == request.Id && x.FirstName == "Updated FirstName" && x.LastName == "Updated LastName" && x.Email == "Updated Email");
+        static void BecauseOf()
+        {
+            _client.Update(_request).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var expectedUser = User.GetExpected(2);
+            expectedUser.ShouldMatch(x => x.Id == 2 && x.FirstName == "Asynchronously Updated FirstName" && x.LastName == "Asynchronously Updated LastName" && x.Email == "Asynchronously Updated Email");
+        }
 
         [SerializeAsJson]
         public interface IUpdateUserService
         {
-            Task Update(UpdateUserRequest request);
+            Task Update(User request);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_putting_a_json_object_and_getting_rich_response_information
     {
-        static TestServerHost host;
-        static UpdateUserRequest request;
-        static IUpdateUserService client;
-        static RichResponse<VoidType> result;
+        static User _request;
+        static IUpdateUserService _client;
+        static RichResponse<VoidType> _result;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IUpdateUserService>("updateUser");
-            request = new UpdateUserRequest
+            _client = HttpClientFactory.CreateInstance<IUpdateUserService>("updateUser");
+            _request = new User
             {
-                Id = Users.Data[1].Id,
-                FirstName = "Updated FirstName",
-                LastName = "Updated LastName",
-                Email = "Updated Email"
+                Id = 2,
+                FirstName = "Asynchronously Updated FirstName",
+                LastName = "Asynchronously Updated LastName",
+                Email = "Asynchronously Updated Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => result = client.Update(request).Result;
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data[1].ShouldMatch(x => x.Id == request.Id && x.FirstName == "Updated FirstName" && x.LastName == "Updated LastName" && x.Email == "Updated Email");
+        static void BecauseOf()
+        {
+            _result = _client.Update(_request).Result;
+        }
 
-        It should_return_etag =
-            () => result.ETag.ShouldEqual(Users.ETags[request.Id]);
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(2).ShouldMatch(x => x.Id == _request.Id && x.FirstName == "Asynchronously Updated FirstName" && x.LastName == "Asynchronously Updated LastName" && x.Email == "Asynchronously Updated Email");
+        }
 
-        It should_return_200_status_code =
-            () => result.Is(HttpStatusCode.OK);
+        [TestMethod]
+        public void it_should_return_etag()
+        {
+            _result.ETag.ShouldEqual("u2");
+        }
+
+        [TestMethod]
+        public void it_should_return_200_status_code()
+        {
+            _result.Is(HttpStatusCode.OK);
+        }
 
         [SerializeAsJson]
         public interface IUpdateUserService
         {
-            Task<RichResponse<VoidType>> Update(UpdateUserRequest request);
+            Task<RichResponse<VoidType>> Update(User request);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object
     {
-        static TestServerHost host;
-        static AddUserRequest request;
-        static IAddUserService client;
+        static User _request;
+        static IAddUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
-            request = new AddUserRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            _request = new User
             {
-                Id = Guid.NewGuid(),
+                Id = 142,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(142).ShouldMatch(x => x.Id == 142 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
-            Task Add(AddUserRequest request);
+            Task Add(User request);
         }
     }
 
-    [Subject(typeof(AsyncHttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object_and_getting_data_back
     {
-        static TestServerHost host;
-        static AddUserAndReturnDataRequest request;
-        static IAddUserService client;
-        static User result;
+        static User _request;
+        static IAddUserService _client;
+        static User _result;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
-            request = new AddUserAndReturnDataRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
+            _request = new User
             {
-                Id = Guid.NewGuid(),
+                Id = 143,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => result = client.Add(request).Result;
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _result = _client.Add(_request).Result;
+        }
 
-        It should_return_the_date =
-            () => result.ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(143).ShouldMatch(x => x.Id == 143 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
+
+        [TestMethod]
+        public void it_should_return_the_data()
+        {
+            _result.ShouldMatch(x => x.Id == 143 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
-            Task<User> Add(AddUserAndReturnDataRequest request);
+            Task<User> Add(User request);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object_and_ignoring_retruned_data
     {
-        static TestServerHost host;
-        static AddUserAndReturnDataRequest request;
-        static IAddUserService client;
+        static User _request;
+        static IAddUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EtsblishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
-            request = new AddUserAndReturnDataRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
+            _request = new User
             {
-                Id = Guid.NewGuid(),
+                Id = 144,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(144).ShouldMatch(x => x.Id == 144 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
-            Task Add(AddUserAndReturnDataRequest request);
+            Task Add(User request);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object_and_ignoring_retruned_data_but_getting_additional_information_about_response
     {
-        static TestServerHost host;
-        static AddUserAndReturnDataRequest request;
-        static IAddUserService client;
-        static RichResponse<VoidType> result;
+        static User _request;
+        static IAddUserService _client;
+        static RichResponse<VoidType> _result;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
-            request = new AddUserAndReturnDataRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUserAndReturnData");
+            _request = new User
             {
-                Id = Guid.NewGuid(),
+                Id = 145,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => result = client.Add(request).Result;
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == request.Id).ShouldMatch(x => x.Id == request.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _result = _client.Add(_request).Result;
+        }
 
-        It should_get_response_status =
-            () => result.StatusCode.ShouldEqual(200);
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(145).ShouldMatch(x => x.Id == 145 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
-        It should_get_etag =
-            () => result.ETag.ShouldEqual(Users.ETags[request.Id]);
+        [TestMethod]
+        public void it_should_get_response_status()
+        {
+            _result.StatusCode.ShouldEqual(200);
+        }
 
-        It should_get_content_type =
-            () => result.ContentType.ShouldBeEqualIgnoringCase("application/json");
+        [TestMethod]
+        public void it_should_get_etag()
+        {
+            _result.ETag.ShouldEqual("a145");
+        }
 
-        It should_get_status_description =
-            () => result.StatusDescription.ShouldBeEqualIgnoringCase("OK");
+        [TestMethod]
+        public void it_should_get_content_type()
+        {
+            _result.ContentType.ShouldBeEqualIgnoringCase("application/json");
+        }
+
+        [TestMethod]
+        public void it_should_get_status_description()
+        {
+            _result.StatusDescription.ShouldBeEqualIgnoringCase("OK");
+        }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
-            Task<RichResponse<VoidType>> Add(AddUserAndReturnDataRequest request);
+            Task<RichResponse<VoidType>> Add(User request);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_conflicting_json_object
     {
-        static TestServerHost host;
-        static AddUserRequest request;
-        static IAddUserService client;
-        static Exception exception;
+        static User _request;
+        static IAddUserService _client;
+        static Exception _exception;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
-            request = new AddUserRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            _request = new User
             {
-                Id = Users.Data[1].Id,
+                Id = 2,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => exception = ((AggregateException)Catch.Exception(() => client.Add(request).Wait())).InnerExceptions[0];
+            BecauseOf();
+        }
 
+        static void BecauseOf()
+        {
+            _exception = ((AggregateException) Catch.Exception(() => _client.Add(_request).Wait())).InnerExceptions[0];
+        }
 
-        It should_throw_http_client_web_exception_exception =
-            () => exception.ShouldBeOfType<HttpClientWebException>();
+        [TestMethod]
+        public void it_should_throw_http_client_web_exception_exception()
+        {
+            _exception.ShouldBeOfType<HttpClientWebException>();
+        }
 
-        It should_return_additional_information_about_the_response =
-            () => ((HttpClientWebException)exception).Response.ShouldNotBeNull();
+        [TestMethod]
+        public void it_should_return_additional_information_about_the_response()
+        {
+            ((HttpClientWebException) _exception).Response.ShouldNotBeNull();
+        }
 
-        It should_return_409_status_code =
-            () => ((HttpClientWebException)exception).Response.StatusCode.ShouldEqual(409);
+        [TestMethod]
+        public void it_should_return_409_status_code()
+        {
+            ((HttpClientWebException) _exception).Response.StatusCode.ShouldEqual(409);
+        }
 
-        It should_return_status_description =
-            () => ((HttpClientWebException)exception).Response.StatusDescription.ShouldEqual(string.Format("User {0} already exist.", request.Id));
+        [TestMethod]
+        public void it_should_return_status_description()
+        {
+            ((HttpClientWebException)_exception).Response.StatusDescription.ShouldEqual(string.Format("User {0} already exist.", _request.Id));
+        }
 
         [SerializeAsJson]
         public interface IAddUserService
         {
-            Task Add(AddUserRequest request);
+            Task Add(User request);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object_using_user_object_as_property
     {
-        static TestServerHost host;
-        static AddUserRequestEx request;
-        static IAddUserService client;
+        static AddUserRequestEx _request;
+        static IAddUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
-            request = new AddUserRequestEx
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
+            _request = new AddUserRequestEx
             {
                 PathPart = "users",
-                User = new AddUserRequest
+                User = new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = 146,
                     FirstName = "New FirstName",
                     LastName = "New LastName",
                     Email = "New Email"
                 }
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == request.User.Id).ShouldMatch(x => x.Id == request.User.Id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(146).ShouldMatch(x => x.Id == 146 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         public class AddUserRequestEx
         {
             public string PathPart { get; set; }
             [SerializeAsJson]
-            public AddUserRequest User { get; set; }
+            public User User { get; set; }
         }
 
         public interface IAddUserService
@@ -1444,47 +1644,52 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object_using_user_object_as_stream_property
     {
-        static TestServerHost host;
-        static Guid id;
-        static AddUserRequestEx request;
-        static IAddUserService client;
+        static AddUserRequestEx _request;
+        static IAddUserService _client;
 
-        Cleanup after_each = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            request.User.Dispose();
-            host.Dispose();
-        };
+            _request.User.Dispose();
+        }
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Guid.NewGuid();
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
-            request = new AddUserRequestEx
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUserEx");
+            _request = new AddUserRequestEx
             {
                 PathPart = "users",
-                User = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new AddUserRequest
+                User = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new User
                 {
-                    Id = id,
+                    Id = 147,
                     FirstName = "New FirstName",
                     LastName = "New LastName",
                     Email = "New Email"
                 })))
             };
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(147).ShouldMatch(x => x.Id == 147 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         public class AddUserRequestEx
         {
             public string PathPart { get; set; }
+
             [SerializeAsJson]
             public Stream User { get; set; }
         }
@@ -1495,39 +1700,43 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object_using_user_object_as_stream
     {
-        static TestServerHost host;
-        static Guid id;
-        static Stream request;
-        static IAddUserService client;
+        static Stream _request;
+        static IAddUserService _client;
 
-        Cleanup after_each = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            request.Dispose();
-            host.Dispose();
-        };
+            _request.Dispose();
+        }
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Guid.NewGuid();
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
-            request = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new AddUserRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            _request = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new User
             {
-                Id = id,
+                Id = 148,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             })));
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(148).ShouldMatch(x => x.Id == 148 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         [SerializeStream(ContentType = "application/json")]
         public interface IAddUserService
@@ -1536,36 +1745,37 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_posting_a_json_object_using_user_object_as_string
     {
-        static TestServerHost host;
-        static Guid id;
-        static string request;
-        static IAddUserService client;
+        static string _request;
+        static IAddUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Guid.NewGuid();
-            client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
-            request = JsonConvert.SerializeObject(new AddUserRequest
+            _client = HttpClientFactory.CreateInstance<IAddUserService>("addUser");
+            _request = JsonConvert.SerializeObject(new User
             {
-                Id = id,
+                Id = 149,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
             });
-            host = new TestServerHost();
-        };
 
-        Because of =
-            () => client.Add(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.First(x => x.Id == id).ShouldMatch(x => x.Id == id && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        static void BecauseOf()
+        {
+            _client.Add(_request).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            User.GetExpected(149).ShouldMatch(x => x.Id == 149 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+        }
 
         public interface IAddUserService
         {
@@ -1573,57 +1783,63 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
+    [TestClass]
     public class when_asynchronously_deleting
     {
-        static TestServerHost host;
-        static DeleteUserRequest request;
-        static IDeleteUserService client;
+        static IDeleteUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            client = HttpClientFactory.CreateInstance<IDeleteUserService>("deleteUser");
-            request = new DeleteUserRequest { Id = Users.Data[2].Id };
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IDeleteUserService>("deleteUser");
 
-        Because of =
-            () => client.Delete(request).Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.ShouldNotContain(x => x.Id == request.Id);
+        static void BecauseOf()
+        {
+            _client.Delete(5).Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var exception = Catch.Exception(() => User.GetExpected(5));
+            exception.ShouldBeOfType<HttpClientException>();
+            exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
+        }
 
         public interface IDeleteUserService
         {
-            Task Delete(DeleteUserRequest request);
+            Task Delete(long id);
         }
     }
 
-    [Subject(typeof(HttpClient<,>))]
-    public class when_asynchronously_executing_request_without_any_parameters_and_return_data
+    [TestClass]
+    public class when_asynchronously_executing_request_without_any_parameters_and_return_data_relying_on_the_url_alone
     {
-        static TestServerHost host;
-        static IDeleteUserService client;
-        static Guid id;
+        static IDeleteUserService _client;
 
-        Cleanup after_each =
-            () => host.Dispose();
-
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            id = Users.Data[2].Id;
-            client = HttpClientFactory.CreateInstance<IDeleteUserService>(new Uri(string.Format("http://localhost:1337/v2/users/{0}", id)), "noParametersRequest");
-            host = new TestServerHost();
-        };
+            _client = HttpClientFactory.CreateInstance<IDeleteUserService>(new Uri("http://localhost:1337/v2/users/6"), "noParametersRequest");
 
-        Because of =
-            () => client.Delete().Wait();
+            BecauseOf();
+        }
 
-        It should_call_the_service =
-            () => Users.Data.ShouldNotContain(x => x.Id == id);
+        static void BecauseOf()
+        {
+            _client.Delete().Wait();
+        }
+
+        [TestMethod]
+        public void it_should_call_the_service()
+        {
+            var exception = Catch.Exception(() => User.GetExpected(6));
+            exception.ShouldBeOfType<HttpClientException>();
+            exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
+        }
 
         public interface IDeleteUserService
         {

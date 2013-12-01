@@ -9,5 +9,15 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+
+        public static User GetExpected(long id)
+        {
+            return HttpClientFactory.CreateInstance<IGetUserService>("getUserV2").Get(id);
+        }
+
+        public interface IGetUserService
+        {
+            User Get(long id, string format = "json");
+        }
     }
 }
