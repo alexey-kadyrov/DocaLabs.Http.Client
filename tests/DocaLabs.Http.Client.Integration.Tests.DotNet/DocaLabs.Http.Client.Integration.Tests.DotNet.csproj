@@ -66,7 +66,6 @@
     <Compile Include="HttpClientAgainstServiceStackTests.cs" />
     <Compile Include="HttpClientAgainstWcfTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ServiceSetup.cs" />
     <Compile Include="Utils\LibraryExtensionsComposerTests.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,7 +120,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)tests\DocaLabs.Test.Services\bin\$(ConfigurationName)\*.*" "$(TargetDir)ServiceHost\" /q /i /s /e /y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

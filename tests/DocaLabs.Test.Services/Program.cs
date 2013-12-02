@@ -9,24 +9,39 @@ namespace DocaLabs.Test.Services
     {
         static void Main(params string [] args)
         {
-            if(args.Length != 1 || string.IsNullOrWhiteSpace(args[0]))
-                throw new ArgumentNullException("args", "There must be one argument with the non blank name of the quit event wait handle");
-
             using (ServerCertificateInstaller.Install())
             using (new ServiceStackServerHost())
             using (new WcfServerHost<TestService>())
             using (new WcfServerHost<TestServiceWithBasicCredentials>())
             using (new WcfServerHost<TestServiceWithCertificate>())
             {
-                WaitQuitEvent(args[0]);
+                Console.WriteLine();
+                Console.WriteLine(" -- press any key to quit.");
+                Console.WriteLine();
+
+                WaitQuitEvent(args.Length == 1 && !string.IsNullOrWhiteSpace(args[0]) ? args[0] : "DocaLabs.Test.Services.QuitEvent");
             }
         }
 
         static void WaitQuitEvent(string quitEventName)
         {
-            using (var quitEvent = EventWaitHandle.OpenExisting(quitEventName))
+            EventWaitHandle quitEvent;
+            if (!EventWaitHandle.TryOpenExisting(quitEventName, out quitEvent))
             {
-                quitEvent.WaitOne(TimeSpan.FromMinutes(10));
+                Console.ReadKey();
+                return;
+            }
+
+            using (quitEvent)
+            {
+                while (true)
+                {
+                    if (quitEvent.WaitOne(TimeSpan.FromMilliseconds(200)))
+                        return;
+
+                    if (Console.KeyAvailable)
+                        return;
+                }
             }
         }
     }

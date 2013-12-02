@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using DocaLabs.Http.Client.Utils;
 using NUnit.Framework;
@@ -57,6 +58,13 @@ namespace DocaLabs.Test.Utils
             CollectionAssert.IsSubsetOf(expected, actual);
         }
 
+        public static void ShouldContain<T>(this IEnumerable<T> actual, Expression<Func<T, bool>> condition)
+        {
+            var compiledCondition = condition.Compile();
+            if(!actual.Any(compiledCondition.Invoke))
+                throw new Exception(string.Format("Should contain item matching expression [{0}], but does not.", condition));
+        }
+
         public static void ShouldEqual<T>(this T actual, T expected)
         {
             Assert.AreEqual(expected, actual);
@@ -75,6 +83,16 @@ namespace DocaLabs.Test.Utils
         public static void ShouldBeEqualIgnoringCase(this string actual, string expected)
         {
             StringAssert.AreEqualIgnoringCase(expected, actual);
+        }
+
+        public static void ShouldNotBeEmpty(this string actual)
+        {
+            Assert.IsNotEmpty(actual);
+        }
+
+        public static void ShouldNotBeEmpty<T>(this T actual) where T : IEnumerable<T>
+        {
+            Assert.IsNotEmpty(actual);
         }
     }
 }
