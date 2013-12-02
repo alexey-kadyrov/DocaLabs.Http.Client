@@ -61,20 +61,15 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AsyncHttpClientAgainstServiceStackTests.cs" />
-    <None Include="Configuration\ConfigurationExtensionsTests.cs" />
-    <None Include="Configuration\RequestExtensionsTests.cs" />
+    <Compile Include="Configuration\ConfigurationExtensionsTests.cs" />
+    <Compile Include="Configuration\RequestSetupTests.cs" />
     <Compile Include="HttpClientAgainstServiceStackTests.cs" />
     <Compile Include="HttpClientAgainstWcfTests.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ServiceSetup.cs" />
-    <None Include="Utils\LibraryExtensionsComposerTests.cs" />
+    <Compile Include="Utils\LibraryExtensionsComposerTests.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="_Contract\DataRequest.cs" />
-    <Compile Include="_Contract\ITestEmptyPostService1.cs" />
-    <Compile Include="_Contract\ITestGetService1.cs" />
-    <Compile Include="_Contract\ITestPostJsonService1.cs" />
-    <Compile Include="_Contract\ITestPostXmlService1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_Contract\DataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
@@ -88,6 +83,10 @@
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
       <Name>DocaLabs.Http.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DocaLabs.Http.Client.Extension.Test.Example\DocaLabs.Http.Client.Extension.Test.Example.csproj">
+      <Project>{07ff9ea5-faa8-433a-95ef-b7a9da2efff6}</Project>
+      <Name>DocaLabs.Http.Client.Extension.Test.Example</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Test.Common\DocaLabs.Testing.Common.csproj">
       <Project>{40A96AE2-C931-4AC1-A38E-5FBB3045216C}</Project>

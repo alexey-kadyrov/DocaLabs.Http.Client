@@ -3,7 +3,6 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Binding.Serialization;
-using DocaLabs.Http.Client.Integration.Tests.DotNet._Contract;
 using DocaLabs.Test.Utils;
 using DocaLabs.Test.Utils.DotNet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -390,7 +389,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
 
         static void BecauseOf()
         {
-            _exception = Catch.Exception(() => _client.Post(new DataRequest { Value1 = 42, Value2 = "Hello World!" }));
+            _exception = Catch.Exception(() => _client.Post(new Request { Value1 = 42, Value2 = "Hello World!" }));
         }
 
         [TestMethod]
@@ -408,7 +407,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [SerializeAsJson]
         public interface IService
         {
-            DataResponse Post(DataRequest query);
+           Response Post(Request query);
         }
 
         public class Request

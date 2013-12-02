@@ -43,14 +43,10 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ITestImport1.cs" />
+    <Compile Include="ITestImport2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestIJsonSerializer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
-      <Project>{b3ee3b7a-05e3-4b0e-9c56-476be4354eeb}</Project>
-      <Name>DocaLabs.Http.Client.DotNet</Name>
-    </ProjectReference>
+    <Compile Include="TestImport1.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

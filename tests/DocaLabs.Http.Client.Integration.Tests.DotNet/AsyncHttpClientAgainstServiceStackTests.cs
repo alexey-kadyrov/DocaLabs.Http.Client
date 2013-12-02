@@ -1269,7 +1269,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
             _client = HttpClientFactory.CreateInstance<IUpdateUserService>("updateUser");
             _request = new User
             {
-                Id = 2,
+                Id = 2002,
                 FirstName = "Asynchronously Updated FirstName",
                 LastName = "Asynchronously Updated LastName",
                 Email = "Asynchronously Updated Email"
@@ -1286,8 +1286,8 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var expectedUser = User.GetExpected(2);
-            expectedUser.ShouldMatch(x => x.Id == 2 && x.FirstName == "Asynchronously Updated FirstName" && x.LastName == "Asynchronously Updated LastName" && x.Email == "Asynchronously Updated Email");
+            var expectedUser = User.GetExpected(2002);
+            expectedUser.ShouldMatch(x => x.Id == 2002 && x.FirstName == "Asynchronously Updated FirstName" && x.LastName == "Asynchronously Updated LastName" && x.Email == "Asynchronously Updated Email");
         }
 
         [SerializeAsJson]
@@ -1310,10 +1310,10 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
             _client = HttpClientFactory.CreateInstance<IUpdateUserService>("updateUser");
             _request = new User
             {
-                Id = 2,
-                FirstName = "Asynchronously Updated FirstName",
-                LastName = "Asynchronously Updated LastName",
-                Email = "Asynchronously Updated Email"
+                Id = 3002,
+                FirstName = "Asynchronously Updated FirstName 2",
+                LastName = "Asynchronously Updated LastName 2",
+                Email = "Asynchronously Updated Email 2"
             };
 
             BecauseOf();
@@ -1327,13 +1327,13 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(2).ShouldMatch(x => x.Id == _request.Id && x.FirstName == "Asynchronously Updated FirstName" && x.LastName == "Asynchronously Updated LastName" && x.Email == "Asynchronously Updated Email");
+            User.GetExpected(3002).ShouldMatch(x => x.Id == 3002 && x.FirstName == "Asynchronously Updated FirstName 2" && x.LastName == "Asynchronously Updated LastName 2" && x.Email == "Asynchronously Updated Email 2");
         }
 
         [TestMethod]
         public void it_should_return_etag()
         {
-            _result.ETag.ShouldEqual("u2");
+            _result.ETag.ShouldEqual("u3002");
         }
 
         [TestMethod]

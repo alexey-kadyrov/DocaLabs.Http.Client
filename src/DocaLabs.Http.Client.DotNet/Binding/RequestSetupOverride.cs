@@ -49,7 +49,7 @@ namespace DocaLabs.Http.Client.Binding
             if (httpRequest == null)
                 return;
 
-            foreach (IClientCertificateReference certRef in endpoint.ClientCertificates)
+            foreach (var certRef in endpoint.ClientCertificates)
                 httpRequest.ClientCertificates.AddRange(certRef.Find());
         }
 

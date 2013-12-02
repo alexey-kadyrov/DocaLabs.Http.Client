@@ -1,183 +1,255 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using DocaLabs.Http.Client.Extension.Test.Example;
+using DocaLabs.Http.Client.Integration.Tests.DotNet.Annotations;
 using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.JsonSerialization;
+using DocaLabs.Test.Utils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DocaLabs.Http.Client.Integration.Tests.DotNet.Utils
 {
-    [Subject(typeof(LibraryExtensionsComposer))]
-    class when_composing_using_default_search_pattern
+    [TestClass]
+    public class when_composing_using_default_search_pattern
     {
-        static LibraryExtensionsComposer composer;
-        static ExtensionLoader extension_loader;
+        static LibraryExtensionsComposer _composer;
+        static ExtensionLoader _extensionLoader;
 
-        Cleanup after_each =
-            () => composer.Dispose();
-
-        Establish context = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            composer = new LibraryExtensionsComposer();
-            extension_loader = new ExtensionLoader();
-        };
+            _composer.Dispose();
+        }
 
-        Because of =
-            () => composer.ComposePartsFor(extension_loader);
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            _composer = new LibraryExtensionsComposer();
+            _extensionLoader = new ExtensionLoader();
 
-        It should_load_existing_extension =
-            () => extension_loader.SerializerExtension.ShouldNotBeNull();
+            BecauseOf();
+        }
 
-        It should_not_load_existing_which_does_not_extension =
-            () => extension_loader.DeserializerExtension.ShouldBeNull();
+        static void BecauseOf()
+        {
+            _composer.ComposePartsFor(_extensionLoader);
+        }
+
+        [TestMethod]
+        public void it_should_load_existing_extension()
+        {
+            _extensionLoader.TestImportExtension1.ShouldNotBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_not_load_existing_which_does_not_extension()
+        {
+            _extensionLoader.TestImportExtension2.ShouldBeNull();
+        }
 
         class ExtensionLoader
         {
             [Import(AllowDefault = true)]
-            public IJsonSerializer SerializerExtension { get; set; }
+            public ITestImport1 TestImportExtension1 { get; set; }
 
             [Import(AllowDefault = true)]
-            public IJsonDeserializer DeserializerExtension { get; set; }
+            public ITestImport2 TestImportExtension2 { get; set; }
         }
     }
 
-    [Subject(typeof(LibraryExtensionsComposer))]
-    class when_composing_using_specified_search_pattern
+    [TestClass]
+    public class when_composing_using_specified_search_pattern
     {
-        static LibraryExtensionsComposer composer;
-        static ExtensionLoader extension_loader;
+        static LibraryExtensionsComposer _composer;
+        static ExtensionLoader _extensionLoader;
 
-        Cleanup after_each =
-            () => composer.Dispose();
-
-        Establish context = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            composer = new LibraryExtensionsComposer("DocaLabs.Http.Client.Extension.Test.Example.dll");
-            extension_loader = new ExtensionLoader();
-        };
+            _composer.Dispose();
+        }
 
-        Because of =
-            () => composer.ComposePartsFor(extension_loader);
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            _composer = new LibraryExtensionsComposer("DocaLabs.Http.Client.Extension.Test.Example.dll");
+            _extensionLoader = new ExtensionLoader();
 
-        It should_load_existing_extension =
-            () => extension_loader.SerializerExtension.ShouldNotBeNull();
+            BecauseOf();
+        }
 
-        It should_not_load_existing_which_does_not_extension =
-            () => extension_loader.DeserializerExtension.ShouldBeNull();
+        static void BecauseOf()
+        {
+            _composer.ComposePartsFor(_extensionLoader);
+        }
+
+        [TestMethod]
+        public void it_should_load_existing_extension()
+        {
+            _extensionLoader.TestImportExtension1.ShouldNotBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_not_load_existing_which_does_not_extension()
+        {
+            _extensionLoader.TestImportExtension2.ShouldBeNull();
+        }
 
         class ExtensionLoader
         {
             [Import(AllowDefault = true)]
-            public IJsonSerializer SerializerExtension { get; set; }
+            public ITestImport1 TestImportExtension1 { get; set; }
 
             [Import(AllowDefault = true)]
-            public IJsonDeserializer DeserializerExtension { get; set; }
+            public ITestImport2 TestImportExtension2 { get; set; }
         }
     }
 
-    [Subject(typeof(LibraryExtensionsComposer))]
-    class when_composing_with_non_existing_extensions_for_required_import_from_existing_assembly
+    [TestClass]
+    public class when_composing_with_non_existing_extensions_for_required_import_from_existing_assembly
     {
-        static LibraryExtensionsComposer composer;
-        static ExtensionLoader extension_loader;
-        static Exception exception;
+        static LibraryExtensionsComposer _composer;
+        static ExtensionLoader _extensionLoader;
+        static Exception _exception;
 
-        Cleanup after_each =
-            () => composer.Dispose();
-
-        Establish context = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            composer = new LibraryExtensionsComposer();
-            extension_loader = new ExtensionLoader();
-        };
+            _composer.Dispose();
+        }
 
-        Because of =
-            () => exception = Catch.Exception(() => composer.ComposePartsFor(extension_loader));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            _composer = new LibraryExtensionsComposer();
+            _extensionLoader = new ExtensionLoader();
 
-        It should_throw_composition_exception =
-            () => exception.ShouldBeOfType<CompositionException>();
+            BecauseOf();
+        }
+
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => _composer.ComposePartsFor(_extensionLoader));
+        }
+
+        [TestMethod]
+        public void it_should_throw_composition_exception()
+        {
+            _exception.ShouldBeOfType<CompositionException>();
+        }
 
         class ExtensionLoader
         {
             [Import(AllowDefault = true)]
-            public IJsonSerializer SerializerExtension { [UsedImplicitly] get; set; }
+            public ITestImport1 TestImportExtension1 { [UsedImplicitly] get; set; }
 
             [Import(AllowDefault = false)]
-            public IJsonDeserializer DeserializerExtension { [UsedImplicitly] get; set; }
+            public ITestImport2 TestImportExtension2 { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(LibraryExtensionsComposer))]
-    class when_composing_with_non_existing_assembly_for_required_import
+    [TestClass]
+    public class when_composing_with_non_existing_assembly_for_required_import
     {
-        static LibraryExtensionsComposer composer;
-        static ExtensionLoader extension_loader;
-        static Exception exception;
+        static LibraryExtensionsComposer _composer;
+        static ExtensionLoader _extensionLoader;
+        static Exception _exception;
 
-        Cleanup after_each =
-            () => composer.Dispose();
-
-        Establish context = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            composer = new LibraryExtensionsComposer("some-non-existent-assembly");
-            extension_loader = new ExtensionLoader();
-        };
+            _composer.Dispose();
+        }
 
-        Because of =
-            () => exception = Catch.Exception(() => composer.ComposePartsFor(extension_loader));
+        [ClassInitialize]
+        public static void EstablisContext(TestContext context)
+        {
+            _composer = new LibraryExtensionsComposer("some-non-existent-assembly");
+            _extensionLoader = new ExtensionLoader();
 
-        It should_throw_composition_exception =
-            () => exception.ShouldBeOfType<CompositionException>();
+            BecauseOf();
+        }
+
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => _composer.ComposePartsFor(_extensionLoader));
+        }
+
+        [TestMethod]
+        public void it_should_throw_composition_exception()
+        {
+            _exception.ShouldBeOfType<CompositionException>();
+        }
 
         class ExtensionLoader
         {
             [Import(AllowDefault = false)]
-            public IJsonSerializer SerializerExtension { [UsedImplicitly] get; set; }
+            public ITestImport1 TestImportExtension1 { [UsedImplicitly] get; set; }
 
             [Import(AllowDefault = false)]
-            public IJsonDeserializer DeserializerExtension { [UsedImplicitly] get; set; }
+            public ITestImport2 TestImportExtension2 { [UsedImplicitly] get; set; }
         }
     }
 
-    [Subject(typeof(LibraryExtensionsComposer))]
-    class when_composing_with_non_existing_assembly_for_optional_import
+    [TestClass]
+    public class when_composing_with_non_existing_assembly_for_optional_import
     {
-        static LibraryExtensionsComposer composer;
-        static ExtensionLoader extension_loader;
+        static LibraryExtensionsComposer _composer;
+        static ExtensionLoader _extensionLoader;
 
-        Cleanup after_each =
-            () => composer.Dispose();
-
-        Establish context = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            composer = new LibraryExtensionsComposer("some-non-existent-assembly");
-            extension_loader = new ExtensionLoader();
-        };
+            _composer.Dispose();
+        }
 
-        Because of =
-            () => composer.ComposePartsFor(extension_loader);
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            _composer = new LibraryExtensionsComposer("some-non-existent-assembly");
+            _extensionLoader = new ExtensionLoader();
 
-        It should_not_load_extension =
-            () => extension_loader.SerializerExtension.ShouldBeNull();
+            BecauseOf();
+        }
+
+        static void BecauseOf()
+        {
+            _composer.ComposePartsFor(_extensionLoader);
+        }
+
+        [TestMethod]
+        public void it_should_not_load_extension()
+        {
+            _extensionLoader.TestImportExtension1.ShouldBeNull();
+        }
 
         class ExtensionLoader
         {
             [Import(AllowDefault = true)]
-            public IJsonSerializer SerializerExtension { get; set; }
+            public ITestImport1 TestImportExtension1 { get; set; }
         }
     }
 
-    [Subject(typeof(LibraryExtensionsComposer))]
-    class when_instantiating_library_extension_composer_with_null_search_pattern
+    [TestClass]
+    public class when_instantiating_library_extension_composer_with_null_search_pattern
     {
-        static LibraryExtensionsComposer composer;
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => composer = new LibraryExtensionsComposer(null));
+        [ClassInitialize]
+        public static void BecauseOf(TestContext context)
+        {
+            _exception = Catch.Exception(() => new LibraryExtensionsComposer(null));
+        }
 
-        It should_throw_argument_null_exception =
-            () => exception.ShouldBeOfType<ArgumentNullException>();
+        [TestMethod]
+        public void it_should_throw_argument_null_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentNullException>();
+        }
 
-        It should_report_search_pattern_parameter =
-            () => ((ArgumentNullException) exception).ParamName.ShouldEqual("searchPattern");
+        [TestMethod]
+        public void it_should_report_search_pattern_parameter()
+        {
+            ((ArgumentNullException) _exception).ParamName.ShouldEqual("searchPattern");
+        }
     }
 }

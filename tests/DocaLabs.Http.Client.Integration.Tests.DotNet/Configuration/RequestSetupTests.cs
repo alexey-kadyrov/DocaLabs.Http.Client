@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Configuration;
 using DocaLabs.Test.Utils;
 using DocaLabs.Test.Utils.DotNet;
@@ -10,9 +12,11 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet.Configuration
     /// The test installs and then remove the test certificate to Trusted People, verify that the certificate was actually removed after the test
     /// </summary>
     [TestClass]
-    public class when_finding_certitificate
+    public class when_copying_client_certificates_from_http_client_endpoint
     {
-        static ClientCertificateReferenceElement _element;
+        static HttpWebRequest _request;
+        static RequestSetupOverride _requestSetup;
+        static IClientEndpoint _endpoint;
         static X509Certificate2 _testCertificate;
 
         [ClassCleanup]
@@ -25,23 +29,25 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet.Configuration
         public static void EstablishContext(TestContext context)
         {
             _testCertificate = CertificateUtils.Install("test-certificate.cer", StoreName.TrustedPeople, StoreLocation.CurrentUser);
-            _element = new ClientCertificateReferenceElement();
+
+            _request = WebRequest.CreateHttp("http://foo.bar/");
+
+            _requestSetup = new RequestSetupOverride();
+
+            _endpoint = EndpointConfigurationFactory.Current.GetEndpoint("certificatesForRequestSetup");
 
             BecauseOf();
         }
 
         static void BecauseOf()
         {
-            _element.StoreName = CertificateStoreName.TrustedPeople;
-            _element.StoreLocation = CertificateStoreLocation.CurrentUser;
-            _element.X509FindType = CertificateX509FindType.FindByThumbprint;
-            _element.FindValue = _testCertificate.Thumbprint;
+            _requestSetup.CopyClientCertificatesFrom(_request, _endpoint);
         }
 
         [TestMethod]
-        public void it_should_find_certificate()
+        public void it_should_copy_the_certificate()
         {
-            _element.Find().Count.ShouldEqual(1);
+            _request.ClientCertificates.Count.ShouldEqual(1);
         }
     }
 }

@@ -929,7 +929,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
             _client = HttpClientFactory.CreateInstance<IUpdateUserService>("updateUser");
             _request = new User
             {
-                Id = 2,
+                Id = 1002,
                 FirstName = "Updated FirstName 2",
                 LastName = "Updated LastName 2",
                 Email = "Updated Email 2"
@@ -946,13 +946,13 @@ namespace DocaLabs.Http.Client.Integration.Tests.DotNet
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(2).ShouldMatch(x => x.Id == _request.Id && x.FirstName == "Updated FirstName 2" && x.LastName == "Updated LastName 2" && x.Email == "Updated Email 2");
+            User.GetExpected(1002).ShouldMatch(x => x.Id == 1002 && x.FirstName == "Updated FirstName 2" && x.LastName == "Updated LastName 2" && x.Email == "Updated Email 2");
         }
 
         [TestMethod]
         public void it_should_return_etag()
         {
-            _result.ETag.ShouldEqual("u2");
+            _result.ETag.ShouldEqual("u1002");
         }
 
         [TestMethod]

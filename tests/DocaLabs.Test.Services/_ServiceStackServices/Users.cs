@@ -52,6 +52,27 @@ namespace DocaLabs.Test.Services._ServiceStackServices
                     FirstName = "And Another Paul",
                     LastName = "Joseph",
                     Email = "paul.joseph@foo.bar"
+                },
+                new User
+                {
+                    Id = 1002,
+                    FirstName = "Michael 2",
+                    LastName = "Goodwill 2",
+                    Email = "michael.goodwill@foo.bar"
+                },
+                new User
+                {
+                    Id = 2002,
+                    FirstName = "Michael 2",
+                    LastName = "Goodwill 2",
+                    Email = "michael.goodwill@foo.bar"
+                },
+                new User
+                {
+                    Id = 3002,
+                    FirstName = "Michael 2",
+                    LastName = "Goodwill 2",
+                    Email = "michael.goodwill@foo.bar"
                 }
             };
 
@@ -62,7 +83,10 @@ namespace DocaLabs.Test.Services._ServiceStackServices
                 { Data[2].Id, "i3" },
                 { Data[3].Id, "i4" },
                 { Data[4].Id, "i5" },
-                { Data[5].Id, "i6" }
+                { Data[5].Id, "i6" },
+                { Data[6].Id, "i1002" },
+                { Data[7].Id, "i2002" },
+                { Data[8].Id, "i3002" }
             };
         }
     }
