@@ -7,7 +7,7 @@ using DocaLabs.Test.Utils;
 using DocaLabs.Test.Utils.DotNet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocaLabs.Http.Client.Integration.Tests.DotNet
+namespace DocaLabs.Http.Client.Integration.Tests
 {
     [TestClass]
     public class when_getting_http_service_without_any_authentication_which_returns_json_object

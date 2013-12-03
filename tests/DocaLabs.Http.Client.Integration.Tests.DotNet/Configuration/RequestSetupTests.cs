@@ -6,7 +6,7 @@ using DocaLabs.Test.Utils;
 using DocaLabs.Test.Utils.DotNet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocaLabs.Http.Client.Integration.Tests.DotNet.Configuration
+namespace DocaLabs.Http.Client.Integration.Tests.Configuration
 {
     /// <summary>
     /// The test installs and then remove the test certificate to Trusted People, verify that the certificate was actually removed after the test

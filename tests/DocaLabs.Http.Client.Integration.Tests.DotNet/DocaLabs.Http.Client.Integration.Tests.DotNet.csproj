@@ -8,7 +8,7 @@
     <ProjectGuid>{A10951A1-8B5D-4518-93D5-C43476A52B41}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocaLabs.Http.Client.Integration.Tests.DotNet</RootNamespace>
+    <RootNamespace>DocaLabs.Http.Client.Integration.Tests</RootNamespace>
     <AssemblyName>DocaLabs.Http.Client.Integration.Tests.DotNet</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

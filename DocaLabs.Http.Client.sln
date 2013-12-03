@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Remote.Integration.Tests", "tests\DocaLabs.Http.Client.Remote.Integration.Tests\DocaLabs.Http.Client.Remote.Integration.Tests.csproj", "{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Remote.Integration.Tests.DotNet", "tests\DocaLabs.Http.Client.Remote.Integration.Tests.DotNet\DocaLabs.Http.Client.Remote.Integration.Tests.DotNet.csproj", "{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.Test.Example", "tests\DocaLabs.Http.Client.Extension.Test.Example\DocaLabs.Http.Client.Extension.Test.Example.csproj", "{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}"
 EndProject

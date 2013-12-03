@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using DocaLabs.Http.Client.Extension.Test.Example;
-using DocaLabs.Http.Client.Integration.Tests.DotNet.Annotations;
+using DocaLabs.Http.Client.Integration.Tests.Properties;
 using DocaLabs.Http.Client.Utils;
 using DocaLabs.Test.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocaLabs.Http.Client.Integration.Tests.DotNet.Utils
+namespace DocaLabs.Http.Client.Integration.Tests.Utils
 {
     [TestClass]
     public class when_composing_using_default_search_pattern

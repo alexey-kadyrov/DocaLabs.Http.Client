@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DocaLabs.Http.Client.Remote.Integration.Tests</RootNamespace>
-    <AssemblyName>DocaLabs.Http.Client.Remote.Integration.Tests</AssemblyName>
+    <AssemblyName>DocaLabs.Http.Client.Remote.Integration.Tests.DotNet</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -71,11 +71,21 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
       <Project>{b3ee3b7a-05e3-4b0e-9c56-476be4354eeb}</Project>
       <Name>DocaLabs.Http.Client.DotNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Extension.NewtonSoft\DocaLabs.Http.Client.Extension.NewtonSoft.csproj">
+      <Project>{bfc334e3-25e4-4973-89b8-6b25276859b2}</Project>
+      <Name>DocaLabs.Http.Client.Extension.NewtonSoft</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
+      <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
+      <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Test.Utils\DocaLabs.Test.Utils.csproj">
       <Project>{0fda939d-d0eb-4bae-9b6a-3b68379b7838}</Project>

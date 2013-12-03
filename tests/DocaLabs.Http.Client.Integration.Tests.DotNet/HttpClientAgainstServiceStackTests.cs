@@ -8,7 +8,7 @@ using DocaLabs.Test.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Integration.Tests.DotNet
+namespace DocaLabs.Http.Client.Integration.Tests
 {
     [TestClass]
     public class when_getting_a_json_object
