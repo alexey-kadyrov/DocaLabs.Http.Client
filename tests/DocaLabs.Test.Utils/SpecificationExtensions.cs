@@ -55,7 +55,14 @@ namespace DocaLabs.Test.Utils
 
         public static void ShouldContain<T>(this IEnumerable<T> actual, params T[] expected)
         {
-            CollectionAssert.IsSubsetOf(expected, actual);
+            if (expected == null)
+                throw new ArgumentNullException("expected");
+
+            if (expected.Length == 0)
+                throw new ArgumentException("Expected collection must have at least one element");
+
+            foreach (var item in expected)
+                CollectionAssert.Contains(expected, item);
         }
 
         public static void ShouldContain<T>(this IEnumerable<T> actual, Expression<Func<T, bool>> condition)

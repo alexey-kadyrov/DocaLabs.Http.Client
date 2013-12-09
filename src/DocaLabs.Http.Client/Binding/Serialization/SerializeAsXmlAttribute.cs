@@ -134,8 +134,8 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         void Write(BindingContext context, WebRequest request, object value)
         {
-            // stream is disposed by the reader
-            using (var writer = XmlWriter.Create(RequestStreamFactory.Get(context, request), GetSettings()))
+            using (var stream = RequestStreamFactory.Get(context, request))
+            using (var writer = XmlWriter.Create(stream, GetSettings()))
             {
                 TryWriteDocType(writer);
 
@@ -145,7 +145,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         async Task WriteAsync(AsyncBindingContext context, WebRequest request, object value)
         {
-            // stream is disposed by the reader
             using (var stream = await RequestStreamFactory.GetAsync(context, request))
             using (var writer = XmlWriter.Create(stream, GetSettings(true)))
             {
@@ -168,9 +167,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
             request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
-            // stream is disposed by the reader
-            var dataStream = new MemoryStream();
-
+            using(var dataStream = new MemoryStream())
             using (var writer = XmlWriter.Create(dataStream, GetSettings()))
             {
                 TryWriteDocType(writer);
@@ -194,9 +191,7 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
             request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
-            // stream is disposed by the reader
-            var dataStream = new MemoryStream();
-
+            using(var dataStream = new MemoryStream())
             using (var writer = XmlWriter.Create(dataStream, GetSettings()))
             {
                 TryWriteDocType(writer);

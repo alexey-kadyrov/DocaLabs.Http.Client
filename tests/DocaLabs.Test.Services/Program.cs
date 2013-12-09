@@ -9,26 +9,42 @@ namespace DocaLabs.Test.Services
     {
         static void Main(params string [] args)
         {
-            using (ServerCertificateInstaller.Install())
-            using (new ServiceStackServerHost())
-            using (new WcfServerHost<TestService>())
-            using (new WcfServerHost<TestServiceWithBasicCredentials>())
-            using (new WcfServerHost<TestServiceWithCertificate>())
+            try
             {
+                using (ServerCertificateInstaller.Install())
+                using (new ServiceStackServerHost())
+                using (new WcfServerHost<TestService>())
+                using (new WcfServerHost<TestServiceWithBasicCredentials>())
+                using (new WcfServerHost<TestServiceWithCertificate>())
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(" -- press enter key to quit.");
+                    Console.WriteLine();
+
+                    WaitQuitEvent(args.Length == 1 ? args[0] : null);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+
+                if(args.Length == 0)
+                    return;
+
                 Console.WriteLine();
-                Console.WriteLine(" -- press any key to quit.");
+                Console.WriteLine(" -- press enter key to quit.");
                 Console.WriteLine();
 
-                WaitQuitEvent(args.Length == 1 && !string.IsNullOrWhiteSpace(args[0]) ? args[0] : "DocaLabs.Test.Services.QuitEvent");
+                Console.ReadLine();
             }
         }
 
         static void WaitQuitEvent(string quitEventName)
         {
             EventWaitHandle quitEvent;
-            if (!EventWaitHandle.TryOpenExisting(quitEventName, out quitEvent))
+            if (string.IsNullOrWhiteSpace(quitEventName) || !EventWaitHandle.TryOpenExisting(quitEventName, out quitEvent))
             {
-                Console.ReadKey();
+                Console.ReadLine();
                 return;
             }
 
