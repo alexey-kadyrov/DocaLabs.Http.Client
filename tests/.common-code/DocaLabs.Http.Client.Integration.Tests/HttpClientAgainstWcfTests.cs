@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Test.Utils;
@@ -342,7 +340,7 @@ namespace DocaLabs.Http.Client.Integration.Tests.Phone
 
         static void BecauseOf()
         {
-            _exception = Catch.Exception(() => _client.Execute(new Request { Value1 = 42, Value2 = "Hello World!" }));
+            _exception = Catch.Exception(() => _client.Execute(new Request { Value1 = 4, Value2 = "Hello World!" }));
         }
 
         [TestMethod]

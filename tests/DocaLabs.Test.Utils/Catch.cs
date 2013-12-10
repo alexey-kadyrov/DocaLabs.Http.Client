@@ -1,5 +1,4 @@
 ﻿using System;
-using NUnit.Framework;
 
 namespace DocaLabs.Test.Utils
 {
@@ -7,7 +6,16 @@ namespace DocaLabs.Test.Utils
     {
         public static Exception Exception(Action action)
         {
-            return Assert.Catch(() => action());
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+
+            return null;
         }
     }
 }
