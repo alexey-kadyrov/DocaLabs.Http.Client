@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Configuration;
 
 namespace DocaLabs.Http.Client.Binding
@@ -8,7 +9,12 @@ namespace DocaLabs.Http.Client.Binding
         /// <summary>
         /// Sets the ContentLength to zero if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.
         /// </summary>
-        void SetContentLengthToZeroIfBodyIsRequired(WebRequest request);
+        void SetContentLengthToZeroIfBodyIsRequired(WebRequest request, BindingContext context);
+
+        /// <summary>
+        /// Sets the ContentLength to zero if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.
+        /// </summary>
+        Task SetContentLengthToZeroIfBodyIsRequiredAsync(WebRequest request, AsyncBindingContext context);
 
         /// <summary>
         /// Returns true if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.

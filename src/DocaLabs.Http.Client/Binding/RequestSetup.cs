@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Configuration;
+using DocaLabs.Http.Client.Utils;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -9,11 +11,34 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public class RequestSetup : IRequestSetup
     {
+        readonly static IRequestStreamFactory RequestStreamFactory = PlatformAdapter.Resolve<IRequestStreamFactory>();
+
         /// <summary>
-        /// Does nothing as it's not supported on all platforms.
+        /// Writes 0 bytes to the request stream due that Store and Windows Phone API doesn't expose ContentLength property (despite that is accessible through reflection and it's public)
         /// </summary>
-        public virtual void SetContentLengthToZeroIfBodyIsRequired(WebRequest request)
+        public virtual void SetContentLengthToZeroIfBodyIsRequired(WebRequest request, BindingContext context)
         {
+            if (!IsBodyRequired(request)) 
+                return;
+
+            using (var stream = RequestStreamFactory.Get(context, request))
+            {
+                stream.Write(new byte[0], 0, 0 );
+            }
+        }
+
+        /// <summary>
+        /// Writes 0 bytes to the request stream due that Store and Windows Phone API doesn't expose ContentLength property (despite that is accessible through reflection and it's public)
+        /// </summary>
+        public virtual async Task SetContentLengthToZeroIfBodyIsRequiredAsync(WebRequest request, AsyncBindingContext context)
+        {
+            if (!IsBodyRequired(request))
+                return;
+
+            using (var stream = await RequestStreamFactory.GetAsync(context, request))
+            {
+                stream.Write(new byte[0], 0, 0);
+            }
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace DocaLabs.Http.Client.Binding
             if (info != null && info.ValueToBeSerialized != null)
                 info.Serializer.Serialize(context, request, info.ValueToBeSerialized);
             else
-                RequestSetup.SetContentLengthToZeroIfBodyIsRequired(request);
+                RequestSetup.SetContentLengthToZeroIfBodyIsRequired(request, context);
         }
 
         /// <summary>
@@ -49,10 +49,7 @@ namespace DocaLabs.Http.Client.Binding
             var info = GetSerializer(context);
 
             if (info == null || info.ValueToBeSerialized == null)
-            {
-                RequestSetup.SetContentLengthToZeroIfBodyIsRequired(request);
-                return TaskUtils.CompletedTask();
-            }
+                return RequestSetup.SetContentLengthToZeroIfBodyIsRequiredAsync(request, context);
 
             var asyncSerializer = info.Serializer as IAsyncRequestSerialization;
             return asyncSerializer != null

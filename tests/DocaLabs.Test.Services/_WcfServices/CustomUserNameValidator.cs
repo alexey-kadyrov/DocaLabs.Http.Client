@@ -8,8 +8,6 @@ namespace DocaLabs.Test.Services._WcfServices
     {
         public override void Validate(string userName, string password)
         {
-            Console.WriteLine("Validating userName:'{0}' password:'{1}'", userName, password);
-
             if (null == userName || null == password)
                 throw new ArgumentNullException();
 
