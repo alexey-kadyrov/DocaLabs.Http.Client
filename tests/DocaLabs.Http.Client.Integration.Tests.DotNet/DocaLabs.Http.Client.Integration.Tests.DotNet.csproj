@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;GENERIC_DOT_NET</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>169</NoWarn>
@@ -31,7 +31,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;GENERIC_DOT_NET</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>169</NoWarn>
@@ -60,6 +60,15 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.Portable.cs">
+      <Link>AsyncHttpClientAgainstServiceStackTests.Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs">
+      <Link>HttpClientAgainstWcfTests.Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs">
+      <Link>User.Portable.cs</Link>
+    </Compile>
     <Compile Include="AsyncHttpClientAgainstServiceStackTests.cs" />
     <Compile Include="Configuration\ConfigurationExtensionsTests.cs" />
     <Compile Include="Configuration\RequestSetupTests.cs" />
@@ -67,7 +76,6 @@
     <Compile Include="HttpClientAgainstWcfTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utils\LibraryExtensionsComposerTests.cs" />
-    <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,14 +2,20 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.Serialization;
+using DocaLabs.Http.Client.Integration.Tests;
 using DocaLabs.Test.Utils;
+#if GENERIC_DOT_NET
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Integration.Tests
+namespace DocaLabs.Http.Client.Integration.Portable.Tests
 {
     [TestClass]
     public class when_asynchronously_getting_a_json_object
@@ -1068,11 +1074,10 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
             var aggregateException = (AggregateException)Catch.Exception(allTask.Wait);
 
-            if (aggregateException != null && aggregateException.InnerExceptions.Count == 2)
-            {
-                _exception1 = aggregateException.InnerExceptions[0];
-                _exception2 = aggregateException.InnerExceptions[1];
-            }
+            _exception1 = aggregateException.InnerExceptions[0];
+            _exception2 = aggregateException.InnerExceptions[1];
+
+            new ManualResetEvent(false).WaitOne(1000);
         }
 
         [TestMethod]
@@ -1425,7 +1430,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new UpdateUserService("updateUser");
             _request = new User
             {
-                Id = 2002,
+                Id = 72002,
                 FirstName = "Asynchronously Updated FirstName",
                 LastName = "Asynchronously Updated LastName",
                 Email = "Asynchronously Updated Email"
@@ -1442,8 +1447,8 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var expectedUser = User.GetExpected(2002);
-            expectedUser.ShouldMatch(x => x.Id == 2002 && x.FirstName == "Asynchronously Updated FirstName" && x.LastName == "Asynchronously Updated LastName" && x.Email == "Asynchronously Updated Email");
+            var expectedUser = User.GetExpected(72002);
+            expectedUser.ShouldMatch(x => x.Id == 72002 && x.FirstName == "Asynchronously Updated FirstName" && x.LastName == "Asynchronously Updated LastName" && x.Email == "Asynchronously Updated Email");
         }
 
         public interface IUpdateUserService
@@ -1474,7 +1479,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new UpdateUserService("updateUser");
             _request = new User
             {
-                Id = 3002,
+                Id = 73002,
                 FirstName = "Asynchronously Updated FirstName 2",
                 LastName = "Asynchronously Updated LastName 2",
                 Email = "Asynchronously Updated Email 2"
@@ -1491,13 +1496,13 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(3002).ShouldMatch(x => x.Id == 3002 && x.FirstName == "Asynchronously Updated FirstName 2" && x.LastName == "Asynchronously Updated LastName 2" && x.Email == "Asynchronously Updated Email 2");
+            User.GetExpected(73002).ShouldMatch(x => x.Id == 73002 && x.FirstName == "Asynchronously Updated FirstName 2" && x.LastName == "Asynchronously Updated LastName 2" && x.Email == "Asynchronously Updated Email 2");
         }
 
         [TestMethod]
         public void it_should_return_etag()
         {
-            _result.ETag.ShouldEqual("u3002");
+            _result.ETag.ShouldEqual("u73002");
         }
 
         [TestMethod]
@@ -1533,7 +1538,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new AddUserService("addUser");
             _request = new User
             {
-                Id = 142,
+                Id = 7142,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
@@ -1550,7 +1555,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(142).ShouldMatch(x => x.Id == 142 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7142).ShouldMatch(x => x.Id == 7142 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public interface IAddUserService
@@ -1581,7 +1586,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new AddUserService("addUserAndReturnData");
             _request = new User
             {
-                Id = 143,
+                Id = 7143,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
@@ -1598,13 +1603,13 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(143).ShouldMatch(x => x.Id == 143 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7143).ShouldMatch(x => x.Id == 7143 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         [TestMethod]
         public void it_should_return_the_data()
         {
-            _result.ShouldMatch(x => x.Id == 143 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            _result.ShouldMatch(x => x.Id == 7143 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public interface IAddUserService
@@ -1634,7 +1639,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new AddUserService("addUserAndReturnData");
             _request = new User
             {
-                Id = 144,
+                Id = 7144,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
@@ -1651,7 +1656,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(144).ShouldMatch(x => x.Id == 144 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7144).ShouldMatch(x => x.Id == 7144 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public interface IAddUserService
@@ -1682,7 +1687,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new AddUserService("addUserAndReturnData");
             _request = new User
             {
-                Id = 145,
+                Id = 7145,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
@@ -1699,7 +1704,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(145).ShouldMatch(x => x.Id == 145 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7145).ShouldMatch(x => x.Id == 7145 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         [TestMethod]
@@ -1711,7 +1716,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_get_etag()
         {
-            _result.ETag.ShouldEqual("a145");
+            _result.ETag.ShouldEqual("a7145");
         }
 
         [TestMethod]
@@ -1822,7 +1827,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
                 PathPart = "users",
                 User = new User
                 {
-                    Id = 146,
+                    Id = 7146,
                     FirstName = "New FirstName",
                     LastName = "New LastName",
                     Email = "New Email"
@@ -1840,7 +1845,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(146).ShouldMatch(x => x.Id == 146 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7146).ShouldMatch(x => x.Id == 7146 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public class AddUserRequestEx
@@ -1885,7 +1890,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
                 PathPart = "users",
                 User = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new User
                 {
-                    Id = 147,
+                    Id = 7147,
                     FirstName = "New FirstName",
                     LastName = "New LastName",
                     Email = "New Email"
@@ -1903,7 +1908,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(147).ShouldMatch(x => x.Id == 147 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7147).ShouldMatch(x => x.Id == 7147 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public class AddUserRequestEx
@@ -1946,7 +1951,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new AddUserService("addUser");
             _request = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new User
             {
-                Id = 148,
+                Id = 7148,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
@@ -1963,7 +1968,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(148).ShouldMatch(x => x.Id == 148 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7148).ShouldMatch(x => x.Id == 7148 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public interface IAddUserService
@@ -1993,7 +1998,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
             _client = new AddUserService("addUser");
             _request = JsonConvert.SerializeObject(new User
             {
-                Id = 149,
+                Id = 7149,
                 FirstName = "New FirstName",
                 LastName = "New LastName",
                 Email = "New Email"
@@ -2010,7 +2015,7 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [TestMethod]
         public void it_should_call_the_service()
         {
-            User.GetExpected(149).ShouldMatch(x => x.Id == 149 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
+            User.GetExpected(7149).ShouldMatch(x => x.Id == 7149 && x.FirstName == "New FirstName" && x.LastName == "New LastName" && x.Email == "New Email");
         }
 
         public interface IAddUserService
@@ -2043,13 +2048,13 @@ namespace DocaLabs.Http.Client.Integration.Tests
 
         static void BecauseOf()
         {
-            _client.ExecuteAsync(new DeleteUserRequest { Id = 5 }).Wait();
+            _client.ExecuteAsync(new DeleteUserRequest { Id = 75 }).Wait();
         }
 
         [TestMethod]
         public void it_should_call_the_service()
         {
-            var exception = Catch.Exception(() => User.GetExpected(5));
+            var exception = Catch.Exception(() => User.GetExpected(75));
             exception.ShouldBeOfType<HttpClientException>();
             exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
         }
@@ -2068,45 +2073,6 @@ namespace DocaLabs.Http.Client.Integration.Tests
         {
             public DeleteUserService(string configuration)
                 : base(null, configuration)
-            {
-            }
-        }
-    }
-
-    [TestClass]
-    public class when_asynchronously_executing_request_without_any_parameters_and_return_data_relying_on_the_url_alone
-    {
-        static IDeleteUserService _client;
-
-        [ClassInitialize]
-        public static void EstablishContext(TestContext context)
-        {
-            _client = new DeleteUserService(new Uri("http://localhost:1337/v2/users/6"), "noParametersRequest");
-
-            BecauseOf();
-        }
-
-        static void BecauseOf()
-        {
-            _client.ExecuteAsync().Wait();
-        }
-
-        [TestMethod]
-        public void it_should_call_the_service()
-        {
-            var exception = Catch.Exception(() => User.GetExpected(6));
-            exception.ShouldBeOfType<HttpClientException>();
-            exception.Is(HttpStatusCode.NotFound).ShouldBeTrue();
-        }
-
-        public interface IDeleteUserService
-        {
-            Task<VoidType> ExecuteAsync(VoidType voidValue = default(VoidType));
-        }
-        public class DeleteUserService : AsyncHttpClient<VoidType, VoidType>, IDeleteUserService
-        {
-            public DeleteUserService(Uri baseUrl, string configuration)
-                : base(baseUrl, configuration)
             {
             }
         }

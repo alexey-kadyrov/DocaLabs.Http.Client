@@ -6,7 +6,7 @@ namespace DocaLabs.Http.Client
     /// <summary>
     /// Defines additional information about the web response.
     /// </summary>
-    public abstract class RichResponseCore
+    public abstract class RichResponse
     {
         /// <summary>
         /// Content type of the data being received.
@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client
         public string ContentType { get; private set; }
 
         /// <summary>
-        /// Gets the status of the response.
+        /// Gets the status code of the response.
         /// </summary>
         public int StatusCode { get; protected set; }
 
@@ -35,17 +35,9 @@ namespace DocaLabs.Http.Client
         public WebHeaderCollection Headers { get; private set; }
 
         /// <summary>
-        /// Returns whenever the current StatusCode equals to the specified HttpStatusCode.
-        /// </summary>
-        public bool Is(HttpStatusCode status)
-        {
-            return (int) status == StatusCode;
-        }
-
-        /// <summary>
         /// Initializes an instance of the RichResponse class by pulling additional information from WebResponse instance.
         /// </summary>
-        protected RichResponseCore(WebResponse response)
+        protected RichResponse(WebResponse response)
         {
             if (response == null)
                 throw new ArgumentNullException("response");
@@ -68,6 +60,37 @@ namespace DocaLabs.Http.Client
 
             StatusCode = (int)httpResponse.StatusCode;
             StatusDescription = httpResponse.StatusDescription;
+        }
+
+        /// <summary>
+        /// Returns whenever the current StatusCode equals to the specified HttpStatusCode.
+        /// </summary>
+        public bool Is(HttpStatusCode status)
+        {
+            return (int)status == StatusCode;
+        }
+    }
+
+    /// <summary>
+    /// A generic that can be used to wrap the output model in order to get more information about the operation status.
+    /// If you subclass that you must provide constructor with parameters (WebResponse response, object value).
+    /// </summary>
+    /// <typeparam name="T">Your output model.</typeparam>
+    public class RichResponse<T> : RichResponse
+    {
+        /// <summary>
+        /// Gets the value that is returned with the response.
+        /// </summary>
+        public T Value { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the Response{} class by pulling additional information from WebResponse instance.
+        /// </summary>
+        public RichResponse(WebResponse response, object value)
+            : base(response)
+        {
+            if (value != null)
+                Value = (T)value;
         }
     }
 }

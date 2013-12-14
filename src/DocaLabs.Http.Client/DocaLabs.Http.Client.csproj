@@ -143,7 +143,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="RichRequest.cs" />
-    <Compile Include="RichResponseCore.cs" />
+    <Compile Include="RichResponse.cs" />
     <Compile Include="Utils\CharSets.cs" />
     <Compile Include="Utils\CollectionExtensions.cs" />
     <Compile Include="Utils\ContentEncoding\IContentDecoderFactory.cs" />

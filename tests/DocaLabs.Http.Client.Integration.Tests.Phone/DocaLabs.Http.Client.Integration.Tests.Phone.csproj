@@ -75,14 +75,14 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\.common-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.cs">
-      <Link>AsyncHttpClientAgainstServiceStackTests.cs</Link>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.Portable.cs">
+      <Link>AsyncHttpClientAgainstServiceStackTests.Portable.cs</Link>
     </Compile>
-    <Compile Include="..\.common-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.cs">
-      <Link>HttpClientAgainstWcfTests.cs</Link>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs">
+      <Link>HttpClientAgainstWcfTests.Portable.cs</Link>
     </Compile>
-    <Compile Include="..\.common-code\DocaLabs.Http.Client.Integration.Tests\User.cs">
-      <Link>User.cs</Link>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs">
+      <Link>User.Portable.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

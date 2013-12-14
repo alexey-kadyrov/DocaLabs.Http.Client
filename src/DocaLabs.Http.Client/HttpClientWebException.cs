@@ -67,9 +67,22 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
+        /// Initializes a new instance of the HttpClientException class with a specified error message and a reference to the inner exception that caused the current exception.
+        /// If the inner is WebException then it'll initialize the Request property.
+        /// </summary>
+        public HttpClientWebException(string message, WebResponse response)
+            : base(message)
+        {
+            if (response != null)
+                Response = new ResponseInfo(response);
+
+            Status = WebExceptionStatus.UnknownError;
+        }
+
+        /// <summary>
         /// COntains additional information about the response.
         /// </summary>
-        public class ResponseInfo : RichResponseCore
+        public class ResponseInfo : RichResponse
         {
             /// <summary>
             /// Initializes an instance of the ResponseInfo class.

@@ -69,7 +69,6 @@
     <Compile Include="Configuration\ClientProxyElement.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\EndpointConfigurationProviderOverride.cs" />
-    <Compile Include="RichResponse.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
     <Compile Include="HttpClientFactory.cs" />
     <Compile Include="Utils\JsonSerialization\JasonSerializerFactory.cs" />

@@ -84,7 +84,8 @@ namespace DocaLabs.Test.Utils
 
         public static void ShouldNotBeNull(this object actual)
         {
-            Assert.IsNotNull(actual);
+            if(actual == null)
+                throw new Exception("The value should not be null but it was null.");
         }
 
         public static void ShouldBeEqualIgnoringCase(this string actual, string expected)

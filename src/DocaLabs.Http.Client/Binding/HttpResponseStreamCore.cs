@@ -21,7 +21,7 @@ namespace DocaLabs.Http.Client.Binding
         Stream _dataStream;
         HttpContentType _contentType;
         Stream _rawResponseStream;
-        int _initialReadTimeout;
+        readonly int _initialReadTimeout;
 
         public WebResponse Response { get; private set; }
 
@@ -59,6 +59,20 @@ namespace DocaLabs.Http.Client.Binding
         /// Gets the content length of data being received.
         /// </summary>
         public long ContentLength { get { return Response.ContentLength; } }
+
+        /// <summary>
+        /// Gets the status code of the response.
+        /// </summary>
+        public int StatusCode
+        {
+            get
+            {
+                var httpResponse = Response as HttpWebResponse;
+                return httpResponse == null 
+                    ? 0 
+                    : (int)httpResponse.StatusCode;
+            }
+        }
 
         /// <summary>
         /// Gets the URI of the Internet resource that actually responded to the request.

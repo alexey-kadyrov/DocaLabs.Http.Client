@@ -3,9 +3,13 @@ using System.Net;
 using System.Xml.Serialization;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Test.Utils;
+#if GENERIC_DOT_NET
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
-namespace DocaLabs.Http.Client.Integration.Tests
+namespace DocaLabs.Http.Client.Integration.Portable.Tests
 {
     [TestClass]
     public class when_getting_http_service_without_any_authentication_which_returns_json_object

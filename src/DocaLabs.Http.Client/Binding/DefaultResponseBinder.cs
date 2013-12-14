@@ -83,6 +83,14 @@ namespace DocaLabs.Http.Client.Binding
             {
                 stream = StreamFactory.CreateStream(context, request);
 
+                if (IsSafe3XX(stream.StatusCode))
+                {
+                    if (responseType != context.OutputModelType)
+                        return Activator.CreateInstance(context.OutputModelType, stream.Response, null);
+                    else
+                        throw new HttpClientWebException(string.Format(Resources.Text.failed_execute_request, context.BaseUrl, context.HttpClient.GetType()), stream.Response);
+                }
+
                 var value = ReadStream(context, stream, responseType);
 
                 object richResponse = null;
@@ -97,7 +105,7 @@ namespace DocaLabs.Http.Client.Binding
             }
             catch (WebException e)
             {
-                if (Is3XX(e) && responseType != context.OutputModelType)
+                if (IsSafe3XX(e) && responseType != context.OutputModelType)
                     return Activator.CreateInstance(context.OutputModelType, e.Response, null);
 
                 throw;
@@ -126,6 +134,14 @@ namespace DocaLabs.Http.Client.Binding
             try
             {
                 stream = await StreamFactory.CreateAsyncStream(context, request);
+
+                if (IsSafe3XX(stream.StatusCode))
+                {
+                    if (responseType != resultType)
+                        return (T) Activator.CreateInstance(resultType, stream.Response, null);
+                    else
+                        throw new HttpClientWebException(string.Format(Resources.Text.failed_execute_request, context.BaseUrl, context.HttpClient.GetType()), stream.Response);
+                }
 
                 var deserializer = GetUserSpecifiedDeserializer(context, responseType);
                 if (deserializer == null)
@@ -164,7 +180,7 @@ namespace DocaLabs.Http.Client.Binding
             }
             catch (WebException e)
             {
-                if (Is3XX(e) && responseType != resultType)
+                if (IsSafe3XX(e) && responseType != resultType)
                     return (T)Activator.CreateInstance(resultType, e.Response, null);
 
                 throw;
@@ -194,10 +210,16 @@ namespace DocaLabs.Http.Client.Binding
             return _responseTypes.GetOrAdd(context.OutputModelType, t => TryGetWrappedResponseModelType(t) ?? t);
         }
 
-        static bool Is3XX(WebException e)
+        static bool IsSafe3XX(WebException e)
         {
             var httpResponse = e.Response as HttpWebResponse;
-            return (httpResponse != null && ((int)httpResponse.StatusCode) >= 300 && ((int)httpResponse.StatusCode) < 400);
+
+            return httpResponse != null && IsSafe3XX((int)httpResponse.StatusCode);
+        }
+
+        static bool IsSafe3XX(int status)
+        {
+            return status == 301 || status == 302 || status == 303 || status == 304 || status == 307;
         }
 
         object ReadStream(BindingContext context, HttpResponseStreamCore responseStream, Type resultType)
@@ -258,7 +280,7 @@ namespace DocaLabs.Http.Client.Binding
             {
                 var typeInfo = type.GetTypeInfo();
 
-                if (typeof (RichResponseCore).GetTypeInfo().IsAssignableFrom(typeInfo))
+                if (typeof (RichResponse).GetTypeInfo().IsAssignableFrom(typeInfo))
                 {
                     var valueProperty = typeInfo.GetDeclaredProperty("Value");
                     if (valueProperty != null && !valueProperty.IsIndexer())

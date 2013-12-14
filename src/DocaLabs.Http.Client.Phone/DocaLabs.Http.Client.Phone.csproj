@@ -95,7 +95,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Text.resx</DependentUpon>
     </Compile>
-    <Compile Include="RichResponse.cs" />
     <Compile Include="Utils\RequestStreamFactory.cs" />
   </ItemGroup>
   <ItemGroup>

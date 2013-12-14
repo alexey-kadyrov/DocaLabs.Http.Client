@@ -64,6 +64,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Services", "tests\DocaLabs.Test.Services\DocaLabs.Test.Services.csproj", "{35959C60-D8BC-4DAB-84A2-E4EAC181BD9D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".certificates", ".certificates", "{A6EB4996-FE40-490B-B3DD-722A65B614D8}"
+	ProjectSection(SolutionItems) = preProject
+		tests\.certificates\client.pfx = tests\.certificates\client.pfx
+		tests\.certificates\commands-to-generate-certificates.txt = tests\.certificates\commands-to-generate-certificates.txt
+		tests\.certificates\localhost.pfx = tests\.certificates\localhost.pfx
+		tests\.certificates\MyCA.cer = tests\.certificates\MyCA.cer
+		tests\.certificates\test-certificate.cer = tests\.certificates\test-certificate.cer
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Utils.DotNet", "tests\DocaLabs.Test.Utils.DotNet\DocaLabs.Test.Utils.DotNet.csproj", "{15C3F3EC-711D-4413-86E7-CDB3F218DD9D}"
 EndProject
@@ -72,6 +79,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.Phone", "tests\DocaLabs.Http.Client.Integration.Tests.Phone\DocaLabs.Http.Client.Integration.Tests.Phone.csproj", "{6DB18236-76BE-47EC-B095-14FAA8BEF738}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.Store", "tests\DocaLabs.Http.Client.Integration.Tests.Store\DocaLabs.Http.Client.Integration.Tests.Store.csproj", "{830133CE-7D64-4089-ADA9-5CE5E8706290}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".portable-code", ".portable-code", "{EF6A4DD6-CF59-4B6E-92F8-3DEF13931D69}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocaLabs.Http.Client.Integration.Tests", "DocaLabs.Http.Client.Integration.Tests", "{9124CE42-6310-43BD-8E2A-B267195D661E}"
+	ProjectSection(SolutionItems) = preProject
+		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.Portable.cs
+		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs
+		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -482,11 +498,13 @@ Global
 		{A6EB4996-FE40-490B-B3DD-722A65B614D8} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{6DB18236-76BE-47EC-B095-14FAA8BEF738} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{830133CE-7D64-4089-ADA9-5CE5E8706290} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
+		{EF6A4DD6-CF59-4B6E-92F8-3DEF13931D69} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{ABF34F55-0FC0-479B-8512-588F0680EB0F} = {B48E0FE1-8AE2-4B60-802D-726E2292354B}
 		{BFC334E3-25E4-4973-89B8-6B25276859B2} = {B48E0FE1-8AE2-4B60-802D-726E2292354B}
 		{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 		{2CF77FD4-D4AC-4705-9C01-F04EDD5B64B9} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 		{87243BE7-4D99-48E1-9C3F-28DCBBDE0B94} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 		{168DF099-C19D-42DF-AD56-3BA470743335} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
+		{9124CE42-6310-43BD-8E2A-B267195D661E} = {EF6A4DD6-CF59-4B6E-92F8-3DEF13931D69}
 	EndGlobalSection
 EndGlobal
