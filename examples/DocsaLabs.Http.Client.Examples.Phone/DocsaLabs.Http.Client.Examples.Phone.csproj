@@ -151,9 +151,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82F9423E-89AD-46EF-A347-6549097B8758}</Project>
-      <Name>DocaLabs.Http.Client.Core</Name>
+      <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj">
       <Project>{41DF1459-0344-4A4C-859F-8185540E3D30}</Project>

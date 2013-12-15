@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Core", "src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj", "{82F9423E-89AD-46EF-A347-6549097B8758}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client", "src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj", "{82F9423E-89AD-46EF-A347-6549097B8758}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Phone", "src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj", "{41DF1459-0344-4A4C-859F-8185540E3D30}"
 EndProject
@@ -85,6 +85,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Utils", "tests\DocaLabs.Test.Utils\DocaLabs.Test.Utils.csproj", "{0FDA939D-D0EB-4BAE-9B6A-3B68379B7838}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.Phone", "tests\DocaLabs.Http.Client.Integration.Tests.Phone\DocaLabs.Http.Client.Integration.Tests.Phone.csproj", "{6DB18236-76BE-47EC-B095-14FAA8BEF738}"
+	ProjectSection(ProjectDependencies) = postProject
+		{82F9423E-89AD-46EF-A347-6549097B8758} = {82F9423E-89AD-46EF-A347-6549097B8758}
+		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.Store", "tests\DocaLabs.Http.Client.Integration.Tests.Store\DocaLabs.Http.Client.Integration.Tests.Store.csproj", "{830133CE-7D64-4089-ADA9-5CE5E8706290}"
 EndProject

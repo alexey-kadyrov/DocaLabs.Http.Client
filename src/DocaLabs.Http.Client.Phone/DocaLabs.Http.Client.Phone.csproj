@@ -100,9 +100,9 @@
     <Compile Include="Utils\RequestStreamFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
+    <ProjectReference Include="..\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82F9423E-89AD-46EF-A347-6549097B8758}</Project>
-      <Name>DocaLabs.Http.Client.Core</Name>
+      <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -124,8 +124,8 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <RemoveDir Directories="$(SolutionDir)build\Phone\"/>
-    <MakeDir Directories="$(SolutionDir)build\Phone\"/>
-    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /out:&quot;$(SolutionDir)build\Phone\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.Core.dll&quot; &quot;$(TargetPath)&quot;" />
+    <RemoveDir Directories="$(SolutionDir)build\Phone\" />
+    <MakeDir Directories="$(SolutionDir)build\Phone\" />
+    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /targetplatform:v4,&quot;%ProgramFiles(x86)%\Reference Assemblies\Microsoft\Framework\WindowsPhone\v8.0&quot; /out:&quot;$(SolutionDir)build\Phone\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot;" />
   </Target>
 </Project>

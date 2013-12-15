@@ -99,9 +99,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
+    <ProjectReference Include="..\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
-      <Name>DocaLabs.Http.Client.Core</Name>
+      <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -115,8 +115,8 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <RemoveDir Directories="$(SolutionDir)build\DotNet\"/>
-    <MakeDir Directories="$(SolutionDir)build\DotNet\"/>
-    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /out:&quot;$(SolutionDir)build\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.Core.dll&quot; &quot;$(TargetPath)&quot;" />
+    <RemoveDir Directories="$(SolutionDir)build\DotNet\" />
+    <MakeDir Directories="$(SolutionDir)build\DotNet\" />
+    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /out:&quot;$(SolutionDir)build\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot;" />
   </Target>
 </Project>

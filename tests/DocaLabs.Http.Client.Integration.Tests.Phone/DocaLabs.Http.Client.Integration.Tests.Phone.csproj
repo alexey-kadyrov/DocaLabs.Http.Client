@@ -142,14 +142,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj">
-      <Project>{41DF1459-0344-4A4C-859F-8185540E3D30}</Project>
-      <Name>DocaLabs.Http.Client.Phone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
-      <Project>{82F9423E-89AD-46EF-A347-6549097B8758}</Project>
-      <Name>DocaLabs.Http.Client.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Test.Utils\DocaLabs.Test.Utils.csproj">
       <Project>{0FDA939D-D0EB-4BAE-9B6A-3B68379B7838}</Project>
       <Name>DocaLabs.Test.Utils</Name>
@@ -159,6 +151,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="DocaLabs.Http.Client, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\Phone\DocaLabs.Http.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
     </Reference>
