@@ -83,9 +83,9 @@
       <Project>{bfc334e3-25e4-4973-89b8-6b25276859b2}</Project>
       <Name>DocaLabs.Http.Client.Extension.NewtonSoft</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj">
       <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
-      <Name>DocaLabs.Http.Client</Name>
+      <Name>DocaLabs.Http.Client.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Test.Utils\DocaLabs.Test.Utils.csproj">
       <Project>{0fda939d-d0eb-4bae-9b6a-3b68379b7838}</Project>

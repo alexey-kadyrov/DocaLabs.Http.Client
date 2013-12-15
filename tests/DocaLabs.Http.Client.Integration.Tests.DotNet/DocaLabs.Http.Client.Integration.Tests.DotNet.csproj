@@ -38,6 +38,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocaLabs.Http.Client, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\DotNet\DocaLabs.Http.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -79,17 +83,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
-      <Project>{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}</Project>
-      <Name>DocaLabs.Http.Client.DotNet</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Extension.NewtonSoft\DocaLabs.Http.Client.Extension.NewtonSoft.csproj">
       <Project>{bfc334e3-25e4-4973-89b8-6b25276859b2}</Project>
       <Name>DocaLabs.Http.Client.Extension.NewtonSoft</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
-      <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
-      <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Http.Client.Extension.Test.Example\DocaLabs.Http.Client.Extension.Test.Example.csproj">
       <Project>{07ff9ea5-faa8-433a-95ef-b7a9da2efff6}</Project>

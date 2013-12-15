@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace DocaLabs.Http.Client.Utils
 {
     static class PlatformAdapter
     {
-        static readonly string[] PlatformNames = { "DotNet", "Phone", "Store"};
-        static readonly Lazy<Assembly> PlatformSpecificAssimebly = new Lazy<Assembly>(FindForPlatformSpecificAssembly); 
         static readonly object Locker = new object();
         static readonly Dictionary<Type, object> Adapters = new Dictionary<Type, object>();
 
@@ -43,57 +39,13 @@ namespace DocaLabs.Http.Client.Utils
                 : null;
         }
 
-        static Assembly FindForPlatformSpecificAssembly()
-        {
-            return PlatformNames
-                .Select(ProbeForPlatformSpecificAssembly)
-                .FirstOrDefault(assembly => assembly != null);
-        }
-
-        static Assembly ProbeForPlatformSpecificAssembly(string platformName)
-        {
-            var assemblyName = new AssemblyName
-            {
-                Name = "DocaLabs.Http.Client." + platformName
-            };
-
-            try
-            {
-                return Assembly.Load(assemblyName);
-            }
-            catch (FileNotFoundException)
-            {
-            }
-            catch (Exception) // Probably FileIOException due to not SN assembly
-            {
-                // Try to load a non-SN version of the assembly
-                assemblyName.SetPublicKey(null);
-                assemblyName.SetPublicKeyToken(null);
-
-                try
-                {
-                    return Assembly.Load(assemblyName);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-
-            return null;
-        }
-
         static Type FindAdapter(Type interfaceType)
         {
             var typeName = MakeAdapterTypeName(interfaceType);
 
             var thisAssembly = typeof (PlatformAdapter).GetTypeInfo().Assembly;
 
-            var assembly = PlatformSpecificAssimebly.Value ?? 
-                thisAssembly;
-
-            return assembly.GetType(typeName + "Override") 
-                ?? assembly.GetType(typeName)
+            return thisAssembly.GetType(typeName + "Override") 
                 ?? thisAssembly.GetType(typeName);
         }
 

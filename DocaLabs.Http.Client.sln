@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Tests", "tests\DocaLabs.Http.Client.Tests\DocaLabs.Http.Client.Tests.csproj", "{39AD9FB5-C1CE-4D32-9253-79F795DC6426}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.DotNet", "tests\DocaLabs.Http.Client.Integration.Tests.DotNet\DocaLabs.Http.Client.Integration.Tests.DotNet.csproj", "{A10951A1-8B5D-4518-93D5-C43476A52B41}"
+	ProjectSection(ProjectDependencies) = postProject
+		{82F9423E-89AD-46EF-A347-6549097B8758} = {82F9423E-89AD-46EF-A347-6549097B8758}
+		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.NewtonSoft", "src\DocaLabs.Http.Client.Extension.NewtonSoft\DocaLabs.Http.Client.Extension.NewtonSoft.csproj", "{BFC334E3-25E4-4973-89B8-6B25276859B2}"
 EndProject
@@ -43,13 +47,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client", "src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj", "{82F9423E-89AD-46EF-A347-6549097B8758}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Core", "src\DocaLabs.Http.Client.Core\DocaLabs.Http.Client.Core.csproj", "{82F9423E-89AD-46EF-A347-6549097B8758}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Phone", "src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj", "{41DF1459-0344-4A4C-859F-8185540E3D30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Store", "src\DocaLabs.Http.Client.Store\DocaLabs.Http.Client.Store.csproj", "{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.MSJavaScriptSerializer", "src\DocaLabs.Http.Client.Extension.MSJavaScriptSerializer\DocaLabs.Http.Client.Extension.MSJavaScriptSerializer.csproj", "{ABF34F55-0FC0-479B-8512-588F0680EB0F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{82F9423E-89AD-46EF-A347-6549097B8758} = {82F9423E-89AD-46EF-A347-6549097B8758}
+		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extensions", "extensions", "{B48E0FE1-8AE2-4B60-802D-726E2292354B}"
 EndProject
