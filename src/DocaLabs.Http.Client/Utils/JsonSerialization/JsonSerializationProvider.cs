@@ -11,7 +11,6 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
     /// </summary>
     public static class JsonSerializationProvider
     {
-        static readonly object Locker;
         static IJsonSerializer _serializer;
         static IJsonDeserializer _deserializer;
 
@@ -22,10 +21,7 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
         {
             get
             {
-                lock (Locker)
-                {
-                    return _serializer;
-                }
+                return _serializer;
             }
 
             set
@@ -33,10 +29,7 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
                 if(value == null)
                     throw new ArgumentNullException("value");
 
-                lock (Locker)
-                {
-                    _serializer = value;
-                }
+                _serializer = value;
             }
         }
 
@@ -47,10 +40,7 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
         {
             get
             {
-                lock (Locker)
-                {
-                    return _deserializer;
-                }
+                return _deserializer;
             }
 
             set
@@ -58,18 +48,13 @@ namespace DocaLabs.Http.Client.Utils.JsonSerialization
                 if (value == null)
                     throw new ArgumentNullException("value");
 
-                lock (Locker)
-                {
-                    _deserializer = value;
-                }
+                _deserializer = value;
             }
         }
 
         static JsonSerializationProvider()
         {
-            Locker = new object();
-
-            var serializerFactory = PlatformAdapter.Resolve<IJasonSerializerFactory>(false);
+            var serializerFactory = PlatformAdapter.Resolve<IJsonSerializerFactory>(false, "DocaLabs.Http.Client.JsonSerializer");
 
             if (serializerFactory != null)
             {

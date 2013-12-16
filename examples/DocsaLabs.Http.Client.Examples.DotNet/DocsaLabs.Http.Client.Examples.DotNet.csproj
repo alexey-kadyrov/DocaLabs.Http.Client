@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocaLabs.Http.Client, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\.json\DotNet\DocaLabs.Http.Client.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -95,14 +99,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
-      <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
-      <Name>DocaLabs.Http.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj">
-      <Project>{b3ee3b7a-05e3-4b0e-9c56-476be4354eeb}</Project>
-      <Name>DocaLabs.Http.Client.DotNet</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DocsaLabs.Http.Client.Examples\DocsaLabs.Http.Client.Examples.csproj">
       <Project>{412ab226-9d40-45a0-a1df-3b8ce2b5a0ca}</Project>
       <Name>DocsaLabs.Http.Client.Examples</Name>

@@ -10,16 +10,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Testing.Common", "tests\DocaLabs.Test.Common\DocaLabs.Testing.Common.csproj", "{40A96AE2-C931-4AC1-A38E-5FBB3045216C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.DotNet", "src\DocaLabs.Http.Client.DotNet\DocaLabs.Http.Client.DotNet.csproj", "{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664} = {1D7D9640-5003-4D20-AA5F-DC373E9C9664}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Tests", "tests\DocaLabs.Http.Client.Tests\DocaLabs.Http.Client.Tests.csproj", "{39AD9FB5-C1CE-4D32-9253-79F795DC6426}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.DotNet", "tests\DocaLabs.Http.Client.Integration.Tests.DotNet\DocaLabs.Http.Client.Integration.Tests.DotNet.csproj", "{A10951A1-8B5D-4518-93D5-C43476A52B41}"
 	ProjectSection(ProjectDependencies) = postProject
-		{82F9423E-89AD-46EF-A347-6549097B8758} = {82F9423E-89AD-46EF-A347-6549097B8758}
 		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.NewtonSoft", "src\DocaLabs.Http.Client.Extension.NewtonSoft\DocaLabs.Http.Client.Extension.NewtonSoft.csproj", "{BFC334E3-25E4-4973-89B8-6B25276859B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{6684DB84-8528-4089-837C-C75247A7FB4B}"
 EndProject
@@ -28,8 +28,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Remote.Integration.Tests.DotNet", "tests\DocaLabs.Http.Client.Remote.Integration.Tests.DotNet\DocaLabs.Http.Client.Remote.Integration.Tests.DotNet.csproj", "{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.Test.Example", "tests\DocaLabs.Http.Client.Extension.Test.Example\DocaLabs.Http.Client.Extension.Test.Example.csproj", "{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D9B79943-F836-4AC1-9D32-91C52A096C25}"
 	ProjectSection(SolutionItems) = preProject
@@ -50,24 +51,31 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client", "src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj", "{82F9423E-89AD-46EF-A347-6549097B8758}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Phone", "src\DocaLabs.Http.Client.Phone\DocaLabs.Http.Client.Phone.csproj", "{41DF1459-0344-4A4C-859F-8185540E3D30}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Store", "src\DocaLabs.Http.Client.Store\DocaLabs.Http.Client.Store.csproj", "{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.MSJavaScriptSerializer", "src\DocaLabs.Http.Client.Extension.MSJavaScriptSerializer\DocaLabs.Http.Client.Extension.MSJavaScriptSerializer.csproj", "{ABF34F55-0FC0-479B-8512-588F0680EB0F}"
 	ProjectSection(ProjectDependencies) = postProject
-		{82F9423E-89AD-46EF-A347-6549097B8758} = {82F9423E-89AD-46EF-A347-6549097B8758}
-		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664} = {1D7D9640-5003-4D20-AA5F-DC373E9C9664}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extensions", "extensions", "{B48E0FE1-8AE2-4B60-802D-726E2292354B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Store", "src\DocaLabs.Http.Client.Store\DocaLabs.Http.Client.Store.csproj", "{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664} = {1D7D9640-5003-4D20-AA5F-DC373E9C9664}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Examples", "examples\DocsaLabs.Http.Client.Examples\DocsaLabs.Http.Client.Examples.csproj", "{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Examples.DotNet", "examples\DocsaLabs.Http.Client.Examples.DotNet\DocsaLabs.Http.Client.Examples.DotNet.csproj", "{2CF77FD4-D4AC-4705-9C01-F04EDD5B64B9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Examples.Phone", "examples\DocsaLabs.Http.Client.Examples.Phone\DocsaLabs.Http.Client.Examples.Phone.csproj", "{87243BE7-4D99-48E1-9C3F-28DCBBDE0B94}"
+	ProjectSection(ProjectDependencies) = postProject
+		{41DF1459-0344-4A4C-859F-8185540E3D30} = {41DF1459-0344-4A4C-859F-8185540E3D30}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocsaLabs.Http.Client.Examples.Store", "examples\DocsaLabs.Http.Client.Examples.Store\DocsaLabs.Http.Client.Examples.Store.csproj", "{168DF099-C19D-42DF-AD56-3BA470743335}"
+	ProjectSection(ProjectDependencies) = postProject
+		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB} = {78F3044F-CC76-4B7A-B0C2-27C92F7309FB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Services", "tests\DocaLabs.Test.Services\DocaLabs.Test.Services.csproj", "{35959C60-D8BC-4DAB-84A2-E4EAC181BD9D}"
 EndProject
@@ -86,11 +94,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Utils", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.Phone", "tests\DocaLabs.Http.Client.Integration.Tests.Phone\DocaLabs.Http.Client.Integration.Tests.Phone.csproj", "{6DB18236-76BE-47EC-B095-14FAA8BEF738}"
 	ProjectSection(ProjectDependencies) = postProject
-		{82F9423E-89AD-46EF-A347-6549097B8758} = {82F9423E-89AD-46EF-A347-6549097B8758}
 		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Integration.Tests.Store", "tests\DocaLabs.Http.Client.Integration.Tests.Store\DocaLabs.Http.Client.Integration.Tests.Store.csproj", "{830133CE-7D64-4089-ADA9-5CE5E8706290}"
+	ProjectSection(ProjectDependencies) = postProject
+		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB} = {78F3044F-CC76-4B7A-B0C2-27C92F7309FB}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".portable-code", ".portable-code", "{EF6A4DD6-CF59-4B6E-92F8-3DEF13931D69}"
 EndProject
@@ -100,6 +110,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocaLabs.Http.Client.Integr
 		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs
 		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.JsonSerializer", "src\DocaLabs.Http.Client.JsonSerializer\DocaLabs.Http.Client.JsonSerializer.csproj", "{1D7D9640-5003-4D20-AA5F-DC373E9C9664}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,20 +183,6 @@ Global
 		{A10951A1-8B5D-4518-93D5-C43476A52B41}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A10951A1-8B5D-4518-93D5-C43476A52B41}.Release|x64.ActiveCfg = Release|Any CPU
 		{A10951A1-8B5D-4518-93D5-C43476A52B41}.Release|x86.ActiveCfg = Release|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|ARM.ActiveCfg = Release|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|x64.ActiveCfg = Release|Any CPU
-		{BFC334E3-25E4-4973-89B8-6B25276859B2}.Release|x86.ActiveCfg = Release|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -199,20 +197,6 @@ Global
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|x64.ActiveCfg = Release|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|x86.ActiveCfg = Release|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Release|ARM.ActiveCfg = Release|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Release|x64.ActiveCfg = Release|Any CPU
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6}.Release|x86.ActiveCfg = Release|Any CPU
 		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -293,20 +277,6 @@ Global
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}.Release|x64.Build.0 = Release|x64
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}.Release|x86.ActiveCfg = Release|x86
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB}.Release|x86.Build.0 = Release|x86
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|ARM.ActiveCfg = Release|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|x64.ActiveCfg = Release|Any CPU
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F}.Release|x86.ActiveCfg = Release|Any CPU
 		{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -485,16 +455,30 @@ Global
 		{830133CE-7D64-4089-ADA9-5CE5E8706290}.Release|x86.ActiveCfg = Release|x86
 		{830133CE-7D64-4089-ADA9-5CE5E8706290}.Release|x86.Build.0 = Release|x86
 		{830133CE-7D64-4089-ADA9-5CE5E8706290}.Release|x86.Deploy.0 = Release|x86
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Release|x64.ActiveCfg = Release|Any CPU
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
-		{B48E0FE1-8AE2-4B60-802D-726E2292354B} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{82F9423E-89AD-46EF-A347-6549097B8758} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{41DF1459-0344-4A4C-859F-8185540E3D30} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{78F3044F-CC76-4B7A-B0C2-27C92F7309FB} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
+		{1D7D9640-5003-4D20-AA5F-DC373E9C9664} = {9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}
 		{40A96AE2-C931-4AC1-A38E-5FBB3045216C} = {457F5521-CCCD-44FC-9654-CF39747614A4}
 		{6684DB84-8528-4089-837C-C75247A7FB4B} = {457F5521-CCCD-44FC-9654-CF39747614A4}
 		{E3B53EEF-D455-4AE4-B1AA-286CA572C279} = {457F5521-CCCD-44FC-9654-CF39747614A4}
@@ -505,14 +489,11 @@ Global
 		{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7} = {6684DB84-8528-4089-837C-C75247A7FB4B}
 		{A10951A1-8B5D-4518-93D5-C43476A52B41} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
-		{07FF9EA5-FAA8-433A-95EF-B7A9DA2EFFF6} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{35959C60-D8BC-4DAB-84A2-E4EAC181BD9D} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{A6EB4996-FE40-490B-B3DD-722A65B614D8} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{6DB18236-76BE-47EC-B095-14FAA8BEF738} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{830133CE-7D64-4089-ADA9-5CE5E8706290} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
 		{EF6A4DD6-CF59-4B6E-92F8-3DEF13931D69} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
-		{ABF34F55-0FC0-479B-8512-588F0680EB0F} = {B48E0FE1-8AE2-4B60-802D-726E2292354B}
-		{BFC334E3-25E4-4973-89B8-6B25276859B2} = {B48E0FE1-8AE2-4B60-802D-726E2292354B}
 		{412AB226-9D40-45A0-A1DF-3B8CE2B5A0CA} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 		{2CF77FD4-D4AC-4705-9C01-F04EDD5B64B9} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 		{87243BE7-4D99-48E1-9C3F-28DCBBDE0B94} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}

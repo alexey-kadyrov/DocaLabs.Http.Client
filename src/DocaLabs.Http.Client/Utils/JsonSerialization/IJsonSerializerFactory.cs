@@ -1,6 +1,6 @@
 ﻿namespace DocaLabs.Http.Client.Utils.JsonSerialization
 {
-    public interface IJasonSerializerFactory
+    public interface IJsonSerializerFactory
     {
         IJsonSerializer CreateSerializer();
         IJsonDeserializer CreateDeserializer();

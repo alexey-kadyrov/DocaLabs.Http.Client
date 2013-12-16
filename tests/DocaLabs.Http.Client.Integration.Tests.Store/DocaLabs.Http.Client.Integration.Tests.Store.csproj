@@ -151,20 +151,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.Store\DocaLabs.Http.Client.Store.csproj">
-      <Project>{78f3044f-cc76-4b7a-b0c2-27c92f7309fb}</Project>
-      <Name>DocaLabs.Http.Client.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
-      <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
-      <Name>DocaLabs.Http.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DocaLabs.Test.Utils\DocaLabs.Test.Utils.csproj">
       <Project>{0fda939d-d0eb-4bae-9b6a-3b68379b7838}</Project>
       <Name>DocaLabs.Test.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="DocaLabs.Http.Client, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\.json\Store\DocaLabs.Http.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>

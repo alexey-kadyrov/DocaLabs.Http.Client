@@ -159,7 +159,7 @@
     <Compile Include="Utils\ICustomConcurrentDictionary.cs" />
     <Compile Include="Utils\ICustomConverterFactory.cs" />
     <Compile Include="Utils\ICustomKeyValueCollection.cs" />
-    <Compile Include="Utils\JsonSerialization\IJasonSerializerFactory.cs" />
+    <Compile Include="Utils\JsonSerialization\IJsonSerializerFactory.cs" />
     <Compile Include="Utils\INullComparer.cs" />
     <Compile Include="Utils\JsonSerialization\DefaultJsonDeserializer.cs" />
     <Compile Include="Utils\JsonSerialization\DefaultJsonSerializer.cs" />

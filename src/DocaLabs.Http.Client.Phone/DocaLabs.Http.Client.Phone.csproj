@@ -123,9 +123,22 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
+
   <Target Name="AfterBuild">
+    <CallTarget Targets="BuildPlainLibrary" />
+    <CallTarget Targets="BuildLibraryWithJsonDotNet" />
+  </Target>
+
+  <Target Name="BuildPlainLibrary">
     <RemoveDir Directories="$(SolutionDir)build\Phone\" />
     <MakeDir Directories="$(SolutionDir)build\Phone\" />
     <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /targetplatform:v4,&quot;%ProgramFiles(x86)%\Reference Assemblies\Microsoft\Framework\WindowsPhone\v8.0&quot; /out:&quot;$(SolutionDir)build\Phone\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot;" />
   </Target>
+
+  <Target Name="BuildLibraryWithJsonDotNet">
+    <RemoveDir Directories="$(SolutionDir)build\.json\Phone\" />
+    <MakeDir Directories="$(SolutionDir)build\.json\Phone\" />
+    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /targetplatform:v4,&quot;%ProgramFiles(x86)%\Reference Assemblies\Microsoft\Framework\WindowsPhone\v8.0&quot; /out:&quot;$(SolutionDir)build\.json\Phone\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot; &quot;$(SolutionDir)src\DocaLabs.Http.Client.JsonSerializer\bin\$(ConfigurationName)\DocaLabs.Http.Client.JsonSerializer.dll&quot;" />
+  </Target>
+
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Extension.NewtonSoft
+namespace DocaLabs.Http.Client.Utils.JsonSerialization
 {
     /// <summary>
     /// Defines serialization settings that can be used to customize the behaviour of the NewtonSoftDefaultJsonSerializer class.

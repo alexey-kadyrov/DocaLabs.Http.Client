@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.ComponentModel.Composition;
-using DocaLabs.Http.Client.Utils.JsonSerialization;
 using Newtonsoft.Json;
 
-namespace DocaLabs.Http.Client.Extension.NewtonSoft
+namespace DocaLabs.Http.Client.Utils.JsonSerialization
 {
     /// <summary>
     /// Implements IJsonSerializer using Newtonsoft JsonConvert.
     /// </summary>
-    [Export(typeof(IJsonSerializer))]
     public class JsonSerializer : IJsonSerializer
     {
-        static readonly ConcurrentDictionary<Type, SerializationSettings> Settings = new ConcurrentDictionary<Type, SerializationSettings>();
+        static readonly CustomConcurrentDictionary<Type, SerializationSettings> Settings = new CustomConcurrentDictionary<Type, SerializationSettings>();
 
         /// <summary>
         /// Serializes an object into string using JSON notation.

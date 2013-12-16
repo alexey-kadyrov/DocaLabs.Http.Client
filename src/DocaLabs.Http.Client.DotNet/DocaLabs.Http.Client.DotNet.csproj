@@ -73,8 +73,6 @@
     <Compile Include="Configuration\EndpointConfigurationProviderOverride.cs" />
     <Compile Include="Configuration\ConfigurationExtenstions.cs" />
     <Compile Include="HttpClientFactory.cs" />
-    <Compile Include="Utils\JsonSerialization\JasonSerializerFactory.cs" />
-    <Compile Include="Utils\LibraryExtensionsComposer.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactory.cs" />
     <Compile Include="Utils\ContentEncoding\ContentEncoderFactory.cs" />
     <Compile Include="Utils\ContentEncoding\GZipContentDecoder.cs" />
@@ -109,14 +107,28 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   -->
+  
   <Target Name="AfterBuild">
+    <CallTarget Targets="BuildPlainLibrary" />
+    <CallTarget Targets="BuildLibraryWithJsonDotNet" />
+  </Target>
+
+  <Target Name="BuildPlainLibrary">
     <RemoveDir Directories="$(SolutionDir)build\DotNet\" />
     <MakeDir Directories="$(SolutionDir)build\DotNet\" />
     <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /out:&quot;$(SolutionDir)build\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot;" />
   </Target>
+
+  <Target Name="BuildLibraryWithJsonDotNet">
+    <RemoveDir Directories="$(SolutionDir)build\.json\DotNet\" />
+    <MakeDir Directories="$(SolutionDir)build\.json\DotNet\" />
+    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /out:&quot;$(SolutionDir)build\.json\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot; &quot;$(SolutionDir)src\DocaLabs.Http.Client.JsonSerializer\$(OutDir)\DocaLabs.Http.Client.JsonSerializer.dll&quot;" />
+  </Target>
+
 </Project>
