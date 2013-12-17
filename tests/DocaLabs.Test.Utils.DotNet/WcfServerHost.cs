@@ -3,9 +3,9 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DocaLabs.Test.Services._WcfServices
+namespace DocaLabs.Test.Utils.DotNet
 {
-    class WcfServerHost<TService> : IDisposable
+    public class WcfServerHost<TService> : IDisposable
     {
         ManualResetEvent ServerReady { get; set; }
         ManualResetEvent StopServer { get; set; }

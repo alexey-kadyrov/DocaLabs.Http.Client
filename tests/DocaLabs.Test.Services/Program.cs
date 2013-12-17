@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using DocaLabs.Test.Utils.DotNet;
 using DocaLabs.Test.Services._ServiceStackServices;
 using DocaLabs.Test.Services._WcfServices;
 
