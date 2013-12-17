@@ -11,13 +11,13 @@ namespace DocaLabs.Http.Client.Integration.Tests
         [AssemblyInitialize]
         public static void StartServices(TestContext context)
         {
-            new HttpClient<VoidType, VoidType>(new Uri("http://localhost:6701/TestServicesProxy/Start")).Execute(VoidType.Value);
+            new HttpClient<VoidType, VoidType>(null, "startServices").Execute(VoidType.Value);
         }
 
         [AssemblyCleanup]
         public static void StopServices()
         {
-            new HttpClient<VoidType, VoidType>(new Uri("http://localhost:6701/TestServicesProxy/Stop")).Execute(VoidType.Value);
+            new HttpClient<VoidType, VoidType>(null, "stopServices").Execute(VoidType.Value);
         }
     }
 }

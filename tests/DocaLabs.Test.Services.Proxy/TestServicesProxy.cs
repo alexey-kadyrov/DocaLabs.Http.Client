@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace DocaLabs.Test.Services.Proxy
@@ -17,6 +18,8 @@ namespace DocaLabs.Test.Services.Proxy
             {
                 if (_quitEvent != null)
                     return;
+
+                Console.WriteLine("Starting Test Services");
 
                 _quitEvent = new EventWaitHandle(false, EventResetMode.ManualReset, QuitEventWaitHandleName);
 
@@ -41,6 +44,8 @@ namespace DocaLabs.Test.Services.Proxy
             {
                 if (_quitEvent == null)
                     return;
+
+                Console.WriteLine("Stopping Test Services");
 
                 _quitEvent.Set();
 
