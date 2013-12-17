@@ -1,7 +1,11 @@
 ﻿using System;
 using DocaLabs.Http.Client;
 using DocaLabs.Http.Client.Binding;
+#if GENERIC_DOT_NET
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace DocaLabs.Http.Client.Integration.Tests
 {

@@ -73,6 +73,9 @@
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs">
       <Link>User.Portable.cs</Link>
     </Compile>
+    <Compile Include="..\.portable-code\ServiceSetup.Portable.cs">
+      <Link>ServiceSetup.Portable.cs</Link>
+    </Compile>
     <Compile Include="AsyncHttpClientAgainstServiceStackTests.cs" />
     <Compile Include="Configuration\ConfigurationExtensionsTests.cs" />
     <Compile Include="Configuration\RequestSetupTests.cs" />
@@ -80,7 +83,6 @@
     <Compile Include="HttpClientAgainstWcfTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DocaLabs.Test.Common\DocaLabs.Testing.Common.csproj">
