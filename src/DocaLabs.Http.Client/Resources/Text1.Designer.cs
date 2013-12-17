@@ -62,15 +62,6 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Base type argument {0} does not match the original argument {1}..
-        /// </summary>
-        internal static string base_type_does_not_match {
-            get {
-                return ResourceManager.GetString("base_type_does_not_match", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot convert from type {0} to type {1}..
         /// </summary>
         internal static string cannot_convert_from_0_to_1 {
@@ -85,33 +76,6 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string cannot_figure_out_how_to_deserialize {
             get {
                 return ResourceManager.GetString("cannot_figure_out_how_to_deserialize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot mix network credential with other types for {0}..
-        /// </summary>
-        internal static string cannot_mix_network_credential_with_other {
-            get {
-                return ResourceManager.GetString("cannot_mix_network_credential_with_other", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Compression format {0} is not supported..
-        /// </summary>
-        internal static string compression_format_is_not_suppoerted {
-            get {
-                return ResourceManager.GetString("compression_format_is_not_suppoerted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Configuration file {0} is not found..
-        /// </summary>
-        internal static string configuration_file_0_not_found {
-            get {
-                return ResourceManager.GetString("configuration_file_0_not_found", resourceCulture);
             }
         }
         
@@ -161,29 +125,11 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the base class {0} is generic it must have two generic arguments..
-        /// </summary>
-        internal static string if_base_class_generic_it_must_have_two_parameters {
-            get {
-                return ResourceManager.GetString("if_base_class_generic_it_must_have_two_parameters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Input argument can be only of string or Guid type..
         /// </summary>
         internal static string input_argument_can_be_only_string_or_guid {
             get {
                 return ResourceManager.GetString("input_argument_can_be_only_string_or_guid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Interface {0} cannot be generic type definition..
-        /// </summary>
-        internal static string interface_cannot_be_generic_type_definition {
-            get {
-                return ResourceManager.GetString("interface_cannot_be_generic_type_definition", resourceCulture);
             }
         }
         
@@ -224,42 +170,6 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The type {0} must be interface..
-        /// </summary>
-        internal static string must_be_interface {
-            get {
-                return ResourceManager.GetString("must_be_interface", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The base type {0} must have method: {1} Execute({2} query)..
-        /// </summary>
-        internal static string must_have_execute_method {
-            get {
-                return ResourceManager.GetString("must_have_execute_method", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The type {0} must have only one method..
-        /// </summary>
-        internal static string must_have_only_one_method {
-            get {
-                return ResourceManager.GetString("must_have_only_one_method", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The base type {0} must have constructor with parameters: (Uri serviceUrl, string configurationName, {1} retryStrategy) or (Uri serviceUrl, string configurationName)..
-        /// </summary>
-        internal static string must_implement_constructor {
-            get {
-                return ResourceManager.GetString("must_implement_constructor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Response stream is null..
         /// </summary>
         internal static string null_response_stream {
@@ -287,7 +197,7 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Service URL is not defined in the constaructor paramter or is not in the configuration file..
+        ///   Looks up a localized string similar to The Service URL is neither defined in the constructor nor in the configuration file..
         /// </summary>
         internal static string service_url_is_not_defined {
             get {

@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D9B799
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Tests.MSTest", "tests\DocaLabs.Http.Client.Tests.MSTest\DocaLabs.Http.Client.Tests.MSTest.csproj", "{B0716490-5D1A-40FD-835C-9AA263523B21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Extension.NewtonSoft.Tests", "tests\DocaLabs.Http.Client.Extension.NewtonSoft.Tests\DocaLabs.Http.Client.Extension.NewtonSoft.Tests.csproj", "{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.JsonSerializer.Tests", "tests\DocaLabs.Http.Client.JsonSerializer.Tests\DocaLabs.Http.Client.JsonSerializer.Tests.csproj", "{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{1911919A-FA5C-4D0D-AA53-104662A59933}"
 	ProjectSection(SolutionItems) = preProject
@@ -107,7 +107,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocaLabs.Http.Client.Integration.Tests", "DocaLabs.Http.Client.Integration.Tests", "{9124CE42-6310-43BD-8E2A-B267195D661E}"
 	ProjectSection(SolutionItems) = preProject
 		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.Portable.cs
+		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstServiceStackTests.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstServiceStackTests.Portable.cs
 		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs
+		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\ServiceSetup.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\ServiceSetup.Portable.cs
 		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs
 	EndProjectSection
 EndProject

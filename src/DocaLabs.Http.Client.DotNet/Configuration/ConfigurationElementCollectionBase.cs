@@ -170,7 +170,7 @@ namespace DocaLabs.Http.Client.Configuration
             BaseRemoveAt(index);
         }
 
-        public IEnumerator<TElement> GetEnumerator()
+        public new IEnumerator<TElement> GetEnumerator()
         {
             var enumerator = base.GetEnumerator();
             while (enumerator.MoveNext())

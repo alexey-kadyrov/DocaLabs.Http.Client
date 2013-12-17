@@ -1076,8 +1076,6 @@ namespace DocaLabs.Http.Client.Integration.Portable.Tests
 
             _exception1 = aggregateException.InnerExceptions[0];
             _exception2 = aggregateException.InnerExceptions[1];
-
-            new ManualResetEvent(false).WaitOne(1000);
         }
 
         [TestMethod]

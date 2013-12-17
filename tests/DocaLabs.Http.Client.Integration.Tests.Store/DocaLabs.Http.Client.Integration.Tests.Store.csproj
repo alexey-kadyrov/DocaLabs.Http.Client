@@ -120,8 +120,14 @@
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\AsyncHttpClientAgainstServiceStackTests.Portable.cs">
       <Link>AsyncHttpClientAgainstServiceStackTests.Portable.cs</Link>
     </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstServiceStackTests.Portable.cs">
+      <Link>HttpClientAgainstServiceStackTests.Portable.cs</Link>
+    </Compile>
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\HttpClientAgainstWcfTests.Portable.cs">
       <Link>HttpClientAgainstWcfTests.Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\ServiceSetup.Portable.cs">
+      <Link>ServiceSetup.Portable.cs</Link>
     </Compile>
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs">
       <Link>User.Portable.cs</Link>

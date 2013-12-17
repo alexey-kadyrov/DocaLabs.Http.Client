@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <httpClientEndpoints>
 
+  <!-- Test Proxy -->
+  <endpoint name="startServices" baseUrl="http://169.254.80.80:6701/TestServicesProxy/Start" method="POST"/>
+  <endpoint name="stopServices" baseUrl="http://169.254.80.80:6701/TestServicesProxy/Stop" method="POST"/>
+
   <!-- WCF clients -->
   <endpoint name="simpleGetJsonCall" baseUrl="http://169.254.80.80:5701/TestService/GetAsJson"/>
   <endpoint name="simpleGetXmlCall" baseUrl="http://169.254.80.80:5701/TestService/GetAsXml"/>

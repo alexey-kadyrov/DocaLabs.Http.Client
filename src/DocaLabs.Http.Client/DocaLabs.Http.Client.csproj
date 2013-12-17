@@ -36,8 +36,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
     <EmbeddedResource Include="Resources\Text.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Text.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Text1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +123,11 @@
     <Compile Include="Configuration\IClientNetworkCredential.cs" />
     <Compile Include="Configuration\IClientProxy.cs" />
     <Compile Include="Configuration\IEndpointConfigurationProvider.cs" />
+    <Compile Include="Resources\Text1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Text.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\CustomKeyValueCollection.cs" />
     <Compile Include="Utils\IRequestStreamFactory.cs" />
     <Compile Include="Utils\ITraceLog.cs" />
@@ -137,11 +142,6 @@
     <Compile Include="HttpClientWebException.cs" />
     <Compile Include="IExecuteStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Text.Designer.cs">
-      <DependentUpon>Text.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="RichRequest.cs" />
     <Compile Include="RichResponse.cs" />
     <Compile Include="Utils\CharSets.cs" />
