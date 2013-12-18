@@ -942,12 +942,23 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => _instance.Get().ShouldBeOfType<ResultModel>();
-        
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            _instance.Get().ShouldBeOfType<ResultModel>();
+        }
+
         public interface IService
         {
             ResultModel Get();
@@ -964,11 +975,22 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => _instance.Get().Result.ShouldBeOfType<ResultModel>();
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            _instance.Get().Result.ShouldBeOfType<ResultModel>();
+        }
 
         public interface IService
         {
@@ -986,11 +1008,22 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => _instance.Get(CancellationToken.None).Result.ShouldBeOfType<ResultModel>();
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            _instance.Get(CancellationToken.None).Result.ShouldBeOfType<ResultModel>();
+        }
 
         public interface IService
         {
@@ -1008,14 +1041,23 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             _instance.Post(new RequestModel());
             _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Pipeline was executed.");
-        };
+        }
 
         public interface IService
         {
@@ -1033,14 +1075,23 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             _instance.Post(new RequestModel()).Wait();
             _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
-        };
+        }
 
         public interface IService
         {
@@ -1058,14 +1109,23 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             _instance.Post(new RequestModel(), CancellationToken.None).Wait();
             _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
-        };
+        }
 
         public interface IService
         {
@@ -1083,14 +1143,23 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             _instance.Do();
             _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Pipeline was executed.");
-        };
+        }
 
         public interface IService
         {
@@ -1103,14 +1172,23 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             _instance.Do().Wait();
             _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
-        };
+        }
 
         public interface IService
         {
@@ -1123,14 +1201,23 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             _instance.Do(CancellationToken.None).Wait();
             _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
-        };
+        }
 
         public interface IService
         {
@@ -1143,16 +1230,25 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult(42, "Hello World!");
             value.Value.GetType().GetProperty("query").GetValue(value.Value).ShouldEqual(42);
             value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
             _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Pipeline was executed.");
-        };
+        }
 
         public interface IService
         {
@@ -1170,15 +1266,24 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult(42, "Hello World!").Result;
             value.Value.GetType().GetProperty("query").GetValue(value.Value).ShouldEqual(42);
             value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
-        };
+        }
 
         public interface IService
         {
@@ -1196,15 +1301,24 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult(42, "Hello World!", CancellationToken.None).Result;
             value.Value.GetType().GetProperty("query").GetValue(value.Value).ShouldEqual(42);
             value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
-        };
+        }
 
         public interface IService
         {
@@ -1222,15 +1336,24 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult("Hello World!");
-            value.Value.ShouldNotBeOfType(typeof(string));
+            value.Value.ShouldNotBeOfType<string>();
             value.Value.GetType().GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
-        };
+        }
 
         public interface IService
         {
@@ -1248,15 +1371,24 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult("Hello World!").Result;
-            value.Value.ShouldNotBeOfType(typeof(string));
+            value.Value.ShouldNotBeOfType<string>();
             value.Value.GetType().GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
-        };
+        }
 
         public interface IService
         {
@@ -1274,15 +1406,24 @@ namespace DocaLabs.Http.Client.Tests
     {
         static IService _instance;
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult("Hello World!", CancellationToken.None).Result;
-            value.Value.ShouldNotBeOfType(typeof(string));
+            value.Value.ShouldNotBeOfType<string>();
             value.Value.GetType().GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
-        };
+        }
 
         public interface IService
         {
@@ -1302,16 +1443,22 @@ namespace DocaLabs.Http.Client.Tests
         static DateTime time;
         static Guid guid;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
             time = DateTime.UtcNow;
             guid = Guid.NewGuid();
-        };
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
 
@@ -1330,7 +1477,7 @@ namespace DocaLabs.Http.Client.Tests
             type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
             type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
             type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
-        };
+        }
 
         public interface IService
         {
@@ -1355,16 +1502,22 @@ namespace DocaLabs.Http.Client.Tests
         static DateTime time;
         static Guid guid;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
             time = DateTime.UtcNow;
             guid = Guid.NewGuid();
-        };
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M).Result;
 
@@ -1383,7 +1536,7 @@ namespace DocaLabs.Http.Client.Tests
             type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
             type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
             type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
-        };
+        }
 
         public interface IService
         {
@@ -1408,16 +1561,22 @@ namespace DocaLabs.Http.Client.Tests
         static DateTime time;
         static Guid guid;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
             time = DateTime.UtcNow;
             guid = Guid.NewGuid();
-        };
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
         {
             var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M, CancellationToken.None).Result;
 
@@ -1436,7 +1595,7 @@ namespace DocaLabs.Http.Client.Tests
             type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
             type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
             type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
-        };
+        }
 
         public interface IService
         {
@@ -1461,16 +1620,22 @@ namespace DocaLabs.Http.Client.Tests
         static DateTime time;
         static Guid guid;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
             time = DateTime.UtcNow;
             guid = Guid.NewGuid();
-        };
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service_and_transfer_attributes = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service_and_transfer_attributes()
         {
             var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
 
@@ -1490,7 +1655,7 @@ namespace DocaLabs.Http.Client.Tests
             type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
             type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
             type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
-        };
+        }
 
         public interface IService
         {
@@ -1521,16 +1686,22 @@ namespace DocaLabs.Http.Client.Tests
         static DateTime time;
         static Guid guid;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
             time = DateTime.UtcNow;
             guid = Guid.NewGuid();
-        };
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service_and_transfer_attributes = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service_and_transfer_attributes()
         {
             var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M).Result;
 
@@ -1550,7 +1721,7 @@ namespace DocaLabs.Http.Client.Tests
             type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
             type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
             type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
-        };
+        }
 
         public interface IService
         {
@@ -1581,16 +1752,22 @@ namespace DocaLabs.Http.Client.Tests
         static DateTime time;
         static Guid guid;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
             time = DateTime.UtcNow;
             guid = Guid.NewGuid();
-        };
 
-        Because of =
-            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service_and_transfer_attributes = () =>
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service_and_transfer_attributes()
         {
             var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M, CancellationToken.None).Result;
 
@@ -1610,7 +1787,7 @@ namespace DocaLabs.Http.Client.Tests
             type.GetProperty("guid").GetValue(value.Value).ShouldEqual(guid);
             type.GetProperty("data").GetValue(value.Value).GetType().GetProperty("Value").GetValue(value.Value.GetType().GetProperty("data").GetValue(value.Value)).ShouldEqual("v1");
             type.GetProperty("number").GetValue(value.Value).ShouldEqual(123.45M);
-        };
+        }
 
         public interface IService
         {

@@ -43,6 +43,11 @@ namespace DocaLabs.Test.Utils
             Assert.IsInstanceOf<T>(obj);
         }
 
+        public static void ShouldNotBeOfType<T>(this object obj)
+        {
+            Assert.IsNotInstanceOf<T>(obj);
+        }
+
         public static void ShouldBeEqualOrGreaterThan(this int actual, int expected)
         {
             Assert.GreaterOrEqual(actual, expected);
@@ -56,6 +61,11 @@ namespace DocaLabs.Test.Utils
         public static void ShouldBeFalse(this bool value)
         {
             Assert.IsFalse(value);
+        }
+
+        public static void ShouldBeEmpty<T>(this IEnumerable<T> actual)
+        {
+            Assert.IsEmpty(actual);
         }
 
         public static void ShouldContain<T>(this IEnumerable<T> actual, params T[] expected)
