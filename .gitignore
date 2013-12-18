@@ -40,3 +40,4 @@ PartCover/
 packages/
 tests/DocaLabs.Http.Client.Tests.MSTest/FakesAssemblies/*
 tests/.service-host/*.*
+build/*

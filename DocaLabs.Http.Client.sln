@@ -116,6 +116,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Services.Proxy", "tests\DocaLabs.Test.Services.Proxy\DocaLabs.Test.Services.Proxy.csproj", "{08E86986-39B5-4561-B430-D8DF2521734B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.DotNet.Tests", "tests\DocaLabs.Http.Client.DotNet.Tests\DocaLabs.Http.Client.DotNet.Tests.csproj", "{423F66E8-1EC5-4CBD-A494-DF29B25F0777}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

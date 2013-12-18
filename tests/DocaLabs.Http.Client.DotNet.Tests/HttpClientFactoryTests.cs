@@ -1815,19 +1815,32 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_several_times_for_the_same_interface_but_different_base_classes
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Establish context =
-            () => HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestHttpClientBaseType), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestHttpClientBaseType), new Uri("http://foo.bar/"));
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/")));
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class NonGenericTestHttpClientBaseType : TestHttpClientBaseType<RequestModel, ResultModel>
         {
@@ -1856,19 +1869,32 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_several_times_for_the_same_interface_but_different_base_classes
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Establish context =
-            () => HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/")));
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class NonGenericTestAsyncHttpClientBaseType : TestAsyncHttpClientBaseType<RequestModel, ResultModel>
         {
@@ -1897,19 +1923,32 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_several_times_for_the_same_interface_but_different_base_classes
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Establish context =
-            () => HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablistContext(TestContext context)
+        {
+            HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/")));
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class NonGenericTestAsyncHttpClientBaseType : TestAsyncHttpClientBaseType<RequestModel, ResultModel>
         {
@@ -1938,16 +1977,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_base_type_with_more_than_two_generic_args
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithThreeGenericArgs<,,>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithThreeGenericArgs<,,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestHttpClientBaseTypeWithThreeGenericArgs<TQuery, TResult, TSomeOther> : HttpClient<TQuery, TResult>
         {
@@ -1981,16 +2034,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_more_than_two_generic_args
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithThreeGenericArgs<,,>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithThreeGenericArgs<,,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithThreeGenericArgs<TQuery, TResult, TSomeOther> : AsyncHttpClient<TQuery, TResult>
         {
@@ -2024,16 +2091,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_more_than_two_generic_args
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithThreeGenericArgs<,,>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithThreeGenericArgs<,,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithThreeGenericArgs<TQuery, TResult, TSomeOther> : AsyncHttpClient<TQuery, TResult>
         {
@@ -2067,16 +2148,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_base_type_with_one_generic_arg
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithOneGenericArg<>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithOneGenericArg<>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestHttpClientBaseTypeWithOneGenericArg<TQuery> : HttpClient<TQuery, ResultModel>
         {
@@ -2105,16 +2200,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_one_generic_arg
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOneGenericArg<>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOneGenericArg<>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithOneGenericArg<TQuery> : AsyncHttpClient<TQuery, ResultModel>
         {
@@ -2143,16 +2252,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_one_generic_arg
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOneGenericArg<>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOneGenericArg<>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithOneGenericArg<TQuery> : AsyncHttpClient<TQuery, ResultModel>
         {
@@ -2181,16 +2304,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_base_type_with_only_default_constructor
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithOnlyDefaultConstructor), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithOnlyDefaultConstructor), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestHttpClientBaseTypeWithOnlyDefaultConstructor : HttpClient<RequestModel, ResultModel>
         {
@@ -2219,16 +2356,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_only_default_constructor
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOnlyDefaultConstructor), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOnlyDefaultConstructor), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithOnlyDefaultConstructor : AsyncHttpClient<RequestModel, ResultModel>
         {
@@ -2257,16 +2408,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_only_default_constructor
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOnlyDefaultConstructor), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithOnlyDefaultConstructor), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithOnlyDefaultConstructor : AsyncHttpClient<RequestModel, ResultModel>
         {
@@ -2295,16 +2460,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_base_type_with_constructor_with_wrong_arguments
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithConstructorWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithConstructorWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestHttpClientBaseTypeWithConstructorWithWrongArguments : HttpClient<RequestModel, ResultModel>
         {
@@ -2333,16 +2512,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_constructor_with_wrong_arguments
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithConstructorWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithConstructorWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithConstructorWithWrongArguments : AsyncHttpClient<RequestModel, ResultModel>
         {
@@ -2371,16 +2564,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_constructor_with_wrong_arguments
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithConstructorWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithConstructorWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithConstructorWithWrongArguments : AsyncHttpClient<RequestModel, ResultModel>
         {
@@ -2409,16 +2616,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_base_type_without_execute_method
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithoutExecuteMethod), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithoutExecuteMethod), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestHttpClientBaseTypeWithoutExecuteMethod
         {
@@ -2451,16 +2672,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_without_execute_method
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithoutExecuteMethod), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithoutExecuteMethod), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithoutExecuteMethod
         {
@@ -2493,16 +2728,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_without_execute_method
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithoutExecuteMethod), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithoutExecuteMethod), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithoutExecuteMethod
         {
@@ -2535,16 +2784,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_base_type_with_execute_method_with_wrong_arguments
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestHttpClientBaseTypeWithExecuteMethodWithWrongArguments
         {
@@ -2582,16 +2845,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_execute_method_with_wrong_arguments
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments
         {
@@ -2629,16 +2906,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_execute_method_with_wrong_arguments
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments
         {
@@ -2676,16 +2967,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_execute_method_without_cancelaltion_token
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments
         {
@@ -2723,16 +3028,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_without_execute_async_method
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_base_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("baseType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_base_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("baseType");
+        }
 
         public class TestAsyncHttpClientBaseTypeWithExecuteMethodWithWrongArguments
         {
@@ -2770,31 +3089,59 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_null_interface
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance(null, new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_null_exception =
-            () => exception.ShouldBeOfType<ArgumentNullException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance(null, new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentNullException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_null_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentNullException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
     }
 
     [TestClass]
     public class when_creating_instance_for_class_instead_of_interface
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<ServiceClassInsteadOfInterface>(new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<ServiceClassInsteadOfInterface>(new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public abstract class ServiceClassInsteadOfInterface
         {
@@ -2815,16 +3162,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_class_instead_of_interface
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<ServiceClassInsteadOfInterface>(new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<ServiceClassInsteadOfInterface>(new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public abstract class ServiceClassInsteadOfInterface
         {
@@ -2845,16 +3206,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_class_instead_of_interface
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<ServiceClassInsteadOfInterface>(new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<ServiceClassInsteadOfInterface>(new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public abstract class ServiceClassInsteadOfInterface
         {
@@ -2875,16 +3250,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_interface_with_two_methods
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithTwoMethods>(new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithTwoMethods>(new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public interface IServiceWithTwoMethods
         {
@@ -2906,16 +3295,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_interface_with_two_methods
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithTwoMethods>(new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishCOntext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithTwoMethods>(new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public interface IServiceWithTwoMethods
         {
@@ -2937,16 +3340,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_interface_with_two_methods
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithTwoMethods>(new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithTwoMethods>(new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public interface IServiceWithTwoMethods
         {
@@ -2968,16 +3385,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_interface_without_any_method
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithoutAnyMethod>(new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance<IServiceWithoutAnyMethod>(new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public interface IServiceWithoutAnyMethod
         {
@@ -2987,16 +3418,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instance_for_generic_type_definition_of_interface
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance(typeof(IService<,>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance(typeof(IService<,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public interface IService<in TQuery, out TResult>
         {
@@ -3007,16 +3452,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_for_generic_type_definition_of_interface
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance(typeof(IService<,>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance(typeof(IService<,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public interface IService<in TQuery, TResult>
         {
@@ -3027,16 +3486,30 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_generic_type_definition_of_interface
     {
-        static Exception exception;
+        static Exception _exception;
 
-        Because of =
-            () => exception = Catch.Exception(() => HttpClientFactory.CreateInstance(typeof(IService<,>), new Uri("http://foo.bar/")));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_throw_argument_exception =
-            () => exception.ShouldBeOfType<ArgumentException>();
+        static void BecauseOf()
+        {
+            _exception = Catch.Exception(() => HttpClientFactory.CreateInstance(typeof(IService<,>), new Uri("http://foo.bar/")));
+        }
 
-        It should_report_interface_type_argument =
-            () => ((ArgumentException)exception).ParamName.ShouldEqual("interfaceType");
+        [TestMethod]
+        public void it_should_throw_argument_exception()
+        {
+            _exception.ShouldBeOfType<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void it_should_report_interface_type_argument()
+        {
+            ((ArgumentException) _exception).ParamName.ShouldEqual("interfaceType");
+        }
 
         public interface IService<in TQuery, TResult>
         {
@@ -3047,29 +3520,41 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_instances_concurrently
     {
-        static List<Type> interfaces;
-        static int count;
+        static List<Type> _interfaces;
+        static int _count;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            interfaces = new List<Type>();
+            _interfaces = new List<Type>();
             for (var i = 0; i < 1000; i++)
-                interfaces.Add(TestHttpClientInterfaceBuilder.CreateInterface(i, typeof(RequestModel), typeof(ResultModel)));
-        };
+                _interfaces.Add(TestHttpClientInterfaceBuilder.CreateInterface(i, typeof(RequestModel), typeof(ResultModel)));
 
-        Because of = () => Parallel.ForEach(interfaces, x =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var s = HttpClientFactory.CreateInstance(typeof(TestHttpClientBaseTypeForConcurrentRun<,>), x, new Uri("http://www.foo.bar/"));
+            Parallel.ForEach(_interfaces, x =>
+            {
+                var s = HttpClientFactory.CreateInstance(typeof (TestHttpClientBaseTypeForConcurrentRun<,>), x,
+                    new Uri("http://www.foo.bar/"));
 
-            var result = s.GetType().GetMethod("CallService").Invoke(s, new object[] { new RequestModel { Value = "Hello!" } });
+                var result = s.GetType()
+                    .GetMethod("CallService")
+                    .Invoke(s, new object[] {new RequestModel {Value = "Hello!"}});
 
-            ((ResultModel)result).Value.ShouldEqual("Hello!");
+                ((ResultModel) result).Value.ShouldEqual("Hello!");
 
-            Interlocked.Increment(ref count);
-        });
+                Interlocked.Increment(ref _count);
+            });
+        }
 
-        It should_create_and_call_all_services =
-            () => count.ShouldEqual(interfaces.Count);
+        [TestMethod]
+        public void it_should_create_and_call_all_services()
+        {
+            _count.ShouldEqual(_interfaces.Count);
+        }
 
         public class RequestModel
         {
@@ -3144,29 +3629,41 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instances_concurrently
     {
-        static List<Type> interfaces;
-        static int count;
+        static List<Type> _interfaces;
+        static int _count;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            interfaces = new List<Type>();
+            _interfaces = new List<Type>();
             for (var i = 0; i < 1000; i++)
-                interfaces.Add(TestAsyncHttpClientInterfaceBuilder.CreateInterface(i, typeof(RequestModel), typeof(ResultModel)));
-        };
+                _interfaces.Add(TestAsyncHttpClientInterfaceBuilder.CreateInterface(i, typeof(RequestModel), typeof(ResultModel)));
 
-        Because of = () => Parallel.ForEach(interfaces, x =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var s = HttpClientFactory.CreateInstance(typeof(TestAsyncHttpClientBaseTypeForConcurrentRun<,>), x, new Uri("http://www.foo.bar/"));
+            Parallel.ForEach(_interfaces, x =>
+            {
+                var s = HttpClientFactory.CreateInstance(typeof (TestAsyncHttpClientBaseTypeForConcurrentRun<,>), x,
+                    new Uri("http://www.foo.bar/"));
 
-            var result = s.GetType().GetMethod("CallService").Invoke(s, new object[] { new RequestModel { Value = "Hello!" } });
+                var result = s.GetType()
+                    .GetMethod("CallService")
+                    .Invoke(s, new object[] {new RequestModel {Value = "Hello!"}});
 
-            ((Task<ResultModel>)result).Result.Value.ShouldEqual("Hello!");
+                ((Task<ResultModel>) result).Result.Value.ShouldEqual("Hello!");
 
-            Interlocked.Increment(ref count);
-        });
+                Interlocked.Increment(ref _count);
+            });
+        }
 
-        It should_create_and_call_all_services =
-            () => count.ShouldEqual(interfaces.Count);
+        [TestMethod]
+        public void it_should_create_and_call_all_services()
+        {
+            _count.ShouldEqual(_interfaces.Count);
+        }
 
         public class RequestModel
         {
@@ -3242,29 +3739,41 @@ namespace DocaLabs.Http.Client.Tests
     [TestClass]
     public class when_creating_asynchronous_instances_with_cancellation_token_concurrently
     {
-        static List<Type> interfaces;
-        static int count;
+        static List<Type> _interfaces;
+        static int _count;
 
-        Establish context = () =>
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
         {
-            interfaces = new List<Type>();
+            _interfaces = new List<Type>();
             for (var i = 0; i < 1000; i++)
-                interfaces.Add(TestAsyncHttpClientInterfaceBuilder.CreateInterface(i, typeof(RequestModel), typeof(ResultModel)));
-        };
+                _interfaces.Add(TestAsyncHttpClientInterfaceBuilder.CreateInterface(i, typeof(RequestModel), typeof(ResultModel)));
 
-        Because of = () => Parallel.ForEach(interfaces, x =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
-            var s = HttpClientFactory.CreateInstance(typeof(TestAsyncHttpClientBaseTypeForConcurrentRun<,>), x, new Uri("http://www.foo.bar/"));
+            Parallel.ForEach(_interfaces, x =>
+            {
+                var s = HttpClientFactory.CreateInstance(typeof (TestAsyncHttpClientBaseTypeForConcurrentRun<,>), x,
+                    new Uri("http://www.foo.bar/"));
 
-            var result = s.GetType().GetMethod("CallService").Invoke(s, new object[] { new RequestModel { Value = "Hello!" }, CancellationToken.None });
+                var result = s.GetType()
+                    .GetMethod("CallService")
+                    .Invoke(s, new object[] {new RequestModel {Value = "Hello!"}, CancellationToken.None});
 
-            ((Task<ResultModel>)result).Result.Value.ShouldEqual("Hello!");
+                ((Task<ResultModel>) result).Result.Value.ShouldEqual("Hello!");
 
-            Interlocked.Increment(ref count);
-        });
+                Interlocked.Increment(ref _count);
+            });
+        }
 
-        It should_create_and_call_all_services =
-            () => count.ShouldEqual(interfaces.Count);
+        [TestMethod]
+        public void it_should_create_and_call_all_services()
+        {
+            _count.ShouldEqual(_interfaces.Count);
+        }
 
         public class RequestModel
         {

@@ -153,7 +153,7 @@ namespace DocaLabs.Http.Client
                 else
                 {
                     if(constructor.OriginalBaseType != baseType)
-                        throw new ArgumentException(string.Format(Resources.Text.base_type_does_not_match, baseType.FullName, constructor.OriginalBaseType.FullName), "baseType");
+                        throw new ArgumentException(string.Format(Resources.PlatformText.base_type_does_not_match, baseType.FullName, constructor.OriginalBaseType.FullName), "baseType");
                 }
 
                 return constructor.ConstructorInfo;
@@ -187,14 +187,14 @@ namespace DocaLabs.Http.Client
             public ClientInterfaceInfo(Type interfaceType)
             {
                 if (!interfaceType.IsInterface)
-                    throw new ArgumentException(string.Format(Resources.Text.must_be_interface, interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.PlatformText.must_be_interface, interfaceType.FullName), "interfaceType");
 
                 if(interfaceType.IsGenericTypeDefinition)
-                    throw new ArgumentException(string.Format(Resources.Text.interface_cannot_be_generic_type_definition, interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.PlatformText.interface_cannot_be_generic_type_definition, interfaceType.FullName), "interfaceType");
 
                 var methods = interfaceType.GetMethods();
                 if (methods.Length != 1)
-                    throw new ArgumentException(string.Format(Resources.Text.must_have_only_one_method, interfaceType.FullName), "interfaceType");
+                    throw new ArgumentException(string.Format(Resources.PlatformText.must_have_only_one_method, interfaceType.FullName), "interfaceType");
 
                 _serviceExecuteMethodInfo = new ServiceCallMethodInfo(methods[0]);
 
@@ -210,7 +210,7 @@ namespace DocaLabs.Http.Client
                     return baseType;
 
                 if (baseType.GetGenericArguments().Length != 2)
-                    throw new ArgumentException(string.Format(Resources.Text.if_base_class_generic_it_must_have_two_parameters, baseType.FullName), "baseType");
+                    throw new ArgumentException(string.Format(Resources.PlatformText.if_base_class_generic_it_must_have_two_parameters, baseType.FullName), "baseType");
 
                 return _serviceExecuteMethodInfo.MakeConcreteGenericType(baseType);
             }
@@ -258,7 +258,7 @@ namespace DocaLabs.Http.Client
                     baseCtor = baseType.GetConstructor(new[] { typeof(Uri), typeof(string) });
 
                     if (baseCtor == null)
-                        throw new ArgumentException(string.Format(Resources.Text.must_implement_constructor, baseType.FullName, _serviceExecuteMethodInfo.ExecuteStrategyType.FullName), "baseType");
+                        throw new ArgumentException(string.Format(Resources.PlatformText.must_implement_constructor, baseType.FullName, _serviceExecuteMethodInfo.ExecuteStrategyType.FullName), "baseType");
                 }
 
                 return baseCtor;
@@ -389,7 +389,7 @@ namespace DocaLabs.Http.Client
             {
                 var baseExecute = baseType.GetMethod(_isAsyncClient ? "ExecuteAsync" : "Execute", new[] { _inputModelInfo.ModelType });
                 if (baseExecute == null)
-                    throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method,
+                    throw new ArgumentException(string.Format(Resources.PlatformText.must_have_execute_method,
                                                 baseType.FullName, _outputModelType.FullName, _inputModelInfo.ModelType.FullName), "baseType");
 
                 var newExecute = DefineServiceCallMethod(typeBuilder);
@@ -412,7 +412,7 @@ namespace DocaLabs.Http.Client
             {
                 var baseExecute = baseType.GetMethod("ExecuteAsync", new[] { _inputModelInfo.ModelType, typeof(CancellationToken) });
                 if (baseExecute == null)
-                    throw new ArgumentException(string.Format(Resources.Text.must_have_execute_method,
+                    throw new ArgumentException(string.Format(Resources.PlatformText.must_have_execute_method,
                                                 baseType.FullName, _outputModelType.FullName, _inputModelInfo.ModelType.FullName), "baseType");
 
                 var newExecute = DefineServiceCallMethod(typeBuilder);

@@ -34,7 +34,7 @@ namespace DocaLabs.Http.Client.Binding
             {
                 var value = credential as NetworkCredential;
                 if (value == null)
-                    throw new ArgumentException(string.Format(Resources.Text.cannot_mix_network_credential_with_other, credential), "credential");
+                    throw new ArgumentException(string.Format(Resources.PlatformText.cannot_mix_network_credential_with_other, credential), "credential");
 
                 CredentialCache.Add(_prefix, authenticationType, value);
             }

@@ -36,7 +36,7 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
             if (Decoders.TryGetValue(encoding, out decoder) && decoder != null)
                 return decoder;
 
-            throw new ArgumentException(string.Format(Text.compression_format_is_not_suppoerted, encoding), "encoding");
+            throw new ArgumentException(string.Format(PlatformText.compression_format_is_not_suppoerted, encoding), "encoding");
         }
 
         /// <summary>
