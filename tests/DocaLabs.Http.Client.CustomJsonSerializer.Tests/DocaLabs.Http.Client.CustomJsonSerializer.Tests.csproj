@@ -1,19 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1D7D9640-5003-4D20-AA5F-DC373E9C9664}</ProjectGuid>
+    <ProjectGuid>{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DocaLabs.Http.Client</RootNamespace>
-    <AssemblyName>DocaLabs.Http.Client.JsonSerializer</AssemblyName>
+    <RootNamespace>DocaLabs.Http.Client.Tests</RootNamespace>
+    <AssemblyName>DocaLabs.Http.Client.CustomJsonSerializer.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -35,30 +32,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Utils\JsonSerialization\JsonDeserializer.cs" />
-    <Compile Include="Utils\JsonSerialization\JsonSerializer.cs" />
+    <Compile Include="Utils\JsonSerialization\JsonSerializerFactoryTests.cs" />
+    <Compile Include="Utils\JsonSerialization\JsonSerializerTests.cs" />
+    <Compile Include="Utils\JsonSerialization\JsonDeserializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\JsonSerialization\SerializationSettings.cs" />
-    <Compile Include="Utils\JsonSerialization\JsonSerializerFactory.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.5.0.8\lib\portable-net45+wp80+win8\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <Compile Include="Utils\JsonSerialization\SerializationSettingsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client.CustomJsonSerializer\DocaLabs.Http.Client.CustomJsonSerializer.csproj">
+      <Project>{1d7d9640-5003-4d20-aa5f-dc373e9c9664}</Project>
+      <Name>DocaLabs.Http.Client.CustomJsonSerializer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\DocaLabs.Http.Client\DocaLabs.Http.Client.csproj">
       <Project>{82f9423e-89ad-46ef-a347-6549097b8758}</Project>
       <Name>DocaLabs.Http.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DocaLabs.Test.Utils\DocaLabs.Test.Utils.csproj">
+      <Project>{0fda939d-d0eb-4bae-9b6a-3b68379b7838}</Project>
+      <Name>DocaLabs.Test.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

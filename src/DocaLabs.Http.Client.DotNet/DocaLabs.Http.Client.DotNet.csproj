@@ -122,13 +122,13 @@
   <Target Name="BuildPlainLibrary">
     <RemoveDir Directories="$(SolutionDir)build\DotNet\" />
     <MakeDir Directories="$(SolutionDir)build\DotNet\" />
-    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /out:&quot;$(SolutionDir)build\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot;" />
+    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /xmldocs /out:&quot;$(SolutionDir)build\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot;" />
   </Target>
 
   <Target Name="BuildLibraryWithJsonDotNet">
     <RemoveDir Directories="$(SolutionDir)build\.json\DotNet\" />
     <MakeDir Directories="$(SolutionDir)build\.json\DotNet\" />
-    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /out:&quot;$(SolutionDir)build\.json\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot; &quot;$(SolutionDir)src\DocaLabs.Http.Client.JsonSerializer\$(OutDir)\DocaLabs.Http.Client.JsonSerializer.dll&quot;" />
+    <Exec Command="&quot;$(SolutionDir)packages\ilmerge.2.13.0307\IlMerge.exe&quot; /xmldocs /out:&quot;$(SolutionDir)build\.json\DotNet\DocaLabs.Http.Client.dll&quot; &quot;$(TargetDir)DocaLabs.Http.Client.dll&quot; &quot;$(TargetPath)&quot; &quot;$(SolutionDir)src\DocaLabs.Http.Client.CustomJsonSerializer\$(OutDir)\DocaLabs.Http.Client.CustomJsonSerializer.dll&quot;" />
   </Target>
 
 </Project>

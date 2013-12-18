@@ -1,0 +1,830 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>DocaLabs.Http.Client</name>
+  </assembly>
+  <members>
+    <member name="T:DocaLabs.Http.Client.Binding.CredentialsMapperOverride">
+      <summary>
+            Default credentials mapper.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Binding.HttpResponseStreamFactory">
+      <summary>
+            Creates instances of the HttpResponseStream class.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.HttpResponseStreamFactory.CreateStream(DocaLabs.Http.Client.Binding.BindingContext,System.Net.WebRequest)">
+      <summary>
+            Initializes an instance of the HttpResponseStream class from the provided WebRequest instance.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.HttpResponseStreamFactory.CreateAsyncStream(DocaLabs.Http.Client.Binding.AsyncBindingContext,System.Net.WebRequest)">
+      <summary>
+            Initializes an asynchronous instance of the HttpResponseStream class from the provided WebRequest instance.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Binding.HttpResponseStream">
+      <summary>
+            Wraps around the response stream.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.HttpResponseStream.BeginRead(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)">
+      <summary>
+            Begins an asynchronous read operation. Consider using ReadAsync instead.
+            </summary>
+      <param name="buffer">The buffer to read the data into.</param>
+      <param name="offset">The byte offset in buffer at which to begin writing data read from the stream.</param>
+      <param name="count">The maximum number of bytes to read.</param>
+      <param name="callback">An optional asynchronous callback, to be called when the read is complete.</param>
+      <param name="state">A user-provided object that distinguishes this particular asynchronous read request from other requests.</param>
+      <returns>An IAsyncResult that represents the asynchronous read, which could still be pending.</returns>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.HttpResponseStream.EndRead(System.IAsyncResult)">
+      <summary>
+            Waits for the pending asynchronous read to complete. Consider using ReadAsync instead.
+            </summary>
+      <param name="asyncResult">The reference to the pending asynchronous request to finish.</param>
+      <returns>The number of bytes read from the stream, between zero (0) and the number of bytes you requested. Streams return zero (0) only at the end of the stream, otherwise, they should block until at least one byte is available.</returns>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.HttpResponseStream.BeginWrite(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)">
+      <summary>
+            Begins an asynchronous write operation. Consider using WriteAsync instead.
+            </summary>
+      <param name="buffer">The buffer to write data from.</param>
+      <param name="offset">The byte offset in buffer from which to begin writing.</param>
+      <param name="count">The maximum number of bytes to write.</param>
+      <param name="callback">An optional asynchronous callback, to be called when the write is complete.</param>
+      <param name="state">A user-provided object that distinguishes this particular asynchronous write request from other requests.</param>
+      <returns>An IAsyncResult that represents the asynchronous write, which could still be pending.</returns>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.HttpResponseStream.EndWrite(System.IAsyncResult)">
+      <summary>
+            Ends an asynchronous write operation. Consider using WriteAsync instead.
+            </summary>
+      <param name="asyncResult">A reference to the outstanding asynchronous I/O request.</param>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Binding.HttpResponseStream.IsMutuallyAuthenticated">
+      <summary>
+            Gets a value that indicates whether mutual authentication occurred.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Binding.RequestSetupOverride">
+      <summary>
+            Defines additional operations on web request.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.RequestSetupOverride.SetContentLengthToZeroIfBodyIsRequired(System.Net.WebRequest,DocaLabs.Http.Client.Binding.BindingContext)">
+      <summary>
+            Sets the ContentLength to zero if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.RequestSetupOverride.SetContentLengthToZeroIfBodyIsRequiredAsync(System.Net.WebRequest,DocaLabs.Http.Client.Binding.AsyncBindingContext)">
+      <summary>
+            Sets the ContentLength to zero if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.RequestSetupOverride.IsBodyRequired(System.Net.WebRequest)">
+      <summary>
+            Returns true if the method is POST or PUT and the request is HttpWebRequest or FileWebRequest.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.RequestSetupOverride.CopyClientCertificatesFrom(System.Net.WebRequest,DocaLabs.Http.Client.Configuration.IClientEndpoint)">
+      <summary>
+            If client certificates are defined in the endpoint configuration then the methods adds them to the request.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.RequestSetupOverride.CopyCredentialsFrom(System.Net.WebRequest,DocaLabs.Http.Client.Binding.IRequestBinder,DocaLabs.Http.Client.Binding.BindingContext)">
+      <summary>
+            If the AuthenticationLevel and Credential are defined then the method copies them into the request.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Binding.RequestSetupOverride.CopyWebProxyFrom(System.Net.WebRequest,DocaLabs.Http.Client.Configuration.IClientEndpoint)">
+      <summary>
+            If web proxy are defined in the endpoint configuration then the methods adds it to the request.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElement">
+      <summary>
+            Represents a configuration element that defines how to find a certificate. 
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElement.StoreName">
+      <summary>
+            Gets or sets the name of the X.509 certificate store to open.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElement.StoreLocation">
+      <summary>
+            Gets or sets a value that specifies the location of the certificate store the client can use to validate the server’s certificate.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElement.X509FindType">
+      <summary>
+            Gets or sets the type of X.509 search to be executed.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElement.FindValue">
+      <summary>
+            Gets or sets a string that specifies the value to search for in the X.509 certificate store.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2">
+      <summary>
+            Defines a base collection type to implement configuration collections.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.#ctor">
+      <summary>
+            Initializes an instance of the ConfigurationElementCollectionBase class.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.#ctor(System.String)">
+      <summary>
+            Initializes an instance of the ConfigurationElementCollectionBase class with the specified element's name.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.#ctor(System.Configuration.ConfigurationElementCollectionType,System.String)">
+      <summary>
+            Initializes an instance of the ConfigurationElementCollectionBase class with the specified collection type and element's name.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.#ctor(System.Configuration.ConfigurationElementCollectionType,System.String,System.Collections.IComparer)">
+      <summary>
+            Initializes an instance of the ConfigurationElementCollectionBase class with the specified collection type, element's name, and comparer.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.IndexOf(`1)">
+      <summary>
+            Returns a position of the specified element.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.Add(`1)">
+      <summary>
+            Adds a new element object to the collection.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.Clear">
+      <summary>
+            Removes all elements from the collection.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.Remove(`0)">
+      <summary>
+            Removes element by specified key.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.Remove(`1)">
+      <summary>
+            Removes element.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.RemoveAt(System.Int32)">
+      <summary>
+            Removes element by specified position.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.CollectionType">
+      <summary>
+            Gets the default type of configuration element collection that contains elements that can be merged across a hierarchy of configuration files.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.ElementName">
+      <summary>
+            Gets the element's tag name.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.AllKeys">
+      <summary>
+            Gets all keys defined in the collection.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.ThrowOnDuplicate">
+      <summary>
+            Always returns true causing the exception to be thrown in an attempt to add a duplicate element to the collection.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.Item(`0)">
+      <summary>
+            Gets or sets the element object by its key.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ConfigurationElementCollectionBase`2.Item(System.Int32)">
+      <summary>
+            Gets or sets the element object by its position.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElementCollection">
+      <summary>
+            Contains a collection of ClientCertificateReferenceElement objects.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElementCollection.#ctor">
+      <summary>
+            Initializes a new instance of the ClientCertificateReferenceCollection class.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
+      <summary>
+            Gets the element key for a specified configuration element.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientCertificateReferenceElementCollection.CreateNewElement">
+      <summary>
+            Creates a new instance of the element.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.HttpClientEndpointSection">
+      <summary>
+            Represents the section of a configuration file, which defines a collection of endpoints that a http client can connect to. 
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.HttpClientEndpointSection.Endpoints">
+      <summary>
+            Gets a list of endpoints that a http client can connect to.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.HttpClientEndpointSection.EndpointsElement">
+      <summary>
+            Gets a list of endpoints that a http client can connect to.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientEndpointElement">
+      <summary>
+            Represents a configuration element that defines the http client endpoint. 
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.Name">
+      <summary>
+            Gets or sets the endpoint name.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.BaseUrl">
+      <summary>
+            Gets or sets the BaseUrl.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.Method">
+      <summary>
+            Gets or sets the request's method, e.g. GET,POST,PUT,DELETE. Default value is empty which means that HttpClient will try to figure out the method.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.Timeout">
+      <summary>
+            Gets or sets the request timeout in milliseconds. Default value is 90 seconds.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.ReadTimeout">
+      <summary>
+            Gets or sets the response stream reading timeout in milliseconds. Default value is 300 seconds.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.WriteTimeout">
+      <summary>
+            Gets or sets the request stream writing timeout in milliseconds. Default value is 300 seconds.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.AutoSetAcceptEncoding">
+      <summary>
+            Get or sets whenever to add 'Accept-Encoding' header automatically depending on what content decoders are defined in ContentDecoderFactory.
+            The default value is true.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.AuthenticationLevel">
+      <summary>
+            Gets or sets values indicating the level of authentication and impersonation used for this request.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.Credential">
+      <summary>
+            Gets or sets authentication information for the request.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.Headers">
+      <summary>
+            Gets the headers collection.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.ClientCertificates">
+      <summary>
+            Gets the client certificate collection.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientEndpointElement.Proxy">
+      <summary>
+            Gets the proxy.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientEndpointElementCollection">
+      <summary>
+            Contains a collection of ClientEndpointElement objects.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientEndpointElementCollection.#ctor">
+      <summary>
+            Initializes a new instance of the ClientEndpointCollection class.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientEndpointElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
+      <summary>
+            Gets the element key for a specified configuration element.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientEndpointElementCollection.CreateNewElement">
+      <summary>
+            Creates a new instance of the element.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientHeaderElement">
+      <summary>
+            Represents a configuration element that defines a header.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientHeaderElement.Name">
+      <summary>
+            Gets or sets the header's name.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientHeaderElement.Value">
+      <summary>
+            Gets or sets the headers's value.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientHeaderElementCollection">
+      <summary>
+            Contains a collection of IClientHeader objects.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientHeaderElementCollection.#ctor">
+      <summary>
+            Initializes a new instance of the ClientHeaderCollection class.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientHeaderElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
+      <summary>
+            Gets the element key for a specified configuration element.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ClientHeaderElementCollection.CreateNewElement">
+      <summary>
+            Creates a new instance of the element.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientNetworkCredentialElement">
+      <summary>
+            Represents a configuration element that defines the network credentials. 
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientNetworkCredentialElement.CredentialType">
+      <summary>
+            Gets or sets the type of credentials. If it's DefaultCredentials or DefaultNetworkCredentials other properties will be ignored.
+            The default value is CredentialType.None.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientNetworkCredentialElement.User">
+      <summary>
+            Gets or sets the user name if the CredentialType is NetworkCredential.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientNetworkCredentialElement.Password">
+      <summary>
+            Gets or sets the password if the CredentialType is NetworkCredential.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientNetworkCredentialElement.Domain">
+      <summary>
+            Gets or sets the domain if the CredentialType is NetworkCredential.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ClientProxyElement">
+      <summary>
+            Represents a configuration element that defines the proxy for http client endpoint. 
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientProxyElement.Address">
+      <summary>
+            Gets or sets the proxy address.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.ClientProxyElement.Credential">
+      <summary>
+            Gets or sets the proxy's credentials.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.EndpointConfigurationProviderOverride">
+      <summary>
+            Defines methods to get an endpoint configuration using the application/web configuration file.
+            </summary>
+    </member>
+    <member name="F:DocaLabs.Http.Client.Configuration.EndpointConfigurationProviderOverride.DefaultSectionName">
+      <summary>
+            Default name for the configuration section.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.EndpointConfigurationProviderOverride.SetSource(System.String)">
+      <summary>
+            Sets a specified file as a source for the configuration.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.EndpointConfigurationProviderOverride.GetEndpoint(System.String)">
+      <summary>
+            Returns an endpoint configuration for provided name.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Configuration.EndpointConfigurationProviderOverride.SectionName">
+      <summary>
+            Defines a section name the root element with endpoint configurations.
+            The default name is 'httpClientEndpoints'.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Configuration.ConfigurationExtenstions">
+      <summary>
+            Defines additional operations on configuration elements.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Configuration.ConfigurationExtenstions.Find(DocaLabs.Http.Client.Configuration.IClientCertificateReference)">
+      <summary>
+            Finds a certificate referenced by an instance of the class.
+            </summary>
+      <returns>Found certificate or null if the certificate is not found, or throws MoreThanOneMatchFoundException if there are more than one match.</returns>
+    </member>
+    <member name="T:DocaLabs.Http.Client.HttpClientFactory">
+      <summary>
+            Generates an implementation of HttpClient for a given interface.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.HttpClientFactory.CreateInstance``1(System.String)">
+      <summary>
+            Creates an instance of a concrete class implementing the TInterface, the class is expected to be derived from HttpClient.
+            </summary>
+      <typeparam name="TInterface">
+            Interface which should be implemented, the interface must implement only one method.
+            The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+            The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+            </typeparam>
+      <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
+    </member>
+    <member name="M:DocaLabs.Http.Client.HttpClientFactory.CreateInstance``1(System.Uri,System.String)">
+      <summary>
+            Creates an instance of a concrete class implementing the TInterface, the class is expected to be derived from HttpClient.
+            </summary>
+      <typeparam name="TInterface">
+            Interface which should be implemented, the interface must implement only one method.
+            The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+            The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+            </typeparam>
+      <param name="baseUrl">The base URL of the service.</param>
+      <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
+    </member>
+    <member name="M:DocaLabs.Http.Client.HttpClientFactory.CreateInstance(System.Type,System.Uri,System.String)">
+      <summary>
+            Creates an instance of a concrete class implementing the interfaceType, the class is derived from HttpClient.
+            </summary>
+      <param name="interfaceType">
+            Interface which should be implemented, the interface must implement only one method.
+            The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+            The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+            </param>
+      <param name="baseUrl">The base URL of the service.</param>
+      <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
+    </member>
+    <member name="M:DocaLabs.Http.Client.HttpClientFactory.CreateInstance``1(System.Type,System.Uri,System.String)">
+      <summary>
+            Creates an instance of a concrete class implementing the interfaceType, the class is derived from baseType.
+            </summary>
+      <typeparam name="TInterface">
+            Interface which should be implemented, the interface must implement only one method.
+            The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+            The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+            </typeparam>
+      <param name="baseType">
+            The base class which will be used to generate the concrete type implementing the interface.
+            The class must have non default constructor:
+                (Uri baseUrl, string configurationName, Func&lt;Func&lt;TResult&gt;, TResult&gt; retryStrategy) 
+                or
+                (Uri baseUrl, string configurationName)
+            </param>
+      <param name="baseUrl">The base URL of the service.</param>
+      <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
+    </member>
+    <member name="M:DocaLabs.Http.Client.HttpClientFactory.CreateInstance(System.Type,System.Type,System.Uri,System.String)">
+      <summary>
+            Creates an instance of a concrete class implementing the interfaceType, the class is derived from baseType.
+            </summary>
+      <param name="baseType">
+            The base class which will be used to generate the concrete type implementing the interface.
+            The class must have non default constructor:
+                (Uri baseUrl, string configurationName, Func&lt;Func&lt;TResult&gt;, TResult&gt; retryStrategy) 
+                or
+                (Uri baseUrl, string configurationName)
+            </param>
+      <param name="interfaceType">
+            Interface which should be implemented, the interface must implement only one method.
+            The method's parameter type is not void it will be used as the TQuery generic parameter and the return type if it's not void as the TResult.
+            The method can have any name. The method's implementation will call to TResult Execute(TQuery query) method of the HttpClient.
+            </param>
+      <param name="baseUrl">The base URL of the service.</param>
+      <param name="configurationName">If the configuration name is used to get the endpoint configuration from the configuration file, if the parameter is null it will default to the interface's type full name.</param>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.ContentEncoding.ContentDecoderFactory">
+      <summary>
+            Defines a decoder factory. By default the factory is populated by decoders that use 
+            standard .Net GZipStream and DeflateStream for gzip/x-gzip/deflate encodings.
+            All class members are thread safe.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentDecoderFactory.Get(System.String)">
+      <summary>
+            Gets a decoder for the specified content encoding.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentDecoderFactory.GetSupportedEncodings">
+      <summary>
+            Returns list of supported encodings.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentDecoderFactory.AddAcceptEncodings(System.Net.WebRequest)">
+      <summary>
+            Adds supported decoders into accept-encoding header of the request.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentDecoderFactory.AddOrReplace(System.String,DocaLabs.Http.Client.Utils.ContentEncoding.IDecodeContent)">
+      <summary>
+            Adds or replaces existing decoder.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentDecoderFactory.Remove(System.String)">
+      <summary>
+            Removes a decoder. If the decoder doesn't exist no exception is thrown.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.ContentEncoding.ContentEncoderFactory">
+      <summary>
+            Defines an encoder factory. By default the factory is populated by encoders that use
+            standard .Net GZipStream and DeflateStream for gzip/x-gzip/deflate encodings.
+            All class members are thread safe.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentEncoderFactory.Get(System.String)">
+      <summary>
+            Gets a encoder for the specified content encoding.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentEncoderFactory.GetSupportedEncodings">
+      <summary>
+            Returns list of supported encodings.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentEncoderFactory.AddOrReplace(System.String,DocaLabs.Http.Client.Utils.ContentEncoding.IEncodeContent)">
+      <summary>
+            Adds or replaces existing encoder.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.ContentEncoderFactory.Remove(System.String)">
+      <summary>
+            Removes an encoder. If the encoder doesn't exist no exception is thrown.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.ContentEncoding.GZipContentDecoder">
+      <summary>
+            Defines gzip decoder for the http content.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.GZipContentDecoder.GetDecompressionStream(System.IO.Stream)">
+      <summary>
+            Returns GZipStream in decompress mode.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.ContentEncoding.GZipContentEncoder">
+      <summary>
+            Defines gzip encoder for the http content.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.GZipContentEncoder.GetCompressionStream(System.IO.Stream)">
+      <summary>
+            Returns GZipStream in compress mode.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.ContentEncoding.DeflateContentDecoder">
+      <summary>
+            Defines deflate decoder for the http content.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.DeflateContentDecoder.GetDecompressionStream(System.IO.Stream)">
+      <summary>
+            Returns DeflateStream in decompress mode.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.ContentEncoding.DeflateContentEncoder">
+      <summary>
+            Defines deflate encoder for the http content.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.ContentEncoding.DeflateContentEncoder.GetCompressionStream(System.IO.Stream)">
+      <summary>
+            Returns DeflateStream in compress mode.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text">
+      <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.ResourceManager">
+      <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.Culture">
+      <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.base_type_does_not_match">
+      <summary>
+              Looks up a localized string similar to Base type argument {0} does not match the original argument {1}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.cannot_convert_from_0_to_1">
+      <summary>
+              Looks up a localized string similar to Cannot convert from type {0} to type {1}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.cannot_figure_out_how_to_deserialize">
+      <summary>
+              Looks up a localized string similar to Cannot figure out how to deserialize web response..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.cannot_mix_network_credential_with_other">
+      <summary>
+              Looks up a localized string similar to Cannot mix network credential with other types for {0}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.compression_format_is_not_suppoerted">
+      <summary>
+              Looks up a localized string similar to Compression format {0} is not supported..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.configuration_file_0_not_found">
+      <summary>
+              Looks up a localized string similar to Configuration file {0} is not found..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.failed_create_url">
+      <summary>
+              Looks up a localized string similar to Failed to create Url {0}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.failed_execute_request">
+      <summary>
+              Looks up a localized string similar to Failed to execute request to {0} ({1}).
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.if_base_class_generic_it_must_have_two_parameters">
+      <summary>
+              Looks up a localized string similar to If the base class {0} is generic it must have two generic arguments..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.input_argument_can_be_only_string_or_guid">
+      <summary>
+              Looks up a localized string similar to Input argument can be only of string or Guid type..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.interface_cannot_be_generic_type_definition">
+      <summary>
+              Looks up a localized string similar to Interface {0} cannot be generic type definition..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.must_be_interface">
+      <summary>
+              Looks up a localized string similar to The type {0} must be interface..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.must_have_execute_method">
+      <summary>
+              Looks up a localized string similar to The base type {0} must have method: {1} Execute({2} query)..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.must_have_only_one_method">
+      <summary>
+              Looks up a localized string similar to The type {0} must have only one method..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.must_implement_constructor">
+      <summary>
+              Looks up a localized string similar to The base type {0} must have constructor with parameters: (Uri serviceUrl, string configurationName, {1} retryStrategy) or (Uri serviceUrl, string configurationName)..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.null_response_stream">
+      <summary>
+              Looks up a localized string similar to Response stream is null..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.object_must_be_of_string_byte_array_or_stream_type">
+      <summary>
+              Looks up a localized string similar to The object {0} must be either string or byte[] or Stream or simple type (e.g. int, double, etc.)..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.separated_coll_attr_cannot_be_used_for_0_in_1">
+      <summary>
+              Looks up a localized string similar to SeparatedCollectionConverterAttribute cannot be used for property {0} in {1}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.service_url_is_not_defined">
+      <summary>
+              Looks up a localized string similar to The Service URL is not defined in the constaructor paramter or is not in the configuration file..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.the_value_must_be_of_stream_type">
+      <summary>
+              Looks up a localized string similar to The value must be of Stream type but is {0}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.type_0_cannot_be_converted_to_byte_array">
+      <summary>
+              Looks up a localized string similar to Type {0} cannot be converted to byte array..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.unknown_underlying_enum_type_0">
+      <summary>
+              Looks up a localized string similar to Unknown underlying enum type {0}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.value_0_is_not_defined_for_enum_1">
+      <summary>
+              Looks up a localized string similar to Value {0} is not defined for enum {1}..
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Resources.DocaLabs.Http.Client.DotNet.Text.will_try_again">
+      <summary>
+              Looks up a localized string similar to Failed to execute the service query, will try again. Attempt {0} out of {1} : {2}.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.JsonSerialization.JsonDeserializer">
+      <summary>
+            Implements IJsonDeserializer using Newtonsoft JsonConvert.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.JsonSerialization.JsonDeserializer.Deserialize(System.String,System.Type)">
+      <summary>
+            Deserializes an object from string in JSON notation.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.JsonSerialization.JsonDeserializer.UpdateSettings(System.Type,Newtonsoft.Json.JsonSerializerSettings)">
+      <summary>
+            Updates/adds settings information which will be used when the specified type is being serialized.
+            Use that to customize behaviour of the JsonConvert.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.JsonSerialization.JsonSerializer">
+      <summary>
+            Implements IJsonSerializer using Newtonsoft JsonConvert.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.JsonSerialization.JsonSerializer.Serialize(System.Object)">
+      <summary>
+            Serializes an object into string using JSON notation.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.JsonSerialization.JsonSerializer.UpdateSettings(System.Type,DocaLabs.Http.Client.Utils.JsonSerialization.SerializationSettings)">
+      <summary>
+            Updates/adds settings information which will be used when the specified type is being serialized.
+            Use that to customize behaviour of the JsonConvert.
+            </summary>
+    </member>
+    <member name="T:DocaLabs.Http.Client.Utils.JsonSerialization.SerializationSettings">
+      <summary>
+            Defines serialization settings that can be used to customize the behaviour of the NewtonSoftDefaultJsonSerializer class.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.JsonSerialization.SerializationSettings.#ctor">
+      <summary>
+            Initializes an instance of the SerializationSettings class with default values.
+            </summary>
+    </member>
+    <member name="M:DocaLabs.Http.Client.Utils.JsonSerialization.SerializationSettings.#ctor(System.Type,Newtonsoft.Json.Formatting,Newtonsoft.Json.JsonSerializerSettings)">
+      <summary>
+            Initializes an instance of the SerializationSettings class with the specified values.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Utils.JsonSerialization.SerializationSettings.Type">
+      <summary>
+            The type of the value being serialized. This parameter is used when Newtonsoft.Json.TypeNameHandling" is Auto to write out the type name if the type of the value does not match.
+            Specifying the type is optional. The default value is null.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Utils.JsonSerialization.SerializationSettings.Formatting">
+      <summary>
+            Indicates how the output is formatted.
+            The default value is None.
+            </summary>
+    </member>
+    <member name="P:DocaLabs.Http.Client.Utils.JsonSerialization.SerializationSettings.Settings">
+      <summary>
+            The settings used to serialize the object. If this is null, default serialization settings will be is used.
+            The default value is null.
+            </summary>
+    </member>
+  </members>
+</doc>

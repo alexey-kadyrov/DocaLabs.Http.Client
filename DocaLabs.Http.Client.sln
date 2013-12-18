@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{457F5521-CCCD-44FC-9654-CF39747614A4}"
@@ -41,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D9B799
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Tests.MSTest", "tests\DocaLabs.Http.Client.Tests.MSTest\DocaLabs.Http.Client.Tests.MSTest.csproj", "{B0716490-5D1A-40FD-835C-9AA263523B21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.JsonSerializer.Tests", "tests\DocaLabs.Http.Client.JsonSerializer.Tests\DocaLabs.Http.Client.JsonSerializer.Tests.csproj", "{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.CustomJsonSerializer.Tests", "tests\DocaLabs.Http.Client.CustomJsonSerializer.Tests\DocaLabs.Http.Client.CustomJsonSerializer.Tests.csproj", "{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{1911919A-FA5C-4D0D-AA53-104662A59933}"
 	ProjectSection(SolutionItems) = preProject
@@ -113,7 +111,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocaLabs.Http.Client.Integr
 		tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Integration.Tests\User.Portable.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.JsonSerializer", "src\DocaLabs.Http.Client.JsonSerializer\DocaLabs.Http.Client.JsonSerializer.csproj", "{1D7D9640-5003-4D20-AA5F-DC373E9C9664}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.CustomJsonSerializer", "src\DocaLabs.Http.Client.CustomJsonSerializer\DocaLabs.Http.Client.CustomJsonSerializer.csproj", "{1D7D9640-5003-4D20-AA5F-DC373E9C9664}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Test.Services.Proxy", "tests\DocaLabs.Test.Services.Proxy\DocaLabs.Test.Services.Proxy.csproj", "{08E86986-39B5-4561-B430-D8DF2521734B}"
 EndProject

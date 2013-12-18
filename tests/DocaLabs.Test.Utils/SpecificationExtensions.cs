@@ -9,7 +9,7 @@ namespace DocaLabs.Test.Utils
 {
     public static class SpecificationExtensions
     {
-        public static void ShouldbeTheSameAs<T>(this T actual, T expected)
+        public static void ShouldBeTheSameAs(this object actual, object expected)
         {
             Assert.AreSame(expected, actual);
         }
@@ -41,6 +41,11 @@ namespace DocaLabs.Test.Utils
         public static void ShouldBeOfType<T>(this object obj)
         {
             Assert.IsInstanceOf<T>(obj);
+        }
+
+        public static void ShouldBeEqualOrGreaterThan(this int actual, int expected)
+        {
+            Assert.GreaterOrEqual(actual, expected);
         }
 
         public static void ShouldBeTrue(this bool value)

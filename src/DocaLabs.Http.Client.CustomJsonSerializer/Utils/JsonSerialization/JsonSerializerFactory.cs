@@ -2,17 +2,14 @@
 {
     public class JsonSerializerFactory : IJsonSerializerFactory
     {
-        readonly IJsonSerializer _serializer = new JsonSerializer();
-        readonly IJsonDeserializer _deserializer = new JsonDeserializer();
-
         public IJsonSerializer CreateSerializer()
         {
-            return _serializer;
+            return new JsonSerializer();
         }
 
         public IJsonDeserializer CreateDeserializer()
         {
-            return _deserializer;
+            return new JsonDeserializer();
         }
     }
 }
