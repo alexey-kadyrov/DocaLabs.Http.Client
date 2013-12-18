@@ -8,24 +8,39 @@ using DocaLabs.Http.Client.Binding;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Binding.Serialization;
 using DocaLabs.Http.Client.Tests._Utils;
-using Machine.Specifications;
+using DocaLabs.Test.Utils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DocaLabs.Http.Client.Tests
 {
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_without_specifying_base_class
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
+
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(new Uri("http://foo.bar/"));
+        }
 
         // it's impossible to verify the call as it will try to execute the "real" pipeline
-        It should_be_able_to_create_the_instance =
-            () => instance.ShouldNotBeNull();
+        [TestMethod]
+        public void it_should_be_able_to_create_the_instance()
+        {
+            _instance.ShouldNotBeNull();
+        }
 
-        It should_use_http_client_as_base_class =
-            () => instance.ShouldBeOfType(typeof(HttpClient<RequestModel, ResultModel>));
+        [TestMethod]
+        public void it_should_use_http_client_as_base_class()
+        {
+            _instance.ShouldBeOfType<HttpClient<RequestModel, ResultModel>>();
+        }
 
         public interface IService
         {
@@ -42,20 +57,34 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_without_specifying_base_class
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
+
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(new Uri("http://foo.bar/"));
+        }
 
         // it's impossible to verify the call as it will try to execute the "real" pipeline
-        It should_be_able_to_create_the_instance =
-            () => instance.ShouldNotBeNull();
+        [TestMethod]
+        public void it_should_be_able_to_create_the_instance()
+        {
+            _instance.ShouldNotBeNull();
+        }
 
-        It should_use_async_http_client_as_base_class =
-            () => instance.ShouldBeOfType(typeof(AsyncHttpClient<RequestModel, ResultModel>));
+        [TestMethod]
+        public void it_should_use_async_http_client_as_base_class()
+        {
+            _instance.ShouldBeOfType<AsyncHttpClient<RequestModel, ResultModel>>();
+        }
 
         public interface IService
         {
@@ -72,20 +101,34 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_service_without_specifying_base_class
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
+
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(new Uri("http://foo.bar/"));
+        }
 
         // it's impossible to verify the call as it will try to execute the "real" pipeline
-        It should_be_able_to_create_the_instance =
-            () => instance.ShouldNotBeNull();
+        [TestMethod]
+        public void it_should_be_able_to_create_the_instance()
+        {
+            _instance.ShouldNotBeNull();
+        }
 
-        It should_use_async_http_client_as_base_class =
-            () => instance.ShouldBeOfType(typeof(AsyncHttpClient<RequestModel, ResultModel>));
+        [TestMethod]
+        public void it_should_use_async_http_client_as_base_class()
+        {
+            _instance.ShouldBeOfType<AsyncHttpClient<RequestModel, ResultModel>>();
+        }
 
         public interface IService
         {
@@ -102,16 +145,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_generic_interface
     {
-        static IGenericService<RequestModel, ResultModel> instance;
+        static IGenericService<RequestModel, ResultModel> _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IGenericService<RequestModel, ResultModel>>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IGenericService<RequestModel, ResultModel>>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        }
         
         public interface IGenericService<in TQuery, out TResult>
         {
@@ -128,16 +182,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_generic_interface
     {
-        static IGenericService<RequestModel, ResultModel> instance;
+        static IGenericService<RequestModel, ResultModel> _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IGenericService<RequestModel, ResultModel>>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IGenericService<RequestModel, ResultModel>>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IGenericService<in TQuery, TResult>
         {
@@ -154,16 +219,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_generic_interface
     {
-        static IGenericService<RequestModel, ResultModel> instance;
+        static IGenericService<RequestModel, ResultModel> _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IGenericService<RequestModel, ResultModel>>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IGenericService<RequestModel, ResultModel>>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IGenericService<in TQuery, TResult>
         {
@@ -180,17 +256,28 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_with_query_and_result_for_generic_type_difinition_as_base_class
     {
-        static IServcie instance;
+        static IServcie _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IServcie>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecuaeOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
-        
+        static void BecuaeOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IServcie>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        }
+
         public interface IServcie
         {
             ResultModel GetResult(RequestModel query);
@@ -206,16 +293,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_with_query_and_result_for_generic_type_difinition_as_base_class
     {
-        static IServcie instance;
+        static IServcie _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IServcie>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IServcie>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IServcie
         {
@@ -232,16 +330,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_with_query_and_result_and_cancellation_token_for_generic_type_difinition_as_base_class
     {
-        static IServcie instance;
+        static IServcie _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IServcie>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IServcie>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IServcie
         {
@@ -258,16 +367,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_for_fully_defined_generic_type
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<RequestModel, ResultModel>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<RequestModel, ResultModel>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IService
         {
@@ -284,16 +404,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_for_fully_defined_generic_type
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<RequestModel, ResultModel>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<RequestModel, ResultModel>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IService
         {
@@ -310,16 +441,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_with_cancellation_token_for_fully_defined_generic_type
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<RequestModel, ResultModel>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecuaseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecuaseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<RequestModel, ResultModel>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IService
         {
@@ -336,16 +478,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_for_non_generic_base_type
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestHttpClientBaseType), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestHttpClientBaseType), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        }
 
         public class NonGenericTestHttpClientBaseType : TestHttpClientBaseType<RequestModel, ResultModel>
         {
@@ -370,16 +523,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_for_non_generic_base_type
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public class NonGenericTestAsyncHttpClientBaseType : TestAsyncHttpClientBaseType<RequestModel, ResultModel>
         {
@@ -404,16 +568,27 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_with_cancellation_token_for_non_generic_base_type
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(NonGenericTestAsyncHttpClientBaseType), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public class NonGenericTestAsyncHttpClientBaseType : TestAsyncHttpClientBaseType<RequestModel, ResultModel>
         {
@@ -438,19 +613,29 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_several_times_for_the_same_interface
     {
-        static IService instance;
+        static IService _instance;
 
-        Establish context =
-            () => HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_still_be_able_to_create_instane_and_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_still_be_able_to_create_instane_and_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IService
         {
@@ -467,19 +652,29 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_several_times_for_the_same_asynchronous_interface
     {
-        static IService instance;
+        static IService _instance;
 
-        Establish context =
-            () => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_still_be_able_to_create_instane_and_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_still_be_able_to_create_instane_and_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IService
         {
@@ -496,19 +691,29 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_several_times_for_the_same_asynchronous_interface
     {
-        static IService instance;
+        static IService _instance;
 
-        Establish context =
-            () => HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            BecauseOf();
+        }
 
-        It should_still_be_able_to_create_instane_and_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
+
+        [TestMethod]
+        public void it_should_still_be_able_to_create_instane_and_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
         public interface IService
         {
@@ -525,23 +730,39 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_decorated_with_attributes
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
 
-        It should_not_transfer_attribute_that_is_not_targeted_for_class_definition =
-            () => instance.GetType().GetCustomAttribute<InterfaceOnlyAttribute>().ShouldBeNull();
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Value)).Value.ShouldEqual("Hello!");
+        }
 
-        It should_transfer_attribute_that_is_targeted_for_class_definition_and_has_properties_fields_and_constructor =
-            () => instance.GetType().GetCustomAttribute<ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute>()
-                          .ShouldMatch(x => x.FromConstructorArg == "one" && x.Field == "two" && x.Property == "three");
+        [TestMethod]
+        public void it_should_not_transfer_attribute_that_is_not_targeted_for_class_definition()
+        {
+            _instance.GetType().GetCustomAttribute<InterfaceOnlyAttribute>().ShouldBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_transfer_attribute_that_is_targeted_for_class_definition_and_has_properties_fields_and_constructor()
+        {
+            _instance.GetType().GetCustomAttribute<ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute>().ShouldMatch(x => x.FromConstructorArg == "one" && x.Field == "two" && x.Property == "three");
+        }
 
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
         public class ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute : Attribute
@@ -578,23 +799,39 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_decorated_with_attributes
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
 
-        It should_not_transfer_attribute_that_is_not_targeted_for_class_definition =
-            () => instance.GetType().GetCustomAttribute<InterfaceOnlyAttribute>().ShouldBeNull();
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
-        It should_transfer_attribute_that_is_targeted_for_class_definition_and_has_properties_fields_and_constructor =
-            () => instance.GetType().GetCustomAttribute<ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute>()
-                          .ShouldMatch(x => x.FromConstructorArg == "one" && x.Field == "two" && x.Property == "three");
+        [TestMethod]
+        public void it_should_not_transfer_attribute_that_is_not_targeted_for_class_definition()
+        {
+            _instance.GetType().GetCustomAttribute<InterfaceOnlyAttribute>().ShouldBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_transfer_attribute_that_is_targeted_for_class_definition_and_has_properties_fields_and_constructor()
+        {
+            _instance.GetType().GetCustomAttribute<ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute>().ShouldMatch(x => x.FromConstructorArg == "one" && x.Field == "two" && x.Property == "three");
+        }
 
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
         public class ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute : Attribute
@@ -631,23 +868,39 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_service_decorated_with_attributes
     {
-        static IService instance;
+        static IService _instance;
 
-        Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            BecvauseOf();
+        }
 
-        It should_be_able_to_call_the_service =
-            () => ((RequestModel)(instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        static void BecvauseOf()
+        {
+            _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+        }
 
-        It should_not_transfer_attribute_that_is_not_targeted_for_class_definition =
-            () => instance.GetType().GetCustomAttribute<InterfaceOnlyAttribute>().ShouldBeNull();
+        [TestMethod]
+        public void it_should_be_able_to_call_the_service()
+        {
+            ((RequestModel)(_instance.GetResult(new RequestModel { Value = "Hello!" }, CancellationToken.None).Result.Value)).Value.ShouldEqual("Hello!");
+        }
 
-        It should_transfer_attribute_that_is_targeted_for_class_definition_and_has_properties_fields_and_constructor =
-            () => instance.GetType().GetCustomAttribute<ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute>()
-                          .ShouldMatch(x => x.FromConstructorArg == "one" && x.Field == "two" && x.Property == "three");
+        [TestMethod]
+        public void it_should_not_transfer_attribute_that_is_not_targeted_for_class_definition()
+        {
+            _instance.GetType().GetCustomAttribute<InterfaceOnlyAttribute>().ShouldBeNull();
+        }
+
+        [TestMethod]
+        public void it_should_transfer_attribute_that_is_targeted_for_class_definition_and_has_properties_fields_and_constructor()
+        {
+            _instance.GetType().GetCustomAttribute<ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute>().ShouldMatch(x => x.FromConstructorArg == "one" && x.Field == "two" && x.Property == "three");
+        }
 
         [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
         public class ClassAttributeWithFieldsPropertiesAndConstructorArgsAttribute : Attribute
@@ -684,16 +937,16 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_with_result_only
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.Get().ShouldBeOfType<ResultModel>();
+            () => _instance.Get().ShouldBeOfType<ResultModel>();
         
         public interface IService
         {
@@ -706,16 +959,16 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_with_result_only
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.Get().Result.ShouldBeOfType<ResultModel>();
+            () => _instance.Get().Result.ShouldBeOfType<ResultModel>();
 
         public interface IService
         {
@@ -728,16 +981,16 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_service_with_result_only
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service =
-            () => instance.Get(CancellationToken.None).Result.ShouldBeOfType<ResultModel>();
+            () => _instance.Get(CancellationToken.None).Result.ShouldBeOfType<ResultModel>();
 
         public interface IService
         {
@@ -750,18 +1003,18 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_with_query_only
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            instance.Post(new RequestModel());
-            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
+            _instance.Post(new RequestModel());
+            _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Pipeline was executed.");
         };
 
         public interface IService
@@ -775,18 +1028,18 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_with_query_only
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            instance.Post(new RequestModel()).Wait();
-            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Async pipeline was executed.");
+            _instance.Post(new RequestModel()).Wait();
+            _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
         };
 
         public interface IService
@@ -800,18 +1053,18 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_service_with_query_only
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            instance.Post(new RequestModel(), CancellationToken.None).Wait();
-            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Async pipeline was executed.");
+            _instance.Post(new RequestModel(), CancellationToken.None).Wait();
+            _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
         };
 
         public interface IService
@@ -825,18 +1078,18 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_service_without_query_or_result
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            instance.Do();
-            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
+            _instance.Do();
+            _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Pipeline was executed.");
         };
 
         public interface IService
@@ -845,18 +1098,18 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_service_without_query_or_result
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            instance.Do().Wait();
-            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Async pipeline was executed.");
+            _instance.Do().Wait();
+            _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
         };
 
         public interface IService
@@ -865,18 +1118,18 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_service_without_query_or_result
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            instance.Do(CancellationToken.None).Wait();
-            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Async pipeline was executed.");
+            _instance.Do(CancellationToken.None).Wait();
+            _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Async pipeline was executed.");
         };
 
         public interface IService
@@ -885,20 +1138,20 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_interface_with_method_with_more_than_one_simple_type_args
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult(42, "Hello World!");
+            var value = _instance.GetResult(42, "Hello World!");
             value.Value.GetType().GetProperty("query").GetValue(value.Value).ShouldEqual(42);
             value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
-            instance.GetType().GetProperty("ExecutionMarker").GetValue(instance, null).ShouldEqual("Pipeline was executed.");
+            _instance.GetType().GetProperty("ExecutionMarker").GetValue(_instance, null).ShouldEqual("Pipeline was executed.");
         };
 
         public interface IService
@@ -912,17 +1165,17 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_interface_with_method_with_more_than_one_simple_type_args
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult(42, "Hello World!").Result;
+            var value = _instance.GetResult(42, "Hello World!").Result;
             value.Value.GetType().GetProperty("query").GetValue(value.Value).ShouldEqual(42);
             value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
         };
@@ -938,17 +1191,17 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_interface_with_method_with_more_than_one_simple_type_args
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult(42, "Hello World!", CancellationToken.None).Result;
+            var value = _instance.GetResult(42, "Hello World!", CancellationToken.None).Result;
             value.Value.GetType().GetProperty("query").GetValue(value.Value).ShouldEqual(42);
             value.Value.GetType().GetProperty("notOk").GetValue(value.Value).ShouldEqual("Hello World!");
         };
@@ -964,17 +1217,17 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_interface_with_method_with_one_simple_type_arg
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult("Hello World!");
+            var value = _instance.GetResult("Hello World!");
             value.Value.ShouldNotBeOfType(typeof(string));
             value.Value.GetType().GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
         };
@@ -990,17 +1243,17 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_interface_with_method_with_one_simple_type_arg
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult("Hello World!").Result;
+            var value = _instance.GetResult("Hello World!").Result;
             value.Value.ShouldNotBeOfType(typeof(string));
             value.Value.GetType().GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
         };
@@ -1016,17 +1269,17 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_eith_cancellation_token_for_asynchronous_interface_with_method_with_one_simple_type_arg
     {
-        static IService instance;
+        static IService _instance;
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult("Hello World!", CancellationToken.None).Result;
+            var value = _instance.GetResult("Hello World!", CancellationToken.None).Result;
             value.Value.ShouldNotBeOfType(typeof(string));
             value.Value.GetType().GetProperty("key").GetValue(value.Value).ShouldEqual("Hello World!");
         };
@@ -1042,10 +1295,10 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_interface_with_mixed_more_than_one_args
     {
-        static IService instance;
+        static IService _instance;
         static DateTime time;
         static Guid guid;
 
@@ -1056,11 +1309,11 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
+            var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
 
             var type = value.Value.GetType();
 
@@ -1095,10 +1348,10 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_interface_with_mixed_more_than_one_args
     {
-        static IService instance;
+        static IService _instance;
         static DateTime time;
         static Guid guid;
 
@@ -1109,11 +1362,11 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M).Result;
+            var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M).Result;
 
             var type = value.Value.GetType();
 
@@ -1148,10 +1401,10 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_interface_with_mixed_more_than_one_args
     {
-        static IService instance;
+        static IService _instance;
         static DateTime time;
         static Guid guid;
 
@@ -1162,11 +1415,11 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service = () =>
         {
-            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M, CancellationToken.None).Result;
+            var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M, CancellationToken.None).Result;
 
             var type = value.Value.GetType();
 
@@ -1201,10 +1454,10 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_interface_with_mixed_more_than_one_args_with_attributes
     {
-        static IService instance;
+        static IService _instance;
         static DateTime time;
         static Guid guid;
 
@@ -1215,11 +1468,11 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service_and_transfer_attributes = () =>
         {
-            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
+            var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M);
 
             var type = value.Value.GetType();
 
@@ -1261,10 +1514,10 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_asynchronous_interface_with_mixed_more_than_one_args_with_attributes
     {
-        static IService instance;
+        static IService _instance;
         static DateTime time;
         static Guid guid;
 
@@ -1275,11 +1528,11 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service_and_transfer_attributes = () =>
         {
-            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M).Result;
+            var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M).Result;
 
             var type = value.Value.GetType();
 
@@ -1321,10 +1574,10 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_with_cancellation_token_for_asynchronous_interface_with_mixed_more_than_one_args_with_attributes
     {
-        static IService instance;
+        static IService _instance;
         static DateTime time;
         static Guid guid;
 
@@ -1335,11 +1588,11 @@ namespace DocaLabs.Http.Client.Tests
         };
 
         Because of =
-            () => instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
+            () => _instance = HttpClientFactory.CreateInstance<IService>(typeof(TestAsyncHttpClientBaseType<,>), new Uri("http://foo.bar/"));
 
         It should_be_able_to_call_the_service_and_transfer_attributes = () =>
         {
-            var value = instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M, CancellationToken.None).Result;
+            var value = _instance.GetResult("Hello World!", time, guid, new Data { Value = "v1" }, 123.45M, CancellationToken.None).Result;
 
             var type = value.Value.GetType();
 
@@ -1382,7 +1635,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_several_times_for_the_same_interface_but_different_base_classes
     {
         static Exception exception;
@@ -1423,7 +1676,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_several_times_for_the_same_interface_but_different_base_classes
     {
         static Exception exception;
@@ -1464,7 +1717,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_several_times_for_the_same_interface_but_different_base_classes
     {
         static Exception exception;
@@ -1505,7 +1758,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_base_type_with_more_than_two_generic_args
     {
         static Exception exception;
@@ -1548,7 +1801,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_more_than_two_generic_args
     {
         static Exception exception;
@@ -1591,7 +1844,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_more_than_two_generic_args
     {
         static Exception exception;
@@ -1634,7 +1887,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_base_type_with_one_generic_arg
     {
         static Exception exception;
@@ -1672,7 +1925,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_one_generic_arg
     {
         static Exception exception;
@@ -1710,7 +1963,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_one_generic_arg
     {
         static Exception exception;
@@ -1748,7 +2001,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_base_type_with_only_default_constructor
     {
         static Exception exception;
@@ -1786,7 +2039,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_only_default_constructor
     {
         static Exception exception;
@@ -1824,7 +2077,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_only_default_constructor
     {
         static Exception exception;
@@ -1862,7 +2115,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_base_type_with_constructor_with_wrong_arguments
     {
         static Exception exception;
@@ -1900,7 +2153,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_constructor_with_wrong_arguments
     {
         static Exception exception;
@@ -1938,7 +2191,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_constructor_with_wrong_arguments
     {
         static Exception exception;
@@ -1976,7 +2229,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_base_type_without_execute_method
     {
         static Exception exception;
@@ -2018,7 +2271,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_without_execute_method
     {
         static Exception exception;
@@ -2060,7 +2313,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_without_execute_method
     {
         static Exception exception;
@@ -2102,7 +2355,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_base_type_with_execute_method_with_wrong_arguments
     {
         static Exception exception;
@@ -2149,7 +2402,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_base_type_with_execute_method_with_wrong_arguments
     {
         static Exception exception;
@@ -2196,7 +2449,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_execute_method_with_wrong_arguments
     {
         static Exception exception;
@@ -2243,7 +2496,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_with_execute_method_without_cancelaltion_token
     {
         static Exception exception;
@@ -2290,7 +2543,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_base_type_without_execute_async_method
     {
         static Exception exception;
@@ -2337,7 +2590,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_null_interface
     {
         static Exception exception;
@@ -2352,7 +2605,7 @@ namespace DocaLabs.Http.Client.Tests
             () => ((ArgumentNullException)exception).ParamName.ShouldEqual("interfaceType");
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_class_instead_of_interface
     {
         static Exception exception;
@@ -2382,7 +2635,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_class_instead_of_interface
     {
         static Exception exception;
@@ -2412,7 +2665,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_class_instead_of_interface
     {
         static Exception exception;
@@ -2442,7 +2695,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_interface_with_two_methods
     {
         static Exception exception;
@@ -2473,7 +2726,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_interface_with_two_methods
     {
         static Exception exception;
@@ -2504,7 +2757,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_interface_with_two_methods
     {
         static Exception exception;
@@ -2535,7 +2788,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_interface_without_any_method
     {
         static Exception exception;
@@ -2554,7 +2807,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instance_for_generic_type_definition_of_interface
     {
         static Exception exception;
@@ -2574,7 +2827,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_for_generic_type_definition_of_interface
     {
         static Exception exception;
@@ -2594,7 +2847,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instance_with_cancellation_token_for_generic_type_definition_of_interface
     {
         static Exception exception;
@@ -2614,7 +2867,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_instances_concurrently
     {
         static List<Type> interfaces;
@@ -2711,7 +2964,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instances_concurrently
     {
         static List<Type> interfaces;
@@ -2809,7 +3062,7 @@ namespace DocaLabs.Http.Client.Tests
         }
     }
 
-    [Subject(typeof(HttpClientFactory))]
+    [TestClass]
     public class when_creating_asynchronous_instances_with_cancellation_token_concurrently
     {
         static List<Type> interfaces;

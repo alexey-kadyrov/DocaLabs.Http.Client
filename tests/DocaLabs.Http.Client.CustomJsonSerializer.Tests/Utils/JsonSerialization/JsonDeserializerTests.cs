@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils.JsonSerialization;
 using DocaLabs.Test.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 {
     // ReSharper disable UnusedAutoPropertyAccessor.Local
+    // ReSharper disable UnusedMember.Local
 
     [TestClass]
     public class when_json_deserializer_is_used
@@ -105,28 +107,28 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
     [TestClass]
     public class when_json_deserializer_is_used_with_json_serializer_settings
     {
-        static JsonDeserializer deserializer;
-        static Exception exception;
+        static JsonDeserializer _deserializer;
+        static Exception _exception;
 
         [ClassInitialize]
         public static void EstablishContext(TestContext context)
         {
             JsonDeserializer.UpdateSettings(typeof(Model), new JsonSerializerSettings { MaxDepth = 1 });
 
-            deserializer = new JsonDeserializer();
+            _deserializer = new JsonDeserializer();
 
             BecauseOf();
         }
 
         static void BecauseOf()
         {
-            exception = Catch.Exception(() => deserializer.Deserialize("{Value:\"Hello World!\", AnotherModel : { \"$type\" : \"InnerModel\", \"InnerValue\" : \"Value42\"}}", typeof(Model)));
+            _exception = Catch.Exception(() => _deserializer.Deserialize("{Value:\"Hello World!\", AnotherModel : { \"$type\" : \"InnerModel\", \"InnerValue\" : \"Value42\"}}", typeof(Model)));
         }
 
         [TestMethod]
         public void it_should_use_that_settings()
         {
-            exception.ShouldNotBeNull();
+            _exception.ShouldNotBeNull();
         }
 
         class Model
@@ -157,11 +159,14 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 
         static void BecauseOf()
         {
-            var model = (Model)_deserializer.Deserialize("{Value1:2012, Value2:\"Hello World!\"}", typeof(Model));
+            Parallel.For(0, 10000, i =>
+            {
+                var model = (Model) _deserializer.Deserialize("{Value1:2012, Value2:\"Hello World!\"}", typeof (Model));
 
-            model.ShouldMatch(x => x.Value1 == 2012 && x.Value2 == "Hello World!");
+                model.ShouldMatch(x => x.Value1 == 2012 && x.Value2 == "Hello World!");
 
-            Interlocked.Increment(ref _count);
+                Interlocked.Increment(ref _count);
+            });
         }
 
         [TestMethod]
@@ -177,5 +182,6 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
         }
     }
 
+    // ReSharper restore UnusedMember.Local
     // ReSharper restore UnusedAutoPropertyAccessor.Local
 }

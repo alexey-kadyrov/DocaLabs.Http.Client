@@ -10,6 +10,8 @@ using JsonSerializer = DocaLabs.Http.Client.Utils.JsonSerialization.JsonSerializ
 
 namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
 {
+    // ReSharper disable UnusedMember.Local
+
     [TestClass]
     public class when_json_serializer_is_used
     {
@@ -283,4 +285,6 @@ namespace DocaLabs.Http.Client.Tests.Utils.JsonSerialization
             return null;
         }
     }
+
+    // ReSharper restore UnusedMember.Local
 }
