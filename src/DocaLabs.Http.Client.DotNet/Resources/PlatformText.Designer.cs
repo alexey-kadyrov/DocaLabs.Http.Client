@@ -70,24 +70,6 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot convert from type {0} to type {1}..
-        /// </summary>
-        internal static string cannot_convert_from_0_to_1 {
-            get {
-                return ResourceManager.GetString("cannot_convert_from_0_to_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot figure out how to deserialize web response..
-        /// </summary>
-        internal static string cannot_figure_out_how_to_deserialize {
-            get {
-                return ResourceManager.GetString("cannot_figure_out_how_to_deserialize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot mix network credential with other types for {0}..
         /// </summary>
         internal static string cannot_mix_network_credential_with_other {
@@ -106,47 +88,11 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration file {0} is not found..
-        /// </summary>
-        internal static string configuration_file_0_not_found {
-            get {
-                return ResourceManager.GetString("configuration_file_0_not_found", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to create Url {0}..
-        /// </summary>
-        internal static string failed_create_url {
-            get {
-                return ResourceManager.GetString("failed_create_url", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to execute request to {0} ({1}).
-        /// </summary>
-        internal static string failed_execute_request {
-            get {
-                return ResourceManager.GetString("failed_execute_request", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to If the base class {0} is generic it must have two generic arguments..
         /// </summary>
         internal static string if_base_class_generic_it_must_have_two_parameters {
             get {
                 return ResourceManager.GetString("if_base_class_generic_it_must_have_two_parameters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Input argument can be only of string or Guid type..
-        /// </summary>
-        internal static string input_argument_can_be_only_string_or_guid {
-            get {
-                return ResourceManager.GetString("input_argument_can_be_only_string_or_guid", resourceCulture);
             }
         }
         
@@ -192,87 +138,6 @@ namespace DocaLabs.Http.Client.Resources {
         internal static string must_implement_constructor {
             get {
                 return ResourceManager.GetString("must_implement_constructor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Response stream is null..
-        /// </summary>
-        internal static string null_response_stream {
-            get {
-                return ResourceManager.GetString("null_response_stream", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The object {0} must be either string or byte[] or Stream or simple type (e.g. int, double, etc.)..
-        /// </summary>
-        internal static string object_must_be_of_string_byte_array_or_stream_type {
-            get {
-                return ResourceManager.GetString("object_must_be_of_string_byte_array_or_stream_type", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SeparatedCollectionConverterAttribute cannot be used for property {0} in {1}..
-        /// </summary>
-        internal static string separated_coll_attr_cannot_be_used_for_0_in_1 {
-            get {
-                return ResourceManager.GetString("separated_coll_attr_cannot_be_used_for_0_in_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Service URL is not defined in the constaructor paramter or is not in the configuration file..
-        /// </summary>
-        internal static string service_url_is_not_defined {
-            get {
-                return ResourceManager.GetString("service_url_is_not_defined", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The value must be of Stream type but is {0}..
-        /// </summary>
-        internal static string the_value_must_be_of_stream_type {
-            get {
-                return ResourceManager.GetString("the_value_must_be_of_stream_type", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type {0} cannot be converted to byte array..
-        /// </summary>
-        internal static string type_0_cannot_be_converted_to_byte_array {
-            get {
-                return ResourceManager.GetString("type_0_cannot_be_converted_to_byte_array", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown underlying enum type {0}..
-        /// </summary>
-        internal static string unknown_underlying_enum_type_0 {
-            get {
-                return ResourceManager.GetString("unknown_underlying_enum_type_0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value {0} is not defined for enum {1}..
-        /// </summary>
-        internal static string value_0_is_not_defined_for_enum_1 {
-            get {
-                return ResourceManager.GetString("value_0_is_not_defined_for_enum_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to execute the service query, will try again. Attempt {0} out of {1} : {2}.
-        /// </summary>
-        internal static string will_try_again {
-            get {
-                return ResourceManager.GetString("will_try_again", resourceCulture);
             }
         }
     }
