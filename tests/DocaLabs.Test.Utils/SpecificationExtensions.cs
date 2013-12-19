@@ -14,24 +14,6 @@ namespace DocaLabs.Test.Utils
             Assert.AreSame(expected, actual);
         }
 
-        public static void ShouldContainOnly(this ICustomKeyValueCollection actual, ICustomKeyValueCollection expected)
-        {
-            if (actual == null)
-                throw new ArgumentNullException("actual");
-
-            if (expected == null)
-                throw new ArgumentNullException("expected");
-
-            if(actual.Count != expected.Count)
-                throw new AssertionException(string.Format("Expected that collection will have the same number of items but the actual contains {0} and the expected {1}", actual.Count, expected.Count));
-
-            foreach (var key in expected)
-            {
-                CollectionAssert.Contains(actual, key);
-                CollectionAssert.AreEqual(expected.GetValues(key), actual.GetValues(key));
-            }
-        }
-
         public static void ShouldMatch<T>(this T actual, Expression<Func<T, bool>> condition)
         {
             if (!condition.Compile().Invoke(actual))
@@ -63,30 +45,6 @@ namespace DocaLabs.Test.Utils
             Assert.IsFalse(value);
         }
 
-        public static void ShouldBeEmpty<T>(this IEnumerable<T> actual)
-        {
-            Assert.IsEmpty(actual);
-        }
-
-        public static void ShouldContain<T>(this IEnumerable<T> actual, params T[] expected)
-        {
-            if (expected == null)
-                throw new ArgumentNullException("expected");
-
-            if (expected.Length == 0)
-                throw new ArgumentException("Expected collection must have at least one element");
-
-            foreach (var item in expected)
-                CollectionAssert.Contains(expected, item);
-        }
-
-        public static void ShouldContain<T>(this IEnumerable<T> actual, Expression<Func<T, bool>> condition)
-        {
-            var compiledCondition = condition.Compile();
-            if(!actual.Any(compiledCondition.Invoke))
-                throw new Exception(string.Format("Should contain item matching expression [{0}], but does not.", condition));
-        }
-
         public static void ShouldEqual<T>(this T actual, T expected)
         {
             Assert.AreEqual(expected, actual);
@@ -109,11 +67,6 @@ namespace DocaLabs.Test.Utils
         }
 
         public static void ShouldNotBeEmpty(this string actual)
-        {
-            Assert.IsNotEmpty(actual);
-        }
-
-        public static void ShouldNotBeEmpty<T>(this T actual) where T : IEnumerable<T>
         {
             Assert.IsNotEmpty(actual);
         }
