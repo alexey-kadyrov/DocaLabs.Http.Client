@@ -23,6 +23,16 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
         /// <summary>
         /// Adds supported decoders into accept-encoding header of the request.
         /// </summary>
-        void AddAcceptEncodings(WebRequest request);
+        void TransferAcceptEncodings(WebRequest request);
+
+        /// <summary>
+        /// Adds or replaces existing decoder.
+        /// </summary>
+        void AddOrReplace(string encoding, IDecodeContent decoder);
+
+        /// <summary>
+        /// Removes a decoder. If the decoder doesn't exist no exception is thrown.
+        /// </summary>
+        void Remove(string encoding);
     }
 }

@@ -13,15 +13,18 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
     /// </summary>
     public class ContentDecoderFactory : IContentDecoderFactory
     {
-        static readonly ConcurrentDictionary<string, IDecodeContent> Decoders;
+        readonly ConcurrentDictionary<string, IDecodeContent> _decoders;
 
-        static ContentDecoderFactory()
+        /// <summary>
+        /// Initializes an instance of the ContentDecoderFactory class with default set of decoders: gzip, x-gzip, and deflate.
+        /// </summary>
+        public ContentDecoderFactory()
         {
-            Decoders = new ConcurrentDictionary<string, IDecodeContent>(StringComparer.OrdinalIgnoreCase);
+            _decoders = new ConcurrentDictionary<string, IDecodeContent>(StringComparer.OrdinalIgnoreCase);
 
-            Decoders[KnownContentEncodings.Gzip] = new GZipContentDecoder();
-            Decoders[KnownContentEncodings.XGzip] = new GZipContentDecoder();
-            Decoders[KnownContentEncodings.Deflate] = new DeflateContentDecoder();
+            _decoders[KnownContentEncodings.Gzip] = new GZipContentDecoder();
+            _decoders[KnownContentEncodings.XGzip] = new GZipContentDecoder();
+            _decoders[KnownContentEncodings.Deflate] = new DeflateContentDecoder();
         }
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
                 throw new ArgumentNullException("encoding");
 
             IDecodeContent decoder;
-            if (Decoders.TryGetValue(encoding, out decoder) && decoder != null)
+            if (_decoders.TryGetValue(encoding, out decoder) && decoder != null)
                 return decoder;
 
             throw new ArgumentException(string.Format(PlatformText.compression_format_is_not_suppoerted, encoding), "encoding");
@@ -44,13 +47,13 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
         /// </summary>
         public ICollection<string> GetSupportedEncodings()
         {
-            return Decoders.Keys;
+            return _decoders.Keys;
         }
 
         /// <summary>
         /// Adds supported decoders into accept-encoding header of the request.
         /// </summary>
-        public void AddAcceptEncodings(WebRequest request)
+        public void TransferAcceptEncodings(WebRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -62,18 +65,18 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
         /// <summary>
         /// Adds or replaces existing decoder.
         /// </summary>
-        static public void AddOrReplace(string encoding, IDecodeContent decoder)
+        public void AddOrReplace(string encoding, IDecodeContent decoder)
         {
-            Decoders.AddOrUpdate(encoding, k => decoder, (k, v) => decoder);
+            _decoders.AddOrUpdate(encoding, k => decoder, (k, v) => decoder);
         }
 
         /// <summary>
         /// Removes a decoder. If the decoder doesn't exist no exception is thrown.
         /// </summary>
-        static public void Remove(string encoding)
+        public void Remove(string encoding)
         {
             IDecodeContent existingDecoder;
-            Decoders.TryRemove(encoding, out existingDecoder);
+            _decoders.TryRemove(encoding, out existingDecoder);
         }
     }
 }

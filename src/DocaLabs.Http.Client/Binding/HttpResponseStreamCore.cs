@@ -14,7 +14,7 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public abstract class HttpResponseStreamCore : Stream
     {
-        static readonly IContentDecoderFactory ContentDecoderFactory = PlatformAdapter.Resolve<IContentDecoderFactory>(false);
+        public static IContentDecoderFactory ContentDecoderFactory { get; private set; }
  
         static protected readonly Encoding DefaultTextEncoding = Encoding.GetEncoding(CharSets.Iso88591);
 
@@ -88,6 +88,11 @@ namespace DocaLabs.Http.Client.Binding
         /// Returns whenever the request supports headers.
         /// </returns>
         public bool SupportsHeaders { get { return Response.SupportsHeaders; } }
+
+        static HttpResponseStreamCore()
+        {
+            ContentDecoderFactory = PlatformAdapter.Resolve<IContentDecoderFactory>(false);
+        }
 
         protected HttpResponseStreamCore(WebResponse response, int readTimeout)
         {

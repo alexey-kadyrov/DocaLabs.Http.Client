@@ -74,7 +74,7 @@ namespace DocaLabs.Http.Client
             request.Method = GetRequestMethod(binder, context);
 
             if (ContentDecoderFactory != null && ShouldSetAcceptEncoding(context))
-                ContentDecoderFactory.AddAcceptEncodings(request);
+                ContentDecoderFactory.TransferAcceptEncodings(request);
 
             RequestSetup.CopyCredentialsFrom(request, binder, context);
 
@@ -98,7 +98,7 @@ namespace DocaLabs.Http.Client
         }
 
         /// <summary>
-        /// If the method returns true the ContentDecoderFactory.AddAcceptEncodings is called to set the Accept-Encoding header. 
+        /// If the method returns true the ContentDecoderFactory.TransferAcceptEncodings is called to set the Accept-Encoding header. 
         /// The default implementation returns Configuration.AutoSetAcceptEncoding value;
         /// </summary>
         protected virtual bool ShouldSetAcceptEncoding(BindingContext context)

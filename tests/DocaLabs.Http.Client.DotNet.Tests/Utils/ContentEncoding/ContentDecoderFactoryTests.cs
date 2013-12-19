@@ -55,12 +55,6 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
         {
             Catch.Exception(() => _factory.Get("some-wacky-encoding")).ShouldBeOfType<ArgumentException>();
         }
-
-        [TestMethod]
-        public void it_should_report_encoding_argument_for_unknown_content_encoding_when_getting_decoder()
-        {
-            ((ArgumentException)Catch.Exception(() => _factory.Get("some-wacky-encoding"))).ParamName.ShouldEqual("encoding");
-        }
     }
 
     [TestClass]
@@ -150,7 +144,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 
         static void BecauseOf()
         {
-            _factory.AddAcceptEncodings(_request.Object);
+            _factory.TransferAcceptEncodings(_request.Object);
         }
 
         [TestMethod]
@@ -176,7 +170,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 
         static void BecuaseOf()
         {
-            _exception = Catch.Exception(() => _factory.AddAcceptEncodings(null));
+            _exception = Catch.Exception(() => _factory.TransferAcceptEncodings(null));
         }
 
         [TestMethod]
@@ -197,12 +191,6 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
     {
         static ContentDecoderFactory _factory;
 
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            ContentDecoderFactory.AddOrReplace(KnownContentEncodings.XGzip, new GZipContentDecoder());
-        }
-
         [ClassInitialize]
         public static void EstablishContext(TestContext context)
         {
@@ -213,7 +201,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 
         static void BecauseOf()
         {
-            ContentDecoderFactory.Remove(KnownContentEncodings.XGzip);
+            _factory.Remove(KnownContentEncodings.XGzip);
         }
 
         [TestMethod]
@@ -256,7 +244,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 
         static void BecauseOf()
         {
-            ContentDecoderFactory.Remove("some-wacky-encoding");
+            _factory.Remove("some-wacky-encoding-2");
         }
 
         [TestMethod]
@@ -295,12 +283,6 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
     {
         static ContentDecoderFactory _factory;
 
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            ContentDecoderFactory.Remove("some-wacky-encoding");
-        }
-
         [ClassInitialize]
         public static void EstablishContext(TestContext context)
         {
@@ -311,7 +293,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 
         static void BecauseOf()
         {
-            ContentDecoderFactory.AddOrReplace("some-wacky-encoding", new TestDecoder());
+            _factory.AddOrReplace("some-wacky-encoding", new TestDecoder());
         }
 
         [TestMethod]
@@ -364,12 +346,6 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
     {
         static ContentDecoderFactory _factory;
 
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            ContentDecoderFactory.AddOrReplace(KnownContentEncodings.XGzip, new GZipContentDecoder());
-        }
-
         [ClassInitialize]
         public static void EstablishContext(TestContext context)
         {
@@ -380,7 +356,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 
         static void BecauseOf()
         {
-            ContentDecoderFactory.AddOrReplace(KnownContentEncodings.XGzip, new TestDecoder());
+            _factory.AddOrReplace(KnownContentEncodings.XGzip, new TestDecoder());
         }
 
         [TestMethod]
@@ -456,9 +432,12 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
                 switch (ii)
                 {
                     case 0:
-                        ContentDecoderFactory.AddOrReplace("some-wacky-encoding", new TestDecoder());
-                        ContentDecoderFactory.Remove("some-wacky-encoding");
+                    {
+                        var name = "some-wacky-encoding" + ii;
+                        _factory.AddOrReplace(name, new TestDecoder());
+                        _factory.Remove(name);
                         break;
+                    }
                     case 1:
                         _factory.GetSupportedEncodings().Count.ShouldBeEqualOrGreaterThan(3);
                         break;
@@ -472,7 +451,7 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
                         _factory.Get(KnownContentEncodings.XGzip).ShouldBeOfType<GZipContentDecoder>();
                         break;
                     case 5:
-                        Catch.Exception(() => _factory.Get("some-other-wacky-encoding")).ShouldBeOfType<ArgumentException>();
+                        Catch.Exception(() => _factory.Get("some-other-wacky-encoding-42")).ShouldBeOfType<ArgumentException>();
                         break;
                 }
 
