@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Binding.PropertyConverting;
 using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding.Serialization
 {
@@ -16,7 +15,6 @@ namespace DocaLabs.Http.Client.Binding.Serialization
     public class SerializeAsFormAttribute : RequestSerializationAttribute
     {
         readonly static IRequestStreamFactory RequestStreamFactory = PlatformAdapter.Resolve<IRequestStreamFactory>();
-        readonly static IContentEncoderFactory ContentEncoderFactory = PlatformAdapter.Resolve<IContentEncoderFactory>(false);
         readonly static PropertyMaps Maps = new PropertyMaps();
 
         string _charSet;
@@ -156,13 +154,13 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         void CompressAndWrite(BindingContext context, WebRequest request, byte[] data)
         {
-            if (ContentEncoderFactory == null)
+            if (ContentEncoders.ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
             request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
             using (var requestStream = RequestStreamFactory.Get(context, request))
-            using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
+            using (var compressionStream = ContentEncoders.ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             using (var dataStream = new MemoryStream(data))
             {
                 dataStream.CopyTo(compressionStream);
@@ -171,13 +169,13 @@ namespace DocaLabs.Http.Client.Binding.Serialization
 
         async Task CompressAndWriteAsync(AsyncBindingContext context, WebRequest request, byte[] data)
         {
-            if (ContentEncoderFactory == null)
+            if (ContentEncoders.ContentEncoderFactory == null)
                 throw new PlatformNotSupportedException(Resources.Text.content_encoding_is_not_supported);
 
             request.Headers[StandardHeaders.ContentEncoding] = RequestContentEncoding;
 
             using (var requestStream = await RequestStreamFactory.GetAsync(context, request))
-            using (var compressionStream = ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
+            using (var compressionStream = ContentEncoders.ContentEncoderFactory.Get(RequestContentEncoding).GetCompressionStream(requestStream))
             using (var dataStream = new MemoryStream(data))
             {
                 context.CancellationToken.ThrowIfCancellationRequested();

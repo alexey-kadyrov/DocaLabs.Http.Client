@@ -2,41 +2,51 @@
 using System.IO.Compression;
 using System.Text;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
-using Machine.Specifications;
+using DocaLabs.Test.Utils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 {
-    [Subject(typeof(DeflateContentEncoder))]
-    class when_deflate_encoder_is_used
+    [TestClass]
+    public class when_deflate_encoder_is_used
     {
-        static DeflateContentEncoder encoder;
-        static MemoryStream comressed_stream;
+        static DeflateContentEncoder _encoder;
+        static MemoryStream _comressedStream;
 
-        Establish context =
-            () => encoder = new DeflateContentEncoder();
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            _encoder = new DeflateContentEncoder();
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        static void BecauseOf()
         {
             using (var comressedStream = new MemoryStream())
             {
                 using (var uncomressedStream = new MemoryStream(Encoding.UTF8.GetBytes("Hello World!")))
-                using (var compressionStream = encoder.GetCompressionStream(comressedStream))
+                using (var compressionStream = _encoder.GetCompressionStream(comressedStream))
                 {
                     uncomressedStream.CopyTo(compressionStream);
                 }
 
-                comressed_stream = new MemoryStream(comressedStream.ToArray());
+                _comressedStream = new MemoryStream(comressedStream.ToArray());
             }
-        };
+        }
 
-        It should_be_able_to_comress =
-            () => DecomressData().ShouldEqual("Hello World!");
+        [TestMethod]
+
+        public void it_should_be_able_to_compress()
+        {
+            DecomressData().ShouldEqual("Hello World!");
+        }
 
         static string DecomressData()
         {
             using (var data = new MemoryStream())
             {
-                using (var decompressionStream = new DeflateStream(comressed_stream, CompressionMode.Decompress))
+                using (var decompressionStream = new DeflateStream(_comressedStream, CompressionMode.Decompress))
                 {
                     decompressionStream.CopyTo(data);
                 }

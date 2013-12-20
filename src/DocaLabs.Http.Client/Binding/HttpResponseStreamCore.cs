@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DocaLabs.Http.Client.Utils;
-using DocaLabs.Http.Client.Utils.ContentEncoding;
 
 namespace DocaLabs.Http.Client.Binding
 {
@@ -14,14 +13,12 @@ namespace DocaLabs.Http.Client.Binding
     /// </summary>
     public abstract class HttpResponseStreamCore : Stream
     {
-        public static IContentDecoderFactory ContentDecoderFactory { get; private set; }
- 
-        static protected readonly Encoding DefaultTextEncoding = Encoding.GetEncoding(CharSets.Iso88591);
-
         Stream _dataStream;
         HttpContentType _contentType;
         Stream _rawResponseStream;
         readonly int _initialReadTimeout;
+
+        protected static Encoding DefaultTextEncoding { get; private set; }
 
         public WebResponse Response { get; private set; }
 
@@ -44,9 +41,9 @@ namespace DocaLabs.Http.Client.Binding
                 if (string.IsNullOrWhiteSpace(contentEncoding))
                     return (_dataStream = RawResponseStream);
 
-                return ContentDecoderFactory == null
+                return ContentEncoders.ContentDecoderFactory == null
                     ? (_dataStream = RawResponseStream)
-                    : (_dataStream = ContentDecoderFactory.Get(contentEncoding).GetDecompressionStream(RawResponseStream));
+                    : (_dataStream = ContentEncoders.ContentDecoderFactory.Get(contentEncoding).GetDecompressionStream(RawResponseStream));
             }
         }
 
@@ -91,7 +88,7 @@ namespace DocaLabs.Http.Client.Binding
 
         static HttpResponseStreamCore()
         {
-            ContentDecoderFactory = PlatformAdapter.Resolve<IContentDecoderFactory>(false);
+            DefaultTextEncoding = Encoding.GetEncoding(CharSets.Iso88591);
         }
 
         protected HttpResponseStreamCore(WebResponse response, int readTimeout)

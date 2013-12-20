@@ -12,15 +12,18 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
     /// </summary>
     public class ContentEncoderFactory : IContentEncoderFactory
     {
-        static readonly ConcurrentDictionary<string, IEncodeContent> Encoders;
+        readonly ConcurrentDictionary<string, IEncodeContent> _encoders;
 
-        static ContentEncoderFactory()
+        /// <summary>
+        /// Initializes an instance of the ContentEncoderFactory class;
+        /// </summary>
+        public ContentEncoderFactory()
         {
-            Encoders = new ConcurrentDictionary<string, IEncodeContent>(StringComparer.OrdinalIgnoreCase);
+            _encoders = new ConcurrentDictionary<string, IEncodeContent>(StringComparer.OrdinalIgnoreCase);
 
-            Encoders[KnownContentEncodings.Gzip] = new GZipContentEncoder();
-            Encoders[KnownContentEncodings.XGzip] = new GZipContentEncoder();
-            Encoders[KnownContentEncodings.Deflate] = new DeflateContentEncoder();
+            _encoders[KnownContentEncodings.Gzip] = new GZipContentEncoder();
+            _encoders[KnownContentEncodings.XGzip] = new GZipContentEncoder();
+            _encoders[KnownContentEncodings.Deflate] = new DeflateContentEncoder();
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
                 throw new ArgumentNullException("encoding");
 
             IEncodeContent encoder;
-            if (Encoders.TryGetValue(encoding, out encoder) && encoder != null)
+            if (_encoders.TryGetValue(encoding, out encoder) && encoder != null)
                 return encoder;
 
             throw new ArgumentException(string.Format(PlatformText.compression_format_is_not_suppoerted, encoding), "encoding");
@@ -43,24 +46,24 @@ namespace DocaLabs.Http.Client.Utils.ContentEncoding
         /// </summary>
         public ICollection<string> GetSupportedEncodings()
         {
-            return Encoders.Keys;
+            return _encoders.Keys;
         }
 
         /// <summary>
         /// Adds or replaces existing encoder.
         /// </summary>
-        static public void AddOrReplace(string encoding, IEncodeContent encoder)
+        public void AddOrReplace(string encoding, IEncodeContent encoder)
         {
-            Encoders.AddOrUpdate(encoding, k => encoder, (k, v) => encoder);
+            _encoders.AddOrUpdate(encoding, k => encoder, (k, v) => encoder);
         }
 
         /// <summary>
         /// Removes an encoder. If the encoder doesn't exist no exception is thrown.
         /// </summary>
-        static public void Remove(string encoding)
+        public void Remove(string encoding)
         {
             IEncodeContent existingEncoder;
-            Encoders.TryRemove(encoding, out existingEncoder);
+            _encoders.TryRemove(encoding, out existingEncoder);
         }
     }
 }

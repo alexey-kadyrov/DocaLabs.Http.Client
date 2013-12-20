@@ -2,23 +2,28 @@
 using System.IO.Compression;
 using System.Text;
 using DocaLabs.Http.Client.Utils.ContentEncoding;
-using Machine.Specifications;
+using DocaLabs.Test.Utils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
 {
-    [Subject(typeof(DeflateContentDecoder))]
-    class when_deflate_decoder_is_used
+    [TestClass]
+    public class when_deflate_decoder_is_used
     {
-        static DeflateContentDecoder decoder;
-        static MemoryStream comressed_stream;
-        static Stream decompression_stream;
+        static DeflateContentDecoder _decoder;
+        static MemoryStream _comressedStream;
+        static Stream _decompressionStream;
 
-        Cleanup after_each =
-            () => decompression_stream.Dispose();
-
-        Establish context = () =>
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            decoder = new DeflateContentDecoder();
+            _decompressionStream.Dispose();
+        }
+
+        [ClassInitialize]
+        public static void EstablishContext(TestContext context)
+        {
+            _decoder = new DeflateContentDecoder();
 
             using (var comressedStream = new MemoryStream())
             {
@@ -28,23 +33,30 @@ namespace DocaLabs.Http.Client.Tests.Utils.ContentEncoding
                     uncomressedStream.CopyTo(compressionStream);
                 }
 
-                comressed_stream = new MemoryStream(comressedStream.ToArray());
+                _comressedStream = new MemoryStream(comressedStream.ToArray());
             }
-        };
 
-        Because of =
-            () => decompression_stream = decoder.GetDecompressionStream(comressed_stream);
+            BecauseOf();
+        }
 
-        It should_be_able_to_decomress =
-            () => DecomressData().ShouldEqual("Hello World!");
+        static void BecauseOf()
+        {
+            _decompressionStream = _decoder.GetDecompressionStream(_comressedStream);
+        }
+
+        [TestMethod]
+        public void it_should_be_able_to_decompress()
+        {
+            DecomressData().ShouldEqual("Hello World!");
+        }
 
         static string DecomressData()
         {
             using (var data = new MemoryStream())
             {
-                using (decompression_stream)
+                using (_decompressionStream)
                 {
-                    decompression_stream.CopyTo(data);
+                    _decompressionStream.CopyTo(data);
                 }
 
                 return Encoding.UTF8.GetString(data.ToArray());

@@ -93,15 +93,6 @@
     <Compile Include="Binding\Serialization\SerializeStreamAttributeTests.cs" />
     <Compile Include="Binding\Serialization\SerializeAsTextAttributeTests.cs" />
     <Compile Include="Binding\_Utils\TestRequestSerializationAttribute.cs" />
-    <Compile Include="Configuration\ClientHeaderElementTests.cs" />
-    <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
-    <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
-    <Compile Include="Configuration\ClientEndpointElementTests.cs" />
-    <Compile Include="Configuration\ConfigurationExtenstionsTests.cs" />
-    <Compile Include="Configuration\DefaultEndpointConfigurationProviderTests.cs" />
-    <Compile Include="Configuration\ClientProxyElementTests.cs" />
-    <Compile Include="Configuration\ClientNetworkCredentialsElementTests.cs" />
-    <Compile Include="Configuration\EndpointConfigurationTests.cs" />
     <Compile Include="Binding\RequestExtensionsTests.cs" />
     <Compile Include="AsyncDefaultExecuteStrategyTests.cs" />
     <Compile Include="DefaultExecuteStrategyTests.cs" />
@@ -150,13 +141,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ExternalEndpointConfiguration.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

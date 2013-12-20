@@ -48,6 +48,7 @@
     <Compile Include="AsyncHttpClient.cs" />
     <Compile Include="Binding\AsyncBindingContext.cs" />
     <Compile Include="Binding\BindingContext.cs" />
+    <Compile Include="Binding\ContentEncoders.cs" />
     <Compile Include="Binding\CredentialsMapper.cs" />
     <Compile Include="Binding\DefaultHeaderMapper.cs" />
     <Compile Include="Binding\DefaultRequestBinder.cs" />
