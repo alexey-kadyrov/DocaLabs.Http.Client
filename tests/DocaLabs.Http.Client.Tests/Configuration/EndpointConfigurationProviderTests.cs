@@ -1,20 +1,22 @@
 ﻿using DocaLabs.Http.Client.Configuration;
-using Machine.Specifications;
 using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using It = Machine.Specifications.It;
 
 namespace DocaLabs.Http.Client.Tests.Configuration
 {
-    [Subject(typeof(EndpointConfiguration))]
-    class when_checking_current_in_default_configuration
+    [TestClass]
+    public class when_checking_current_in_default_configuration
     {
-        It should_return_default_endpoint_configuration_provider =
-            () => EndpointConfiguration.Current.ShouldBeOfType<EndpointConfigurationProviderOverride>();
+        [TestMethod]
+        public void it_should_return_default_endpoint_configuration_provider()
+        {
+            EndpointConfigurationOverride.Current.ShouldBeOfType<EndpointConfigurationProviderOverride>();
+        }
     }
 
-    [Subject(typeof(EndpointConfiguration))]
-    class when_setting_current_provider
+    [TestClass]
+    public class when_setting_current_provider
     {
         static IEndpointConfigurationProvider original_provider;
         static IEndpointConfigurationProvider new_provider;
@@ -36,8 +38,8 @@ namespace DocaLabs.Http.Client.Tests.Configuration
             () => EndpointConfiguration.Current.ShouldBeTheSameAs(new_provider);
     }
 
-    [Subject(typeof(EndpointConfiguration))]
-    class when_setting_current_provider_to_null
+    [TestClass]
+    public class when_setting_current_provider_to_null
     {
         static IEndpointConfigurationProvider original_provider;
         static Exception exception;

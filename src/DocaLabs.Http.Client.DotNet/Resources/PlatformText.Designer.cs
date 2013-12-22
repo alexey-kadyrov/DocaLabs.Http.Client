@@ -88,6 +88,15 @@ namespace DocaLabs.Http.Client.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The confoguration file &apos;{0}&apos; is not found..
+        /// </summary>
+        internal static string configuration_file_0_not_found {
+            get {
+                return ResourceManager.GetString("configuration_file_0_not_found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If the base class {0} is generic it must have two generic arguments..
         /// </summary>
         internal static string if_base_class_generic_it_must_have_two_parameters {

@@ -32,7 +32,7 @@ namespace DocaLabs.Http.Client.Configuration
             }
         }
 
-        static public StoreLocation ToStoreLocation(this CertificateStoreLocation value)
+        public static StoreLocation ToStoreLocation(this CertificateStoreLocation value)
         {
             switch (value)
             {

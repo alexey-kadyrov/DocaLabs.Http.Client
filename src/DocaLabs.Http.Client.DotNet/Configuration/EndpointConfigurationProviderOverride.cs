@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace DocaLabs.Http.Client.Configuration
@@ -44,8 +45,8 @@ namespace DocaLabs.Http.Client.Configuration
                 return;
             }
 
-            //if (!File.Exists(fileName))
-            //    throw new FileNotFoundException(string.Format(Resources.Text.configuration_file_0_not_found, fileName), fileName);
+            if (!File.Exists(fileName))
+                throw new FileNotFoundException(string.Format(Resources.PlatformText.configuration_file_0_not_found, fileName), fileName);
 
             _configuration = ConfigurationManager.OpenMappedExeConfiguration(
                 new ExeConfigurationFileMap { ExeConfigFilename = fileName }, ConfigurationUserLevel.None);

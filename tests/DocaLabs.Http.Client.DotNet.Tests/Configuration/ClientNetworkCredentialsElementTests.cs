@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DocaLabs.Http.Client.Tests.Configuration
 {
     [TestClass]
-    class when_netwrok_credentials_are_newed
+    public class when_netwrok_credentials_is_newed
     {
         static ClientNetworkCredentialElement _element;
 
@@ -46,7 +46,7 @@ namespace DocaLabs.Http.Client.Tests.Configuration
     }
 
     [TestClass]
-    class when_changing_value_on_netwrok_credentials_which_is_directly_newed
+    public class when_changing_value_on_netwrok_credentials_which_is_directly_newed
     {
         static ClientNetworkCredentialElement _element;
 

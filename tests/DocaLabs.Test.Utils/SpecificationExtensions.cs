@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using DocaLabs.Http.Client.Utils;
 using NUnit.Framework;
 
 namespace DocaLabs.Test.Utils
@@ -69,6 +66,21 @@ namespace DocaLabs.Test.Utils
         public static void ShouldNotBeEmpty(this string actual)
         {
             Assert.IsNotEmpty(actual);
+        }
+
+        public static void ShouldContain(this string actual, string expected)
+        {
+            StringAssert.Contains(expected, actual);
+        }
+
+        public static void ShouldNotContain(this string actual, string expected)
+        {
+            StringAssert.DoesNotContain(expected, actual);
+        }
+
+        public static void ShouldBeEmpty(this string actual)
+        {
+            Assert.IsEmpty(actual);
         }
     }
 }
