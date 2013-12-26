@@ -53,8 +53,20 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="_Utils\HttpResponseStreamHelper.Portable.cs" />
-    <Compile Include="Binding\HttpResponseStreamTests.Portable.cs" />
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\Binding\HttpResponseStreamTests.Portable.cs">
+      <Link>Binding\HttpResponseStreamTests.Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\_Utils\HttpResponseStreamHelper.Portable.cs">
+      <Link>_Utils\HttpResponseStreamHelper.Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebRequest.Portable.cs">
+      <Link>_Utils\MockWebRequest.Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebResponse.Portable.cs">
+      <Link>_Utils\MockWebResponse.Portable.cs</Link>
+    </Compile>
+    <Compile Include="Binding\HttpResponseStreamFactoryTests.cs" />
+    <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
     <Compile Include="Configuration\ClientEndpointElementTests.cs" />
     <Compile Include="Configuration\ClientHeaderElementTests.cs" />
@@ -76,8 +88,6 @@
     <Compile Include="Utils\ContentEncoding\GZipContentEncoderTests.cs" />
     <Compile Include="Utils\NullComparerOverrideTests.cs" />
     <Compile Include="Utils\RequestStreamFactoryTests.cs" />
-    <Compile Include="_Utils\MockWebRequest.Portable.cs" />
-    <Compile Include="_Utils\MockWebResponse.Portable.cs" />
     <Compile Include="_Utils\TestAsyncHttpClientBaseType.cs" />
     <Compile Include="_Utils\TestHttpClientBaseType.cs" />
   </ItemGroup>
