@@ -146,7 +146,7 @@ namespace DocaLabs.Http.Client.Binding
                 var deserializer = GetUserSpecifiedDeserializer(context, responseType);
                 if (deserializer == null)
                 {
-                    if (StreamTypeChecker.IsStream(responseType))
+                    if (StreamTypeChecker.IsSupportedStream(responseType))
                     {
                         var retVal = stream;
                         stream = null;
@@ -235,7 +235,7 @@ namespace DocaLabs.Http.Client.Binding
                     return deserializer.Deserialize(responseStream, resultType);
             }
 
-            if (StreamTypeChecker.IsStream(resultType))
+            if (StreamTypeChecker.IsSupportedStream(resultType))
                 return responseStream;
 
             if (resultType == typeof(VoidType))
