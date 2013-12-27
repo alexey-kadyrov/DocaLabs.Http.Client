@@ -4,11 +4,12 @@ using System.Net;
 using System.Net.Fakes;
 using System.Text;
 using DocaLabs.Http.Client.Binding;
+using DocaLabs.Http.Client.Configuration;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace DocaLabs.Http.Client.Tests.MSTest
+namespace DocaLabs.Http.Client.Tests
 {
     [TestClass]
     public class DefaultResponseBinderTests
@@ -32,7 +33,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 mockRequest.Setup(x => x.GetResponse()).Returns(shimWebResponse);
 
                 var binder = new DefaultResponseBinder();
-                var bindingContext = new BindingContext(new Client(), null, null, null, typeof(string), typeof(RichResponse<Model>));
+                var bindingContext = new BindingContext(new Client(), null, new ClientEndpoint(), new Uri("http://foo.bar"), typeof(string), typeof(RichResponse<Model>));
 
                 var data = (RichResponse<Model>)binder.Read(bindingContext, mockRequest.Object);
 
@@ -63,7 +64,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 mockRequest.Setup(x => x.GetResponse()).Returns(shimWebResponse);
 
                 var binder = new DefaultResponseBinder();
-                var bindingContext = new BindingContext(new Client(), null, null, null, typeof(string), typeof(RichResponse<Model>));
+                var bindingContext = new BindingContext(new Client(), null, new ClientEndpoint(), new Uri("http://foo.bar"), typeof(string), typeof(RichResponse<Model>));
 
                 try
                 {
@@ -100,7 +101,7 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 mockRequest.Setup(x => x.GetResponse()).Returns(shimWebResponse);
 
                 var binder = new DefaultResponseBinder();
-                var bindingContext = new BindingContext(new Client(), null, null, null, typeof(string), typeof(RichResponse<Model>));
+                var bindingContext = new BindingContext(new Client(), null, new ClientEndpoint(), new Uri("http://foo.bar"), typeof(string), typeof(RichResponse<Model>));
 
                 var data = (RichResponse<Model>)binder.Read(bindingContext, mockRequest.Object);
 

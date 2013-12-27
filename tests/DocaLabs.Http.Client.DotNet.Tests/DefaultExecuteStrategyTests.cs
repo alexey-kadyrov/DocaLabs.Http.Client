@@ -4,7 +4,7 @@ using System.Net.Fakes;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocaLabs.Http.Client.Tests.MSTest
+namespace DocaLabs.Http.Client.Tests
 {
     [TestClass]
     public class DefaultExecuteStrategyTests
@@ -156,49 +156,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 };
 
                 var targetException = new WebException("Failed request", null, WebExceptionStatus.ProtocolError, shimHttpWebResponse);
-
-                var strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
-
-                Exception exception = null;
-                var attempts = 0;
-
-                var started = DateTime.UtcNow;
-
-                try
-                {
-                    strategy.Execute("Hello World!", x => { ++attempts; throw targetException; });
-                }
-                catch (Exception e)
-                {
-                    exception = e;
-                }
-
-                var duration = DateTime.UtcNow - started;
-
-                Assert.IsNotNull(exception);
-
-                Assert.AreEqual(3, attempts);
-                Assert.IsTrue(duration > TimeSpan.FromMilliseconds(300) && duration < TimeSpan.FromSeconds(1));
-            }
-        }
-
-        [TestMethod]
-        public void WhenExecutingActionThrowsWebExceptionWithConnectionFailureForFtp()
-        {
-            using (ShimsContext.Create())
-            {
-                var lastModified = DateTime.Now;
-
-                var shimHttpWebResponse = new ShimFtpWebResponse
-                {
-                    StatusCodeGet = () => FtpStatusCode.CantOpenData,
-                    StatusDescriptionGet = () => "Entity not found.",
-                    SupportsHeadersGet = () => true,
-                    LastModifiedGet = () => lastModified,
-                    HeadersGet = () => new WebHeaderCollection { { "Server", "Test" } }
-                };
-
-                var targetException = new WebException("Failed request", null, WebExceptionStatus.ConnectFailure, shimHttpWebResponse);
 
                 var strategy = new DefaultExecuteStrategy<string, string>(new[] { TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(200) });
 

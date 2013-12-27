@@ -4,7 +4,7 @@ using System.Net.Fakes;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocaLabs.Http.Client.Tests.MSTest
+namespace DocaLabs.Http.Client.Tests
 {
     [TestClass]
     public class ExceptionExtensionsTests

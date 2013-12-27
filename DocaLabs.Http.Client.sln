@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9F07395B-938F-4C93-8BE5-0FBBBCDC6DA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{457F5521-CCCD-44FC-9654-CF39747614A4}"
@@ -36,8 +38,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D9B799
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.Tests.MSTest", "tests\DocaLabs.Http.Client.Tests.MSTest\DocaLabs.Http.Client.Tests.MSTest.csproj", "{B0716490-5D1A-40FD-835C-9AA263523B21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.CustomJsonSerializer.Tests", "tests\DocaLabs.Http.Client.CustomJsonSerializer.Tests\DocaLabs.Http.Client.CustomJsonSerializer.Tests.csproj", "{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}"
 EndProject
@@ -118,6 +118,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocaLabs.Http.Client.DotNet.Tests", "tests\DocaLabs.Http.Client.DotNet.Tests\DocaLabs.Http.Client.DotNet.Tests.csproj", "{423F66E8-1EC5-4CBD-A494-DF29B25F0777}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB} = {B3EE3B7A-05E3-4B0E-9C56-476BE4354EEB}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocaLabs.Http.Client.Tests", "DocaLabs.Http.Client.Tests", "{076F2174-B8FA-41F5-820F-6AD888EECF44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Utils", "_Utils", "{A3BCEF80-B6DE-48AE-B926-14C1E5227E91}"
+	ProjectSection(SolutionItems) = preProject
+		tests\.portable-code\DocaLabs.Http.Client.Tests\_Utils\HttpResponseStreamHelper.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Tests\_Utils\HttpResponseStreamHelper.Portable.cs
+		tests\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebRequest.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebRequest.Portable.cs
+		tests\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebResponse.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebResponse.Portable.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binding", "Binding", "{60F0B0DE-A7F9-42C9-B275-7290B889E206}"
+	ProjectSection(SolutionItems) = preProject
+		tests\.portable-code\DocaLabs.Http.Client.Tests\Binding\HttpResponseStreamTests.Portable.cs = tests\.portable-code\DocaLabs.Http.Client.Tests\Binding\HttpResponseStreamTests.Portable.cs
 	EndProjectSection
 EndProject
 Global
@@ -204,20 +218,6 @@ Global
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|x64.ActiveCfg = Release|Any CPU
 		{DDAB3D1C-0F71-4E58-8E11-73E1230B0FDB}.Release|x86.ActiveCfg = Release|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Release|ARM.ActiveCfg = Release|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Release|x64.ActiveCfg = Release|Any CPU
-		{B0716490-5D1A-40FD-835C-9AA263523B21}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -520,7 +520,6 @@ Global
 		{15C3F3EC-711D-4413-86E7-CDB3F218DD9D} = {457F5521-CCCD-44FC-9654-CF39747614A4}
 		{0FDA939D-D0EB-4BAE-9B6A-3B68379B7838} = {457F5521-CCCD-44FC-9654-CF39747614A4}
 		{39AD9FB5-C1CE-4D32-9253-79F795DC6426} = {6684DB84-8528-4089-837C-C75247A7FB4B}
-		{B0716490-5D1A-40FD-835C-9AA263523B21} = {6684DB84-8528-4089-837C-C75247A7FB4B}
 		{C0910D55-CA4A-4F2A-851F-F6FA90D49DD7} = {6684DB84-8528-4089-837C-C75247A7FB4B}
 		{423F66E8-1EC5-4CBD-A494-DF29B25F0777} = {6684DB84-8528-4089-837C-C75247A7FB4B}
 		{A10951A1-8B5D-4518-93D5-C43476A52B41} = {E3B53EEF-D455-4AE4-B1AA-286CA572C279}
@@ -536,5 +535,8 @@ Global
 		{87243BE7-4D99-48E1-9C3F-28DCBBDE0B94} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 		{168DF099-C19D-42DF-AD56-3BA470743335} = {E15F1853-FE85-4A5A-8B12-4B8F1D998CD6}
 		{9124CE42-6310-43BD-8E2A-B267195D661E} = {EF6A4DD6-CF59-4B6E-92F8-3DEF13931D69}
+		{076F2174-B8FA-41F5-820F-6AD888EECF44} = {EF6A4DD6-CF59-4B6E-92F8-3DEF13931D69}
+		{A3BCEF80-B6DE-48AE-B926-14C1E5227E91} = {076F2174-B8FA-41F5-820F-6AD888EECF44}
+		{60F0B0DE-A7F9-42C9-B275-7290B889E206} = {076F2174-B8FA-41F5-820F-6AD888EECF44}
 	EndGlobalSection
 EndGlobal

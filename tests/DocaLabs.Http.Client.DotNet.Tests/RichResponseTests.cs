@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocaLabs.Http.Client.Tests.MSTest
+namespace DocaLabs.Http.Client.Tests
 {
     [TestClass]
     public class RichResponseTests
@@ -26,7 +26,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(0, richResponse.StatusCode);
                 Assert.IsNull(richResponse.StatusDescription);
                 Assert.IsNull(richResponse.ETag);
-                Assert.AreEqual(DateTime.MinValue, richResponse.LastModified);
                 Assert.AreEqual(0, richResponse.Headers.AllKeys.Length);
                 Assert.AreEqual("Hello World!", richResponse.Value);
                 Assert.AreEqual("application/json", richResponse.ContentType);
@@ -58,7 +57,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(0, richResponse.StatusCode);
                 Assert.IsNull(richResponse.StatusDescription);
                 Assert.AreEqual("W/\"123\"", richResponse.ETag);
-                Assert.AreEqual(DateTime.MinValue, richResponse.LastModified);
 
                 Assert.AreEqual(1, richResponse.Headers.AllKeys.Length);
                 Assert.AreEqual("ETag", richResponse.Headers.AllKeys[0]);
@@ -91,7 +89,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(409, richResponse.StatusCode);
                 Assert.AreEqual("Conflict on the server.", richResponse.StatusDescription);
                 Assert.AreEqual("W/\"123\"", richResponse.ETag);
-                Assert.AreEqual(lastModified.ToUniversalTime(), richResponse.LastModified);
 
                 Assert.AreEqual(1, richResponse.Headers.AllKeys.Length);
                 Assert.AreEqual("ETag", richResponse.Headers.AllKeys[0]);
@@ -99,37 +96,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
 
                 Assert.AreEqual("Hello World!", richResponse.Value);
                 Assert.AreEqual("application/json", richResponse.ContentType);
-            }
-        }
-
-        [TestMethod]
-        public void WhenRichResponseIsInitializedForFtpWebResponse()
-        {
-            using (ShimsContext.Create())
-            {
-                var lastModified = DateTime.Now;
-
-                var shimHttpWebResponse = new ShimFtpWebResponse
-                {
-                    StatusCodeGet = () => FtpStatusCode.ClosingData,
-                    StatusDescriptionGet = () => "Closing data.",
-                    SupportsHeadersGet = () => true,
-                    LastModifiedGet = () => lastModified,
-                    HeadersGet = () => new WebHeaderCollection { { "ETag", "W/\"123\"" } }
-                };
-
-                var richResponse = new RichResponse<string>(shimHttpWebResponse, "Hello World!");
-
-                Assert.AreEqual(226, richResponse.StatusCode);
-                Assert.AreEqual("Closing data.", richResponse.StatusDescription);
-                Assert.AreEqual("W/\"123\"", richResponse.ETag);
-                Assert.AreEqual(lastModified.ToUniversalTime(), richResponse.LastModified);
-
-                Assert.AreEqual(1, richResponse.Headers.AllKeys.Length);
-                Assert.AreEqual("ETag", richResponse.Headers.AllKeys[0]);
-                Assert.AreEqual("W/\"123\"", richResponse.Headers["ETag"]);
-
-                Assert.AreEqual("Hello World!", richResponse.Value);
             }
         }
 
@@ -155,7 +121,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(409, richResponse.StatusCode);
                 Assert.AreEqual("Conflict on the server.", richResponse.StatusDescription);
                 Assert.IsNull(richResponse.ETag);
-                Assert.AreEqual(lastModified.ToUniversalTime(), richResponse.LastModified);
 
                 Assert.AreEqual(1, richResponse.Headers.AllKeys.Length);
                 Assert.AreEqual("custom-header", richResponse.Headers.AllKeys[0]);
@@ -163,37 +128,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
 
                 Assert.AreEqual("Hello World!", richResponse.Value);
                 Assert.AreEqual("application/json", richResponse.ContentType);
-            }
-        }
-
-        [TestMethod]
-        public void WhenRichResponseIsInitializedForFtpWebResponseWithoutEtagHeader()
-        {
-            using (ShimsContext.Create())
-            {
-                var lastModified = DateTime.Now;
-
-                var httpWebResponse = new ShimFtpWebResponse
-                {
-                    StatusCodeGet = () => FtpStatusCode.ClosingData,
-                    StatusDescriptionGet = () => "Closing data.",
-                    SupportsHeadersGet = () => true,
-                    LastModifiedGet = () => lastModified,
-                    HeadersGet = () => new WebHeaderCollection { { "custom-header", "custom-value" } }
-                };
-
-                var richResponse = new RichResponse<string>(httpWebResponse, "Hello World!");
-
-                Assert.AreEqual(226, richResponse.StatusCode);
-                Assert.AreEqual("Closing data.", richResponse.StatusDescription);
-                Assert.IsNull(richResponse.ETag);
-                Assert.AreEqual(lastModified.ToUniversalTime(), richResponse.LastModified);
-
-                Assert.AreEqual(1, richResponse.Headers.AllKeys.Length);
-                Assert.AreEqual("custom-header", richResponse.Headers.AllKeys[0]);
-                Assert.AreEqual("custom-value", richResponse.Headers["custom-header"]);
-
-                Assert.AreEqual("Hello World!", richResponse.Value);
             }
         }
 
@@ -219,7 +153,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.AreEqual(409, richResponse.StatusCode);
                 Assert.AreEqual("Conflict on the server.", richResponse.StatusDescription);
                 Assert.IsNull(richResponse.ETag);
-                Assert.AreEqual(lastModified.ToUniversalTime(), richResponse.LastModified);
 
                 Assert.AreEqual(1, richResponse.Headers.AllKeys.Length);
                 Assert.AreEqual("custom-header", richResponse.Headers.AllKeys[0]);
@@ -250,26 +183,6 @@ namespace DocaLabs.Http.Client.Tests.MSTest
                 Assert.IsTrue(richResponse.Is(HttpStatusCode.Conflict));
                 Assert.IsFalse(richResponse.Is(HttpStatusCode.ExpectationFailed));
                 Assert.AreEqual("application/json", richResponse.ContentType);
-            }
-        }
-
-        [TestMethod]
-        public void WhenComparingFtpStatusCode()
-        {
-            using (ShimsContext.Create())
-            {
-                var httpWebResponse = new ShimFtpWebResponse
-                {
-                    StatusCodeGet = () => FtpStatusCode.ClosingControl,
-                    StatusDescriptionGet = () => "Closing control.",
-                    SupportsHeadersGet = () => true,
-                    HeadersGet = () => new WebHeaderCollection()
-                };
-
-                var richResponse = new RichResponse<string>(httpWebResponse, "Hello World!");
-
-                Assert.IsTrue(richResponse.Is(FtpStatusCode.ClosingControl));
-                Assert.IsFalse(richResponse.Is(FtpStatusCode.ClosingData));
             }
         }
     }
