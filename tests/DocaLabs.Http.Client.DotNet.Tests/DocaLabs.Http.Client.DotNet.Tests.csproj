@@ -72,6 +72,7 @@
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebResponse.Portable.cs">
       <Link>_Utils\MockWebResponse.Portable.cs</Link>
     </Compile>
+    <Compile Include="AsyncDefaultExecuteStrategyTests.Portable.cs" />
     <Compile Include="Binding\HttpResponseStreamFactoryTests.cs" />
     <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />

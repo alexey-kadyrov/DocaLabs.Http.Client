@@ -32,6 +32,11 @@ namespace DocaLabs.Test.Utils
             Assert.GreaterOrEqual(actual, expected);
         }
 
+        public static void ShouldBeEqualOrGreaterThan(this TimeSpan actual, TimeSpan expected)
+        {
+            Assert.GreaterOrEqual(actual, expected);
+        }
+
         public static void ShouldBeTrue(this bool value)
         {
             Assert.IsTrue(value);
@@ -45,6 +50,11 @@ namespace DocaLabs.Test.Utils
         public static void ShouldEqual<T>(this T actual, T expected)
         {
             Assert.AreEqual(expected, actual);
+        }
+
+        public static void ShouldBeLessThan(this TimeSpan actual, TimeSpan expected)
+        {
+            Assert.Less(actual, expected);
         }
 
         public static void ShouldBeNull(this object actual)
