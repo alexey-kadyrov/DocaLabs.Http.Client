@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Funq;
-using ServiceStack.WebHost.Endpoints;
+using ServiceStack;
 
 namespace DocaLabs.Test.Services._ServiceStackServices
 {
@@ -66,7 +66,7 @@ namespace DocaLabs.Test.Services._ServiceStackServices
             public AppHost() 
                 : base("StarterTemplate HttpListener", typeof (AppHost).Assembly)
             {
-                SetConfig(new EndpointHostConfig { DebugMode = true });
+                SetConfig(new HostConfig { DebugMode = true });
             }
 
             public override void Configure(Container container)

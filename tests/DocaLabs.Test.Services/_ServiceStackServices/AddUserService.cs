@@ -1,7 +1,5 @@
 ﻿using System.Linq;
-using ServiceStack.Common.Web;
-using ServiceStack.ServiceInterface;
-using ServiceStack.Text;
+using ServiceStack;
 
 namespace DocaLabs.Test.Services._ServiceStackServices
 {
