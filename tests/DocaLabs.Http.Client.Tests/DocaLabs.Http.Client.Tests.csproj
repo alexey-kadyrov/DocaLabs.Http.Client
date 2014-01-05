@@ -95,7 +95,6 @@
     <Compile Include="Binding\_Utils\TestRequestSerializationAttribute.cs" />
     <Compile Include="Binding\RequestExtensionsTests.cs" />
     <None Include="Configuration\EndpointConfigurationProviderTests.cs" />
-    <Compile Include="DefaultExecuteStrategyTests.cs" />
     <Compile Include="ExceptionExtensionsTests.cs" />
     <Compile Include="AsyncHttpClientTests.cs" />
     <Compile Include="HttpClientTests.cs" />

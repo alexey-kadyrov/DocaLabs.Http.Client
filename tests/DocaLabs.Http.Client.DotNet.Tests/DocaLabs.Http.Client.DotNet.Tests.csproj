@@ -60,8 +60,14 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\AsyncDefaultExecuteStrategyTests.Portable.cs">
+      <Link>AsyncDefaultExecuteStrategyTests.Portable.cs</Link>
+    </Compile>
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\Binding\HttpResponseStreamTests.Portable.cs">
       <Link>Binding\HttpResponseStreamTests.Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\DefaultExecuteStrategyTests.Portable.cs">
+      <Link>DefaultExecuteStrategyTests.Portable.cs</Link>
     </Compile>
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\_Utils\HttpResponseStreamHelper.Portable.cs">
       <Link>_Utils\HttpResponseStreamHelper.Portable.cs</Link>
@@ -72,7 +78,6 @@
     <Compile Include="..\.portable-code\DocaLabs.Http.Client.Tests\_Utils\MockWebResponse.Portable.cs">
       <Link>_Utils\MockWebResponse.Portable.cs</Link>
     </Compile>
-    <Compile Include="AsyncDefaultExecuteStrategyTests.Portable.cs" />
     <Compile Include="Binding\HttpResponseStreamFactoryTests.cs" />
     <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Configuration\ClientCertificateReferenceElementTests.cs" />
