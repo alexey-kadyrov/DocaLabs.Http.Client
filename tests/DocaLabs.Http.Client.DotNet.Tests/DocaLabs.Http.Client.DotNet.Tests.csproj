@@ -96,6 +96,7 @@
     <Compile Include="ExceptionExtensionsTests.cs" />
     <Compile Include="HttpClientFactoryTests.cs" />
     <Compile Include="HttpClientWebExceptionTests.cs" />
+    <Compile Include="HttpClientWebExceptionTests.Portable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RichResponseTests.cs" />
     <Compile Include="Utils\ContentEncoding\ContentDecoderFactoryTests.cs" />

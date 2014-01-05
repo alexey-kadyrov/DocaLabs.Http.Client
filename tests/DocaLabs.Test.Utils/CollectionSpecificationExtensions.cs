@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace DocaLabs.Test.Utils
             }
         }
 
-        public static void ShouldBeEmpty<T>(this IEnumerable<T> actual)
+        public static void ShouldBeEmpty(this IEnumerable actual)
         {
             Assert.IsEmpty(actual);
         }

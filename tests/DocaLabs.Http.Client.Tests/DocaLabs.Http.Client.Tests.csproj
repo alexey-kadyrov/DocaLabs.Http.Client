@@ -98,7 +98,6 @@
     <Compile Include="ExceptionExtensionsTests.cs" />
     <Compile Include="AsyncHttpClientTests.cs" />
     <Compile Include="HttpClientTests.cs" />
-    <Compile Include="HttpClientWebExceptionTests.cs" />
     <Compile Include="HttpClientExceptionTests.cs" />
     <Compile Include="Binding\HttpResponseStreamTests.cs" />
     <Compile Include="Binding\PropertyConverting\SeparatedCollectionConverterAttributeTests.cs" />
